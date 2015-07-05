@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Daily Journal</string>
+    <string name="show_parties">Parties</string>
+    
+  	<string name="msg_reminder">Don\'t forget to do the Journal Entry</string>    
+    <string name="msg_export">Exporting </string>
+    <string name="msg_import">Importing </string>
+    <string name="msg_finished">%1$s %2$s.</string>
+    <string name="msg_backup_restored">You still need to import latest JSON file.</string>
+    
+    <string name="warning_overpaid_msg">You have overpaid %1$s by %2$s %3$.2f</string>
+    <string name="warning_select_party">Please select the party!</string>
+    <string name="warning_no_attch">No attachment found</string>
+    <string name="warning_cant_change_party">You can not change the party.</string>
+    <string name="warning_see_attachment">You can not see the attachments now!</string>
+    <string name="warning_ext_mismatch">The extension of the backup file is incorrect</string>
+    
+    <string name="currency_type">Rs</string>
+    
+    <string-array name="options_attch">
+        <item>Take Picture</item>
+        <item>Attach Picture</item>
+        <item>See Attachment</item>
+    </string-array>
+    
+    <string name="str_export_json">Export JSON</string>
+    <string name="str_import_json">Import JSON</string>
+    <string name="str_backup_restore">Backup Restore</string>
+    <string name="str_backup">Backup</string>
+    <string name="str_reminder">Reminder</string>
+    <string name="str_id">ID : </string>
+    <string name="str_cr">Cr. </string>
+    <string name="str_dr">Dr. </string>
+    <string name="str_new_journal">New Journal</string>
+    <string name="str_party">Select Party</string>
+    <string name="str_select_attch">Select Attachment</string>
+    <string name="str_attch_delete">Attachment Deleted</string>
+    <string name="str_party_deleted">Party Deleted</string>
+    <string name="str_choose">Choose</string>
+	<string name="str_save">Save</string>
+	<string name="str_delete">Delete</string>
+	<string name="str_alert">Alert!</string>        
+	<string name="str_date">Date</string>
+	<string name="str_note">Note</string>
+	<string name="str_balance">Balance :  </string>
+	<string name="str_information">Information</string>
+	<string name="str_finished">finished</string>
+	<string name="str_failed">failed</string>
+	<string name="str_create_full_backup">Full Backup</string>
+	<string name="str_restore_backup">Restore Backup</string>
+    
+	<string name="hint_note">Write notes here....</string>
+</resources>
+

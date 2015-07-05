@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.ndhunju.dailyjournal.HomeActivity" >
+
+    <item
+        android:id="@+id/Merchants"
+        android:orderInCategory="100"
+        android:title="@string/show_parties"
+        android:showAsAction="ifRoom|withText"
+        />
+     <item
+        android:id="@+id/Export"
+        android:orderInCategory="100"
+        android:title="@string/str_export_json"
+        android:showAsAction="never"
+        />
+     <item
+        android:id="@+id/Import"
+        android:orderInCategory="100"
+        android:title="@string/str_import_json"
+        android:showAsAction="never"
+        />
+     <item
+        android:id="@+id/CreateFullBack"
+        android:orderInCategory="100"
+        android:title="@string/str_create_full_backup"
+        android:showAsAction="never"
+        />
+     <item
+        android:id="@+id/RestoreBackup"
+        android:orderInCategory="100"
+        android:title="@string/str_restore_backup"
+        android:showAsAction="never"
+        />
+     
+</menu>
+<!-- app:showAsAction="ifRoom|withText" -->
+<!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/menu/home.xml -->

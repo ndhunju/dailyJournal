@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_lock"
+        android:showAsAction="ifRoom|withText"
+        android:title="Lock"/>
+    <item
+        android:id="@+id/delete_picture"
+		android:showAsAction="ifRoom|withText"
+		android:icon="@android:drawable/ic_delete"
+        android:title="Delete"/>
+</menu>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\dhunju\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-17b5e44ec01c000530f98924a73e2a2d890cc0b3.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-d52b83fa0e5eff60a654d3d7e1d03773c159dcdd.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\18.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8f11f56e350eacabf2273f646d981356eea0ed77">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-a7fdc75f24185edad72b4e2fe325e12441bd0b54.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-0349c9656d53ecdf7ca91a67fcc16f4e88ec92e6.jar" />
+    </item>
+
+</items>

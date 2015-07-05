@@ -1,0 +1,259 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Manifest Merging:
+-----------------
+Your project uses libraries that provide manifests, and your Eclipse
+project did not explicitly turn on manifest merging. In Android Gradle
+projects, manifests are always merged (meaning that contents from your
+libraries' manifests will be merged into the app manifest. If you had
+manually copied contents from library manifests into your app manifest
+you may need to remove these for the app to build correctly.
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* DailyJournal.zip
+* DailyJournal\
+* DailyJournal\.classpath
+* DailyJournal\.project
+* DailyJournal\AndroidManifest.xml
+* DailyJournal\bin\
+* DailyJournal\bin\AndroidManifest.xml
+* DailyJournal\bin\DailyJournal.apk
+* DailyJournal\bin\classes.dex
+* DailyJournal\bin\classes\
+* DailyJournal\bin\classes\com\
+* DailyJournal\bin\classes\com\ndhunju\
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\BuildConfig.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$array.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$attr.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$dimen.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$drawable.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$id.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$layout.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$menu.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$string.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R$style.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\R.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\DatePickerFragment$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\DatePickerFragment$2.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\DatePickerFragment.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\HomeActivity.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalActivity.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$2.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$3.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$4.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$5.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$6.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$7$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$7.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$8.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment$9.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\JournalFragment.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\NotificationService.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyActivity$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyActivity$2.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyActivity$3.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyActivity.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyInformationActivity$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyInformationActivity.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyListActivity$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyListActivity$2.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyListActivity$3.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyListActivity.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyListDialog$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyListDialog$2.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyListDialog$3.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\controller\PartyListDialog.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\database\
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\database\FeedReaderContract$FeedEntry.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\database\FeedReaderContract.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\database\FeedReaderDbHelper.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Alarm.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Journal$Type.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Journal.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Party$Type.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Party.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\PictureUtils$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\PictureUtils.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Storage$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Storage$2.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Storage$3.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Storage.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\Utils.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\model\ViewUtils.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\Compat.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\CupcakeGestureDetector.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\DefaultOnDoubleTapListener.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\EclairGestureDetector.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\FroyoGestureDetector$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\FroyoGestureDetector.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\GestureDetector.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\GingerScroller.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\HackyViewPager.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\IPhotoView.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\IcsScroller.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\OnGestureListener.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PhotoView.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PhotoViewAttacher$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PhotoViewAttacher$AnimatedZoomRunnable.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PhotoViewAttacher$FlingRunnable.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PhotoViewAttacher$OnMatrixChangedListener.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PhotoViewAttacher$OnPhotoTapListener.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PhotoViewAttacher$OnViewTapListener.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PhotoViewAttacher.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\PreGingerScroller.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\ScrollerProxy.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\VersionedGestureDetector.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\ViewPagerActivity$1.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\ViewPagerActivity$2.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\ViewPagerActivity$SamplePagerAdapter.class
+* DailyJournal\bin\classes\com\ndhunju\dailyjournal\viewPager\ViewPagerActivity.class
+* DailyJournal\bin\dexedLibs\
+* DailyJournal\bin\dexedLibs\android-support-v4-62f0b59f81b5b4f8a072eda433f21f38.jar
+* DailyJournal\bin\jarlist.cache
+* DailyJournal\bin\res\
+* DailyJournal\bin\res\crunch\
+* DailyJournal\bin\res\crunch\drawable-hdpi\
+* DailyJournal\bin\res\crunch\drawable-hdpi\ic_ganesh_book.png
+* DailyJournal\bin\res\crunch\drawable\
+* DailyJournal\bin\res\crunch\drawable\ic_ganesh_book_small.png
+* DailyJournal\bin\resources.ap_
+* DailyJournal\libs\
+* DailyJournal\libs\android-support-v4.jar
+* DailyJournal\proguard-project.txt
+* DailyJournal\project.properties
+* DailyJournal\res\
+* DailyJournal\res\drawable-hdpi\
+* DailyJournal\res\drawable-hdpi\ic_ganesh_book.png
+* DailyJournal\res\drawable\
+* DailyJournal\res\drawable\cell_shape.xml
+* DailyJournal\res\drawable\heading_shape.xml
+* DailyJournal\res\drawable\ic_ganesh_book_small.png
+* DailyJournal\res\layout\
+* DailyJournal\res\layout\activity_home.xml
+* DailyJournal\res\layout\activity_journal.xml
+* DailyJournal\res\layout\activity_party.xml
+* DailyJournal\res\layout\activity_party_information.xml
+* DailyJournal\res\layout\activity_view_pager.xml
+* DailyJournal\res\layout\dialog_date_picker.xml
+* DailyJournal\res\layout\fragment_journal.xml
+* DailyJournal\res\layout\fragment_party_list.xml
+* DailyJournal\res\menu\
+* DailyJournal\res\menu\home.xml
+* DailyJournal\res\menu\viewpager_menu.xml
+* DailyJournal\res\values-v11\
+* DailyJournal\res\values-v11\styles.xml
+* DailyJournal\res\values-v14\
+* DailyJournal\res\values-v14\styles.xml
+* DailyJournal\res\values-w820dp\
+* DailyJournal\res\values-w820dp\dimens.xml
+* DailyJournal\res\values\
+* DailyJournal\res\values\dimens.xml
+* DailyJournal\res\values\strings.xml
+* DailyJournal\res\values\styles.xml
+* DailyJournal\src\
+* DailyJournal\src\com\
+* DailyJournal\src\com\ndhunju\
+* DailyJournal\src\com\ndhunju\dailyjournal\
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\DatePickerFragment.java
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\HomeActivity.java
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\JournalActivity.java
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\JournalFragment.java
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\NotificationService.java
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\PartyActivity.java
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\PartyInformationActivity.java
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\PartyListActivity.java
+* DailyJournal\src\com\ndhunju\dailyjournal\controller\PartyListDialog.java
+* DailyJournal\src\com\ndhunju\dailyjournal\database\
+* DailyJournal\src\com\ndhunju\dailyjournal\database\FeedReaderContract.java
+* DailyJournal\src\com\ndhunju\dailyjournal\database\FeedReaderDbHelper.java
+* DailyJournal\src\com\ndhunju\dailyjournal\model\
+* DailyJournal\src\com\ndhunju\dailyjournal\model\Alarm.java
+* DailyJournal\src\com\ndhunju\dailyjournal\model\Journal.java
+* DailyJournal\src\com\ndhunju\dailyjournal\model\Party.java
+* DailyJournal\src\com\ndhunju\dailyjournal\model\PictureUtils.java
+* DailyJournal\src\com\ndhunju\dailyjournal\model\Storage.java
+* DailyJournal\src\com\ndhunju\dailyjournal\model\Utils.java
+* DailyJournal\src\com\ndhunju\dailyjournal\model\ViewUtils.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\Compat.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\CupcakeGestureDetector.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\DefaultOnDoubleTapListener.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\EclairGestureDetector.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\FroyoGestureDetector.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\GestureDetector.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\GingerScroller.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\HackyViewPager.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\IPhotoView.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\IcsScroller.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\OnGestureListener.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\PhotoView.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\PhotoViewAttacher.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\PreGingerScroller.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\ScrollerProxy.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\VersionedGestureDetector.java
+* DailyJournal\src\com\ndhunju\dailyjournal\viewPager\ViewPagerActivity.java
+* ic_launcher-web.png
+* proguard-project.txt
+
+Replaced Jars with Dependencies:
+--------------------------------
+The importer recognized the following .jar files as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the .jar file in your project was of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the jar replacement in the import wizard and try again:
+
+android-support-v4.jar => com.android.support:support-v4:21.0.3
+android-support-v7-appcompat.jar => com.android.support:appcompat-v7:18.0.0
+
+Replaced Libraries with Dependencies:
+-------------------------------------
+The importer recognized the following library projects as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the source files in your project were of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the library replacement in the import wizard and try
+again:
+
+android-support-v7-appcompat => [com.android.support:appcompat-v7:18.0.0]
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* assets\ => app\src\main\assets
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
