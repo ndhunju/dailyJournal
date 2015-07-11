@@ -7,43 +7,35 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Party {
-	
-	public static enum Type { Debitors, Creditors };
+
+	//Static variables
+	private static int mCurrentPartyId;
+
+	//Custom Type of Party
+	public enum Type { Debtors, Creditors }
+
+	//Keys used for respective properties
 	private static String KEY_ID = "id";
 	private static String KEY_NAME = "name";
 	private static String KEY_PHONE = "phone";
 	private static String KEY_TYPE = "type";
 	private static String KEY_JOURNALS = "journals";
 	
-	private static int mCurrentPartyId;
-	
+	//Declare variables
 	private int mId;
 	private String mName;
 	private String mPhone;
 	private Type mType;
 	private ArrayList<Journal> mJournals;
-	
+
+	//Constructor
 	public Party(String name, int id){
 		mId = id;
-		mName = name;
 		mPhone = "";
-		mType = Type.Debitors;
+		mName = name;
+		mType = Type.Debtors;
 		mJournals = new ArrayList<Journal>();
 	}
-	
-	public static int getCurrentId(){
-		return mCurrentPartyId;
-	}
-	
-	public static void setCurrentId(int id){
-		mCurrentPartyId = id;
-	}
-	
-	public static int incrementCurrentId(){
-		mCurrentPartyId++;
-		return mCurrentPartyId;
-	}
-	
 	
 	public int getId() {
 		return mId;
@@ -103,12 +95,16 @@ public class Party {
 			index--;
 		}
 	}
-	
+
+	/**
+	 * Deletes a jouranl along with the attachments associated with it
+	 * @param journalId
+	 */
 	public void deleteJournal(int journalId){
 		for(int i = 0; i < mJournals.size() ; i++){
 			Journal mJournal = mJournals.get(i);
 			if(mJournal.getId() == journalId){
-				mJournal.deleteAttachments();
+				mJournal.deleteAllAttachment();
 				mJournals.remove(i);
 			}
 		}
@@ -116,7 +112,7 @@ public class Party {
 	
 	public void deleteAllJournals(){
 		for(int i = 0; i < mJournals.size(); i++){
-			mJournals.get(i).deleteAttachments();
+			mJournals.get(i).deleteAllAttachment();
 			mJournals.remove(i);
 		}
 		
@@ -141,35 +137,66 @@ public class Party {
 		return json;
 	}
 	
+	@Override
+	public String toString() {
+		return mName;
+	}
+
+	//Static methods
+	public static int getCurrentId(){
+		return mCurrentPartyId;
+	}
+
+	public static void setCurrentId(int id){
+		mCurrentPartyId = id;
+	}
+
+	public static int incrementCurrentId(){
+		mCurrentPartyId++;
+		return mCurrentPartyId;
+	}
+
+	/**
+	 * Creates a Party Object from passed json parameter
+	 * @param json
+	 * @param newId If true, new Id is given to the party object. Useful
+	 *              when data is imported/merged from a backup file as it can avoid
+	 *              having duplicate IDs.
+	 * @return
+	 */
 	public static Party fromJSON(JSONObject json, boolean newId){
-		
+
 		try {
 			int id = json.getInt(KEY_ID);
-			if(newId) id = ++mCurrentPartyId;
+
+			if(newId){
+				//usu when merging data
+				id = ++mCurrentPartyId;
+			}else if(mCurrentPartyId < id) {
+				//when restoring which deletes old objects
+				//we need to track latest/highest id
+				mCurrentPartyId = id + 1;
+			}else if(mCurrentPartyId == id){
+					mCurrentPartyId++;
+			}
+
 			String name = json.getString(KEY_NAME);
 			Party newParty = new Party(name, id);
 			String phone = json.getString(KEY_PHONE);
 			Type t = Type.valueOf(json.getString(KEY_TYPE));
 			newParty.setPhone(phone);
 			newParty.setType(t);
-			
+
 			JSONArray journalJSONS = json.getJSONArray(KEY_JOURNALS);
 			for(int i = 0 ; i < journalJSONS.length(); i++){
-				Journal newJournal = Journal.fromJSON(journalJSONS.getJSONObject(i), true);
+				Journal newJournal = Journal.fromJSON(journalJSONS.getJSONObject(i), newId);
 				newJournal.setPartyId(id);
 				newParty.addJournal(newJournal);
 			}
-			
+
 			return newParty;
 		} catch (JSONException e) {	e.printStackTrace();}
-		
+
 		return null;
 	}
-	
-	@Override
-	public String toString() {
-		return mName;
-	}
-	
-
 }

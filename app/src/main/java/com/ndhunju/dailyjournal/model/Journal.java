@@ -1,5 +1,7 @@
 package com.ndhunju.dailyjournal.model;
 
+import com.ndhunju.dailyjournal.R;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -9,9 +11,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Journal implements Comparator<Journal>{
-	
-	public static enum Type { Debit, Credit};
-	
+
+    //Static variable
+    private static int mCurrentJournalId;
+
+    //Custom Type of a Journal
+	public enum Type { Debit, Credit}
+
+    //Keys used for respective properties
 	private static String KEY_ID = "id";
 	private static String KEY_DATE = "date";
 	private static String KEY_ADDED_DATE = "added_date";
@@ -19,9 +26,8 @@ public class Journal implements Comparator<Journal>{
 	private static String KEY_TYPE = "type";
 	private static String KEY_NOTE = "mNote";
 	private static String KEY_ATTCH = "attachments";
-	
-	private static int mCurrentJournalId;
-	
+
+    //Declare variables
 	private int mId;
 	private int mPartyId;
 	private long mDate;
@@ -30,36 +36,30 @@ public class Journal implements Comparator<Journal>{
 	private double mAmount;
 	private String mNote;
 	private ArrayList<String> mAttachmentPaths;
-	
-	public Journal(long date, int id){
-		mId = id;
-		mPartyId = Utils.NO_PARTY;
-		mAddedDate = Calendar.getInstance().getTimeInMillis(); //set it to current time
-		mDate = date;
-		mType = Type.Debit;
-		mAmount = 0;
-		mNote = "";
-		mAttachmentPaths = new ArrayList<String>();
+
+    //Class constructor
+    public Journal(int id){
+        mId = id;
+        mNote = "";
+        mAmount = 0;
+        mType = Type.Debit;
+        mPartyId = Utils.NO_PARTY;
+        mAttachmentPaths = new ArrayList<String>();
+        long time = Calendar.getInstance().getTimeInMillis();
+        mDate = mAddedDate = time;
+    }
+
+    public Journal(long date, int id){
+        this(id);
+        mDate = date;
 	}
-	
-	public static int getCurrentId(){
-		return mCurrentJournalId;
-	}
-	
-	public static void setCurrentId(int id){
-		mCurrentJournalId = id;
-	}
-	
-	public static int incrementCurrentId(){
-		mCurrentJournalId++;
-		return mCurrentJournalId;
-	}
-	
+
+    //Methods
 	public int getId(){
 		return mId;
 	}
-	
-	public void setIdFromDB(int id){
+
+	public void setId(int id){
 		mId = id;
 	}
 	
@@ -67,8 +67,8 @@ public class Journal implements Comparator<Journal>{
 		return mPartyId;
 	}
 	
-	public void setPartyId(int merchantId){
-		mPartyId = merchantId;
+	public void setPartyId(int partyId){
+		mPartyId = partyId;
 	}
 	
 	public long getDate() {
@@ -79,14 +79,29 @@ public class Journal implements Comparator<Journal>{
 		this.mDate = mDate;
 	}
 
+    /**
+     * Returns the date that the Journal was created in the
+     * app rather than the date the actual Journal was made
+     * @return
+     */
 	public long getAddedDate() {
 		return mAddedDate;
 	}
-	
-	public void setAddedDateFromDB(long date){
+
+    /**
+     * Sets the date that the Journal was created in the
+     * app. Should be used when this information was
+     * retrieved from the database or other form of backup data
+     * @param date
+     */
+	public void setAddedDate(long date){
 		mAddedDate = date;
 	}
 
+    /**
+     * Returns type of the Journal: Debit or Credit
+     * @return
+     */
 	public Type getType() {
 		return mType;
 	}
@@ -115,7 +130,6 @@ public class Journal implements Comparator<Journal>{
 		return mAttachmentPaths;
 	}
 
-	
 	public void setAttachmentPaths(ArrayList<String> mAttachmentPaths) {
 		this.mAttachmentPaths = mAttachmentPaths;
 	}
@@ -124,18 +138,31 @@ public class Journal implements Comparator<Journal>{
 		mAttachmentPaths.add(path);
 	}
 	
-	public void deleteAttachments(){
-		for(String path: mAttachmentPaths)
-			Utils.deleteFile(path);
+	public void deleteAllAttachment(){
+		for(String path: mAttachmentPaths){
+            Utils.deleteFile(path);
+        }
 		mAttachmentPaths.clear();
 	}
-	
-	@Override
-	public int compare(Journal lhs, Journal rhs) {
-		//if the difference between two dates are huge then it might
-		//throw error
-		return (int)(lhs.getDate()- rhs.getDate());
-	}
+
+    /**
+     * Deletes the attachment with specified path
+     * Returns false if path not found
+     * @param path
+     * @return
+     */
+    public boolean deleteAttachment(String path){
+        for(int i = 0 ; i < mAttachmentPaths.size(); i++)
+            if(mAttachmentPaths.get(i).equals(path)){
+                mAttachmentPaths.remove(i);
+                return true;
+            }
+        return false;
+    }
+
+    public void deleteAttachment(int pos){
+        mAttachmentPaths.remove(pos);
+    }
 	
 	public JSONObject toJSON(){
 		JSONObject j = new JSONObject();
@@ -155,44 +182,10 @@ public class Journal implements Comparator<Journal>{
 		return j;
 	}
 	
-	public static Journal fromJSON(JSONObject json, boolean newId){
-		try {
-			int id = json.getInt("id");
-			if(newId) id = ++mCurrentJournalId;
-			long date = json.getLong("date");
-			long added_date = json.getLong("added_date");
-			Type type = Type.valueOf(json.getString("type"));
-			double amount = json.getDouble("amount");
-			String note = json.getString("mNote");
-			JSONArray attachmentJSONS = json.getJSONArray("attachments");
-			ArrayList<String> attachments = new ArrayList<String>();
-			for(int i = 0; i < attachmentJSONS.length(); i++){
-				attachments.add(attachmentJSONS.getString(i));
-			}
-			Journal newJournal = new Journal(date, id);
-			newJournal.setAddedDateFromDB(added_date);
-			newJournal.setAmount(amount);
-			newJournal.setType(type);
-			newJournal.setNote(note);
-			newJournal.setAttachmentPaths(attachments);
-			
-			//while exporting from JSON put the largest id as current
-			/*if(id > mCurrentJournalId)
-				mCurrentJournalId = id;*/ //we will instead give a new id
-			
-			return newJournal;
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-		
-	}
-	
 	public Journal getDeepCopy(){
 		Journal tempJournal = new Journal(mDate, mId);
 		tempJournal.setPartyId(mPartyId);
-		tempJournal.setAddedDateFromDB(mAddedDate);
+		tempJournal.setAddedDate(mAddedDate);
 		tempJournal.setAmount(mAmount);
 		tempJournal.setType(mType);
 		tempJournal.setNote(mNote);
@@ -214,4 +207,77 @@ public class Journal implements Comparator<Journal>{
 			mAttachmentPaths.add(path);
 		return true;
 	}
+
+    @Override
+    public int compare(Journal lhs, Journal rhs) {
+        //TODO if the difference between two dates are huge then it might throw error
+        return (int)(lhs.getDate()- rhs.getDate());
+    }
+
+    //Static methods
+    public static int getCurrentId(){
+        return mCurrentJournalId;
+    }
+
+    public static void setCurrentId(int id){
+        mCurrentJournalId = id;
+    }
+
+    public static int incrementCurrentId(){
+        mCurrentJournalId++;
+        return mCurrentJournalId;
+    }
+
+    /**
+     * Creates a Journal Object from passed json parameter
+     * @param json
+     * @param newId If true, new Id is given to the journal object. Useful
+     *              when data is imported from a backup file as it can avoid
+     *              having duplicate IDs
+     * @return
+     */
+    public static Journal fromJSON(JSONObject json, boolean newId){
+        try {
+            int id = json.getInt("id");
+
+			if(newId){
+				//usu when merging data
+				id = ++mCurrentJournalId;
+			}else if(mCurrentJournalId < id) {
+				//when restoring which deletes old objects
+				//we need to track latest/highest id
+				mCurrentJournalId = id + 1;
+			}else if(mCurrentJournalId == id){
+				mCurrentJournalId++;
+			}
+
+            long date = json.getLong("date");
+            long added_date = json.getLong("added_date");
+            Type type = Type.valueOf(json.getString("type"));
+            double amount = json.getDouble("amount");
+            String note = json.getString("mNote");
+            JSONArray attachmentJSONS = json.getJSONArray("attachments");
+            ArrayList<String> attachments = new ArrayList<String>();
+            for(int i = 0; i < attachmentJSONS.length(); i++){
+                attachments.add(attachmentJSONS.getString(i));
+            }
+            Journal newJournal = new Journal(date, id);
+            newJournal.setAddedDate(added_date);
+            newJournal.setAmount(amount);
+            newJournal.setType(type);
+            newJournal.setNote(note);
+            newJournal.setAttachmentPaths(attachments);
+
+            //while exporting from JSON put the largest id as current
+			/*if(id > mCurrentJournalId)
+				mCurrentJournalId = id;*/ //we will instead give a new id
+
+            return newJournal;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
 }

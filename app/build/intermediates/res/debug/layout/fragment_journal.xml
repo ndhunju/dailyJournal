@@ -35,6 +35,7 @@
             android:inputType="numberDecimal"
             android:singleLine="true"
             android:textColor="#5CB85C"
+            android:hint="@string/str_00.00"
             android:textSize="50sp" >
         </EditText>
     </LinearLayout>
@@ -78,7 +79,7 @@
         android:id="@+id/fragment_home_attach_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_select_attch" />
+        android:text="@string/str_attachment" />
      
     <EditText
         android:id="@+id/fragment_home_note_et"

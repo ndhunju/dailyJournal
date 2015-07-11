@@ -74,7 +74,7 @@ public class PartyListActivity extends FragmentActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String name = srchPartyET.getText().toString();
-				Party newParty = new Party(name, storage.getNextPartyId());
+				Party newParty = new Party(name, Party.incrementCurrentId());
 				Storage.getInstance(PartyListActivity.this).addParty(newParty);
 				Utils.toast(PartyListActivity.this, name + " saved.");
 				

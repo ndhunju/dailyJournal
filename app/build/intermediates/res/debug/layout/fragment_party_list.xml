@@ -6,6 +6,7 @@
 
     <EditText
         android:id="@+id/fragment_party_list_search_et"
+        android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Party" />

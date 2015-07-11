@@ -27,52 +27,34 @@ import com.ndhunju.dailyjournal.database.FeedReaderContract.FeedEntry;
 import com.ndhunju.dailyjournal.database.FeedReaderDbHelper;
 
 public class Storage {
-	
-	private static final String KEY_CURRENT_PARTY_ID = Utils.APP_PREFIX + "currentMerchantId";
 
+	//Constant variables
+	private static final String KEY_CURRENT_PARTY_ID = Utils.APP_PREFIX + "currentMerchantId";
 	private static final String KEY_CURRENT_JOURNAL_ID = Utils.APP_PREFIX + "currentJournalId";
 
+    //Declare variables
+	private Context mContext;
+	static SharedPreferences pm;
 	private static Storage mStorage;
+	private ArrayList<Party> mParties;
 	private FeedReaderDbHelper mDbHelper;
 
-	private Context mContext;
-	private ArrayList<Party> mParties;
-	
-	static SharedPreferences pm;
-	
+	//Constructor
 	private Storage(Context con) {
 		mContext = con;
 		mParties = new ArrayList<Party>();
 		mDbHelper = new FeedReaderDbHelper(mContext);
+
+		//Get current id for party and journal
 		pm = PreferenceManager.getDefaultSharedPreferences(con);
-		int journalId = pm.getInt(KEY_CURRENT_JOURNAL_ID, 1);
-		Journal.setCurrentId(journalId);
-		int partyId = pm.getInt(KEY_CURRENT_PARTY_ID, 1);
-		Party.setCurrentId(partyId);
+		Journal.setCurrentId(pm.getInt(KEY_CURRENT_JOURNAL_ID, 1));
+		Party.setCurrentId(pm.getInt(KEY_CURRENT_PARTY_ID, 1));
 	}
 
 	public static Storage getInstance(Context con) {
 		if (mStorage == null)
 			mStorage = new Storage(con);
 		return mStorage;
-	}
-	
-	public int getNextPartyId(){
-		int id = Party.incrementCurrentId();
-		//update in shared preference
-		pm.edit().putInt(KEY_CURRENT_PARTY_ID, id).commit();
-		return id;
-	}
-	
-	public int getNextJournalId(){
-		int id = Journal.incrementCurrentId();
-		//update in shared preference
-		pm.edit().putInt(KEY_CURRENT_JOURNAL_ID, id).commit();
-		return id;
-	}
-	
-	public int getNewJournalId(){
-		return Journal.getCurrentId() ;
 	}
 	
 	public ArrayList<String> getPartyNames() {
@@ -109,6 +91,12 @@ public class Storage {
 		return null;
 	}
 
+    /**
+     * Returns a Journal with passed id. It's more efficient to use
+     * {@link #getJournal(Party, int)} if you have party object
+     * @param journalId
+     * @return
+     */
 	public Journal getJournal(int journalId) {
 		for (Party m : getParties())
 			for (Journal j : m.getJournals())
@@ -124,6 +112,24 @@ public class Storage {
 		return null;
 	}
 
+	/**
+	 * Similar to {@link #getJournal(int, int) getJournal(partyId, journalId)} method
+	 * but relatively more efficient.
+	 * @param party
+	 * @param journalId
+	 * @return
+	 */
+	public Journal getJournal(Party party, int journalId){
+		for(Journal j : party.getJournals())
+			if(j.getId() == journalId)
+				return j;
+		return null;
+	}
+
+    /**
+     * Adds passed party to the party list in its right alphabetical order
+     * @param party
+     */
 	public void addParty(Party party) {
 		// add merchants in the alphabetical order
 		mParties.add(party);
@@ -139,7 +145,8 @@ public class Storage {
 		}
 		
 	}
-	
+
+
 	public void deleteParty(int partyId){
 		for(int i = 0; i < mParties.size() ; i++){
 			Party party = mParties.get(i);
@@ -151,171 +158,6 @@ public class Storage {
 		}
 	}
 	
-	public JSONArray getJSONDb(){
-		JSONArray partyJSONs = new JSONArray();
-		for (Party m : mParties) {
-				partyJSONs.put(m.toJSON());
-			}
-		
-		return partyJSONs;
-	}
-	
-	public boolean createJSONFile() {
-		try {
-			// Create an app folder
-			File appFolder = Utils.getAppFolder(true);
-
-			File jsonFile = new File(appFolder.getAbsolutePath(), "dailyJournal-"
-					+ Utils.parseDate(new Date(), Utils.DATE_FORMAT_SLASH) + ".json");
-			jsonFile.createNewFile();
-			FileOutputStream fileOutputStream = new FileOutputStream(jsonFile.getAbsoluteFile());
-			fileOutputStream.write(getJSONDb().toString().getBytes());
-			fileOutputStream.close();
-
-			// to let know that a new file has been created so that it appears
-			// in the computer
-			 MediaScannerConnection.scanFile(mContext,
-			          new String[] { jsonFile.toString() }, null,
-			          new MediaScannerConnection.OnScanCompletedListener() {
-						@Override
-						public void onScanCompleted(String path, Uri uri) {
-							Log.i("ExternalStorage", "Scanned " + path + ":");
-					        Log.i("ExternalStorage", "-> uri=" + uri);
-							
-						}
-					 });
-			 
-			Log.i("json backup", "JSON backup created");
-			return true;
-
-		} catch (Exception e) {
-			Log.w("TAG", "Error creating json backup file: " + e.getMessage());
-			return false;
-		}
-	}
-
-	public boolean parseJSON(String filePath){
-		
-		if(!filePath.endsWith(".json")){
-			Utils.alert(mContext, mContext.getString(com.ndhunju.dailyjournal.R.string.warning_ext_mismatch));
-			return false;
-		}
-		
-		try {
-			
-			FileInputStream is = new FileInputStream(new File(filePath));
-			int size = is.available();
-			byte[] buffer = new byte[size];
-			is.read(buffer);
-			is.close();
-			String json;
-			json = new String(buffer, "UTF-8");
-			JSONArray partyJSONArray = new JSONArray(json);
-			for (int i = 0; i < partyJSONArray.length(); i++) {
-				Party newParty = Party.fromJSON(partyJSONArray.getJSONObject(i), true);
-				mStorage.addParty(newParty);
-			}
-			return true;
-		} catch (Exception e) {}
-		
-		return false;
-		
-	}
-
-	public void createFullBackUp(){
-		
-		new AsyncTask<Void, Void, Boolean>() {
-			ProgressDialog pd;
-			protected void onPreExecute() {
-				pd  = new ProgressDialog(mContext);
-				pd.setIndeterminate(true);
-				pd.setMessage(mContext.getString(R.string.msg_export));
-				pd.setCancelable(false);
-				pd.setCanceledOnTouchOutside(false);
-				//pd.show(); throws Error
-			};
-			
-			protected void onPostExecute(Boolean result) {
-				pd.cancel();
-				
-				String msg = String.format(mContext.getString(R.string.msg_finished), mContext.getString(R.string.str_backup),
-						result ? mContext.getString(R.string.str_finished) : mContext.getString(R.string.str_failed));
-				Utils.toast(mContext, msg);
-			};
-			
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				try {
-					
-					//1.Create JSON 
-					if(!createJSONFile())
-						return false;
-					
-					//2. Zip app folder that is hidden
-					File directoryToZip = Utils.getAppFolder(true);
-					
-					//get App Folder that is not hidden
-					File appFolder = Utils.getAppFolder(false);
-					//create a zip file in unhidden app folder
-					File zipFile = new File(appFolder.getAbsoluteFile(), 
-							"dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_SLASH) + Utils.ZIP_EXT) ;
-					
-					Utils.zip(directoryToZip , zipFile);
-					
-					//to let know that a new file has been created so that it appears in the computer
-					MediaScannerConnection.scanFile(mContext, new String[]{ appFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null	, null);
-					Log.i("backup" , "backup created");
-					return true;
-
-				} catch (Exception e) {
-					Log.w("TAG", "Error creating backup file: " + e.getMessage());
-					return false;
-				}
-			}
-		}.execute();
-	}
-	
-	public void restoreBackUp(String filePath){
-		
-		if(!filePath.endsWith(Utils.ZIP_EXT)){
-			Utils.alert(mContext, mContext.getString(com.ndhunju.dailyjournal.R.string.warning_ext_mismatch));
-			return;
-		}
-		
-		new AsyncTask<String, Void, Boolean>() {
-			ProgressDialog pd;
-			protected void onPreExecute() {
-				pd  = new ProgressDialog(mContext);
-				pd.setIndeterminate(true);
-				pd.setMessage(mContext.getString(R.string.msg_import));
-				pd.setCancelable(false);
-				pd.setCanceledOnTouchOutside(false);
-				//pd.show(); throws error
-			};
-			
-			protected void onPostExecute(Boolean result) {
-				pd.cancel();
-				String msg = String.format(mContext.getString(R.string.msg_finished), mContext.getString(R.string.str_backup_restore),
-						result ? mContext.getString(R.string.str_finished) : mContext.getString(R.string.str_failed));
-				Utils.toast(mContext, msg + " " + mContext.getString(R.string.msg_backup_restored), Toast.LENGTH_LONG);
-			};
-			
-			@Override
-			protected Boolean doInBackground(String... params) {
-				try {
-					File appFolder = Utils.getAppFolder(true);
-					Utils.unzip(new File(params[0]), appFolder);
-					//to let know that a new file has been created so that it appears in the computer
-					MediaScannerConnection.scanFile(mContext, new String[]{ appFolder.getAbsolutePath()}, null, null);
-					return true;
-
-				} catch (Exception e) {
-					Log.w("TAG", "Error creating backup file: " + e.getMessage());
-					return false;
-				}
-			}
-		}.execute(filePath);
-	}
 	/*
 	 * You should not initialize your helper object using with new DatabaseHelper(context).
 	   Instead, always use DatabaseHelper.getInstance(context), as it guarantees that only 
@@ -347,9 +189,13 @@ public class Storage {
 			}
 
 		}
-		
+
 		db.close();
 		mDbHelper.close();
+
+		//update current IDS for party and journal
+		pm.edit().putInt(KEY_CURRENT_PARTY_ID, Party.getCurrentId()).commit();
+		pm.edit().putInt(KEY_CURRENT_JOURNAL_ID, Journal.getCurrentId()).commit();
 	}
 
 	public long writePartyToDB(Party party, SQLiteDatabase db) {
@@ -545,7 +391,7 @@ public class Storage {
 			c.moveToNext();
 
 			Journal journal = new Journal(date, id);
-			journal.setAddedDateFromDB(addedDate);
+			journal.setAddedDate(addedDate);
 			journal.setType(type);
 			journal.setAmount(amount);
 			journal.setNote(note);

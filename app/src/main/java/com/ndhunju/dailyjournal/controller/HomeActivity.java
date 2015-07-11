@@ -36,8 +36,7 @@ public class HomeActivity extends FragmentActivity {
 
 		HomeActivity.this.finish();
 		
-	};
-	
-	
+	}
+
 
 }

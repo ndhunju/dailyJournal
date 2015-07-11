@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -41,16 +42,19 @@ public class JournalFragment extends Fragment {
 
 	public static final String TAG = JournalFragment.class.getCanonicalName();
 
-	Journal tempJournal;
+	//UI Widgets
 	TextView drCrTv, idTV;
-	EditText amountEt, noteEt;
 	Button partyBtn, dateBtn;
+	EditText amountEt, noteEt;
 	PartyListDialog partylistdialog;
 
+
 	Storage mStorage;
-	
-	boolean dateChanged, journalChanged = false;
+	Journal tempJournal;
+	Party mParty;
 	int journalId;
+	boolean dateChanged, journalChanged;
+
 
 	public static Fragment newInstance(int journalId, int partyId) {
 		Bundle args = new Bundle();
@@ -61,32 +65,37 @@ public class JournalFragment extends Fragment {
 		return newJF;
 	}
 
-	private JournalFragment() {}
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
-		mStorage = Storage.getInstance(getActivity());
-		mStorage.readPartiesFromDB();
 
-		journalId = getArguments().getInt(Utils.KEY_JOURNAL_ID);
-		
 		setHasOptionsMenu(true);
 
+		mStorage = Storage.getInstance(getActivity());
+		//Load data from the local database
+		mStorage.readPartiesFromDB();
+		journalId = getArguments().getInt(Utils.KEY_JOURNAL_ID);
+
+
+		//JournalFragment are usu called in two scenario
 		if (journalId == Utils.ID_NEW_JOURNAL) {
-			tempJournal = new Journal(Calendar.getInstance().getTimeInMillis(), mStorage.getNewJournalId());
+			//1. When a new Journal will be entered. Journal needs new Id
+			tempJournal = new Journal(Journal.getCurrentId());
 			getActivity().setTitle(getString(R.string.str_new_journal));
 		} else {
+			//2. When a existing journal of a party is opened. Journal has Id
 			int partyId = getArguments().getInt(Utils.KEY_PARTY_ID);
-			tempJournal = mStorage.getJournal(partyId, journalId).getDeepCopy();
-			getActivity().setTitle(mStorage.getParty(partyId).getName());
+			mParty = mStorage.getParty(partyId);
+			tempJournal = mStorage.getJournal(mParty, journalId).getDeepCopy();
+			getActivity().setTitle(mParty.getName());
 		}
 
+		//Wire Views and Widgets
 		View v = inflater.inflate(R.layout.fragment_journal, new LinearLayout(getActivity()));
-
 		idTV = (TextView) v.findViewById(R.id.fragment_journal_id);
+		idTV.setText(Utils.getStringId(tempJournal.getId()));
 
 		drCrTv = (TextView) v.findViewById(R.id.fragment_journal_dr_cr_tv);
+
 		amountEt = (EditText) v.findViewById(R.id.fragment_home_amount_et);
 		amountEt.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -104,28 +113,26 @@ public class JournalFragment extends Fragment {
 
 		dateBtn = (Button) v.findViewById(R.id.activity_home_date_btn);
 		dateBtn.setText(Utils.parseDate(new Date(tempJournal.getDate()), Utils.DATE_FORMAT)) ;
-				//+ " ("	+ Utils.getNepaliDate(tempJournal.getDate()) + ")");
 		dateBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DatePickerFragment.newInstance(new Date(tempJournal.getDate())).show(
-						getActivity().getSupportFragmentManager(), DatePickerFragment.TAG);
+				DatePickerFragment.newInstance(new Date(tempJournal.getDate()))
+						.show(getActivity().getSupportFragmentManager(), DatePickerFragment.TAG);
 				//the result is delivered to OnDialoguePressedOk()
 			}
 		});
 
 		partyBtn = (Button) v.findViewById(R.id.fragment_home_merchant_btn);
-		partyBtn.setText(tempJournal.getPartyId() == Utils.NO_PARTY ? getString(R.string.str_party)
-				: mStorage.getParty(tempJournal.getPartyId()).getName());
+		partyBtn.setText(mParty == null ? getString(R.string.str_party): mParty.getName());
 		partyBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if(journalId != Utils.ID_NEW_JOURNAL){
+				if (journalId != Utils.ID_NEW_JOURNAL) {
 					Utils.alert(getActivity(), getString(R.string.warning_cant_change_party));
 					return;
 				}
-					
+
 				partylistdialog = new PartyListDialog();
 				partylistdialog.show(getActivity().getSupportFragmentManager(), PartyListDialog.KEY_PARTY_ID);
 				//the result is delivered to OnDialoguePressedOk()
@@ -139,9 +146,7 @@ public class JournalFragment extends Fragment {
 			public void onClick(View v) {
 				journalChanged = true;
 				tempJournal.setType(Journal.Type.Debit);
-				amountEt.setTextColor(Color.parseColor(Utils.GREEN));
-				drCrTv.setTextColor(Color.parseColor(Utils.GREEN));
-				drCrTv.setText(getString(R.string.str_dr));
+                setTextDrCr(tempJournal.getType());
 			}
 		});
 
@@ -152,9 +157,7 @@ public class JournalFragment extends Fragment {
 			public void onClick(View v) {
 				journalChanged = true;
 				tempJournal.setType(Journal.Type.Credit);
-				amountEt.setTextColor(Color.parseColor(Utils.RED));
-				drCrTv.setText(getString(R.string.str_cr));
-				drCrTv.setTextColor(Color.parseColor(Utils.RED));
+                setTextDrCr(tempJournal.getType());
 			}
 		});
 
@@ -235,34 +238,44 @@ public class JournalFragment extends Fragment {
 					return;
 				}
 
-				Party party = mStorage.getParty(tempJournal.getPartyId());
-				
-				if (journalId == Utils.ID_NEW_JOURNAL) {
-					party.addJournal(tempJournal);
-					tempJournal = new Journal(Calendar.getInstance().getTimeInMillis(), mStorage.getNextJournalId());
-					setValues(tempJournal);
-				}
-				else{
-					//if the date is changed, delete the old Journal and add it again with changed date
-					//in order for the Journal to be in right place in the array. takes more processing power
-					if(dateChanged){
-						//tempJournal.getDate() != mStorage.getJournal(tempJournal.getPartyId(), tempJournal.getId()).getDate()){
-						party.deleteJournal(tempJournal.getId());
-						party.addJournal(tempJournal);
-					}
-					
-					Intent i = new Intent();
-					if(journalChanged){
-						i.putExtra(Utils.NAME_JOURNAL_CHGD, true);
-						Journal journal = mStorage.getJournal(tempJournal.getPartyId(), tempJournal.getId()); 
-						journal.deepCopyFrom(tempJournal);
-						tempJournal = null;
-					}
-					Utils.toast(getActivity(), "Journal saved.");
-					getActivity().setResult(Activity.RESULT_OK, i);
-					getActivity().finish();
-				}
+				switch(journalId){
+					case Utils.ID_NEW_JOURNAL:
+						//If the journal is new, add it to the party
+						mParty.addJournal(tempJournal);
 
+                        //Save selected values so that user doesn't have to selected them again
+                        long selectedDate = tempJournal.getDate();
+                        int selectedPartyId = tempJournal.getPartyId();
+                        Journal.Type selectedType = tempJournal.getType();
+
+                        //Create new instance of Journal
+						tempJournal = new Journal(selectedDate, Journal.incrementCurrentId());
+                        tempJournal.setPartyId(selectedPartyId);
+                        tempJournal.setType(selectedType);
+						setValues(tempJournal, mParty);
+						break;
+
+					default:
+						//if the date is changed, delete the old Journal and add it again with changed date
+						//in order for the Journal to be in right place in the array. takes more processing power
+						if(dateChanged){
+							mParty.deleteJournal(tempJournal.getId());
+							mParty.addJournal(tempJournal);
+						}
+
+						Intent i = new Intent();
+						if(journalChanged){
+							i.putExtra(Utils.NAME_JOURNAL_CHGD, true);
+							Journal journal = mStorage.getJournal(mParty, tempJournal.getId());
+							journal.deepCopyFrom(tempJournal);
+							tempJournal = null;
+						}
+						Utils.toast(getActivity(), String.format(getString(R.string.msg_saved),
+								getString(R.string.str_journal)));
+						getActivity().setResult(Activity.RESULT_OK, i);
+						getActivity().finish();
+						break;
+				}
 			}
 		});
 
@@ -274,7 +287,8 @@ public class JournalFragment extends Fragment {
 				public void onClick(View v) {
 					journalChanged = true;
 					mStorage.getParty(tempJournal.getPartyId()).deleteJournal(tempJournal.getId());
-					Utils.toast(getActivity(), "Journal Deleted!");
+					String msg= String.format(getString(R.string.msg_deleted),getString(R.string.str_journal));
+					Utils.toast(getActivity(), msg);
 					Intent i = new Intent();
 					i.putExtra(Utils.NAME_JOURNAL_CHGD, true);
 					getActivity().setResult(Activity.RESULT_OK, i);
@@ -283,30 +297,31 @@ public class JournalFragment extends Fragment {
 			});
 		}
 		
-		setValues(tempJournal);
+		setValues(tempJournal, mParty);
 
 		return v;
 	}
 
 	public void OnDialogPressedOk(Intent data, int requestCode) {
 		switch (requestCode) {
-		case PartyListDialog.SELECTED_PARTY_CODE:
-			int partyId = data.getIntExtra(PartyListDialog.KEY_PARTY_ID, 0);
-			partyBtn.setText(mStorage.getParty(partyId).getName());
-			tempJournal.setPartyId(partyId);
-			partylistdialog.dismiss();
-			break;
 
-		case Utils.REQUEST_CHGED_DATE:
-			long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
-			if(newDate != tempJournal.getDate()){
-				tempJournal.setDate(newDate);
-				dateChanged = journalChanged = true;
-			}
-			dateBtn.setText(Utils.parseDate(new Date(tempJournal.getDate()), Utils.DATE_FORMAT));
-					//+ " ("+ Utils.getNepaliDate(tempJournal.getDate()) + ")");
-			Log.i("Selected Date", String.valueOf(tempJournal.getDate()));
-			break;
+            case PartyListDialog.SELECTED_PARTY_CODE:
+                int partyId = data.getIntExtra(PartyListDialog.KEY_PARTY_ID, 0);
+                mParty = mStorage.getParty(partyId);
+                partyBtn.setText(mParty.getName());
+                tempJournal.setPartyId(partyId);
+                partylistdialog.dismiss();
+                break;
+
+            case Utils.REQUEST_CHGED_DATE:
+                long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
+                if(newDate != tempJournal.getDate()){
+                    tempJournal.setDate(newDate);
+                    dateChanged = journalChanged = true;
+                }
+                dateBtn.setText(Utils.parseDate(new Date(tempJournal.getDate()), Utils.DATE_FORMAT));
+                Log.i("Selected Date", String.valueOf(tempJournal.getDate()));
+                break;
 
 		}
 
@@ -318,66 +333,45 @@ public class JournalFragment extends Fragment {
 			return;
 
 		switch (requestCode) {
-		case Utils.REQUEST_TAKE_PHOTO:
-			// TODO: check if it works
-			tempJournal.getAttachmentPaths().add(Utils.getLastPicturePath());
-			//tempJournal.getAttachmentPaths().add(data.getData().getPath()); //data is null here
-					//((Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT)).getPath());
-			// Bundle extras = data.getExtras();
-			// Bitmap imageBitmap = (Bitmap) extras.get("data");
-			// mImageView.setImageBitmap(imageBitmap);
 
-			break;
-		case Utils.REQUEST_IMAGE:
-			Uri selectedImage = data.getData();
+            case Utils.REQUEST_TAKE_PHOTO:
+                // TODO: check if it works
+                tempJournal.getAttachmentPaths().add(Utils.getLastPicturePath());
+                //tempJournal.getAttachmentPaths().add(data.getData().getPath()); //data is null here
+                        //((Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT)).getPath());
+                // Bundle extras = data.getExtras();
+                // Bitmap imageBitmap = (Bitmap) extras.get("data");
+                // mImageView.setImageBitmap(imageBitmap);
 
-			Bitmap bitmap;
-			try {
-				bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-			} catch (Exception e) { Log.d(this.toString(), "couldn't load selected image");
-				return;
-			}
+                break;
 
-			File picFile = Utils.createImageFile(getActivity(), tempJournal);
+            case Utils.REQUEST_IMAGE:
+                Uri selectedImage = data.getData();
+                Bitmap bitmap;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                } catch (Exception e) { Log.d(TAG, "couldn't load selected image");
+                    return;
+                }
 
-			PictureUtils.storeImage(bitmap, picFile, getActivity());
-			tempJournal.getAttachmentPaths().add(picFile.getAbsolutePath());
-			// partyFolder.getAbsolutePath()+ "/" + fileName + ".png");
+                File picFile = Utils.createImageFile(getActivity(), tempJournal);
+                PictureUtils.storeImage(bitmap, picFile, getActivity());
+                tempJournal.getAttachmentPaths().add(picFile.getAbsolutePath());
+                break;
 
-			break;
-			
-		case Utils.REQUEST_PICK_JSON_CODE:
-				Uri selectedJsonFile = data.getData();
-				boolean success = mStorage.parseJSON((selectedJsonFile.getPath()));
-				Utils.alert(getActivity(), String.format(getString(R.string.msg_finished), getString(R.string.str_backup_restore),
-						success ? getString(R.string.str_finished) : getString(R.string.str_failed)));
-				
-				//update the id
-				tempJournal.setIdFromDB(mStorage.getNextJournalId());
-				idTV.setText(getString(R.string.str_id) + Utils.getStringId(tempJournal.getId()));
-				
-			break;
-			
-		case Utils.REQUEST_PICK_BACKUP_CODE:
-			Uri selectedFile = data.getData();
-			mStorage.restoreBackUp(selectedFile.getPath());
-			
-			break;
-			
-		case Utils.REQUEST_CHGD_ATTACHMENTS:
-			boolean isAttachmentChanged = data.getBooleanExtra(Utils.KEY_ATTACHMENTS_IS_CHGD, false);
-			if(isAttachmentChanged){
-				tempJournal.setAttachmentPaths(data.getStringArrayListExtra(Utils.KEY_ATTACHMENTS));
-			}
-			
-			break;
-		}
+            case Utils.REQUEST_CHGD_ATTACHMENTS:
+                boolean isAttachmentChanged = data.getBooleanExtra(Utils.KEY_ATTACHMENTS_IS_CHGD, false);
+                if(isAttachmentChanged){
+                    tempJournal.setAttachmentPaths(data.getStringArrayListExtra(Utils.KEY_ATTACHMENTS));
+                }
+
+                break;
+        }
 
 	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Auto-generated method stub
 		inflater.inflate(R.menu.home, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -389,60 +383,67 @@ public class JournalFragment extends Fragment {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-		intent.setType("file/*");
-		
 		switch (id) {
-		case R.id.Merchants:
-			startActivity(new Intent(getActivity(), PartyListActivity.class));
-			break;
-			
-		case R.id.CreateFullBack:
-			mStorage.createFullBackUp();
-			break;
-			
-		case R.id.RestoreBackup:
-			startActivityForResult(intent, Utils.REQUEST_PICK_BACKUP_CODE);
-			break;
-			
-		case R.id.Export:
-			if(mStorage.createJSONFile())
-				Utils.toast(getActivity(), getString(R.string.str_export_json) + " " + getString(R.string.str_finished));
-			break;
-		case R.id.Import:
-			startActivityForResult(intent, Utils.REQUEST_PICK_JSON_CODE);
+            case R.id.Merchants:
+                startActivity(new Intent(getActivity(), PartyListActivity.class));
+                break;
 
+            case R.id.Tools:
+                startActivity(new Intent(getActivity(), ImportExportActivity.class));
+                break;
 		}
 
 		return super.onOptionsItemSelected(item);
 	}
 
 	/**
-	 * 
+	 * Sets value of the UI Widgets based on passed parameters
 	 */
-	public void setValues(Journal tempJournal) {
-		idTV.setText("ID: " + Utils.getStringId(tempJournal.getId()));
-		amountEt.requestFocus();
-		amountEt.setText(tempJournal.getAmount() == 0 ? ".00" : String.valueOf(tempJournal.getAmount()));
-		partyBtn.setText(tempJournal.getPartyId() == Utils.NO_PARTY ? getString(R.string.str_party):
-			mStorage.getParty(tempJournal.getPartyId()).getName());
-		if (tempJournal.getType().equals(Journal.Type.Debit)) {
-			drCrTv.setText(getString(R.string.str_dr));
-			drCrTv.setTextColor(Color.parseColor(Utils.GREEN)); // green color
-			amountEt.setTextColor(Color.parseColor(Utils.GREEN));
-		} else {
-			drCrTv.setText(getString(R.string.str_cr));
-			drCrTv.setTextColor(Color.parseColor(Utils.RED)); // red
-			amountEt.setTextColor(Color.parseColor(Utils.RED));
-		}
-		
-		noteEt.setText(tempJournal.getNote());
-		
+	public void setValues(Journal tempJournal, Party party) {
+		idTV.setText(getString(R.string.str_id) + Utils.getStringId(tempJournal.getId()));
+        partyBtn.setText(party == null ? getString(R.string.str_party) : party.getName());
+        amountEt.setText(tempJournal.getAmount() == 0 ? "" : String.valueOf(tempJournal.getAmount()));
+        noteEt.setText(tempJournal.getNote());
+        setTextDrCr(tempJournal.getType());
+        amountEt.requestFocus();
 	}
+
+    /**
+     * Sets the value and color of {@link #drCrTv} and {@link #amountEt} based on passed
+     * Journal Type
+     * @param journalType
+     */
+    public void setTextDrCr(Journal.Type journalType){
+        if (journalType.equals(Journal.Type.Debit)) {
+            drCrTv.setText(getString(R.string.str_dr));
+            drCrTv.setTextColor(Color.parseColor(Utils.GREEN));
+            amountEt.setTextColor(Color.parseColor(Utils.GREEN));
+        } else {
+            drCrTv.setText(getString(R.string.str_cr));
+            drCrTv.setTextColor(Color.parseColor(Utils.RED));
+            amountEt.setTextColor(Color.parseColor(Utils.RED));
+        }
+    }
 	
 	@Override
 	public void onPause() {
-		mStorage.writeToDB();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                mStorage.writeToDB();
+            }
+        });
 		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		//update the id
+        if (journalId == Utils.ID_NEW_JOURNAL) {
+            tempJournal.setId(Journal.getCurrentId());
+            idTV.setText(getString(R.string.str_id) + Utils.getStringId(tempJournal.getId()));
+        }
+
 	}
 }

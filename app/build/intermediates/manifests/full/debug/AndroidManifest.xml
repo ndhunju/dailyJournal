@@ -6,12 +6,15 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="22" />
+        android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -32,10 +35,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.ndhunju.dailyjournal.JournalFragment"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name="com.ndhunju.dailyjournal.controller.PartyListActivity"
             android:screenOrientation="portrait" >
         </activity>
@@ -53,6 +52,22 @@
         </activity>
 
         <service android:name="com.ndhunju.dailyjournal.controller.NotificationService" />
+
+        <activity
+            android:name="com.ndhunju.dailyjournal.controller.ImportExportActivity"
+            android:exported="true"
+            android:icon="@drawable/ic_ganesh_book_small"
+            android:label="@string/title_activity_back_up" >
+            <intent-filter>
+                <action android:name="com.google.android.apps.drive.DRIVE_OPEN" />
+
+                <data android:mimeType="file/.dj" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

@@ -1,12 +1,17 @@
 package com.ndhunju.dailyjournal.model;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +24,9 @@ import java.util.zip.ZipOutputStream;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -33,13 +40,12 @@ import com.ndhunju.dailyjournal.controller.NotificationService;
 
 public class Utils {
 	
-	public static final int REQUEST_PICK_JSON_CODE = 1;
 	public static final int REQUEST_TAKE_PHOTO = 2;
 	public static final int REQUEST_IMAGE = 4;
 	public static final int REQUEST_JOURNAL_CHGD = 5;
 	public static final int REQUEST_CHGED_DATE = 6;
 	public static final int REQUEST_CHGD_ATTACHMENTS = 7;
-	public static final int  REQUEST_PICK_BACKUP_CODE = 8;
+
 	
 	public static final int NO_PARTY = -1;
 	public static final int ID_NEW_JOURNAL = -2;
@@ -59,7 +65,8 @@ public class Utils {
 	//Date Formats
 	public static final String DATE_FORMAT_FULL = "EEEE, MMM dd, yyy @ kk:mm a";
 	public static final String DATE_FORMAT = "MMM-d-yyy";
-	public static final String DATE_FORMAT_SLASH = "M-d-yyy";
+	public static final String DATE_FORMAT_DASH = "M-d-yyy";
+	public static final String DATE_FORMAT_FOR_FILE = "M-d-yyy-kk-mm-ss"; //kk for 24 hours format
 	public static final String DATE_FORMAT_SHORT = "EEE, MMM dd";
 	public static final String DATE_FORMAT_DAY = "EEEE, MMM dd";
 	public static final String DATE_FORMAT_NEPALI = "d/M/yyy";
@@ -72,7 +79,8 @@ public class Utils {
 	
 	
 	private static final String IMG_EXT = ".png";
-	public static final String ZIP_EXT = ".dj";
+	public static final String ZIP_EXT = ".zip";
+	public static final String ZIP_EXT_OLD = ".dj";
 	
 	private static String lastPicturePath;
 	
@@ -90,7 +98,7 @@ public class Utils {
 	}
 	
 	public static void toast(Context context, String msg){
-		Toast.makeText(context, msg	, Toast.LENGTH_SHORT).show();;
+		Toast.makeText(context, msg	, Toast.LENGTH_SHORT).show();
 	}
 	
 	public static void toast(Context con, String msg, int length){
@@ -108,6 +116,14 @@ public class Utils {
 		.setTitle(con.getString(R.string.str_alert))
 		.setPositiveButton(android.R.string.ok, null)
 		.create().show();
+	}
+
+	public static void alert(Context con,String msg, DialogInterface.OnClickListener listener){
+		new AlertDialog.Builder(con).setMessage(msg)
+				.setTitle(con.getString(R.string.str_alert))
+				.setPositiveButton(android.R.string.ok, listener)
+				.setNegativeButton(android.R.string.cancel, null)
+				.create().show();
 	}
 	
 	public static String getNepalDate(long date){
@@ -206,20 +222,49 @@ public class Utils {
 		File f = new File(path);
 		return f.delete();
 	}
-	
-	public static void zip(File directory, File zipfile) throws IOException {
-		URI base = directory.toURI();
+
+	public static boolean cleanDirectory(File directory) throws IOException {
+		if (!directory.exists()) {
+			final String message = directory + " does not exist";
+			throw new IllegalArgumentException(message);
+			}
+
+		if (!directory.isDirectory()) {
+		 final String message = directory + " is not a directory";
+			throw new IllegalArgumentException(message);
+			}
+
+		final File[] files = directory.listFiles();
+		if (files == null) {  // null if security restricted
+			throw new IOException("Failed to list contents of " + directory);
+			}
+
+		for (final File file : files) {
+				file.delete();
+			}
+
+		return true;
+	}
+
+	/**
+	 * Zips passed File/Directory and writes the zipped content into passed finalZipFile
+	 * @param directoryToZip
+	 * @param finalZipFile
+	 * @throws IOException
+	 */
+	public static void zip(File directoryToZip, File finalZipFile) throws IOException {
+		URI base = directoryToZip.toURI();
 		Deque<File> queue = new LinkedList<File>();
-		queue.push(directory);
-		OutputStream out = new FileOutputStream(zipfile);
+		queue.push(directoryToZip);
+		OutputStream out = new FileOutputStream(finalZipFile);
 		Closeable res = out;
 		ZipOutputStream zout = null ;
 		try {
 			zout = new ZipOutputStream(out);
 			res = zout;
 			while (!queue.isEmpty()) {
-				directory = queue.pop();
-				for (File kid : directory.listFiles()) {
+				directoryToZip = queue.pop();
+				for (File kid : directoryToZip.listFiles()) {
 					String name = base.relativize(kid.toURI()).getPath();
 					if (kid.isDirectory()) {
 						queue.push(kid);
@@ -242,12 +287,18 @@ public class Utils {
 		}
 	}
 
-	public static void unzip(File zipfile, File directory) throws IOException {
-		ZipFile zfile = new ZipFile(zipfile);
+	/**
+	 * Unzips passed zipped file into passed directory (directoryToUnzip)
+	 * @param zipFile
+	 * @param directoryToUnzip
+	 * @throws IOException
+	 */
+	public static void unzip(File zipFile, File directoryToUnzip) throws IOException {
+		ZipFile zfile = new ZipFile(zipFile.getAbsolutePath());
 		Enumeration<? extends ZipEntry> entries = zfile.entries();
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = entries.nextElement();
-			File file = new File(directory, entry.getName());
+			File file = new File(directoryToUnzip, entry.getName());
 			if (entry.isDirectory()) {
 				file.mkdirs();
 			} else {
@@ -263,7 +314,7 @@ public class Utils {
 		zfile.close();
 	}
 
-	private static void copy(InputStream in, OutputStream out) throws IOException {
+	public static void copy(InputStream in, OutputStream out) throws IOException {
 		byte[] buffer = new byte[1024];
 		while (true) {
 			int readCount = in.read(buffer);
@@ -271,6 +322,16 @@ public class Utils {
 				break;
 			}
 			out.write(buffer, 0, readCount);
+		}
+	}
+
+	public static void copyInputStream( BufferedReader in, BufferedWriter out )      throws IOException
+	{
+		char[] buffer=new char[1024];
+		int len;
+		while ( ( len=in.read(buffer) ) >= 0 )
+		{
+			out.write(buffer, 0, len);
 		}
 	}
 
@@ -290,6 +351,34 @@ public class Utils {
 		} finally {
 			out.close();
 		}
+	}
+
+	public static byte[] read(File file) throws IOException {
+
+		ByteArrayOutputStream ous = null;
+		InputStream ios = null;
+		try {
+			byte[] buffer = new byte[4096];
+			ous = new ByteArrayOutputStream();
+			ios = new FileInputStream(file);
+			int read = 0;
+			while ( (read = ios.read(buffer)) != -1 ) {
+				ous.write(buffer, 0, read);
+			}
+		} finally {
+			try {
+				if ( ous != null )
+					ous.close();
+			} catch ( IOException e) {
+			}
+
+			try {
+				if ( ios != null )
+					ios.close();
+			} catch ( IOException e) {
+			}
+		}
+		return ous.toByteArray();
 	}
 
 }

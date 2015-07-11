@@ -30,20 +30,14 @@ public class DatePickerFragment extends DialogFragment {
 		mCal = Calendar.getInstance();
 		mCal.setTime(d);
 		
-		/*Bundle args = new Bundle();
-		args.putSerializable(EXTRA_CAL, mCal);
-		args.putBoolean(EXTRA_NEW_JOURNAL, isNewJournal);*/
-		
 		DatePickerFragment dateFragment = new DatePickerFragment();
-		//dateFragment.setArguments(args);
-		
+
 		return dateFragment;
 	}
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		//mCal = (Calendar)getArguments().getSerializable(EXTRA_CAL);
-		
+
 		int year = mCal.get(Calendar.YEAR);
 		int month = mCal.get(Calendar.MONTH);
 		int day = mCal.get(Calendar.DAY_OF_MONTH);
@@ -80,13 +74,15 @@ public class DatePickerFragment extends DialogFragment {
 		});*/
 		
 		return new AlertDialog.Builder(getActivity())
-			.setTitle("Pick a Date")
+			.setTitle(getString(R.string.str_pick_a_date))
 			.setPositiveButton(android.R.string.ok, new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Intent i = new Intent();
 					i.putExtra(EXTRA_CAL, mCal);
-					((JournalFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.activity_home_journal_fl)).OnDialogPressedOk(i, Utils.REQUEST_CHGED_DATE);
+					((JournalFragment)getActivity().getSupportFragmentManager()
+							.findFragmentById(R.id.activity_home_journal_fl))
+							.OnDialogPressedOk(i, Utils.REQUEST_CHGED_DATE);
 				}
 			})
 			.setView(v)

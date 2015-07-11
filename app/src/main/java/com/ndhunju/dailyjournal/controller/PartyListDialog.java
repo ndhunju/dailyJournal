@@ -72,21 +72,21 @@ public class PartyListDialog extends DialogFragment {
 			}
 		}); 
 		
-		((Button)v.findViewById(R.id.fragment_party_list_add_party_btn)).setOnClickListener(new OnClickListener() {
-			
+		v.findViewById(R.id.fragment_party_list_add_party_btn).setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String name = srchPartyET.getText().toString();
-				Party newParty = new Party(name, Storage.getInstance(getActivity()).getNextPartyId());
+				Party newParty = new Party(name, Party.incrementCurrentId());
 				Storage storage = Storage.getInstance(getActivity());
 				storage.addParty(newParty);
 				Utils.toast(getActivity(), name + " saved.");
-				
+
 				Intent i = new Intent();
-				i.putExtra(KEY_PARTY_ID	, newParty.getId() );
-				((JournalFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.activity_home_journal_fl)).OnDialogPressedOk(i, SELECTED_PARTY_CODE);		
-				
+				i.putExtra(KEY_PARTY_ID, newParty.getId());
+				((JournalFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.activity_home_journal_fl)).OnDialogPressedOk(i, SELECTED_PARTY_CODE);
+
 			}
 		});
 

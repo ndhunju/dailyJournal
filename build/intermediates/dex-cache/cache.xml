@@ -2,18 +2,39 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\dhunju\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-17b5e44ec01c000530f98924a73e2a2d890cc0b3.jar" />
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-6144e4212dd7015747c6b32d4fdd02df57c19609.jar" />
     </item>
     <item
-        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\classes.jar"
+        jar="C:\Users\dhunju\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-d52b83fa0e5eff60a654d3d7e1d03773c159dcdd.jar" />
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-b4399b053913d6805730de7cd50c8d206374650f.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-c08e4ed0cd6dea2c872396dc930ea3e6d6b1face.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f44d03c138cb6488fdbaa65e3a7e5878861a56d8">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-5bc60c0a10680805d645c344752d3287c64db8c5.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\jars\libs\internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-62dac5d78168975c431f4ed56fbf246b1eed3286.jar" />
     </item>
     <item
         jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\18.0.0\jars\classes.jar"
@@ -21,13 +42,6 @@
         revision="22.0.1"
         sha1="8f11f56e350eacabf2273f646d981356eea0ed77">
         <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-a7fdc75f24185edad72b4e2fe325e12441bd0b54.jar" />
-    </item>
-    <item
-        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\libs\internal_impl-21.0.3.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-0349c9656d53ecdf7ca91a67fcc16f4e88ec92e6.jar" />
     </item>
 
 </items>

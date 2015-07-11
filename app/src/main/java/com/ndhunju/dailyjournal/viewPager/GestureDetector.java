@@ -18,9 +18,9 @@ package com.ndhunju.dailyjournal.viewPager;
 import android.view.MotionEvent;
 
 public interface GestureDetector {
-	public boolean onTouchEvent(MotionEvent ev);
+	boolean onTouchEvent(MotionEvent ev);
 
-	public boolean isScaling();
+	boolean isScaling();
 
-	public void setOnGestureListener(OnGestureListener listener);
+	void setOnGestureListener(OnGestureListener listener);
 }
