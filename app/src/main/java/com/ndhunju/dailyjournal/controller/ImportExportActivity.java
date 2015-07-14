@@ -82,8 +82,14 @@ public class ImportExportActivity extends Activity {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //connect to pick a file from drive
-                        connectGoogleApiClient(REQUEST_CODE_GDRIVE_PICKER);
+                        Utils.alert(ImportExportActivity.this, getString(R.string.warning_restore),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //connect to pick a file from drive
+                                        connectGoogleApiClient(REQUEST_CODE_GDRIVE_PICKER);
+                                    }
+                                });
                     }
                 });
 
@@ -203,11 +209,12 @@ public class ImportExportActivity extends Activity {
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        String msg = "";
         switch (requestCode) {
             case REQUEST_CODE_GDRIVE_CREATOR:
                 // Called after a file is saved to Drive.
                 gDrivePd.cancel();
-                String msg = String.format(getString(R.string.msg_exporting),
+                msg = String.format(getString(R.string.msg_exporting),
                         resultCode == RESULT_OK ?getString(R.string.str_finished): getString(R.string.str_failed));
                 Utils.alert(ImportExportActivity.this, msg);
                 break;
@@ -223,22 +230,35 @@ public class ImportExportActivity extends Activity {
             //Currently this feature is disabled
             case REQUEST_CODE_PICK_JSON:
                 //Called when the user has picked a json file to restore data from
+                if(resultCode != RESULT_OK) {
+                    msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
+                    Utils.alert(ImportExportActivity.this, msg);
+                    return;
+                }
+
                 Uri selectedJsonFile = data.getData();
                 boolean success = parseJSONFile((selectedJsonFile.getPath()), false);
                 //Prepare msg
-                String msg1 = success ? String.format(getString(R.string.msg_finished), getString(R.string.str_backup)) :
+                msg = success ? String.format(getString(R.string.msg_finished), getString(R.string.str_backup)) :
                         String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
-                Utils.alert(ImportExportActivity.this, msg1);
+
+                Utils.alert(ImportExportActivity.this, msg);
 
                 break;
 
             case REQUEST_CODE_PICK_BACKUP:
                 //Called when the user has picked a backup (.dj/.zip) file
+                if(resultCode != RESULT_OK || data.getData() == null) {
+                    msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
+                    Utils.alert(ImportExportActivity.this, msg);
+                    return;
+                }
                 Uri selectedFile = data.getData();
                 restoreBackUp(selectedFile.getPath());
                 break;
 
             case REQUEST_CODE_GDRIVE_PICKER:
+
                 if (resultCode == RESULT_OK) {
                     DriveId driveId = (DriveId) data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
@@ -301,7 +321,7 @@ public class ImportExportActivity extends Activity {
 
                                 try {
                                     //Create a new full backup of data into local drive
-                                    String filePath = createBackUp();
+                                    String filePath = createBackUp(false);
                                     backUpfile = new File(filePath);
                                     outputStream.write(Utils.read(backUpfile));
 
@@ -350,8 +370,8 @@ public class ImportExportActivity extends Activity {
     public String createJSONFile() throws IOException {
 
         try {
-            // Create a hidden app folder
-            File appFolder = Utils.getAppFolder(true);
+            // Create a app folder
+            File appFolder = Utils.getAppFolder(ImportExportActivity.this);
 
             //Store old json files in an array so that it can be deleted once
             //new json file is created succesfully
@@ -364,7 +384,9 @@ public class ImportExportActivity extends Activity {
             String fileName = "dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_FOR_FILE) + ".json";
             File jsonFile = new File(appFolder.getAbsolutePath(),fileName );
 
-            jsonFile.createNewFile();
+            if(!jsonFile.createNewFile())
+                Log.d(TAG, "Failed to create file " + jsonFile.getAbsolutePath());
+
             FileOutputStream fileOutputStream = new FileOutputStream(jsonFile.getAbsoluteFile());
             fileOutputStream.write(getJSONDb().toString().getBytes());
             fileOutputStream.close();
@@ -419,7 +441,7 @@ public class ImportExportActivity extends Activity {
             @Override
             protected String doInBackground(Void... Void) {
                 try {
-                    filePath = createBackUp();
+                    filePath = createBackUp(true);
                 } catch (IOException e) {
                     Log.w("TAG", "Error creating backup file: " + e.getMessage());
                 } finally {
@@ -436,6 +458,8 @@ public class ImportExportActivity extends Activity {
                         String.format(getString(R.string.msg_finished), getString(R.string.str_backup))
                         : String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
 
+                resultMsg += String.format(getString(R.string.msg_saved_in), getString(R.string.backup_dir));
+
                 //Display the result
                 Utils.alert(ImportExportActivity.this, resultMsg);
             }
@@ -444,16 +468,17 @@ public class ImportExportActivity extends Activity {
 
     }
 
-    public String createBackUp() throws IOException {
+    public String createBackUp(boolean inExtDir) throws IOException {
         //1.Create JSON with latest data
         createJSONFile();
 
-        //2. Zip app folder that is hidden as all the attachments and json file are here
+        //2. Zip app folder  as all the attachments and json file are here
         //2.1 Get the app folder
-        File directoryToZip = Utils.getAppFolder(true);
+        File directoryToZip = Utils.getAppFolder(ImportExportActivity.this);
 
         //2.2 get App Folder that is not hidden. Backup file will be created here
-        File appFolder = Utils.getAppFolder(false);
+        File appFolder = inExtDir ? Utils.getAppFolder(false) : Utils.getCacheDir(ImportExportActivity.this);
+
 
         //2.3 create a zip file in not hidden app folder so that user can use it
         String fileName = "dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_FOR_FILE) + Utils.ZIP_EXT;
@@ -463,8 +488,11 @@ public class ImportExportActivity extends Activity {
         //3 zip the directory file into zipFile
         Utils.zip(directoryToZip, zipFile);
 
-        //let know that a new file has been created so that it appears in the computer
-        MediaScannerConnection.scanFile(ImportExportActivity.this, new String[]{appFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
+        if(inExtDir) {
+            //let know that a new file has been created so that it appears in the computer
+            MediaScannerConnection.scanFile(ImportExportActivity.this, new String[]{appFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
+        }
+
         Log.i("backup", "backup created");
 
         return zipFile.getAbsolutePath();
@@ -510,7 +538,7 @@ public class ImportExportActivity extends Activity {
             protected Boolean doInBackground(String... params) {
                 try {
                     //Get the app folder where the data are stored
-                    File appFolder = Utils.getAppFolder(true);
+                    File appFolder = Utils.getAppFolder(ImportExportActivity.this);
 
                     //Delete old files, attachments
                     Utils.cleanDirectory(appFolder);
@@ -584,7 +612,7 @@ public class ImportExportActivity extends Activity {
             protected Boolean doInBackground(String... params) {
                 try {
                     //Get the app folder where the data are stored
-                    File appFolder = Utils.getAppFolder(true);
+                    File appFolder = Utils.getAppFolder(ImportExportActivity.this);
 
                     //Unzip the files into app folder
                     Utils.unzip(new File(params[0]), appFolder);
@@ -744,7 +772,7 @@ public class ImportExportActivity extends Activity {
 
             //create the file in local drive to store retrieved data
             String fileName = "dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_FOR_FILE) + Utils.ZIP_EXT;
-            File backUpFileFromGDrive = new File(Utils.getAppFolder(false).getAbsolutePath(), fileName );
+            File backUpFileFromGDrive = new File(Utils.getCacheDir(ImportExportActivity.this).getAbsolutePath(), fileName );
 
 
             //Buffered input streams read data from a memory area known as a buffer;
@@ -764,9 +792,16 @@ public class ImportExportActivity extends Activity {
                 out.close();
                 driveContents.discard(getGoogleApiClient());
 
+                //Get the app folder where the data are stored
+                File appFolder = Utils.getAppFolder(ImportExportActivity.this);
 
-                //Unzip the backup file into hidden app folder
-                File appFolder = Utils.getAppFolder(true);
+                //Delete old files, attachments
+                Utils.cleanDirectory(appFolder);
+
+                //Delete existing objects
+                Storage.getInstance(ImportExportActivity.this).getParties().clear();
+
+                //Unzip the backup file into app folder
                 Utils.unzip(backUpFileFromGDrive, appFolder);
 
                 //search .json file
@@ -785,7 +820,9 @@ public class ImportExportActivity extends Activity {
                 ex.printStackTrace();
             }finally {
                 //delete the file once the data is restored; Google drive already has a copy
-                backUpFileFromGDrive.delete();
+               boolean success =  Utils.deleteFile(backUpFileFromGDrive.getAbsolutePath());
+                if(!success) Log.e(TAG, "Deleting backup file from google drive failed.");
+                //backUpFileFromGDrive.delete();
             }
 
             return "success";

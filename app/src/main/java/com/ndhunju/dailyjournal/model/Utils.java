@@ -1,30 +1,7 @@
 package com.ndhunju.dailyjournal.model;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URI;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Deque;
-import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +14,29 @@ import android.widget.Toast;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.NotificationService;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Deque;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class Utils {
 	
@@ -58,7 +58,8 @@ public class Utils {
 	
 	
 	public static final String APP_PREFIX = "com.ndhunju.dailyJournal";
-	public static final String APP_FOLDER_NAME = "DailyJournal"; 
+	public static final String APP_FOLDER_NAME = "DailyJournal";
+	public static final String APP_CACHE_FOLDER_NAME = "Cache";
 	public static final String ATTCH_FOLDER_NAME = "attachments";
 	public static final String HIDE_FOLDER = "."; //putting . makes the dir hidden, thus not appearing on "Photos" app
 	
@@ -83,6 +84,7 @@ public class Utils {
 	public static final String ZIP_EXT_OLD = ".dj";
 	
 	private static String lastPicturePath;
+	private static String appDir;
 	
 	public static String parseDate(Date date, String format) {
 		return DateFormat.format(format, date).toString(); 
@@ -128,7 +130,7 @@ public class Utils {
 	
 	public static String getNepalDate(long date){
 		long difference = 1789603921348l;
-		return parseDate(new Date(date+difference), DATE_FORMAT_NEPALI);
+		return parseDate(new Date(date + difference), DATE_FORMAT_NEPALI);
 	}
 	
 	public static void setNotification(Context con){
@@ -140,8 +142,8 @@ public class Utils {
 		cal.set(Calendar.MINUTE, 30); // 30 mins
 			
 		Alarm.setAlarmForNotification(con, NotificationService.class, Calendar.getInstance(),
-				con.getString(R.string.str_reminder),
-				con.getString(R.string.msg_reminder), true, 1000 * 60 * 60 * 24);
+                con.getString(R.string.str_reminder),
+                con.getString(R.string.msg_reminder), true, 1000 * 60 * 60 * 24);
 	}
 	
 	public static Intent getPictureFromCam(Activity activity, Journal journal){
@@ -168,7 +170,17 @@ public class Utils {
 	public static String getLastPicturePath(){
 		return lastPicturePath;
 	}
-	
+
+	/**
+	 * Returns a folder that will store app data.
+	 *  <b>NOTE:</b> <i>Since Android 4.4+, an app cannot delete files created in SD card
+	 * Thus while deleting a party, it's respective attachment files
+	 * cannot be deleted even though it was created by the app. Instead use
+	 * {@link #getAppFolder(Activity)} </i>
+	 * @param hide
+	 * @return
+     * TODO Use this method to export files to SD Card later if users want.
+	 */
 	public static File getAppFolder(boolean hide) {
 		// Create an app folder
 		File appFolder = new File(Environment.getExternalStorageDirectory(), hide ?
@@ -179,7 +191,60 @@ public class Utils {
 
 		return appFolder;
 	}
-	
+
+	/**
+	 * Returns app's folder in an internal storage if exists otherwise creates a new one
+	 *
+	 * @param activity
+	 * @return
+	 */
+	public static File getAppFolder(Activity activity){
+		File appFolder = activity.getDir(Utils.APP_FOLDER_NAME, Context.MODE_PRIVATE);
+		appDir = appFolder.getAbsolutePath();
+		return appFolder;
+	}
+
+	/**
+	 * Unlike {@link Activity#getCacheDir()} this method doesn't limit storage size
+	 * to 1 MB.
+	 * @param activity
+	 * @return
+	 */
+	public static File getCacheDir(Activity activity){
+		return activity.getDir(Utils.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
+	}
+
+	public static boolean cleanCacheDir(Activity activity){
+		File file = activity.getDir(Utils.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
+		boolean success = false;
+		try{
+			success = Utils.cleanDirectory(file);
+		} catch (IOException e) {
+			Log.d("Cache Dir", "Error deleting cache folder");
+			e.printStackTrace();
+		}
+
+		return  success;
+	}
+
+	public static String getAppDir(){
+		return appDir;
+	}
+
+	/**
+	 * Since app's data such as attachments are now stored in internal storage
+	 * we need to check if the path for attachments are still referring to external(old)
+	 * storage. If it is, then change it to the new one
+	 * @param path
+	 * @return
+	 */
+	public static String replaceOldDir(String path){
+		String oldPath = getAppFolder(true).getAbsolutePath();
+		if(path.contains(oldPath)){
+			path = path.replace(oldPath, Utils.getAppDir());
+		}
+		return path;
+	}
 	public static File getAttachmentFolder(File appFolder, boolean hide) {
 		File attchFolder = new File(appFolder.getAbsolutePath(), hide ? HIDE_FOLDER + Utils.ATTCH_FOLDER_NAME :
 			Utils.ATTCH_FOLDER_NAME); //. makes it invisible
@@ -201,25 +266,51 @@ public class Utils {
 	
 	public static File createImageFile(Activity activity, Journal journal) {
 		
-		File attachmentFolder = getAttachmentFolder(getAppFolder(true), true);
+		File attachmentFolder = getAttachmentFolder(getAppFolder(activity), true);
 		
-		File partyFolder = getPartyFolder(attachmentFolder, 
+		File partyFolder = getPartyFolder(attachmentFolder,
 				Storage.getInstance(activity).getParty(journal.getPartyId()).getName(), true);
 
 		//create a file to store image
-		String fileName = journal.getPartyId() + "-" + journal.getId() + "-"
-				+ journal.getAttachmentPaths().size();
+
+		/*This is prolly the secure way but I want to keep name short and simple and avoid the
+		overhead by imorting UUID class just for
+		String fileName = UUID.randomUUID().toString();*/
+
 		try {
-			File pic = new File(partyFolder.getAbsolutePath(), fileName + IMG_EXT);
+			String fileName;
+			File pic = null;
+			int i = 0;
+			do{
+				/*This way of naming creates collision when let's say two files 1-1-0.png and 1-1-1.png
+		 		exist. User deletes the first one. Later adds a new one which will be name 1-1-1.png*/
+				fileName = journal.getPartyId() + "-" + journal.getId() + "-"
+						+ (journal.getAttachmentPaths().size()+ i);
+				pic = new File(partyFolder.getAbsolutePath(), fileName + IMG_EXT);
+				i++;
+			}
+			while(pic.exists());
+
 			pic.createNewFile();
 			return pic;
 		} catch (Exception e) {	e.printStackTrace();}
 
 		return null;
 	}
-	
+
+	/**
+	 * Attempts to delete the file with passed path. Since Android 4.4, files in
+	 * SD Card can't be deleted (using {@link #getAppFolder(boolean)} but there should
+     * be no problem deleting files created using {@link #getAppFolder(Activity)}
+	 * @param path
+	 * @return
+	 */
 	public static boolean deleteFile(String path){
 		File f = new File(path);
+		if(!f.exists())
+			return true;
+		boolean t = f.isFile();
+		boolean u = f.isHidden();
 		return f.delete();
 	}
 
@@ -379,6 +470,29 @@ public class Utils {
 			}
 		}
 		return ous.toByteArray();
+	}
+
+	public static String formatCurrency(Double currency){
+		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
+		return nf.format(currency);
+	}
+
+	public static double parseCurrency(String currency) throws Exception {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
+		double doubleCurrency = 0;
+		try{
+			doubleCurrency = nf.parse(currency).doubleValue();
+		}catch(ParseException pe){
+			//try parsing it for regular double string
+			try{
+				doubleCurrency  = Double.parseDouble(currency);
+			}catch(NumberFormatException nfe){
+				Log.d("Format", "Incorrect format " + currency);
+				throw new Exception("Incorrect number format");
+			}
+		}
+
+		return doubleCurrency;
 	}
 
 }

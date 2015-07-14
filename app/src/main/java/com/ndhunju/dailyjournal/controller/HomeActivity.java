@@ -16,7 +16,7 @@ public class HomeActivity extends FragmentActivity {
 		Storage.getInstance(HomeActivity.this).readPartiesFromDB();
 		
 		//set notification if not set already
-		Utils.setNotification(HomeActivity.this);
+		//Utils.setNotification(HomeActivity.this);
 		
 		Intent newActIntent = new Intent(HomeActivity.this, JournalActivity.class);
 		startActivity(newActIntent);

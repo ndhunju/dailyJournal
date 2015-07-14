@@ -1,14 +1,12 @@
 package com.ndhunju.dailyjournal.model;
 
-import com.ndhunju.dailyjournal.R;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class Journal implements Comparator<Journal>{
 
@@ -138,11 +136,13 @@ public class Journal implements Comparator<Journal>{
 		mAttachmentPaths.add(path);
 	}
 	
-	public void deleteAllAttachment(){
-		for(String path: mAttachmentPaths){
-            Utils.deleteFile(path);
+	public boolean deleteAllAttachment(){
+		for(int i = 0 ; i < mAttachmentPaths.size(); i++){
+            if(!Utils.deleteFile(mAttachmentPaths.get(i)))
+				return false;
+			mAttachmentPaths.remove(i);
         }
-		mAttachmentPaths.clear();
+		return true;
 	}
 
     /**
@@ -259,8 +259,14 @@ public class Journal implements Comparator<Journal>{
             JSONArray attachmentJSONS = json.getJSONArray("attachments");
             ArrayList<String> attachments = new ArrayList<String>();
             for(int i = 0; i < attachmentJSONS.length(); i++){
-                attachments.add(attachmentJSONS.getString(i));
+				//Since app's data such as attachments are now stored in internal storage
+				//we need to check if the path for attachments are still referring to external(old)
+				//storage. If it is, then change it to the new one
+				String path = attachmentJSONS.getString(i);
+				path = Utils.replaceOldDir(path);
+                attachments.add(path);
             }
+
             Journal newJournal = new Journal(date, id);
             newJournal.setAddedDate(added_date);
             newJournal.setAmount(amount);

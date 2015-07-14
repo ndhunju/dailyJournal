@@ -1,9 +1,5 @@
 package com.ndhunju.dailyjournal.controller;
 
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -38,6 +34,10 @@ import com.ndhunju.dailyjournal.model.Storage;
 import com.ndhunju.dailyjournal.model.Utils;
 import com.ndhunju.dailyjournal.viewPager.ViewPagerActivity;
 
+import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+
 public class JournalFragment extends Fragment {
 
 	public static final String TAG = JournalFragment.class.getCanonicalName();
@@ -68,8 +68,6 @@ public class JournalFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		setHasOptionsMenu(true);
-
 		mStorage = Storage.getInstance(getActivity());
 		//Load data from the local database
 		mStorage.readPartiesFromDB();
@@ -81,12 +79,15 @@ public class JournalFragment extends Fragment {
 			//1. When a new Journal will be entered. Journal needs new Id
 			tempJournal = new Journal(Journal.getCurrentId());
 			getActivity().setTitle(getString(R.string.str_new_journal));
+			//enable menu
+			setHasOptionsMenu(true);
 		} else {
 			//2. When a existing journal of a party is opened. Journal has Id
 			int partyId = getArguments().getInt(Utils.KEY_PARTY_ID);
 			mParty = mStorage.getParty(partyId);
 			tempJournal = mStorage.getJournal(mParty, journalId).getDeepCopy();
 			getActivity().setTitle(mParty.getName());
+			setHasOptionsMenu(false);
 		}
 
 		//Wire Views and Widgets
@@ -101,8 +102,13 @@ public class JournalFragment extends Fragment {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if( !s.toString().equals("")){
-					tempJournal.setAmount(Double.parseDouble(s.toString()));
-					journalChanged = true;
+					try{
+						tempJournal.setAmount( Utils.parseCurrency(s.toString()));
+						journalChanged = true;
+					}catch(Exception e){
+						e.printStackTrace();
+						Utils.alert(getActivity(), getString(R.string.warning_format));
+					}
 				  }
 				}
 			@Override
@@ -123,7 +129,7 @@ public class JournalFragment extends Fragment {
 		});
 
 		partyBtn = (Button) v.findViewById(R.id.fragment_home_merchant_btn);
-		partyBtn.setText(mParty == null ? getString(R.string.str_party): mParty.getName());
+		partyBtn.setText(mParty == null ? getString(R.string.str_select_party): mParty.getName());
 		partyBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -233,7 +239,7 @@ public class JournalFragment extends Fragment {
 			public void onClick(View v) {
 				
 				// if party is not selected warn user
-				if (tempJournal.getPartyId() == (Utils.NO_PARTY)) {
+				if (mParty == null) {
 					Utils.alert(getActivity(), getString(R.string.warning_select_party));
 					return;
 				}
@@ -285,14 +291,20 @@ public class JournalFragment extends Fragment {
 			deleteBtn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					journalChanged = true;
-					mStorage.getParty(tempJournal.getPartyId()).deleteJournal(tempJournal.getId());
-					String msg= String.format(getString(R.string.msg_deleted),getString(R.string.str_journal));
-					Utils.toast(getActivity(), msg);
-					Intent i = new Intent();
-					i.putExtra(Utils.NAME_JOURNAL_CHGD, true);
-					getActivity().setResult(Activity.RESULT_OK, i);
-					getActivity().finish();
+					String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_journal));
+					Utils.alert(getActivity(), msg, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i) {
+							journalChanged = true;
+							mStorage.getParty(tempJournal.getPartyId()).deleteJournal(tempJournal.getId());
+							String msg = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
+							Utils.toast(getActivity(), msg);
+							Intent intent = new Intent();
+							intent.putExtra(Utils.NAME_JOURNAL_CHGD, true);
+							getActivity().setResult(Activity.RESULT_OK, intent);
+							getActivity().finish();
+						}
+					});
 				}
 			});
 		}
@@ -372,7 +384,7 @@ public class JournalFragment extends Fragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.home, menu);
+		inflater.inflate(R.menu.menu_home, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 	
@@ -400,11 +412,14 @@ public class JournalFragment extends Fragment {
 	 * Sets value of the UI Widgets based on passed parameters
 	 */
 	public void setValues(Journal tempJournal, Party party) {
+		mParty = party;
 		idTV.setText(getString(R.string.str_id) + Utils.getStringId(tempJournal.getId()));
-        partyBtn.setText(party == null ? getString(R.string.str_party) : party.getName());
-        amountEt.setText(tempJournal.getAmount() == 0 ? "" : String.valueOf(tempJournal.getAmount()));
+        partyBtn.setText(party == null ? getString(R.string.str_select_party) : party.getName());
+        amountEt.setText(tempJournal.getAmount() == 0 ? "" :
+				Utils.formatCurrency(tempJournal.getAmount()));
         noteEt.setText(tempJournal.getNote());
         setTextDrCr(tempJournal.getType());
+		dateBtn.setText(Utils.parseDate(new Date(tempJournal.getDate()), Utils.DATE_FORMAT));
         amountEt.requestFocus();
 	}
 
@@ -439,10 +454,10 @@ public class JournalFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		//update the id
+		//update the id and reset all
         if (journalId == Utils.ID_NEW_JOURNAL) {
             tempJournal.setId(Journal.getCurrentId());
-            idTV.setText(getString(R.string.str_id) + Utils.getStringId(tempJournal.getId()));
+			setValues(tempJournal, null);
         }
 
 	}

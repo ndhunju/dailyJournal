@@ -98,7 +98,7 @@ public class ViewPagerActivity extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.viewpager_menu, menu);
+		getMenuInflater().inflate(R.menu.menu_viewpager, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 

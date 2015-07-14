@@ -117,24 +117,26 @@ ADDED from AndroidManifest.xml:55:9
 		ADDED from AndroidManifest.xml:55:18
 activity#com.ndhunju.dailyjournal.controller.ImportExportActivity
 ADDED from AndroidManifest.xml:56:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:60:13
 	android:label
 		ADDED from AndroidManifest.xml:58:13
 	android:exported
 		ADDED from AndroidManifest.xml:59:13
 	android:icon
-		ADDED from AndroidManifest.xml:60:13
+		ADDED from AndroidManifest.xml:61:13
 	android:name
 		ADDED from AndroidManifest.xml:57:13
 intent-filter#com.google.android.apps.drive.DRIVE_OPEN
-ADDED from AndroidManifest.xml:61:13
+ADDED from AndroidManifest.xml:62:13
 action#com.google.android.apps.drive.DRIVE_OPEN
-ADDED from AndroidManifest.xml:62:17
-	android:name
-		ADDED from AndroidManifest.xml:62:25
-data
 ADDED from AndroidManifest.xml:63:17
+	android:name
+		ADDED from AndroidManifest.xml:63:25
+data
+ADDED from AndroidManifest.xml:64:17
 	android:mimeType
-		ADDED from AndroidManifest.xml:63:23
+		ADDED from AndroidManifest.xml:64:23
 meta-data#com.google.android.gms.version
 ADDED from com.google.android.gms:play-services-base:7.5.0:21:9
 	android:value

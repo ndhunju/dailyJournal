@@ -123,4 +123,8 @@ public class PictureUtils {
 	public static String getFullPath(Context c, String merchantName, String fileName){
 		return c.getString(R.string.app_name) + merchantName + fileName;
 	}
+
+	public static void deleteImageFile(Activity activity, String path){
+		activity.deleteFile(path);
+	}
 }

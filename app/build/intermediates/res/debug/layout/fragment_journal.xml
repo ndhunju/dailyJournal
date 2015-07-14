@@ -45,13 +45,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        style="@style/Widget.Button_Normal"
         />
 
     <Button
         android:id="@+id/fragment_home_merchant_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_party" />
+        android:text="@string/str_select_party"
+        style="@style/Widget.Button_Normal"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/str_dr"
-            android:textColor="#5CB85C" />
+            style="@style/Widget.Button_Positive"/>
 
         <Button
             android:id="@+id/fragment_home_credit_btn"
@@ -72,14 +74,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/str_cr"
-            android:textColor="#f63752" />
+            style="@style/Widget.Button_Negative"/>
     </LinearLayout>
 
      <Button
         android:id="@+id/fragment_home_attach_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_attachment" />
+        android:text="@string/str_attachment"
+         style="@style/Widget.Button_Normal"/>
      
     <EditText
         android:id="@+id/fragment_home_note_et"
@@ -93,14 +96,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_save"
-        android:textColor="#0000F0" />
+        style="@style/Widget.Button_Neutral"/>
 
     <Button
         android:id="@+id/fragment_home_delete_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_delete"
-        android:textColor="#F00000"
+        style="@style/Widget.Button_Warning"
         android:visibility="invisible" />
 
 </LinearLayout><!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/layout/fragment_journal.xml -->

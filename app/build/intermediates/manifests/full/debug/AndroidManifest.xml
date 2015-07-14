@@ -57,7 +57,8 @@
             android:name="com.ndhunju.dailyjournal.controller.ImportExportActivity"
             android:exported="true"
             android:icon="@drawable/ic_ganesh_book_small"
-            android:label="@string/title_activity_back_up" >
+            android:label="@string/title_activity_back_up"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.google.android.apps.drive.DRIVE_OPEN" />
 

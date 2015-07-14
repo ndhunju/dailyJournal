@@ -7,13 +7,14 @@
         android:id="@+id/Merchants"
         android:orderInCategory="1"
         android:title="@string/show_parties"
-        app:showAsAction="ifRoom|withText"
-        />
+        android:showAsAction="ifRoom|withText"
+        tools:ignore="AppCompatResource" />
      <item
         android:id="@+id/Tools"
         android:orderInCategory="2"
         android:title="@string/str_tools"
-        app:showAsAction="never"
+         android:icon="@android:drawable/ic_menu_manage"
+        app:showAsAction="ifRoom"
         />
      
 </menu>

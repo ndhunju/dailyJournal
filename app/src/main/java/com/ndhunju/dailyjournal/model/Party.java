@@ -110,13 +110,13 @@ public class Party {
 		}
 	}
 	
-	public void deleteAllJournals(){
+	public boolean deleteAllJournals(){
 		for(int i = 0; i < mJournals.size(); i++){
-			mJournals.get(i).deleteAllAttachment();
+			if(!mJournals.get(i).deleteAllAttachment())
+				return false;
 			mJournals.remove(i);
 		}
-		
-		mJournals = null;
+		return true;
 	}
 	
 	public JSONObject toJSON(){

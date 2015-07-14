@@ -1,9 +1,8 @@
 package com.ndhunju.dailyjournal.model;
 
-import java.util.Date;
-
 import android.app.Activity;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -11,6 +10,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
+
+import java.util.Date;
 
 public class ViewUtils {
 	
@@ -34,6 +35,7 @@ public class ViewUtils {
 		dateTV.setGravity(Gravity.CENTER);
 		dateTV.setText(activity.getString(R.string.str_date));
 		dateTV.setTextSize(TEXT_SIZE);
+		dateTV.setTypeface(null, Typeface.BOLD);
 		headingRow.addView(dateTV);
 
 		TextView noteTV = new TextView(activity);
@@ -46,6 +48,7 @@ public class ViewUtils {
 		noteTV.setGravity(Gravity.CENTER);
 		noteTV.setText(activity.getString(R.string.str_note));
 		noteTV.setTextSize(TEXT_SIZE);
+		noteTV.setTypeface(null, Typeface.BOLD);
 		headingRow.addView(noteTV);
 
 		TextView drTV = new TextView(activity);
@@ -55,6 +58,7 @@ public class ViewUtils {
 		drTV.setGravity(Gravity.CENTER);
 		drTV.setTextSize(TEXT_SIZE);
 		drTV.setText(activity.getString(R.string.str_dr));
+		drTV.setTypeface(null, Typeface.BOLD);
 		headingRow.addView(drTV);
 		
 		TextView crTV = new TextView(activity);
@@ -64,6 +68,7 @@ public class ViewUtils {
 		crTV.setGravity(Gravity.CENTER);
 		crTV.setTextSize(TEXT_SIZE);
 		crTV.setText(activity.getString(R.string.str_cr));
+		crTV.setTypeface(null, Typeface.BOLD);
 		headingRow.addView(crTV);
 		
 		return headingRow;
@@ -75,11 +80,15 @@ public class ViewUtils {
 		balanceRow.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		balanceRow.setWeightSum(LAYOUT_WT_SUM);
 
-		TextView emptyTV = new TextView(activity);
-		emptyTV.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		emptyTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
-		emptyTV.setPadding(PADDING, PADDING, PADDING, PADDING);
-		balanceRow.addView(emptyTV);
+		TextView dateTV = new TextView(activity);
+		dateTV.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
+		dateTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		dateTV.setPadding(PADDING, PADDING, PADDING, PADDING);
+		dateTV.setGravity(Gravity.CENTER);
+		dateTV.setTextSize(TEXT_SIZE);
+		dateTV.setText(Utils.parseDate(new Date(), Utils.DATE_FORMAT));
+		dateTV.setTypeface(null, Typeface.BOLD);
+		balanceRow.addView(dateTV);
 
 		TextView balanceTv = new TextView(activity);
 		balanceTv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
@@ -88,6 +97,7 @@ public class ViewUtils {
 		balanceTv.setGravity(Gravity.CENTER);
 		balanceTv.setText(activity.getString(R.string.str_balance));
 		balanceTv.setTextSize(TEXT_SIZE);
+		balanceTv.setTypeface(null, Typeface.BOLD);
 		balanceRow.addView(balanceTv);
 
 		TextView drCrTv = new TextView(activity);
@@ -96,6 +106,7 @@ public class ViewUtils {
 		drCrTv.setPadding(PADDING, PADDING, PADDING, PADDING);
 		drCrTv.setGravity(Gravity.END);
 		drCrTv.setTextSize(TEXT_SIZE);
+		drCrTv.setTypeface(null, Typeface.BOLD);
 		drCrTv.setText(balance < 0 ? "Cr" : "Dr");
 		balanceRow.addView(drCrTv);
 
@@ -105,7 +116,8 @@ public class ViewUtils {
 		balanceAmtTv.setPadding(PADDING, PADDING, PADDING, PADDING);
 		balanceAmtTv.setGravity(Gravity.CENTER);
 		balanceAmtTv.setTextSize(TEXT_SIZE);
-		balanceAmtTv.setText(String.valueOf(balance));
+		balanceAmtTv.setText(Utils.formatCurrency(balance));
+		balanceAmtTv.setTypeface(null, Typeface.BOLD);
 		balanceRow.addView(balanceAmtTv);
 		
 		return balanceRow;
@@ -144,7 +156,7 @@ public class ViewUtils {
 		drCol.setPadding(PADDING, PADDING, PADDING, PADDING);
 		drCol.setGravity(Gravity.CENTER);
 		drCol.setTextSize(TEXT_SIZE);
-		drCol.setText(String.valueOf(journal.getAmount()));
+		drCol.setText(Utils.formatCurrency(journal.getAmount()));
 
 		TextView crCol = new TextView(activity);
 		crCol.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));

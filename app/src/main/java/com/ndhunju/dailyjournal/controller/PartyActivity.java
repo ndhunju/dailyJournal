@@ -1,10 +1,13 @@
 package com.ndhunju.dailyjournal.controller;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -19,6 +22,9 @@ import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.model.Storage;
 import com.ndhunju.dailyjournal.model.Utils;
 import com.ndhunju.dailyjournal.model.ViewUtils;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class PartyActivity extends FragmentActivity {
 
@@ -37,33 +43,15 @@ public class PartyActivity extends FragmentActivity {
 
 		Party party = Storage.getInstance(PartyActivity.this).getParty(mPartyId);
 		
-		Button infoBtn = (Button) findViewById(R.id.activity_party_info_btn);
-		infoBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(PartyActivity.this,PartyInformationActivity.class);
-				i.putExtra(PartyListDialog.KEY_PARTY_ID, mPartyId);
-				startActivity(i); //for result? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-			}
-		});
-		
-		((Button)findViewById(R.id.activity_party_delete_btn)).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Storage.getInstance(PartyActivity.this).deleteParty(mPartyId);
-				Utils.toast(PartyActivity.this, getString(R.string.str_party_deleted));
-				PartyActivity.this.finish();
-			}
-		});
-		
 		double balance = party.getBalance();
-		balanceTV.setText(String.valueOf(balance));
-		balanceTV.setTextColor(balance > 0 ? Color.parseColor(Utils.RED): Color.parseColor(Utils.GREEN)); // red : green
+		balanceTV.setText(Utils.formatCurrency(balance));
+		balanceTV.setTextColor(balance > 0 ? Color.parseColor(Utils.RED): Color.parseColor(Utils.GREEN));
 		tableLL.addView(createLedgerView(party));
 		setTitle(party.getName());
-		if (balance > 0)
+
+		/*if (balance > 0)
 			Utils.alert(PartyActivity.this,	String.format(getString(R.string.warning_overpaid_msg), party.getName(),
-					getString(R.string.currency_type), balance));
+					getString(R.string.currency_type), balance));*/
 
 	}
 
@@ -80,13 +68,13 @@ public class PartyActivity extends FragmentActivity {
 			//You need to get a fresh copy of party from Storage 
 			Party party = Storage.getInstance(PartyActivity.this).getParty(mPartyId);
 			double balance = party.getBalance();
-			balanceTV.setText(String.valueOf(balance));
+			balanceTV.setText(Utils.formatCurrency(balance));
 			balanceTV.setTextColor(balance > 0 ? Color.parseColor("#f63752"): Color.parseColor("#5CB85C")); // red : green
 			tableLL.removeAllViews();
 			tableLL.addView(createLedgerView(party));
-			if (balance > 0)
+			/*if (balance > 0)
 				Utils.alert(PartyActivity.this,	String.format(getString(R.string.warning_overpaid_msg), party.getName(),
-						getString(R.string.currency_type), balance));
+						getString(R.string.currency_type), balance));*/
 		}
 	}
 	
@@ -113,6 +101,40 @@ public class PartyActivity extends FragmentActivity {
 		ledgerTL.addView(ViewUtils.createLedgerFooter(PartyActivity.this, party.getBalance()));
 
 		return ledgerTL;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_party_activity, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch(item.getItemId()){
+			case R.id.menu_party_activity_info:
+				Intent i = new Intent(PartyActivity.this,PartyInformationActivity.class);
+				i.putExtra(PartyListDialog.KEY_PARTY_ID, mPartyId);
+				startActivity(i); //for result? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+				break;
+
+			case R.id.menu_party_activity_delete:
+				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_party));
+				Utils.alert(PartyActivity.this, msg, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						boolean success = Storage.getInstance(PartyActivity.this).deleteParty(mPartyId);
+						String msg1 = success ? String.format(getString(R.string.msg_deleted), getString(R.string.str_party))
+								: String.format(getString(R.string.msg_failed), getString(R.string.str_delete));
+						Utils.toast(PartyActivity.this, msg1);
+						PartyActivity.this.finish();
+					}
+				});
+				break;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 }

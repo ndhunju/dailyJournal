@@ -81,6 +81,10 @@
     <color name="abc_search_url_text_normal">#7fa87f</color>
     <color name="abc_search_url_text_pressed">@android:color/black</color>
     <color name="abc_search_url_text_selected">@android:color/black</color>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="blue">#2092FF</color>
+    <color name="blue_pressed">#2071FF</color>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/res/values/common_colors.xml -->
     <eat-comment/>
     <color name="common_action_bar_splitter">#d2d2d2</color>
@@ -93,6 +97,18 @@
     <color name="common_signin_btn_light_text_disabled">#FFAAAAAA</color>
     <color name="common_signin_btn_light_text_focused">#FF737373</color>
     <color name="common_signin_btn_light_text_pressed">@android:color/white</color>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="green">#0BA65F</color>
+    <color name="green_pressed">#066137</color>
+    <color name="grey">#DDDDDD</color>
+    <color name="grey_pressed">#AAAAAA</color>
+    <color name="orange">#EB5E0C</color>
+    <color name="orange_pressed">#C7500A</color>
+    <color name="red_light">#DD4B39</color>
+    <color name="red_light_pressed">#DD3639</color>
+    <color name="yellow">#FED14C</color>
+    <color name="yellow_pressed">#CCA83D</color>
     <declare-styleable name="ActionBar"><attr name="navigationMode"><enum name="normal" value="0"/><enum name="listMode" value="1"/><enum name="tabMode" value="2"/></attr><attr name="displayOptions"><flag name="useLogo" value="0x1"/><flag name="showHome" value="0x2"/><flag name="homeAsUp" value="0x4"/><flag name="showTitle" value="0x8"/><flag name="showCustom" value="0x10"/><flag name="disableHome" value="0x20"/></attr><attr name="title"/><attr format="string" name="subtitle"/><attr format="reference" name="titleTextStyle"/><attr format="reference" name="subtitleTextStyle"/><attr format="reference" name="icon"/><attr format="reference" name="logo"/><attr format="reference" name="divider"/><attr format="reference" name="background"/><attr format="reference|color" name="backgroundStacked"/><attr format="reference|color" name="backgroundSplit"/><attr format="reference" name="customNavigationLayout"/><attr name="height"/><attr format="reference" name="homeLayout"/><attr format="reference" name="progressBarStyle"/><attr format="reference" name="indeterminateProgressStyle"/><attr format="dimension" name="progressBarPadding"/><attr format="dimension" name="itemPadding"/></declare-styleable>
     <declare-styleable name="ActionBarLayout"><attr name="android:layout_gravity"/></declare-styleable>
     <declare-styleable name="ActionBarWindow"><attr format="boolean" name="windowActionBar"/><attr format="boolean" name="windowActionBarOverlay"/><attr format="boolean" name="windowSplitActionBar"/></declare-styleable>
@@ -165,6 +181,9 @@
     <eat-comment/>
     <string name="auth_google_play_services_client_facebook_display_name">Facebook</string>
     <string name="auth_google_play_services_client_google_display_name">Google</string>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="backup_dir">Daily Journal Folder in SD Card.</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/res/values/common_strings.xml -->
     <eat-comment/>
     <string name="common_android_wear_notification_needs_update_text"><ns1:g id="app_name">%1$s</ns1:g> requires an update to the Android Wear app.</string>
@@ -201,10 +220,11 @@
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="currency_type">Rs</string>
+    <string name="currency_type">$</string>
     <string name="hello_world">Hello world!</string>
     <string name="hint_note">Write notes here....</string>
     <string name="msg_creating">Creating %1$s ...</string>
+    <string name="msg_delete_confirm">Delete the %1$s ?</string>
     <string name="msg_deleted">%1$s deleted</string>
     <string name="msg_exporting">%1$s exporting... </string>
     <string name="msg_failed">%1$s failed.</string>
@@ -213,13 +233,14 @@
     <string name="msg_reminder">Don\'t forget to do the Journal Entry</string>
     <string name="msg_restored">%1$s restored</string>
     <string name="msg_saved">%1$s saved</string>
+    <string name="msg_saved_in">Saved in %1$s .</string>
     <string name="show_parties">Parties</string>
     <string name="str_00.00">00.00</string>
     <string name="str_alert">Alert!</string>
     <string name="str_attachment"> Attachment</string>
     <string name="str_attch_delete">Attachment Deleted</string>
     <string name="str_backup">Backup</string>
-    <string name="str_balance">Balance :  </string>
+    <string name="str_balance">Balance :</string>
     <string name="str_choose">Choose</string>
     <string name="str_cr">Cr. </string>
     <string name="str_create_backup_in_google_drive">Create Backup in Google Drive</string>
@@ -233,35 +254,39 @@
     <string name="str_import_json_from_sd">Import JSON Backup File</string>
     <string name="str_information">Information</string>
     <string name="str_journal">Journal</string>
+    <string name="str_lock">Lock</string>
     <string name="str_new_journal">New Journal</string>
     <string name="str_note">Note</string>
-    <string name="str_party">Select Party</string>
-    <string name="str_party_deleted">Party Deleted</string>
+    <string name="str_party">Party</string>
     <string name="str_pick_a_date">Pick a Date</string>
     <string name="str_reminder">Reminder</string>
     <string name="str_restore_backup_from_google_drive">Restore from Google Drive</string>
     <string name="str_restore_backup_from_sd">Restore Backup from SD Card</string>
     <string name="str_save">Save</string>
+    <string name="str_select_party">Select Party</string>
     <string name="str_tools">Tools</string>
     <string name="title_activity_back_up">Tools</string>
     <string name="warning_cant_change_party">You can not change the party.</string>
     <string name="warning_ext_mismatch">The extension of the backup file is incorrect</string>
+    <string name="warning_format">The format is incorrect</string>
     <string name="warning_no_attch">No attachment found</string>
     <string name="warning_overpaid_msg">You have overpaid %1$s by %2$s %3$.2f</string>
-    <string name="warning_restore">Restoring to old backup file will delete all new entries</string>
+    <string name="warning_restore">Restoring to Old Backup File will erase all new Entries</string>
     <string name="warning_see_attachment">You can not see the attachments now!</string>
     <string name="warning_select_party">Please select the party!</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/styles.xml -->
     <eat-comment/>
-    <style name="AppBaseTheme" parent="@android:style/Theme.DeviceDefault">
+    <style name="AppBaseTheme" parent="@android:style/Theme.DeviceDefault.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+
     </style>
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:theme">@android:style/Theme.DeviceDefault.Light</item>
     </style>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/18.0.0/res/values/values.xml -->
     <eat-comment/>
@@ -783,4 +808,31 @@
     <style name="Widget.AppCompat.ProgressBar" parent="Widget.AppCompat.Base.ProgressBar"/>
     <style name="Widget.AppCompat.ProgressBar.Horizontal" parent="Widget.AppCompat.Base.ProgressBar.Horizontal"/>
     <style name="Widget.AppCompat.Spinner.DropDown.ActionBar" parent="Widget.AppCompat.Base.Spinner"/>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="Widget.Button_Negative" parent="android:Widget">
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/button_negative</item>
+    </style>
+    <style name="Widget.Button_Neutral" parent="android:Widget">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:background">@drawable/button_neutral</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <style name="Widget.Button_Normal" parent="android:Widget">
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:background">@drawable/button_normal</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <style name="Widget.Button_Positive" parent="android:Widget">
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/button_positive</item>
+    </style>
+    <style name="Widget.Button_Warning" parent="android:Widget">
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/button_warning</item>
+    </style>
 </resources>

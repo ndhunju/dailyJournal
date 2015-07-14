@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -14,30 +15,35 @@
             android:layout_height="wrap_content"
             android:text="@string/str_create_backup_in_google_drive"
             android:id="@+id/activity_import_export_full_backup_google_drive_btn"
+            style="@style/Widget.Button_Normal"
             />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/str_restore_backup_from_google_drive"
             android:id="@+id/activity_import_export_restore__google_drive_btn"
+            style="@style/Widget.Button_Normal"
             />
         <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_create_backup_in_sd"
         android:id="@+id/activity_import_export_full_backup_btn"
+            style="@style/Widget.Button_Normal"
          />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_restore_backup_from_sd"
         android:id="@+id/activity_import_export_restore_btn"
+        style="@style/Widget.Button_Normal"
         />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_import_json_from_sd"
         android:id="@+id/activity_import_export_restore_json_from_sd_btn"
+        style="@style/Widget.Button_Normal"
         />
     </LinearLayout>
 </ScrollView>
