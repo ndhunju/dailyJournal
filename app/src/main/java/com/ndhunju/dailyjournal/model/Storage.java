@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import org.json.JSONArray;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -33,6 +34,7 @@ public class Storage {
 	//Constant variables
 	private static final String KEY_CURRENT_PARTY_ID = Utils.APP_PREFIX + "currentMerchantId";
 	private static final String KEY_CURRENT_JOURNAL_ID = Utils.APP_PREFIX + "currentJournalId";
+	private static final String KEY_OLD_DATA_IMPORTED = Utils.APP_PREFIX + "oldDataImported";
 
     //Declare variables
 	private Context mContext;
@@ -57,6 +59,14 @@ public class Storage {
 		if (mStorage == null)
 			mStorage = new Storage(con);
 		return mStorage;
+	}
+
+	public boolean isOldDataImported(){
+		return pm.getBoolean(KEY_OLD_DATA_IMPORTED, false);
+	}
+
+	public void oldDataImportAttempted(boolean imported){
+		pm.edit().putBoolean(KEY_OLD_DATA_IMPORTED, imported).commit();
 	}
 	
 	public ArrayList<String> getPartyNames() {
@@ -151,12 +161,36 @@ public class Storage {
 
 	public boolean deleteParty(int partyId){
 		for(int i = 0; i < mParties.size() ; i++){
-			Party party = mParties.get(i);
-				if(!party.deleteAllJournals())
+			if(mParties.get(i).getId() == partyId){
+				if(!mParties.get(i).deleteAllJournals())
 					return false;
 				mParties.remove(i);
 			}
+		}
 		return true;
+	}
+
+	public boolean deleteAllParties(){
+		/*for(int i = 0;i < mParties.size(); i++){
+			if(!mParties.get(i).deleteAllJournals())
+				return false;
+			mParties.remove(i);
+		}*/
+
+		mParties.clear();
+		return true;
+	}
+
+	public boolean eraseAll(Activity activity){
+		try{
+			deleteAllParties();
+			Utils.cleanDirectory(Utils.getAppFolder(activity));
+			writeToDB();
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public static boolean deleteViaContentProvider(Context context, String fullname)
@@ -418,8 +452,9 @@ public class Storage {
 					.getColumnIndexOrThrow(FeedEntry.COL_MERCHANT_NAME));
 			String phone = c.getString(c
 					.getColumnIndexOrThrow(FeedEntry.COL_MERCHANT_PHONE));
-			Party.Type type = Party.Type.valueOf(c.getString(c
-					.getColumnIndexOrThrow(FeedEntry.COL_MERCHANT_TYPE)));
+			//Since Debitors was corrected to Debtors, Type.valueOf("Debitors") throws error
+			String typeStr = c.getString(c.getColumnIndexOrThrow(FeedEntry.COL_MERCHANT_TYPE));
+			Party.Type type = typeStr.equals("Debitors") ? Party.Type.Debtors : Party.Type.valueOf(typeStr);
 			String journalsHashCode = (c.getString(c
 					.getColumnIndexOrThrow(FeedEntry.COL_MERCHANT_JOURNALS)));
 

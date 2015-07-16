@@ -1,0 +1,14 @@
+Daily Journal (3.9)
+    
+    - Improved UI 
+    - Save backup to SD card and Google Drive
+    - Correct Format for money value.
+    - Fixed : Deleting a party doesn't delete its attachments from file
+    - Move Information and delete button to Option Menu
+    - Confirm before deleting 
+    - Fixed : error parsing Old Json file as "Debitors" Type was corrected to Debtors 
+
+Daily Journal (3.1)
+    - restore backup fixed
+    - Fixed : when app is opened from the reminder notification, all the parties       are gone
+  

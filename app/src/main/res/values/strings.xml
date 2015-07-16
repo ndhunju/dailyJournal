@@ -15,6 +15,11 @@
     <string name="msg_creating">Creating %1$s ...</string>
     <string name="msg_saved_in">Saved in %1$s .</string>
     <string name="msg_delete_confirm">Delete the %1$s ?</string>
+    <string name="msg_connecting">Connecting to %1$s ...</string>
+    <string name="msg_restore_gdrive">The app is having problem restoring from Google Drive.
+        You can download the backup file to SD Card and use "Restore backup from SD Card" Option</string>
+    <string name="msg_move_old_data">For better security, Daily Journal now uses a secure folder.
+        The app will move old data to the secure folder. This can take few minutes.</string>
 
     <string name="warning_overpaid_msg">You have overpaid %1$s by %2$s %3$.2f</string>
     <string name="warning_select_party">Please select the party!</string>
@@ -65,6 +70,7 @@
     <string name="str_create_backup_in_google_drive">Create Backup in Google Drive</string>
     <string name="str_restore_backup_from_google_drive">Restore from Google Drive</string>
     <string name="str_lock">Lock</string>
+    <string name="str_google_drive">Google Drive</string>
 
 	<string name="hint_note">Write notes here....</string>
     <string name="title_activity_back_up">Tools</string>

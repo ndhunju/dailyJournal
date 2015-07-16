@@ -35,11 +35,15 @@ import com.ndhunju.dailyjournal.model.Utils;
 import com.ndhunju.dailyjournal.viewPager.ViewPagerActivity;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
 public class JournalFragment extends Fragment {
 
+	public static final int REQUEST_CODE_IMPORT_OLD_DATA = 183;
 	public static final String TAG = JournalFragment.class.getCanonicalName();
 
 	//UI Widgets
@@ -73,6 +77,19 @@ public class JournalFragment extends Fragment {
 		mStorage.readPartiesFromDB();
 		journalId = getArguments().getInt(Utils.KEY_JOURNAL_ID);
 
+		//Check if the old directory exists or not
+		if( !mStorage.isOldDataImported() && Utils.oldAppFolderExist()){
+			Utils.alert(getActivity(), getString(R.string.msg_move_old_data), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					Intent importOldDataIntent = new Intent(getActivity(), ImportExportActivity.class);
+					importOldDataIntent.putExtra(Utils.KEY_IMPORT_OLD_DATA, true);
+					startActivityForResult(importOldDataIntent, REQUEST_CODE_IMPORT_OLD_DATA);
+				}
+			});
+
+		}
+
 
 		//JournalFragment are usu called in two scenario
 		if (journalId == Utils.ID_NEW_JOURNAL) {
@@ -81,6 +98,7 @@ public class JournalFragment extends Fragment {
 			getActivity().setTitle(getString(R.string.str_new_journal));
 			//enable menu
 			setHasOptionsMenu(true);
+			setRetainInstance(true);
 		} else {
 			//2. When a existing journal of a party is opened. Journal has Id
 			int partyId = getArguments().getInt(Utils.KEY_PARTY_ID);
@@ -185,6 +203,13 @@ public class JournalFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
+
+				// if party is not selected warn user
+				if (tempJournal.getPartyId() == (Utils.NO_PARTY)) {
+					Utils.alert(getActivity(), getString(R.string.warning_select_party));
+					return;
+				}
+
 				CharSequence[] options = getResources().getStringArray(R.array.options_attch);
 
 				new AlertDialog.Builder(getActivity()).setTitle("Choose")
@@ -192,11 +217,6 @@ public class JournalFragment extends Fragment {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								Intent i = null;
-								// if party is not selected warn user
-								if (tempJournal.getPartyId() == (Utils.NO_PARTY)) {
-									Utils.alert(getActivity(), getString(R.string.warning_select_party));
-									return;
-								}
 
 								switch (which) {
 								case 0:
@@ -304,7 +324,7 @@ public class JournalFragment extends Fragment {
 							getActivity().setResult(Activity.RESULT_OK, intent);
 							getActivity().finish();
 						}
-					});
+					}, null);
 				}
 			});
 		}
@@ -341,14 +361,41 @@ public class JournalFragment extends Fragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != Activity.RESULT_OK)
+
+		if (resultCode != Activity.RESULT_OK){
+			Utils.alert(getActivity(), String.format(getString(R.string.msg_failed), getString(R.string.str_save)));
 			return;
+		}
 
 		switch (requestCode) {
 
             case Utils.REQUEST_TAKE_PHOTO:
+
                 // TODO: check if it works
-                tempJournal.getAttachmentPaths().add(Utils.getLastPicturePath());
+				//Since camera cannot save picture in file created inside app's folder
+				//1. Create a file in external storage
+				//2. Provide that file's path to camera where it will stream picture data
+				//3. Copy the file into internal storage
+				//4. Delete file in external storage
+
+				File tempPicFile = Utils.createExternalStoragePublicPicture();
+				File internalPicFile = Utils.createImageFile(getActivity(), tempJournal);
+
+				try{
+					FileInputStream picFileIS  = new FileInputStream(tempPicFile);
+					FileOutputStream internalFileOS = new FileOutputStream(internalPicFile);
+					Utils.copy(picFileIS, internalFileOS);
+					picFileIS.close();
+					internalFileOS.close();
+					boolean sucess = tempPicFile.delete();
+                    //deleting this file works fine. May be files in public folder can be
+                    //deleted
+					if(sucess) Log.d(TAG,"Temp pic file deleted" );
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				tempJournal.getAttachmentPaths().add(internalPicFile.getAbsolutePath());
                 //tempJournal.getAttachmentPaths().add(data.getData().getPath()); //data is null here
                         //((Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT)).getPath());
                 // Bundle extras = data.getExtras();
@@ -378,6 +425,17 @@ public class JournalFragment extends Fragment {
                 }
 
                 break;
+
+			case Utils.REQUEST_CODE_IMPORTED:
+				boolean imported = data.getBooleanExtra(Utils.KEY_IMPORTED, false);
+                //if old data were imported then null the Party. Otherwise sometimes newly added
+                //party which is erased after restore could be stored in mParty object
+				if(imported)
+					mParty = null;
+
+			case REQUEST_CODE_IMPORT_OLD_DATA:
+				Log.i(TAG, "Importing old data finished");
+
         }
 
 	}
@@ -401,7 +459,7 @@ public class JournalFragment extends Fragment {
                 break;
 
             case R.id.Tools:
-                startActivity(new Intent(getActivity(), ImportExportActivity.class));
+                startActivityForResult(new Intent(getActivity(), ImportExportActivity.class), Utils.REQUEST_CODE_IMPORTED);
                 break;
 		}
 
@@ -443,11 +501,11 @@ public class JournalFragment extends Fragment {
 	@Override
 	public void onPause() {
         AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                mStorage.writeToDB();
-            }
-        });
+			@Override
+			public void run() {
+				mStorage.writeToDB();
+			}
+		});
 		super.onPause();
 	}
 
@@ -457,8 +515,10 @@ public class JournalFragment extends Fragment {
 		//update the id and reset all
         if (journalId == Utils.ID_NEW_JOURNAL) {
             tempJournal.setId(Journal.getCurrentId());
-			setValues(tempJournal, null);
+			setValues(tempJournal, mParty);
         }
 
 	}
+
+
 }

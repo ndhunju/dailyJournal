@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -120,12 +121,19 @@ public class ViewPagerActivity extends FragmentActivity {
 			
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				int currentItemPos = mViewPager.getCurrentItem();
-				if(new File(filePaths.get(currentItemPos)).delete())
-					filePaths.remove(currentItemPos);//doesn't delete from the journal
-				Utils.toast(ViewPagerActivity.this, getString(R.string.str_attch_delete));
-				((SamplePagerAdapter)mViewPager.getAdapter()).notifyDataSetChanged();
-				attachmentChanged = true;
+				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_attachment));
+				Utils.alert(ViewPagerActivity.this, msg, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						int currentItemPos = mViewPager.getCurrentItem();
+						if(new File(filePaths.get(currentItemPos)).delete())
+							filePaths.remove(currentItemPos);//doesn't delete from the journal
+						Utils.toast(ViewPagerActivity.this, getString(R.string.str_attch_delete));
+						((SamplePagerAdapter)mViewPager.getAdapter()).notifyDataSetChanged();
+						attachmentChanged = true;
+
+					}
+				}, null);
 				return true;
 			}
 		});

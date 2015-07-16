@@ -2,6 +2,8 @@ package com.ndhunju.dailyjournal.model;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ContentProvider;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,6 +47,8 @@ public class Utils {
 	public static final int REQUEST_JOURNAL_CHGD = 5;
 	public static final int REQUEST_CHGED_DATE = 6;
 	public static final int REQUEST_CHGD_ATTACHMENTS = 7;
+	public static final int REQUEST_CODE_IMPORTED = 8;
+
 
 	
 	public static final int NO_PARTY = -1;
@@ -77,6 +81,8 @@ public class Utils {
 	public static final String KEY_PARTY_ID = Utils.APP_PREFIX	+ "merchantId";
 	public static final String KEY_ATTACHMENTS = Utils.APP_PREFIX + "keyAttachments";
 	public static final String KEY_ATTACHMENTS_IS_CHGD = APP_PREFIX + "isAttachmentChanged";
+	public static final String KEY_IMPORTED = APP_PREFIX + "KeyImported";
+	public static final String KEY_IMPORT_OLD_DATA = APP_PREFIX + "KeyImportedOLdData";
 	
 	
 	private static final String IMG_EXT = ".png";
@@ -120,11 +126,19 @@ public class Utils {
 		.create().show();
 	}
 
-	public static void alert(Context con,String msg, DialogInterface.OnClickListener listener){
+	public static void alert(Context con,String msg, DialogInterface.OnClickListener listener, DialogInterface.OnClickListener CancelLister){
 		new AlertDialog.Builder(con).setMessage(msg)
 				.setTitle(con.getString(R.string.str_alert))
 				.setPositiveButton(android.R.string.ok, listener)
-				.setNegativeButton(android.R.string.cancel, null)
+				.setNegativeButton(android.R.string.cancel, CancelLister)
+				.create().show();
+	}
+
+	public static void alert(Context con,String msg, DialogInterface.OnClickListener OkListener){
+		new AlertDialog.Builder(con).setMessage(msg)
+				.setTitle(con.getString(R.string.str_alert))
+				.setPositiveButton(android.R.string.ok, OkListener)
+				.setCancelable(false)
 				.create().show();
 	}
 	
@@ -153,7 +167,9 @@ public class Utils {
 			// Create the File where the photo should go
 			File photoFile = null;
 			try {
-				photoFile = createImageFile(activity, journal);
+
+				photoFile = createExternalStoragePublicPicture();
+
 				// Continue only if the File was successfully created
 				if (photoFile != null) {
 					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,	Uri.fromFile(photoFile));
@@ -176,7 +192,7 @@ public class Utils {
 	 *  <b>NOTE:</b> <i>Since Android 4.4+, an app cannot delete files created in SD card
 	 * Thus while deleting a party, it's respective attachment files
 	 * cannot be deleted even though it was created by the app. Instead use
-	 * {@link #getAppFolder(Activity)} </i>
+	 * {@link #getAppFolder(Context)}  </i>
 	 * @param hide
 	 * @return
      * TODO Use this method to export files to SD Card later if users want.
@@ -185,11 +201,21 @@ public class Utils {
 		// Create an app folder
 		File appFolder = new File(Environment.getExternalStorageDirectory(), hide ?
 				HIDE_FOLDER + Utils.APP_FOLDER_NAME : Utils.APP_FOLDER_NAME);
+		//when hide= true, it is asking for oldApp Folder, don't create dir
+		if(hide) return appFolder;
+
 		if (!appFolder.exists())
 			appFolder.mkdir();
-		
 
 		return appFolder;
+	}
+
+	public static boolean oldAppFolderExist(){
+		// Create an app folder
+		File oldAppFolder = new File(Environment.getExternalStorageDirectory(),
+				HIDE_FOLDER + Utils.APP_FOLDER_NAME );
+		return oldAppFolder.exists();
+
 	}
 
 	/**
@@ -198,7 +224,7 @@ public class Utils {
 	 * @param activity
 	 * @return
 	 */
-	public static File getAppFolder(Activity activity){
+	public static File getAppFolder(Context activity){
 		File appFolder = activity.getDir(Utils.APP_FOLDER_NAME, Context.MODE_PRIVATE);
 		appDir = appFolder.getAbsolutePath();
 		return appFolder;
@@ -263,18 +289,50 @@ public class Utils {
 
 		return partyFolder;
 	}
-	
-	public static File createImageFile(Activity activity, Journal journal) {
-		
+
+    public static File createExternalStoragePublicPicture() {
+        // Create a path where we will place our picture in the user's
+        // public pictures directory.  Note that you should be careful about
+        // what you place here, since the user often manages these files.  For
+        // pictures and other media owned by the application, consider
+        // Context.getExternalMediaDir().
+        File path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File file = new File(path, "temp.jpg");
+
+            // Make sure the Pictures directory exists.
+            path.mkdirs();
+            return file;
+    }
+
+    public static boolean deleteExternalStoragePublicPicture() {
+        // Create a path where we will place our picture in the user's
+        // public pictures directory and delete the file.  If external
+        // storage is not currently mounted this will fail.
+        File path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File file = new File(path, "temp.jpg");
+        return file.delete();
+    }
+
+
+    public static File createImageFile(Activity activity, Journal journal) {
+
+		//TODO: the file returned is inside the app folder which can be accessed by
+		//the app only. So Camera app cannot stream photo to this file
+
 		File attachmentFolder = getAttachmentFolder(getAppFolder(activity), true);
 		
 		File partyFolder = getPartyFolder(attachmentFolder,
 				Storage.getInstance(activity).getParty(journal.getPartyId()).getName(), true);
 
+		//Save the image in camera folder
+		//File tempFile =
+
 		//create a file to store image
 
 		/*This is prolly the secure way but I want to keep name short and simple and avoid the
-		overhead by imorting UUID class just for
+		overhead of imorting UUID class just for
 		String fileName = UUID.randomUUID().toString();*/
 
 		try {
@@ -301,7 +359,7 @@ public class Utils {
 	/**
 	 * Attempts to delete the file with passed path. Since Android 4.4, files in
 	 * SD Card can't be deleted (using {@link #getAppFolder(boolean)} but there should
-     * be no problem deleting files created using {@link #getAppFolder(Activity)}
+     * be no problem deleting files created using {@link #getAppFolder(Context)}
 	 * @param path
 	 * @return
 	 */

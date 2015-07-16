@@ -1,9 +1,0 @@
-- restore backup fixed
-
-to do 
-- remove Nepali date - done
-- when the app is opened from the reminder notification, all the parties are gone - done
-
-3/20/2012
-- let user save a printable version so that they can print their journal and store it
-- check if after restoring backup next Id is used for new journal or the last id

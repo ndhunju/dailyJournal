@@ -12,7 +12,7 @@ public class Party {
 	private static int mCurrentPartyId;
 
 	//Custom Type of Party
-	public enum Type { Debtors, Creditors }
+	public static enum Type { Debtors, Creditors }
 
 	//Keys used for respective properties
 	private static String KEY_ID = "id";
@@ -183,7 +183,11 @@ public class Party {
 			String name = json.getString(KEY_NAME);
 			Party newParty = new Party(name, id);
 			String phone = json.getString(KEY_PHONE);
-			Type t = Type.valueOf(json.getString(KEY_TYPE));
+
+			//Since Debitors was corrected to Debtors, Type.valueOf("Debitors") throws error
+			String type = json.getString(KEY_TYPE);
+			Type t = type.equals("Debitors") ? Type.Debtors : Type.valueOf(type);
+
 			newParty.setPhone(phone);
 			newParty.setType(t);
 

@@ -130,7 +130,7 @@ public class PartyActivity extends FragmentActivity {
 						Utils.toast(PartyActivity.this, msg1);
 						PartyActivity.this.finish();
 					}
-				});
+				}, null);
 				break;
 		}
 
