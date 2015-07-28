@@ -22,18 +22,23 @@ public class NotificationService extends IntentService{
 	
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.i(TAG, "Recieved a notification intent : " + intent);
+		Log.i(TAG, "Received a notification intent : " + intent);
 		
 		String msg = (String)intent.getSerializableExtra(Alarm.MSG);
-		String title = (String)intent.getSerializableExtra(Alarm.TITLE); 
-		
-		
-		setNotification( title, msg);
+		String title = (String)intent.getSerializableExtra(Alarm.TITLE);
+
+
+		sendNotification(title, msg);
 		
 	}
 
-	public void setNotification(String title, String text){
-		
+    /**
+     * Sends notification to the user.
+     * @param title: Title for the notification
+     * @param text: Notification message
+     */
+	public void sendNotification(String title, String text){
+
 		PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, JournalActivity.class), 0);
 		Notification notification = new NotificationCompat.Builder(this)
 										.setSmallIcon(R.drawable.ic_ganesh_book_small)
@@ -42,8 +47,8 @@ public class NotificationService extends IntentService{
 										.setContentIntent(pi)
 										.setAutoCancel(true)
 										.build();
-		
-		
+
+
 		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 		//assign different notification id so that old one is not updated by new one
 		nm.notify(7, notification);

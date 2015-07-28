@@ -16,16 +16,16 @@ public class Party {
 
 	//Keys used for respective properties
 	private static String KEY_ID = "id";
+    private static String KEY_TYPE="type";
 	private static String KEY_NAME = "name";
 	private static String KEY_PHONE = "phone";
-	private static String KEY_TYPE = "type";
 	private static String KEY_JOURNALS = "journals";
 	
 	//Declare variables
 	private int mId;
+    private Type mType;
 	private String mName;
 	private String mPhone;
-	private Type mType;
 	private ArrayList<Journal> mJournals;
 
 	//Constructor
@@ -68,7 +68,12 @@ public class Party {
 	public void setType(Type mType) {
 		this.mType = mType;
 	}
-	
+
+	/**
+	 * Returns the balance of this party. <b>NOTE: </b>This method should be used as less as
+	 * possible as it loops through all the journals to calculate the balance.
+	 * @return
+	 */
 	public double getBalance() {
 		double balance = 0;
 		for(Journal j : mJournals)
@@ -82,7 +87,12 @@ public class Party {
 	public ArrayList<Journal> getJournals() {
 		return mJournals;
 	}
-	
+
+	/**
+	 * This method adds the passed Journal to the list in chronicle
+	 * order.
+	 * @param journal
+	 */
 	public void addJournal(Journal journal){
 		
 		//add journal in the order of date
@@ -118,7 +128,11 @@ public class Party {
 		}
 		return true;
 	}
-	
+
+	/**
+	 * Creates and returns JSON object for this party
+	 * @return
+	 */
 	public JSONObject toJSON(){
 		JSONObject json = new JSONObject();
 		try{

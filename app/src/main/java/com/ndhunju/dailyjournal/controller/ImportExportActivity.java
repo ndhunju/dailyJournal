@@ -41,29 +41,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ImportExportActivity extends Activity {
 
     private static final String TAG = ImportExportActivity.class.getCanonicalName();
     private static final String BACK_FILE_TYPE = "application/zip";
 
-
-    public static final int REQUEST_CODE_PICK_JSON = 1;
-    public static final int REQUEST_CODE_PICK_BACKUP = 8;
+    //Request codes with random values
+    private static final int REQUEST_CODE_PICK_JSON = 1235;
+    private static final int REQUEST_CODE_PICK_BACKUP = 8489;
 
     //For Google Drive Api
     private static final int REQUEST_CODE_GDRIVE_CREATOR = 1185;
     private static final int REQUEST_CODE_GDRIVE_PICKER = 1189;
-    private static final int REQUEST_CODE_RESOLUTION = 1258;
+    private static final int REQUEST_CODE_GDRIVE_RESOLUTION = 1258;
 
     //Declare GoogleApiClient to use Google Drive
     private GoogleApiClient mGoogleApiClient;
-    private int mRequestCode;
-    private boolean imported;
-    ProgressDialog gDrivePd;
-
-
+    private boolean imported;                   //true if data were imported
+    private ProgressDialog gDrivePd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +71,7 @@ public class ImportExportActivity extends Activity {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //Connect  to create a file in drive
+                        //Initaite the connection to create a file in drive
                         connectGoogleApiClient(REQUEST_CODE_GDRIVE_CREATOR);
                     }
                 });
@@ -90,11 +86,11 @@ public class ImportExportActivity extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         //TODO It's taking too long to download file and progress bar is not working either
-                                        Utils.alert(ImportExportActivity.this, getString(R.string.msg_restore_gdrive));
-                                        return;
-                                        //imported = true;
+                                        //Utils.alert(ImportExportActivity.this, getString(R.string.msg_restore_gdrive));
+                                        //return;
+                                        imported = true;
                                         //connect to pick a file from drive
-                                        //connectGoogleApiClient(REQUEST_CODE_GDRIVE_PICKER);
+                                        connectGoogleApiClient(REQUEST_CODE_GDRIVE_PICKER);
                                     }
                                 }, null);
                     }
@@ -125,6 +121,7 @@ public class ImportExportActivity extends Activity {
                     }
                 });
 
+        //Disabling Import JSON File feature as it need some technical knowledge. Not user friendly
         ((Button) findViewById(R.id.activity_import_export_restore_json_from_sd_btn)).setVisibility(View.INVISIBLE);
         /*.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +133,10 @@ public class ImportExportActivity extends Activity {
         });*/
     }
 
+    /**
+     *Initiates the connection to Google Drive
+     * @param requestCode
+     */
     private void connectGoogleApiClient(int requestCode) {
         final ProgressDialog connectionPd = new ProgressDialog(ImportExportActivity.this);
         connectionPd.setIndeterminate(true);
@@ -144,7 +145,8 @@ public class ImportExportActivity extends Activity {
         connectionPd.setCanceledOnTouchOutside(false);
         connectionPd.show();
 
-        mRequestCode = requestCode; //this is used later at onConnected to distinguish
+        final int mRequestCode = requestCode; //this is used later at onConnected to distinguish
+
         mGoogleApiClient = new GoogleApiClient.Builder(ImportExportActivity.this)
                 .addApi(Drive.API)
                 .addScope(Drive.SCOPE_FILE)
@@ -155,7 +157,7 @@ public class ImportExportActivity extends Activity {
                         connectionPd.cancel();
                         switch (mRequestCode) {
                             case REQUEST_CODE_GDRIVE_CREATOR:
-                                saveFileToGDrive();
+                                createBackUpFileToGDrive();
                                 break;
 
                             case REQUEST_CODE_GDRIVE_PICKER:
@@ -163,6 +165,7 @@ public class ImportExportActivity extends Activity {
                                         .newOpenFileActivityBuilder()
                                         .setMimeType(new String[]{BACK_FILE_TYPE})
                                         .build(mGoogleApiClient);
+
                                 try {
                                     startIntentSenderForResult(intentSender, REQUEST_CODE_GDRIVE_PICKER, null, 0, 0, 0);
                                 } catch (IntentSender.SendIntentException e) {
@@ -173,7 +176,7 @@ public class ImportExportActivity extends Activity {
 
                     @Override
                     public void onConnectionSuspended(int i) {
-                        Log.i(TAG, "GoogleApiClient connection suspended");
+                        Log.i(TAG, "GoogleApiClient connection suspended. Cause = " + i);
                     }
                 })
                 .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
@@ -186,12 +189,10 @@ public class ImportExportActivity extends Activity {
                             GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), ImportExportActivity.this, 0).show();
                             return;
                         }
-                        // The failure has a resolution. Resolve it.
-                        // Called typically when the app is not yet authorized, and an
-                        // authorization
-                        // dialog is displayed to the user.
+                        // If the failure has a resolution. Resolve it. Called typically when the app is
+                        // not yet authorized, and an authorization dialog is displayed to the user.
                         try {
-                            result.startResolutionForResult(ImportExportActivity.this, REQUEST_CODE_RESOLUTION);
+                            result.startResolutionForResult(ImportExportActivity.this, REQUEST_CODE_GDRIVE_RESOLUTION);
                             Log.i(TAG, "Resolving resolution");
                         } catch (IntentSender.SendIntentException e) {
                             Log.e(TAG, "Exception while starting resolution activity", e);
@@ -205,11 +206,13 @@ public class ImportExportActivity extends Activity {
 
     @Override
     protected void onPause() {
-        //commenting out because onPause is called when a dialog for Google Drive is called
-        //which disconnects ApiClient. However it is needed later
-        //  mGoogleApiClient.disconnect();
         super.onPause();
+        //If the data were imported, write them to the database
         if(imported) Storage.getInstance(ImportExportActivity.this).writeToDB();
+
+        //onPause() is called when a dialog for Google Drive is open
+        //which disconnects ApiClient. However it is needed later
+        // mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -220,7 +223,7 @@ public class ImportExportActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        //Notify that Old backup has been stored
+        //Notify previous activity whether Old backup was restored
         Intent i = new Intent();
         i.putExtra(Utils.KEY_IMPORTED, imported);
         setResult(Activity.RESULT_OK, i);
@@ -230,6 +233,7 @@ public class ImportExportActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        //Check if this activity was called to import the old data ( data saved by v3.1)
         boolean importOldData = getIntent().getBooleanExtra(Utils.KEY_IMPORT_OLD_DATA, false);
         if(importOldData) importOldData();
     }
@@ -238,25 +242,23 @@ public class ImportExportActivity extends Activity {
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         String msg = "";
         switch (requestCode) {
-            case REQUEST_CODE_GDRIVE_CREATOR:
-                // Called after a file is saved to Drive.
+            case REQUEST_CODE_GDRIVE_CREATOR: // Called after the file is created in the google drive.
                 gDrivePd.cancel();
-                msg = String.format(getString(R.string.msg_exporting),
-                        resultCode == RESULT_OK ?getString(R.string.str_finished): getString(R.string.str_failed));
+                //Format the message
+                msg = String.format(getString(R.string.msg_exporting), resultCode == RESULT_OK
+                        ?getString(R.string.str_finished): getString(R.string.str_failed));
                 Utils.alert(ImportExportActivity.this, msg);
                 break;
 
-            case REQUEST_CODE_RESOLUTION:
-                //Called after the issue has been resolved
+            case REQUEST_CODE_GDRIVE_RESOLUTION://Called after google drive connection issue has been resolved
                 Log.i(TAG, "Activity result request code resolution");
                 // Make sure the app is not already connected or attempting to connect
                 if (!mGoogleApiClient.isConnecting() && !mGoogleApiClient.isConnected())
                     mGoogleApiClient.connect();
                 break;
 
-            //Currently this feature is disabled
-            case REQUEST_CODE_PICK_JSON:
-                //Called when the user has picked a json file to restore data from
+            //Currently this feature is disabled. User needs some technical knowledge to use this
+            case REQUEST_CODE_PICK_JSON: //Called when the user has picked a json file to restore data from
                 if(resultCode != RESULT_OK) {
                     msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
                     Utils.alert(ImportExportActivity.this, msg);
@@ -265,6 +267,7 @@ public class ImportExportActivity extends Activity {
 
                 Uri selectedJsonFile = data.getData();
                 boolean success = parseJSONFile((selectedJsonFile.getPath()), false);
+
                 //Prepare msg
                 msg = success ? String.format(getString(R.string.msg_finished), getString(R.string.str_backup)) :
                         String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
@@ -273,24 +276,26 @@ public class ImportExportActivity extends Activity {
 
                 break;
 
-            case REQUEST_CODE_PICK_BACKUP:
-                //Called when the user has picked a backup (.dj/.zip) file
+            case REQUEST_CODE_PICK_BACKUP://User picks a backup file from mStorage(.dj/.zip) file
                 if(resultCode != RESULT_OK || data.getData() == null) {
                     msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
                     Utils.alert(ImportExportActivity.this, msg);
                     return;
                 }
+
                 Uri selectedFile = data.getData();
                 restoreBackUp(selectedFile.getPath());
+
                 break;
 
-            case REQUEST_CODE_GDRIVE_PICKER:
+            case REQUEST_CODE_GDRIVE_PICKER://User picks a file from Google Drive
 
                 if (resultCode == RESULT_OK) {
                     DriveId driveId = (DriveId) data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
                     Log.d(TAG, "Selected file's ID: " + driveId);
-                    new RestoreFromGoogleDriveAsyncTask(this).execute(driveId);
+                    //Download the file in background thread
+                    restoreFromGoogleDrive(driveId);
                 }
                 break;
 
@@ -298,12 +303,32 @@ public class ImportExportActivity extends Activity {
     }
 
     /**
-     * Creates a new backup file on a local drive and saves it to Drive.
+     * Creates backup file to Google Drive in the background thread using {@link AsyncTask}
      */
-    private void saveFileToGDrive() {
+    private void createBackUpFileToGDrive() {
 
         new AsyncTask<Void, Void, Boolean>() {
-            boolean success;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //TODO Spinner/Bar gets stuck. Sticking bar at 20 seems better than stuck Spinner
+                        gDrivePd = new ProgressDialog(ImportExportActivity.this);
+                        gDrivePd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        gDrivePd.setIndeterminate(true);
+                        gDrivePd.setMax(100);
+                        gDrivePd.setProgress(10);
+                        gDrivePd.setMessage(String.format(getString(R.string.msg_creating), getString(R.string.str_backup)));
+                        gDrivePd.setCancelable(false);
+                        gDrivePd.setCanceledOnTouchOutside(false);
+                        gDrivePd.show();
+                    }
+                });
+            }
+
             @Override
             protected Boolean doInBackground(Void... voids) {
                 gDrivePd.setProgress(20);
@@ -315,13 +340,14 @@ public class ImportExportActivity extends Activity {
 
                             @Override
                             public void onResult(DriveContentsResult result) {
-                                // If the operation was not successful, notify user
-                                if (!result.getStatus().isSuccess()) {
+                                if (!result.getStatus().isSuccess()) { //Failed
                                     Log.i(TAG, "Failed to create new backup: " + result.getStatus().getStatusMessage());
                                     return;
                                 }
-                                // Otherwise, write our data to the new contents.
+
+                                // If successful write the data to the new contents.
                                 Log.i(TAG, "Content created.");
+                                gDrivePd.setProgress(20);
 
                                 // Get an output stream for the contents.
                                 OutputStream outputStream = result.getDriveContents().getOutputStream();
@@ -336,7 +362,7 @@ public class ImportExportActivity extends Activity {
                                     outputStream.write(Utils.read(backUpfile));
                                     gDrivePd.setProgress(40);
 
-                                    //delete the backup file from internal storage
+                                    //delete the backup file from internal mStorage
                                     Utils.deleteFile(filePath);
 
                                     // Create the initial metadata - MIME type and title.
@@ -354,41 +380,23 @@ public class ImportExportActivity extends Activity {
                                             .setActivityTitle(backUpfile.getName())
                                             .build(mGoogleApiClient);
 
-                                    success = true;
 
                                     gDrivePd.setProgress(50);
 
+                                    //Show a Google Drive Picker where user can select the folder to save backup file in
+                                    //It usu takes a while for Drive Picker to show up. So cancel gDrivePD at onActivityResult();
                                     startIntentSenderForResult(intentSender, REQUEST_CODE_GDRIVE_CREATOR, null, 0, 0, 0);
-
 
                                 } catch (IOException e1) {
                                     Log.i(TAG, "Unable to write file contents.");
                                 } catch (IntentSender.SendIntentException e) {
                                     Log.i(TAG, "Failed to launch file chooser.");
-                                    e.printStackTrace();
                                 }
+
                             }
                         });
 
-                return success;
-            }
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //TODO Spinner/Bar gets stuck. Sticking bar at 20 seems better than stuck Spinner
-                        gDrivePd = new ProgressDialog(ImportExportActivity.this);
-                        gDrivePd.setMessage(String.format(getString(R.string.msg_creating), getString(R.string.str_backup)));
-                        gDrivePd.setCancelable(false);
-                        gDrivePd.setCanceledOnTouchOutside(false);
-                        gDrivePd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        gDrivePd.setMax(100);
-                        gDrivePd.setProgress(10);
-                        gDrivePd.show();
-                    }
-                });
+                return true;
             }
 
             @Override
@@ -398,13 +406,14 @@ public class ImportExportActivity extends Activity {
 
             @Override
             protected void onPostExecute(Boolean aBoolean) {
+
                 super.onPostExecute(aBoolean);
             }
         }.execute();
     }
 
     /**
-     * Creates a JSON file containing the data into predefined (Utils.getAppFolder()) path
+     * Creates a JSON file containing the data into predefined ({@link Utils#getAppFolder(Context)} ) path
      * in sd card. <b>It deletes the old JSON file</b>
      * @return If successful, returns the absolute path of the file. Otherwise, null.
      */
@@ -422,29 +431,21 @@ public class ImportExportActivity extends Activity {
                     filesToDelete.add(f);
             }
 
-            String fileName = "dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_FOR_FILE) + ".json";
+            //Create new json file
+            String fileName = Utils.getJSONFileName();
             File jsonFile = new File(appFolder.getAbsolutePath(),fileName );
 
             if(!jsonFile.createNewFile())
                 Log.d(TAG, "Failed to create file " + jsonFile.getAbsolutePath());
 
+            //Write data to newly created JSON file in json format
             FileOutputStream fileOutputStream = new FileOutputStream(jsonFile.getAbsoluteFile());
             fileOutputStream.write(getJSONDb().toString().getBytes());
             fileOutputStream.close();
 
-            // Let the device know that a new file has been created so that it appears in the computer when connected via usb
-            MediaScannerConnection.scanFile(this,
-                    new String[]{jsonFile.toString()}, null,
-                    new MediaScannerConnection.OnScanCompletedListener() {
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
-                            Log.i("ExternalStorage", "Scanned " + path + ":");
-                            Log.i("ExternalStorage", "-> uri=" + uri);
-                        }
-                    });
+            Log.i(TAG, "JSON backup created");
 
-            Log.i("json backup", "JSON backup created");
-
+            //Delete Old files so that there is always one latest copy
             for(File f : filesToDelete){
                 f.delete();
             }
@@ -452,21 +453,20 @@ public class ImportExportActivity extends Activity {
             return jsonFile.getAbsolutePath();
 
         } catch (IOException e) {
-            Log.w("TAG", "Error creating json backup file: " + e.getMessage());
+            Log.w(TAG, "Error creating json backup file: " + e.getMessage());
             throw e;
         }
     }
 
-
     /**
-     * Creates full backup (.json file + attachments) into the app folder
+     * Creates full backup (.json file + attachments) inside the app folder. It runs in the
+     * background thread.
      * @return Full path of the file if successful otherwise null.
      */
     public void createBackUpToSdCard() {
 
         new AsyncTask<Void, Void, String>() {
             ProgressDialog pd;
-            String filePath = null;
 
             @Override
             protected void onPreExecute() {
@@ -481,10 +481,11 @@ public class ImportExportActivity extends Activity {
 
             @Override
             protected String doInBackground(Void... Void) {
+                String filePath = "";
                 try {
                     filePath = createBackUp(true);
                 } catch (IOException e) {
-                    Log.w("TAG", "Error creating backup file: " + e.getMessage());
+                    Log.w(TAG, "Error creating backup file: " + e.getMessage());
                 } finally {
                     return filePath;
                 }
@@ -495,7 +496,7 @@ public class ImportExportActivity extends Activity {
                 //End progress bar
                 pd.cancel();
 
-                String resultMsg =  result != "" ?
+                String resultMsg =  (result != ""  || result != null) ?
                         String.format(getString(R.string.msg_finished), getString(R.string.str_backup))
                         : String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
 
@@ -509,6 +510,13 @@ public class ImportExportActivity extends Activity {
 
     }
 
+    /**
+     * Creates a backup file of existing data along with attachments.
+     * @param inExtDir : true to create backup file in external mStorage. Backup file created
+     *                 in ext. mStorage can be accessed by computers through USB connection
+     * @return : It retuns the absolute path of the backup file.
+     * @throws IOException
+     */
     public String createBackUp(boolean inExtDir) throws IOException {
         //1.Create JSON with latest data
         createJSONFile();
@@ -522,26 +530,24 @@ public class ImportExportActivity extends Activity {
 
 
         //2.3 create a zip file in not hidden app folder so that user can use it
-        String fileName = "dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_FOR_FILE) + Utils.ZIP_EXT;
+        String fileName = Utils.getZipFileName();
         File zipFile = new File(appFolder.getAbsoluteFile(), fileName);
         zipFile.createNewFile();
 
         //3 zip the directory file into zipFile
         Utils.zip(directoryToZip, zipFile);
 
-        if(inExtDir) {
-            //let know that a new file has been created so that it appears in the computer
+        if(inExtDir) //let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(ImportExportActivity.this, new String[]{appFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
-        }
 
-        Log.i("backup", "backup created");
+        Log.i(TAG, "Backup file created");
 
         return zipFile.getAbsolutePath();
     }
 
     /**
-     * Restores the data from zipped file
-     * @param filePath
+     * Restores the data from zipped/backup file
+     * @param filePath : Absolute Path of the backup file
      */
     public void restoreBackUp(String filePath){
 
@@ -596,7 +602,7 @@ public class ImportExportActivity extends Activity {
                     for(int i = files.length-1; i >= 0 ; i-- )
                         if(files[i].isFile() && files[i].getName().endsWith(".json")){
                             if(!parseJSONFile(files[i].getAbsolutePath(), false))
-                                return false; //false to preserve Id
+                                return false; //false to preserve current Id
                             //takes the first json file from the last
                             //name of json file has date on it so the latest json file
                             //wil likely be at the bottom of the list
@@ -605,12 +611,9 @@ public class ImportExportActivity extends Activity {
 
                     //to let know that a new file has been created so that it appears in the computer
                     MediaScannerConnection.scanFile(ImportExportActivity.this, new String[]{ appFolder.getAbsolutePath()}, null, null);
-
-
                     return true;
-
                 } catch (Exception e) {
-                    Log.w("TAG", "Error creating backup file: " + e.getMessage());
+                    Log.e(TAG, "Error creating backup file: " + e.getMessage());
                     return false;
                 }
             }
@@ -618,7 +621,8 @@ public class ImportExportActivity extends Activity {
     }
 
     /**
-     * Imports the data from zipped file
+     *Imports data from zipped/backup file
+     *TODO: This feature will be added in the future
      * @param filePath
      */
     public void importData(String filePath){
@@ -724,7 +728,7 @@ public class ImportExportActivity extends Activity {
 
         try {
             //Copy the content of file into byte[] and then to string
-            //TO:DO Not an efficient way for large file
+            //TODO Not an efficient way for large file
             is = new FileInputStream(new File(filePath));
             int size = is.available();
             byte[] buffer = new byte[size];
@@ -754,162 +758,160 @@ public class ImportExportActivity extends Activity {
     }
 
     /**
+     * Retrieves DriveFileContent, make a local copy, uses it to restore the backed up data
      * https://github.com/googledrive/android-demos/blob/master/src/com/google/android/gms/drive/sample/demo
-     * This class retrieves DriveFileContent, make a local copy, uses it to restore the backed up data
      */
-    final private class RestoreFromGoogleDriveAsyncTask extends ApiClientAsyncTask<DriveId, Boolean, String> {
+    private void restoreFromGoogleDrive(DriveId id) {
 
-        ProgressDialog fileRetrievePd;
-        public RestoreFromGoogleDriveAsyncTask(Context context) {
-            super(context);
-        }
+        new AsyncTask<DriveId, Boolean, String>() {
+            ProgressDialog fileRetrievePd;
 
-        @Override
-        protected String doInBackgroundConnected(DriveId... params) {
+            @Override
+            protected String doInBackground(DriveId... params) {
 
-            //Show the progress bar
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    fileRetrievePd = new ProgressDialog(ImportExportActivity.this);
-                    fileRetrievePd.setIndeterminate(false); //TODO Still shows indeterminate progress bar
-                    fileRetrievePd.setMessage(String.format(getString(R.string.msg_importing), ""));
-                    fileRetrievePd.setCanceledOnTouchOutside(false);
-                    fileRetrievePd.setMax(100);
-                    fileRetrievePd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialogInterface) {
-                            mGoogleApiClient.disconnect();
-                            RestoreFromGoogleDriveAsyncTask.this.cancel(true);
-                        }
-                    });
-
-                    // Reset progress dialog back to zero as we're
-                    // initiating an opening request.
-                    fileRetrievePd.setProgress(0);
-                    fileRetrievePd.show();
-                }
-            });
-
-            //Get the DriveFile with given instance of GoogleApiClient and DriveID
-            DriveFile driveFile = Drive.DriveApi.getFile(mGoogleApiClient, params[0]);
-            DriveContentsResult driveContentsResult = driveFile.open(mGoogleApiClient,
-                    DriveFile.MODE_READ_ONLY,
-                    new DriveFile.DownloadProgressListener() {
+                //Show the progress bar
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onProgress(long bytesDownloaded, long bytesExpected) {
-                        // Update progress dialog with the latest progress.
-                        //Only once called tho
-                        final int progress = (int)(bytesDownloaded*100/bytesExpected);
-                        Log.d(TAG, String.format("Loading progress: %d percent", progress));
-                        runOnUiThread(new Runnable() {
+                    public void run() {
+                        fileRetrievePd = new ProgressDialog(ImportExportActivity.this);
+                        fileRetrievePd.setIndeterminate(true);
+                        fileRetrievePd.setMessage(String.format(getString(R.string.msg_importing), ""));
+                        fileRetrievePd.setCanceledOnTouchOutside(false);
+                        fileRetrievePd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        fileRetrievePd.setMax(100);
+                        fileRetrievePd.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
-                            public void run() {
-                                fileRetrievePd.setProgress(progress);
-
+                            public void onCancel(DialogInterface dialogInterface) {
+                                mGoogleApiClient.disconnect();
+                                cancel(true);
                             }
                         });
 
+                        // Reset progress dialog back to zero as we're
+                        // initiating an opening request.
+                        fileRetrievePd.setProgress(0);
+                        fileRetrievePd.show();
                     }
-                }).await(); //making the process synchronous
+                });
 
-            //If unsuccessful, notify the user and return
-            if (!driveContentsResult.getStatus().isSuccess()) {
-                Utils.alert(ImportExportActivity.this, getString(R.string.str_failed) + ":"
-                + driveContentsResult.getStatus().getStatusMessage());
-                return null;
+                //Get the DriveFile with given instance of GoogleApiClient and DriveID
+                DriveFile driveFile = Drive.DriveApi.getFile(mGoogleApiClient, params[0]);
+                DriveContentsResult driveContentsResult = driveFile.open(mGoogleApiClient,
+                        DriveFile.MODE_READ_ONLY,
+                        new DriveFile.DownloadProgressListener() {
+                            @Override
+                            public void onProgress(long bytesDownloaded, long bytesExpected) {
+                                // Update progress dialog with the latest progress.
+                                //Only once called tho
+                                final int progress = (int) (bytesDownloaded * 100 / bytesExpected);
+                                Log.d(TAG, String.format("Loading progress: %d percent", progress));
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //sticks at 0. Maybe because of small file size
+                                        fileRetrievePd.setProgress(progress+10);
+                                    }
+                                });
+
+                            }
+                        }).await(); //making the process synchronous
+
+                //If unsuccessful, notify the user and return
+                if (!driveContentsResult.getStatus().isSuccess()) {
+                    Utils.alert(ImportExportActivity.this, getString(R.string.str_failed) + ":"
+                            + driveContentsResult.getStatus().getStatusMessage());
+                    return null;
+                }
+
+                //Get DriveContents to retrieve data from
+                DriveContents driveContents = driveContentsResult.getDriveContents();
+
+                //create the file in local drive to store retrieved data
+                String fileName = Utils.getZipFileName();
+                File backUpFileFromGDrive = new File(Utils.getCacheDir(ImportExportActivity.this).getAbsolutePath(), fileName);
+
+
+                //Buffered input streams read data from a memory area known as a buffer;
+                //the native input API is called only when the buffer is empty.
+                BufferedOutputStream out = null;
+                InputStream in = null;
+
+                try {
+                    out = new BufferedOutputStream(new FileOutputStream(backUpFileFromGDrive));
+                    in = driveContents.getInputStream();
+                    out.write(Utils.read(in));//Faster Read
+                    //Imp: Close the resources to prevent leakage*/
+                    in.close();
+                    out.close();
+                    driveContents.discard(mGoogleApiClient);
+
+                    //Delete existing objects
+                    Storage.getInstance(ImportExportActivity.this).deleteAllParties();
+
+                    //Get the app folder where the data are stored
+                    File appFolder = Utils.getAppFolder(ImportExportActivity.this);
+
+                    //Delete old files, attachments
+                    Utils.cleanDirectory(appFolder);
+
+                    //Unzip the backup file into app folder
+                    Utils.unzip(backUpFileFromGDrive, appFolder);
+
+                    //search .json file
+                    File[] files = appFolder.listFiles();
+                    for (int i = files.length - 1; i >= 0; i--)
+                        if (files[i].isFile() && files[i].getName().endsWith(".json")) {
+                            if (!parseJSONFile(files[i].getAbsolutePath(), false))
+                                return null;
+                            //takes the first json file from the last
+                            //name of json file has date on it so the latest json file
+                            //wil likely be at the bottom of the list
+                            break;
+                        }
+
+                } catch (Exception ex) {
+                    Log.e(TAG, "Error copying file to local drive");
+                    ex.printStackTrace();
+                } finally {
+                    //delete the file once the data is restored; Google drive already has a copy
+                    boolean success = Utils.deleteFile(backUpFileFromGDrive.getAbsolutePath());
+                    if (!success) Log.e(TAG, "Deleting backup file from google drive failed.");
+                    //backUpFileFromGDrive.delete();
+                }
+
+                return "success";
             }
 
-            //Get DriveContents to retrieve data from
-            DriveContents driveContents = driveContentsResult.getDriveContents();
-
-            //create the file in local drive to store retrieved data
-            String fileName = "dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_FOR_FILE) + Utils.ZIP_EXT;
-            File backUpFileFromGDrive = new File(Utils.getCacheDir(ImportExportActivity.this).getAbsolutePath(), fileName );
-
-
-            //Buffered input streams read data from a memory area known as a buffer;
-            //the native input API is called only when the buffer is empty.
-            BufferedOutputStream out = null;
-            InputStream in = null;
-
-            try {
-                out = new BufferedOutputStream(new FileOutputStream(backUpFileFromGDrive));
-                in = driveContents.getInputStream();
-                int b;
-                while ( (b = in.read()) >= 0) {
-                    out.write(b);
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                final String msg;
+                if (result == null) {
+                    Log.d(TAG, "Error while reading from the file");
+                    msg = String.format(getString(R.string.msg_failed), getString(R.string.str_restore_backup_from_google_drive));
+                } else {
+                    Log.i(TAG, "Successfully restored from GoogleDrive");
+                    msg = String.format(getString(R.string.msg_importing), getString(R.string.str_finished));
                 }
-                //Imp: Close the resources to prevent leakage
-                in.close();
-                out.close();
-                driveContents.discard(getGoogleApiClient());
 
-                //Delete existing objects
-                Storage.getInstance(ImportExportActivity.this).deleteAllParties();
-
-                //Get the app folder where the data are stored
-                File appFolder = Utils.getAppFolder(ImportExportActivity.this);
-
-                //Delete old files, attachments
-                Utils.cleanDirectory(appFolder);
-
-                //Unzip the backup file into app folder
-                Utils.unzip(backUpFileFromGDrive, appFolder);
-
-                //search .json file
-                File[] files = appFolder.listFiles();
-                for(int i = files.length-1; i >= 0 ; i-- )
-                    if(files[i].isFile() && files[i].getName().endsWith(".json")){
-                        if(!parseJSONFile(files[i].getAbsolutePath(), false))
-                            return null;
-                        //takes the first json file from the last
-                        //name of json file has date on it so the latest json file
-                        //wil likely be at the bottom of the list
-                        break;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fileRetrievePd.cancel();
+                        Utils.alert(ImportExportActivity.this, msg);
                     }
-
-            }catch(Exception ex){
-                Log.e(TAG, "Error copying file to local drive");
-                ex.printStackTrace();
-            }finally {
-                //delete the file once the data is restored; Google drive already has a copy
-               boolean success =  Utils.deleteFile(backUpFileFromGDrive.getAbsolutePath());
-                if(!success) Log.e(TAG, "Deleting backup file from google drive failed.");
-                //backUpFileFromGDrive.delete();
+                });
             }
-
-            return "success";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            final String msg;
-            if (result == null) {
-                Log.d(TAG, "Error while reading from the file");
-                msg = String.format(getString(R.string.msg_failed), getString(R.string.str_restore_backup_from_google_drive));
-            }else {
-                Log.i(TAG, "Successfully restored from GoogleDrive");
-                msg = String.format(getString(R.string.msg_importing), getString(R.string.str_finished));
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    fileRetrievePd.cancel();
-                    Utils.alert(ImportExportActivity.this, msg);
-                }
-            });
-        }
+        }.execute(id);
     }
 
+    /**
+     * Imports Old Data - data saved by old app (v3.1-)
+     */
     public void importOldData(){
         final ProgressDialog pd = new ProgressDialog(ImportExportActivity.this);
 
         new AsyncTask<Void, Integer, Boolean>(){
-
-
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -947,14 +949,13 @@ public class ImportExportActivity extends Activity {
                 //2.2 get App Folder that is not hidden. Backup file will be created here
                 File extAppFolder = Utils.getAppFolder(false) ;
 
-                //2.3 create a zip file in external app folder so that user can use it
-                String fileName = "dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_FOR_FILE) + Utils.ZIP_EXT;
+                //2.3 create a zip file in external app folder so that user can use it in case anything goes wrong
+                String fileName = Utils.getZipFileName();
                 File zipFile = new File(extAppFolder.getAbsoluteFile(), fileName);
 
                 try{
-                    zipFile.createNewFile();
 
-                    //create a new json file
+                    zipFile.createNewFile(); //create a new json file
 
                     //Store old json files in an array so that it can be deleted once
                     //new json file is created succesfully
@@ -964,14 +965,15 @@ public class ImportExportActivity extends Activity {
                             filesToDelete.add(f);
                     }
 
-                    String name = "dailyJournal-" + Utils.parseDate(new Date(), Utils.DATE_FORMAT_FOR_FILE) + ".json";
+                    String name = Utils.getJSONFileName();
                     File jsonFile = new File(directoryToZip.getAbsolutePath(),name );
 
                     if(!jsonFile.createNewFile())
-                        Log.d(TAG, "Failed to create file " + jsonFile.getAbsolutePath());
+                        Log.d(TAG, "Failed to create file at " + jsonFile.getAbsolutePath());
 
                     publishProgress(30);
 
+                    //write data to json file
                     FileOutputStream fileOutputStream = new FileOutputStream(jsonFile.getAbsoluteFile());
                     fileOutputStream.write(getJSONDb().toString().getBytes());
                     fileOutputStream.close();
@@ -984,8 +986,8 @@ public class ImportExportActivity extends Activity {
                             new MediaScannerConnection.OnScanCompletedListener() {
                                 @Override
                                 public void onScanCompleted(String path, Uri uri) {
-                                    Log.i("ExternalStorage", "Scanned " + path + ":");
-                                    Log.i("ExternalStorage", "-> uri=" + uri);
+                                    Log.i(TAG + "ExternalStorage", "Scanned " + path + ":");
+                                    Log.i(TAG + "ExternalStorage", "-> uri=" + uri);
                                 }
                             });
 
@@ -996,20 +998,19 @@ public class ImportExportActivity extends Activity {
                         f.delete();
                     }
 
+                    publishProgress(60);
+
                     //3 zip the directory file into zipFile
                     Utils.zip(directoryToZip, zipFile);
 
                     publishProgress(70);
-
-                    //let know that a new file has been created so that it appears in the computer
-                    MediaScannerConnection.scanFile(ImportExportActivity.this, new String[]{extAppFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
 
                     Log.i(TAG, "old file's backup created");
 
                     //Delete existing files, objects, database
                     Storage.getInstance(ImportExportActivity.this).deleteAllParties();
 
-                    //3. Restore the backedup file
+                    //3. Restore the backup file
 
                     //Get the app folder where the new data are stored
                     File newAppFolder = Utils.getAppFolder(ImportExportActivity.this);
@@ -1050,13 +1051,17 @@ public class ImportExportActivity extends Activity {
             @Override
             protected void onPostExecute(Boolean aBoolean) {
                 pd.cancel();
+                //Record that the old data were imported so that it doesn't happen again
                 Storage.getInstance(ImportExportActivity.this).oldDataImportAttempted(true);
+
                 setResult(aBoolean ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+
+                //Prepare message to notify user
                 String msg = aBoolean ? getString(R.string.str_finished) : getString(R.string.str_failed);
                 Utils.alert(ImportExportActivity.this, msg, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ImportExportActivity.this.finish();
+                        ImportExportActivity.this.finish();  //Kill the activity once the import attempt is finished
                     }
                 }, null);
 

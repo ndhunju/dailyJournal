@@ -14,14 +14,14 @@ public class JournalActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
+		//Get Journal and Party ID if passed through Intent
 		int journalId = getIntent().getIntExtra(Utils.KEY_JOURNAL_ID, Utils.ID_NEW_JOURNAL);
 		int partyId = getIntent().getIntExtra(Utils.KEY_PARTY_ID, Utils.NO_PARTY);
 
+		//Add an instance of JournalFragment
 		Fragment jf = JournalFragment.newInstance(journalId, partyId);
 		getSupportFragmentManager().beginTransaction().add(R.id.activity_home_journal_fl, jf).commit();
-		
-		
-		
+
 	}
 
 }

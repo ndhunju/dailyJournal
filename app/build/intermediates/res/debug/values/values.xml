@@ -175,7 +175,6 @@
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="action_settings">Settings</string>
     <string name="app_name">Daily Journal</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/res/values/auth_strings.xml -->
     <eat-comment/>
@@ -183,7 +182,7 @@
     <string name="auth_google_play_services_client_google_display_name">Google</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="backup_dir">Daily Journal Folder in SD Card.</string>
+    <string name="backup_dir">\'Daily Journal\' Folder in the Storage.</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/res/values/common_strings.xml -->
     <eat-comment/>
     <string name="common_android_wear_notification_needs_update_text"><ns1:g id="app_name">%1$s</ns1:g> requires an update to the Android Wear app.</string>
@@ -220,8 +219,6 @@
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="currency_type">$</string>
-    <string name="hello_world">Hello world!</string>
     <string name="hint_note">Write notes here....</string>
     <string name="msg_connecting">Connecting to %1$s ...</string>
     <string name="msg_creating">Creating %1$s ...</string>
@@ -234,12 +231,12 @@
     <string name="msg_move_old_data">For better security, Daily Journal now uses a secure folder.
         The app will move old data to the secure folder. This can take few minutes.</string>
     <string name="msg_reminder">Don\'t forget to do the Journal Entry</string>
-    <string name="msg_restore_gdrive">The app is having problem restoring from Google Drive.
-        You can download the backup file to SD Card and use "Restore backup from SD Card" Option</string>
+    <string name="msg_restore_gdrive">The app is having problem restoring from Google
+        Drive.You can download the backup file to SD Card and use "Restore backup from SD
+        Card" Option</string>
     <string name="msg_restored">%1$s restored</string>
     <string name="msg_saved">%1$s saved</string>
     <string name="msg_saved_in">Saved in %1$s .</string>
-    <string name="show_parties">Parties</string>
     <string name="str_00.00">00.00</string>
     <string name="str_alert">Alert!</string>
     <string name="str_attachment"> Attachment</string>
@@ -261,8 +258,8 @@
     <string name="str_information">Information</string>
     <string name="str_journal">Journal</string>
     <string name="str_lock">Lock</string>
-    <string name="str_new_journal">New Journal</string>
     <string name="str_note">Note</string>
+    <string name="str_parties">Parties</string>
     <string name="str_party">Party</string>
     <string name="str_pick_a_date">Pick a Date</string>
     <string name="str_reminder">Reminder</string>
@@ -271,7 +268,9 @@
     <string name="str_save">Save</string>
     <string name="str_select_party">Select Party</string>
     <string name="str_tools">Tools</string>
-    <string name="title_activity_back_up">Tools</string>
+    <string name="title_activity_import_export">Tools</string>
+    <string name="title_activity_journal">New Journal</string>
+    <string name="title_activity_party">Party List</string>
     <string name="warning_cant_change_party">You can not change the party.</string>
     <string name="warning_ext_mismatch">The extension of the backup file is incorrect</string>
     <string name="warning_format">The format is incorrect</string>

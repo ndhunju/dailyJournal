@@ -20,67 +20,59 @@ import com.ndhunju.dailyjournal.model.Utils;
 
 public class PartyListActivity extends FragmentActivity {
 
-	ListView partyLV ;
-	ArrayAdapter<Party> partyAdapter;
-	EditText srchPartyET;
-	Storage storage;
+	//Declare variables
+	private Storage mStorage;
+	private ListView partyLV;
+	private EditText srchPartyET;
+	private ArrayAdapter<Party> partyAdapter;
+
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(R.layout.fragment_party_list);
-		setTitle("Party List");
+		setTitle(getString(R.string.title_activity_party));
 		
-		storage = Storage.getInstance(PartyListActivity.this);
-		
+		mStorage = Storage.getInstance(PartyListActivity.this);
+
+		//Wire up widgets
 		srchPartyET = (EditText)findViewById(R.id.fragment_party_list_search_et);
 		srchPartyET.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				//filter the list below
-				partyAdapter.getFilter().filter(s);
+				partyAdapter.getFilter().filter(s); //filter the list below
 			}
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count,	int after) {}
 			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void afterTextChanged(Editable s) {}
 		});
 		
 		partyLV = (ListView)findViewById(R.id.fragment_party_list_party_list_lv);
-		/*merchantAdapter = new ArrayAdapter<Merchant>(this, android.R.layout.simple_list_item_1, storage.getMerchants());
-		merchantLV.setAdapter(merchantAdapter);*/
 		partyLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent i = new Intent(PartyListActivity.this, PartyActivity.class);
-				i.putExtra(PartyListDialog.KEY_PARTY_ID	, partyAdapter.getItem(position).getId()); //ids array is parallel
+				i.putExtra(Utils.KEY_PARTY_ID, partyAdapter.getItem(position).getId()); //ids array is parallel
 				startActivity(i);
 			}
 
 		}); 
-		
+
+		//When user clicks on Add Party button, create a Party and pass the ID to previous activity
 		((Button)findViewById(R.id.fragment_party_list_add_party_btn)).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				String name = srchPartyET.getText().toString();
 				Party newParty = new Party(name, Party.incrementCurrentId());
 				Storage.getInstance(PartyListActivity.this).addParty(newParty);
 				Utils.toast(PartyListActivity.this, name + " saved.");
-				
-				
+
 				Intent i = new Intent(PartyListActivity.this, PartyActivity.class);
-				i.putExtra(PartyListDialog.KEY_PARTY_ID	, newParty.getId());
+				i.putExtra(Utils.KEY_PARTY_ID, newParty.getId());
 				startActivity(i);
 			}
 		});
@@ -90,13 +82,13 @@ public class PartyListActivity extends FragmentActivity {
 	
 	@Override
 	protected void onPause() {
-		Storage.getInstance(PartyListActivity.this).writeToDB();
+		//Storage.getInstance(PartyListActivity.this).writeToDB();
 		super.onPause();
 	}
 	
 	@Override
 	protected void onResume() {
-		partyAdapter = new ArrayAdapter<Party>(this, android.R.layout.simple_list_item_1, storage.getParties());
+		partyAdapter = new ArrayAdapter<Party>(this, android.R.layout.simple_list_item_1, mStorage.getParties());
 		partyLV.setAdapter(partyAdapter);
 		super.onResume();
 	}

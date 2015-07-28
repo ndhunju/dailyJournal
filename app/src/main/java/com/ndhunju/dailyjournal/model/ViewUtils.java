@@ -13,6 +13,9 @@ import com.ndhunju.dailyjournal.R;
 
 import java.util.Date;
 
+/**
+ * This class has methods that can be used to create header, footer and row of a Ledger
+ */
 public class ViewUtils {
 	
 	//Table layout constants
@@ -20,9 +23,12 @@ public class ViewUtils {
 	private static float COL_WT = 1.0f;
 	private static int PADDING = 5;
 	private static int TEXT_SIZE = 15;
-	
-	
-	@SuppressWarnings("deprecation")
+
+	/**
+	 * This method creates Header of a Ledger
+	 * @param activity
+	 * @return
+	 */
 	public static TableRow createLedgerHeader(Activity activity){
 		TableRow headingRow = new TableRow(activity);
 		headingRow.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -73,8 +79,13 @@ public class ViewUtils {
 		
 		return headingRow;
 	}
-	
-	@SuppressWarnings("deprecation")
+
+	/**
+	 * * This method creates Footer for a Ledger with passed balance
+	 * @param activity
+	 * @param balance : Balance to show at the end of the Ledger
+	 * @return
+	 */
 	public static TableRow createLedgerFooter(Activity activity, double balance){
 		TableRow balanceRow = new TableRow(activity);
 		balanceRow.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -86,7 +97,7 @@ public class ViewUtils {
 		dateTV.setPadding(PADDING, PADDING, PADDING, PADDING);
 		dateTV.setGravity(Gravity.CENTER);
 		dateTV.setTextSize(TEXT_SIZE);
-		dateTV.setText(Utils.parseDate(new Date(), Utils.DATE_FORMAT));
+		dateTV.setText(Utils.formatDate(new Date(), Utils.DATE_FORMAT));
 		dateTV.setTypeface(null, Typeface.BOLD);
 		balanceRow.addView(dateTV);
 
@@ -122,8 +133,14 @@ public class ViewUtils {
 		
 		return balanceRow;
 	}
-	
-	@SuppressWarnings("deprecation")
+
+	/**
+	 * This method creates a row of a ledger based on passed journal
+	 * @param activity
+	 * @param journal
+	 * @param rowOnClickListener
+	 * @return
+	 */
 	public static TableRow createJournalRow(Activity activity, Journal journal, View.OnClickListener rowOnClickListener){
 		TableRow r = new TableRow(activity);
 		r.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -134,7 +151,7 @@ public class ViewUtils {
 		dateCol.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_shape));
 		dateCol.setPadding(PADDING, PADDING, PADDING, PADDING);
 		dateCol.setGravity(Gravity.CENTER);
-		dateCol.setText(Utils.parseDate(new Date(journal.getDate()),Utils.DATE_FORMAT));
+		dateCol.setText(Utils.formatDate(new Date(journal.getDate()), Utils.DATE_FORMAT));
 		dateCol.setTextSize(TEXT_SIZE);
 		r.addView(dateCol);
 

@@ -12,30 +12,21 @@ public class HomeActivity extends FragmentActivity {
 	protected void onCreate(android.os.Bundle arg0) {
 		super.onCreate(arg0);
 		
-		//read the database
+		//Read the database
 		Storage.getInstance(HomeActivity.this).readPartiesFromDB();
 		
-		//set notification if not set already
-		//Utils.setNotification(HomeActivity.this);
-		
+		//Disabling the notification for now.
+		//Alarm.setAlarm();
+
+		//TODO Add a Splash Screen as it might take long time for data to load
+
+		//Immediately jump to JournalActivity for now
 		Intent newActIntent = new Intent(HomeActivity.this, JournalActivity.class);
 		startActivity(newActIntent);
-		
-		/*//Ask user if he wants to export the info before quiting
-		new AlertDialog.Builder(HomeActivity.this)
-			.setTitle(getString(R.string.str_alert))
-			.setMessage(getString(R.string.msg_export))
-			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					Storage.getInstance(HomeActivity.this).exportJSON();
-				}
-				
-			})
-			.create().show();*/
 
+		//Finish current activity. This way, when user presses back he doesn't come to
+		//this activity which will be blank white.
 		HomeActivity.this.finish();
-		
 	}
 
 

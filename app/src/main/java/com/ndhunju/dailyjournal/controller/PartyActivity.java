@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -23,11 +22,13 @@ import com.ndhunju.dailyjournal.model.Storage;
 import com.ndhunju.dailyjournal.model.Utils;
 import com.ndhunju.dailyjournal.model.ViewUtils;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-
 public class PartyActivity extends FragmentActivity {
 
+    //Constants
+    private static final int REQUEST_JOURNAL_CHGD = 5457;
+    private static final int REQUEST_PARTY_INFO_CHGD = 5793;
+
+    //Variables
 	int mPartyId;
 	TextView balanceTV;
 	LinearLayout tableLL;
@@ -37,20 +38,27 @@ public class PartyActivity extends FragmentActivity {
 		super.onCreate(arg0);
 		setContentView(R.layout.activity_party);
 
-		mPartyId = getIntent().getIntExtra(PartyListDialog.KEY_PARTY_ID, 0);
+        //Get the mParty id
+		mPartyId = getIntent().getIntExtra(Utils.KEY_PARTY_ID, 0);
+
+        //Wire up the widgets/view
 		balanceTV = (TextView) findViewById(R.id.activity_party_balance_tv);
 		tableLL = (LinearLayout)findViewById(R.id.activity_party_ll);
 
+        //Get the Party object and set values
 		Party party = Storage.getInstance(PartyActivity.this).getParty(mPartyId);
-		
+
 		double balance = party.getBalance();
 		balanceTV.setText(Utils.formatCurrency(balance));
 		balanceTV.setTextColor(balance > 0 ? Color.parseColor(Utils.RED): Color.parseColor(Utils.GREEN));
-		tableLL.addView(createLedgerView(party));
+
+		tableLL.addView(createLedgerView(party, balance));
+
 		setTitle(party.getName());
 
+        //Alert the user if balance is negative
 		/*if (balance > 0)
-			Utils.alert(PartyActivity.this,	String.format(getString(R.string.warning_overpaid_msg), party.getName(),
+			Utils.alert(PartyActivity.this,	String.format(getString(R.string.warning_overpaid_msg), mParty.getName(),
 					getString(R.string.currency_type), balance));*/
 
 	}
@@ -61,24 +69,46 @@ public class PartyActivity extends FragmentActivity {
 			return;
 
 		switch (requestCode) {
-		case Utils.REQUEST_JOURNAL_CHGD:
-			
-			if(!data.getBooleanExtra(Utils.NAME_JOURNAL_CHGD, false))
-				return;
-			//You need to get a fresh copy of party from Storage 
-			Party party = Storage.getInstance(PartyActivity.this).getParty(mPartyId);
-			double balance = party.getBalance();
-			balanceTV.setText(Utils.formatCurrency(balance));
-			balanceTV.setTextColor(balance > 0 ? Color.parseColor("#f63752"): Color.parseColor("#5CB85C")); // red : green
-			tableLL.removeAllViews();
-			tableLL.addView(createLedgerView(party));
-			/*if (balance > 0)
-				Utils.alert(PartyActivity.this,	String.format(getString(R.string.warning_overpaid_msg), party.getName(),
-						getString(R.string.currency_type), balance));*/
+            case REQUEST_JOURNAL_CHGD:
+
+                if(!data.getBooleanExtra(Utils.KEY_JOURNAL_CHGD, false))
+                    return;
+
+                //Since the Journal was changed, you need to get a fresh copy of mParty from Storage to reflect the change
+                Party party = Storage.getInstance(PartyActivity.this).getParty(mPartyId);
+
+                double balance = party.getBalance();
+                balanceTV.setText(Utils.formatCurrency(balance));
+                balanceTV.setTextColor(balance > 0 ? Color.parseColor(Utils.RED) : Color.parseColor(Utils.GREEN));
+
+                tableLL.removeAllViews();
+                tableLL.addView(createLedgerView(party, balance));
+
+                //Alert the user if balance is negative
+                /*if (balance > 0)
+                    Utils.alert(PartyActivity.this,	String.format(getString(R.string.warning_overpaid_msg), mParty.getName(),
+                            getString(R.string.currency_type), balance));*/
+                break;
+
+            case REQUEST_PARTY_INFO_CHGD:
+
+                if(!data.getBooleanExtra(Utils.KEY_PARTY_INFO_CHGD, false))
+                    return;
+
+                //Party information was changed, update the title
+                //Party party2 = Storage.getInstance(PartyActivity.this).getParty(mPartyId); //Results in more overhead
+                setTitle(data.getStringExtra(Utils.KEY_PARTY_NAME));
+                break;
 		}
 	}
-	
-	public TableLayout createLedgerView(Party party) {
+
+    /**
+     * This method creates a Ledger(Table) of the passed Party object. It takes balance of the mParty as well since
+     * the balance is usually already calculated and getBalance() increases overhead
+     * @param party
+     * @return
+     */
+	public TableLayout createLedgerView(Party party, double balance) {
 
 		TableLayout ledgerTL = new TableLayout(PartyActivity.this);
 		ledgerTL.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -89,22 +119,23 @@ public class PartyActivity extends FragmentActivity {
 					new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							// open journal activity to show the info
+							//Open journal activity to show the detail info of the clicked Journal
 							Intent i = new Intent(PartyActivity.this,JournalActivity.class);
 							i.putExtra(Utils.KEY_JOURNAL_ID,j.getId());
 							i.putExtra(Utils.KEY_PARTY_ID, j.getPartyId());
-							startActivityForResult(i, Utils.REQUEST_JOURNAL_CHGD);
+							startActivityForResult(i, REQUEST_JOURNAL_CHGD);
 						}
 					}));
 		}
 
-		ledgerTL.addView(ViewUtils.createLedgerFooter(PartyActivity.this, party.getBalance()));
+		ledgerTL.addView(ViewUtils.createLedgerFooter(PartyActivity.this, balance));
 
 		return ledgerTL;
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
 		getMenuInflater().inflate(R.menu.menu_party_activity, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -114,12 +145,14 @@ public class PartyActivity extends FragmentActivity {
 
 		switch(item.getItemId()){
 			case R.id.menu_party_activity_info:
+                //Create intent to pass current mParty id to PartyInformationActivity
 				Intent i = new Intent(PartyActivity.this,PartyInformationActivity.class);
-				i.putExtra(PartyListDialog.KEY_PARTY_ID, mPartyId);
-				startActivity(i); //for result? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+				i.putExtra(Utils.KEY_PARTY_ID, mPartyId);
+				startActivityForResult(i, REQUEST_PARTY_INFO_CHGD);
 				break;
 
 			case R.id.menu_party_activity_delete:
+                //User wants to delete the Party but first confirm the deletion
 				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_party));
 				Utils.alert(PartyActivity.this, msg, new DialogInterface.OnClickListener() {
 					@Override

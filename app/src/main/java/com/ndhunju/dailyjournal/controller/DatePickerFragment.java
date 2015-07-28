@@ -24,13 +24,16 @@ public class DatePickerFragment extends DialogFragment {
 	
 	static Calendar mCal;
 	
-	public static DatePickerFragment newInstance(Date d){
+	public static DatePickerFragment newInstance(Date d, int requestCode){
 		
 		//Create a calendar to get the year, month, and day
 		mCal = Calendar.getInstance();
 		mCal.setTime(d);
 		
 		DatePickerFragment dateFragment = new DatePickerFragment();
+		Bundle args = new Bundle();
+		args.putInt(Utils.KEY_REQUEST_CODE, requestCode);
+		dateFragment.setArguments(args);
 
 		return dateFragment;
 	}
@@ -60,7 +63,8 @@ public class DatePickerFragment extends DialogFragment {
 		);
 		
 		
-		/*TimePicker tp = (TimePicker)v.findViewById(R.id.dialogTimePicker);
+		/* Disabling TimePicker as Time is not so much relevant for a Journal
+		TimePicker tp = (TimePicker)v.findViewById(R.id.dialogTimePicker);
 		tp.setCurrentHour(hour);
 		tp.setCurrentMinute(min);
 		tp.setOnTimeChangedListener(new OnTimeChangedListener() {
@@ -80,9 +84,10 @@ public class DatePickerFragment extends DialogFragment {
 				public void onClick(DialogInterface dialog, int which) {
 					Intent i = new Intent();
 					i.putExtra(EXTRA_CAL, mCal);
+					//So far, DatePickerFragment is called from JournalFragment only
 					((JournalFragment)getActivity().getSupportFragmentManager()
 							.findFragmentById(R.id.activity_home_journal_fl))
-							.OnDialogPressedOk(i, Utils.REQUEST_CHGED_DATE);
+							.OnDialogPressedOk(i, getArguments().getInt(Utils.KEY_REQUEST_CODE));
 				}
 			})
 			.setView(v)

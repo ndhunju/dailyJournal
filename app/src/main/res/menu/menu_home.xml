@@ -6,7 +6,7 @@
     <item
         android:id="@+id/Merchants"
         android:orderInCategory="1"
-        android:title="@string/show_parties"
+        android:title="@string/str_parties"
         android:showAsAction="ifRoom|withText"
         tools:ignore="AppCompatResource" />
      <item

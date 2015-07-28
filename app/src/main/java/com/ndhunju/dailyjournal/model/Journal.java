@@ -18,21 +18,21 @@ public class Journal implements Comparator<Journal>{
 
     //Keys used for respective properties
 	private static String KEY_ID = "id";
+	private static String KEY_TYPE="type";
 	private static String KEY_DATE = "date";
-	private static String KEY_ADDED_DATE = "added_date";
-	private static String KEY_AMOUNT = "amount";
-	private static String KEY_TYPE = "type";
 	private static String KEY_NOTE = "mNote";
+	private static String KEY_AMOUNT = "amount";
 	private static String KEY_ATTCH = "attachments";
+	private static String KEY_ADDED_DATE = "added_date";
 
     //Declare variables
 	private int mId;
-	private int mPartyId;
 	private long mDate;
-	private long mAddedDate; //Date when the journal was recorded
-	private Type mType;
-	private double mAmount;
+	private Type  mType;
 	private String mNote;
+	private int  mPartyId;
+	private double mAmount;
+	private long mAddedDate; 							//Date when the journal was recorded
 	private ArrayList<String> mAttachmentPaths;
 
     //Class constructor
@@ -181,8 +181,13 @@ public class Journal implements Comparator<Journal>{
 		
 		return j;
 	}
-	
-	public Journal getDeepCopy(){
+
+	/**
+	 * Returns a deep copy of this Journal object
+	 * @return
+	 */
+	@Override
+	public Journal clone(){
 		Journal tempJournal = new Journal(mDate, mId);
 		tempJournal.setPartyId(mPartyId);
 		tempJournal.setAddedDate(mAddedDate);
@@ -193,7 +198,13 @@ public class Journal implements Comparator<Journal>{
 			tempJournal.addAttachmentPaths(path.toString());
 		return tempJournal;
 	}
-	
+
+	/**
+	 * Perform deep copy of passed Journal object into this
+	 * Journal
+	 * @param journal
+	 * @return
+	 */
 	public boolean deepCopyFrom(Journal journal){
 		mDate = journal.getDate();
 		mId = journal.getId();
@@ -208,6 +219,12 @@ public class Journal implements Comparator<Journal>{
 		return true;
 	}
 
+	/**
+	 * Compares two journal based on their dates
+	 * @param lhs
+	 * @param rhs
+	 * @return
+	 */
     @Override
     public int compare(Journal lhs, Journal rhs) {
         //TODO if the difference between two dates are huge then it might throw error

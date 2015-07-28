@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="blue">#2092FF</color>
-    <color name="blue_pressed">#2071FF</color>
-    <color name="green">#0BA65F</color>
-    <color name="green_pressed">#066137</color>
-    <color name="yellow">#FED14C</color>
-    <color name="yellow_pressed">#CCA83D</color>
-    <color name="red_light">#DD4B39</color>
-    <color name="red_light_pressed">#DD3639</color>
-    <color name="orange">#EB5E0C</color>
-    <color name="orange_pressed">#C7500A</color>
     <color name="grey">#DDDDDD</color>
+    <color name="green">#0BA65F</color>
+    <color name="orange">#EB5E0C</color>
+    <color name="yellow">#FED14C</color>
+    <color name="red_light">#DD4B39</color>
+    <color name="blue_pressed">#2071FF</color>
     <color name="grey_pressed">#AAAAAA</color>
+    <color name="green_pressed">#066137</color>
+    <color name="orange_pressed">#C7500A</color>
+    <color name="yellow_pressed">#CCA83D</color>
+    <color name="red_light_pressed">#DD3639</color>
 </resources>
