@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 
-public class Journal implements Comparator<Journal>{
+public class Journal{
 
     //Static variable
     private static int mCurrentJournalId;
@@ -218,18 +218,6 @@ public class Journal implements Comparator<Journal>{
 			mAttachmentPaths.add(path);
 		return true;
 	}
-
-	/**
-	 * Compares two journal based on their dates
-	 * @param lhs
-	 * @param rhs
-	 * @return
-	 */
-    @Override
-    public int compare(Journal lhs, Journal rhs) {
-        //TODO if the difference between two dates are huge then it might throw error
-        return (int)(lhs.getDate()- rhs.getDate());
-    }
 
     //Static methods
     public static int getCurrentId(){

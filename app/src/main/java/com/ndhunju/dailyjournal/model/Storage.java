@@ -50,7 +50,7 @@ public class Storage {
 		mDbHelper = new FeedReaderDbHelper(mContext);
 
 		//Get current id for party and journal
-		pm = PreferenceManager.getDefaultSharedPreferences(con);
+		if(pm == null ) pm = PreferenceManager.getDefaultSharedPreferences(con);
 		Journal.setCurrentId(pm.getInt(KEY_CURRENT_JOURNAL_ID, 1));
 		Party.setCurrentId(pm.getInt(KEY_CURRENT_PARTY_ID, 1));
 	}
@@ -61,7 +61,22 @@ public class Storage {
 		return mStorage;
 	}
 
-	public boolean isOldDataImported(){
+	/**
+	 * Created to used it while JUnit testing
+	 * @param sp
+	 * @return
+	 */
+	public static boolean setSharedPreference(SharedPreferences sp){
+		if(sp == null)
+			return false;
+
+		pm = sp;
+		return true;
+	}
+
+	public boolean isOldDataImported(){ return pm.getBoolean(KEY_OLD_DATA_IMPORTED, false); }
+
+	public static boolean isOldDataImported(SharedPreferences pm){
 		return pm.getBoolean(KEY_OLD_DATA_IMPORTED, false);
 	}
 
@@ -158,7 +173,6 @@ public class Storage {
 		
 	}
 
-
 	public boolean deleteParty(int partyId){
 		for(int i = 0; i < mParties.size() ; i++){
 			if(mParties.get(i).getId() == partyId){
@@ -177,7 +191,7 @@ public class Storage {
 			mParties.remove(i);
 		}*/
 
-		mParties.clear();
+		mParties = null;
 		return true;
 	}
 
@@ -315,7 +329,8 @@ public class Storage {
 
 		}
 
-		db.close();
+		//db.close(); //TODO It seems it causes an error following error in Samsung Galaxy phone
+		// (java.lang.IllegalStateException: Cannot perform this operation because the connection pool has been closed.))
 		mDbHelper.close();
 
 		//update current IDS for party and journal

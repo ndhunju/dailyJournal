@@ -44,7 +44,7 @@ public class Utils {
 
 	public static final int NO_PARTY = -1;
 	public static final int ID_NEW_JOURNAL=-2;
-	private static final int NUM_OF_DIGITS = 7; // Number of digits for ID
+	public static final int NUM_OF_DIGITS = 7; // Number of digits for ID
 
 	//Hex Value of colors
 	public static final String RED = "#f63752";
@@ -133,10 +133,10 @@ public class Utils {
 	 * @param id
 	 * @return
 	 */
-	public static String getStringId(int id) {
+	public static String getStringId(int id, int noOfDigits) {
 		String nextId = String.valueOf(id);
 		String zeros = "";
-		for (int i = 0; i <= NUM_OF_DIGITS - nextId.length(); i++)
+		for (int i = 1; i <= noOfDigits - nextId.length(); i++)
 			zeros += "0";
 		return zeros + nextId;
 	}

@@ -44,7 +44,7 @@ public class PartyInformationActivity extends FragmentActivity {
 
 		//Wire up widgets
 		TextView idTV = (TextView)findViewById(R.id.activity_merchant_info_id_tv);
-		idTV.setText(Utils.getStringId(mParty.getId()));
+		idTV.setText(Utils.getStringId(mParty.getId(),Utils.NUM_OF_DIGITS));
 		
 		nameET = (EditText)findViewById(R.id.activity_merchant_info_name_et);
 		nameET.setText(mParty.getName());

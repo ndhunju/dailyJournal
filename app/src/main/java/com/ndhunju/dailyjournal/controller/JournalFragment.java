@@ -125,7 +125,7 @@ public class JournalFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_journal, new LinearLayout(getActivity()));
 
 		idTV = (TextView) v.findViewById(R.id.fragment_journal_id);
-		idTV.setText(Utils.getStringId(tempJournal.getId()));
+		idTV.setText(Utils.getStringId(tempJournal.getId(), Utils.NUM_OF_DIGITS));
 
 		drCrTv = (TextView) v.findViewById(R.id.fragment_journal_dr_cr_tv);
 
@@ -493,7 +493,7 @@ public class JournalFragment extends Fragment {
 	 */
 	public void setValues(Journal tempJournal, Party party) {
 		mParty = party;
-		idTV.setText(getString(R.string.str_id) + Utils.getStringId(tempJournal.getId()));
+		idTV.setText(getString(R.string.str_id) + Utils.getStringId(tempJournal.getId(), Utils.NUM_OF_DIGITS));
         partyBtn.setText(party == null ? getString(R.string.str_select_party) : party.getName());
         amountEt.setText(tempJournal.getAmount() == 0 ? "" :
 				Utils.formatCurrency(tempJournal.getAmount()));
