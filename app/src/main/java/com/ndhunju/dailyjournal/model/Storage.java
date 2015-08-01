@@ -1,33 +1,22 @@
 package com.ndhunju.dailyjournal.model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-
-import org.json.JSONArray;
-
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.database.FeedReaderContract.FeedEntry;
 import com.ndhunju.dailyjournal.database.FeedReaderDbHelper;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class Storage {
 
@@ -178,12 +167,18 @@ public class Storage {
 			if(mParties.get(i).getId() == partyId){
 				if(!mParties.get(i).deleteAllJournals())
 					return false;
-				mParties.remove(i);
+				mParties.remove(i); //decrements the size of array
+                i--;
 			}
 		}
 		return true;
 	}
 
+	/**
+	 * Clears all parties. <b>Note: </b> It doesn't delete corresponding files/attachments
+	 * from app folder. For that, {@link #eraseAll(Activity)} should be called
+	 * @return
+	 */
 	public boolean deleteAllParties(){
 		/*for(int i = 0;i < mParties.size(); i++){
 			if(!mParties.get(i).deleteAllJournals())
@@ -191,15 +186,21 @@ public class Storage {
 			mParties.remove(i);
 		}*/
 
-		mParties = null;
+		mParties = new ArrayList<>();
+
 		return true;
 	}
 
-	public boolean eraseAll(Activity activity){
+	/**
+	 * Deletes all parties, journals along with the attachments.
+	 * @param context
+	 * @return
+	 */
+	public boolean eraseAll(Context context){
 		try{
 			deleteAllParties();
-			Utils.cleanDirectory(Utils.getAppFolder(activity));
-			writeToDB();
+			Utils.deleteDirectory(Utils.getAppFolder(context));
+			//writeToDB(); //while exiting the app, it will be called
 			return true;
 		}catch (Exception e){
 			e.printStackTrace();
@@ -414,7 +415,7 @@ public class Storage {
 		// created
 		// every time it loads data from database making more than one copies of
 		// same goals
-		mParties.clear();
+		deleteAllParties();
 
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 		// mDbHelper.onCreate(db); //uncomment only when you need to eras db

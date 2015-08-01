@@ -592,7 +592,7 @@ public class ImportExportActivity extends Activity {
                     File appFolder = Utils.getAppFolder(ImportExportActivity.this);
 
                     //Delete old files, attachments
-                    Utils.cleanDirectory(appFolder);
+                    Utils.deleteDirectory(appFolder);
 
                     //Unzip the files into app folder
                     Utils.unzip(new File(params[0]), appFolder);
@@ -852,7 +852,7 @@ public class ImportExportActivity extends Activity {
                     File appFolder = Utils.getAppFolder(ImportExportActivity.this);
 
                     //Delete old files, attachments
-                    Utils.cleanDirectory(appFolder);
+                    Utils.deleteDirectory(appFolder);
 
                     //Unzip the backup file into app folder
                     Utils.unzip(backUpFileFromGDrive, appFolder);
@@ -1016,7 +1016,7 @@ public class ImportExportActivity extends Activity {
                     File newAppFolder = Utils.getAppFolder(ImportExportActivity.this);
 
                     //Delete old files, attachments
-                    Utils.cleanDirectory(newAppFolder);
+                    Utils.deleteDirectory(newAppFolder);
 
                     publishProgress(80);
 

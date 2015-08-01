@@ -402,7 +402,7 @@ public class JournalFragment extends Fragment {
 				//4. Delete file in external mStorage
 
 				File tempPicFile = Utils.createExternalStoragePublicPicture();
-				File internalPicFile = Utils.createImageFile(getActivity(), tempJournal);
+				File internalPicFile = Utils.createImageFile(getActivity(), tempJournal, mParty);
 
 				try{
 					FileInputStream picFileIS  = new FileInputStream(tempPicFile);
@@ -432,7 +432,7 @@ public class JournalFragment extends Fragment {
                     return;
                 }
 
-                File picFile = Utils.createImageFile(getActivity(), tempJournal);
+                File picFile = Utils.createImageFile(getActivity(), tempJournal, mParty);
                 Utils.storeImage(bitmap, picFile, getActivity());
                 tempJournal.getAttachmentPaths().add(picFile.getAbsolutePath());
                 break;

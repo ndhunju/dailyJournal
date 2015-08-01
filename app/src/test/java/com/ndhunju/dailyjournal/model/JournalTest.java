@@ -3,10 +3,16 @@ package com.ndhunju.dailyjournal.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
@@ -17,8 +23,14 @@ public class JournalTest {
 
     String jsonJournal;
 
+    @BeforeClass
+    public static void initializeSomethingReallyExpensive(){}
+
+    @AfterClass
+    public static void cleanUpSomethingReallyExpensive(){}
+
     @Before
-    public void initialize(){
+    public void setUp(){
         //Arrange
         jsonJournal = "{" +
                 "id:2," +
@@ -30,6 +42,9 @@ public class JournalTest {
                 "attachments:[\"\\/data\\/data\\/com.ndhunju.dailyjournal\\/app_DailyJournal\\/.attachments\\/.Bill Gates\\/2-2-0.png\"]" +
                 "}";
     }
+
+    @After
+    public void cleanUp(){}
 
     @Test
     public void correctlyParsesJSONStr() throws Exception {
@@ -62,4 +77,20 @@ public class JournalTest {
         //Assert
         assertNotEquals(testJournal.getId(), equalTo(2));
     }
+
+    @Test
+    public void deletingAttchShouldDeleteFile() throws IOException {
+        //Arrange
+        File testFile = new File("testFile.jpg");
+        testFile.createNewFile();
+        Journal testJournal = new Journal(0);
+        testJournal.addAttachmentPaths(testFile.getAbsolutePath());
+
+        //Act
+        testJournal.deleteAttachment(testFile.getAbsolutePath());
+
+        //Assert
+        assertFalse("Attachment file not deleted.", testFile.exists());
+    }
+
 }

@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
 
 public class Journal{
 
@@ -140,7 +139,8 @@ public class Journal{
 		for(int i = 0 ; i < mAttachmentPaths.size(); i++){
             if(!Utils.deleteFile(mAttachmentPaths.get(i)))
 				return false;
-			mAttachmentPaths.remove(i);
+			mAttachmentPaths.remove(i); //this decrements the size of array;
+            i--;
         }
 		return true;
 	}
@@ -154,14 +154,19 @@ public class Journal{
     public boolean deleteAttachment(String path){
         for(int i = 0 ; i < mAttachmentPaths.size(); i++)
             if(mAttachmentPaths.get(i).equals(path)){
+				if(!Utils.deleteFile(path)) //delete path only if file is deleted
+					return false;
                 mAttachmentPaths.remove(i);
                 return true;
             }
         return false;
     }
 
-    public void deleteAttachment(int pos){
+    public boolean deleteAttachment(int pos){
+		if(!Utils.deleteFile(mAttachmentPaths.get(pos)))
+			return false;
         mAttachmentPaths.remove(pos);
+		return true;
     }
 	
 	public JSONObject toJSON(){

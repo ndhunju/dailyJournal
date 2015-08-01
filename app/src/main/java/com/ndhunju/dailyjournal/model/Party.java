@@ -1,10 +1,10 @@
 package com.ndhunju.dailyjournal.model;
 
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class Party {
 
@@ -94,6 +94,9 @@ public class Party {
 	 * @param journal
 	 */
 	public void addJournal(Journal journal){
+
+        //set the PartyId of journal
+        journal.setPartyId(mId);
 		
 		//add journal in the order of date
 		mJournals.add(journal);
@@ -124,7 +127,8 @@ public class Party {
 		for(int i = 0; i < mJournals.size(); i++){
 			if(!mJournals.get(i).deleteAllAttachment())
 				return false;
-			mJournals.remove(i);
+			mJournals.remove(i); //decrements the size of array
+			i--;
 		}
 		return true;
 	}

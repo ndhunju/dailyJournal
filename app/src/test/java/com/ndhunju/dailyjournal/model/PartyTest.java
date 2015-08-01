@@ -1,28 +1,32 @@
 package com.ndhunju.dailyjournal.model;
 
 import org.json.JSONObject;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 /**
- * Created by dhunju on 7/31/2015.
+ * Created by dhunju
  */
 public class PartyTest {
 
     Party testParty;
     String jsonParty;
 
+    @BeforeClass
+    public static void initializeSomethingReallyExpensive(){}
+
     @Before
-    public void initialize(){
+    public void setUp(){
         testParty =  new Party("Party", 0);
         jsonParty = "{" +
                 "id:2," +
@@ -39,6 +43,12 @@ public class PartyTest {
                 "attachments:[address]}" +
                 "]}";
     }
+
+    @After
+    public void cleanUp(){}
+
+    @AfterClass
+    public static void cleanUpSomethingReallyExpensive(){}
 
     @Test
     public void addingOnlyCreditJournalsGivesNegativeBalance() throws Exception {
@@ -114,5 +124,21 @@ public class PartyTest {
 
         //Assert
         assertFalse(testParty.getId() == 2);
+    }
+
+    @Test
+    public void deletingJournalShouldDeleteAllAttachments(){
+        //Arrange
+        Journal j1 = new Journal(0);
+        j1.addAttachmentPaths("path1");
+        j1.addAttachmentPaths("path2");
+
+        testParty.addJournal(j1);
+
+        //Act
+        testParty.deleteJournal(j1.getId());
+
+        //Assert
+        assertThat(j1.getAttachmentPaths().size(), equalTo(0));
     }
 }

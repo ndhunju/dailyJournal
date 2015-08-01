@@ -109,7 +109,7 @@ public class Utils {
         return nf.format(currency);
     }
 
-    public static double parseCurrency(String currency) throws Exception {
+    public static double parseCurrency(String currency) throws NumberFormatException {
         NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
         double doubleCurrency = 0;
         try{
@@ -120,7 +120,7 @@ public class Utils {
                 doubleCurrency  = Double.parseDouble(currency);
             }catch(NumberFormatException nfe){
                 Log.d("Format", "Incorrect format " + currency);
-                throw new Exception("Incorrect number format");
+                throw new NumberFormatException("Incorrect number format");
             }
         }
 
@@ -236,11 +236,12 @@ public class Utils {
 
 	/**
 	 * Returns app's folder in an internal storage if exists otherwise creates a new one
-	 * @param activity
+	 * @param context
 	 * @return
 	 */
-	public static File getAppFolder(Context activity){
-		File appFolder = activity.getDir(Utils.APP_FOLDER_NAME, Context.MODE_PRIVATE);
+	public static File getAppFolder(Context context){
+		File appFolder = context.getDir(Utils.APP_FOLDER_NAME, Context.MODE_PRIVATE);
+		if(!appFolder.exists()) appFolder.mkdir();
 		appDir = appFolder.getAbsolutePath();
 		return appFolder;
 	}
@@ -265,7 +266,7 @@ public class Utils {
 		File file = activity.getDir(Utils.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
 		boolean success = false;
 		try{
-			success = Utils.cleanDirectory(file);
+			success = Utils.deleteDirectory(file);
 		} catch (IOException e) {
 			Log.d("Cache Dir", "Error deleting cache folder");
 			e.printStackTrace();
@@ -343,15 +344,14 @@ public class Utils {
         return file.delete();
     }
 
-    public static File createImageFile(Activity activity, Journal journal) {
+    public static File createImageFile(Context context, Journal journal, Party party) {
 
 		//TODO: the file returned is inside the app folder which can be accessed by
 		//the app only. So Camera app cannot stream photo to this file
 
-		File attachmentFolder = getAttachmentFolder(getAppFolder(activity), true);
+		File attachmentFolder = getAttachmentFolder(getAppFolder(context), true);
 		
-		File partyFolder = getPartyFolder(attachmentFolder,
-                Storage.getInstance(activity).getParty(journal.getPartyId()).getName(), true);
+		File partyFolder = getPartyFolder(attachmentFolder, party.getName(), true);
 
 		/*This is prolly the secure way but I want to keep name short and simple and avoid the
 		overhead of imorting UUID class just for this purpose
@@ -372,6 +372,7 @@ public class Utils {
 			while(pic.exists());
 
 			pic.createNewFile();
+
 			return pic;
 		} catch (Exception e) {	e.printStackTrace();}
 
@@ -400,7 +401,7 @@ public class Utils {
      * @return
      * @throws IOException : if not directory is found
      */
-	public static boolean cleanDirectory(File directory) throws IOException {
+	public static boolean deleteDirectory(File directory) throws IOException {
 		if (!directory.exists()) {
 			final String message = directory + " does not exist";
 			throw new IllegalArgumentException(message);
@@ -417,8 +418,12 @@ public class Utils {
 			}
 
 		for (final File file : files) {
-				file.delete();
+			//if it is a directory, go inside it with recursive call
+			if(file.isDirectory())	deleteDirectory(file);
+			else if(!file.delete()) return false;
 			}
+
+		if(!directory.delete()) return false;
 
 		return true;
 	}

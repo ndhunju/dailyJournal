@@ -15,45 +15,39 @@
       </layout>
     </layouts>
   </component>
-  <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="d45b2b90-b2f3-476c-a06d-3fa06318282b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/libs/org.json.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/JournalTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/PartyTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/StorageTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/UtilsTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/hamcrest_core_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/junit_4_12.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/mockable_android_21.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/mockito_core_1_9_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/objenesis_1_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/org_json.xml" />
-      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\DailyJournal.iml" afterPath="$PROJECT_DIR$/dailyJournal.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExportActivity$11.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExportActivity$11.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExportActivity$12.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExportActivity$12.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExportActivity$9.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExportActivity$9.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Journal$Type.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Journal$Type.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Journal.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Journal.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/JournalFragment.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/JournalFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/PartyInformationActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/PartyInformationActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/test/debug/com/ndhunju/dailyjournal/model/JournalTest.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/test/debug/com/ndhunju/dailyjournal/model/JournalTest.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Party.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Party.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/test/debug/com/ndhunju/dailyjournal/model/PartyTest.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/test/debug/com/ndhunju/dailyjournal/model/PartyTest.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Storage.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Storage.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/test/debug/com/ndhunju/dailyjournal/model/StorageTest.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/test/debug/com/ndhunju/dailyjournal/model/StorageTest.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Utils$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Utils$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Utils.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Utils.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/test/debug/com/ndhunju/dailyjournal/model/UtilsTest.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/test/debug/com/ndhunju/dailyjournal/model/UtilsTest.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/apk/app-debug-unaligned.apk" afterPath="$PROJECT_DIR$/app/build/outputs/apk/app-debug-unaligned.apk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/apk/app-debug.apk" afterPath="$PROJECT_DIR$/app/build/outputs/apk/app-debug.apk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/dex/debug/classes.dex" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/debug/classes.dex" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/gradle_project_sync_data.bin" afterPath="$PROJECT_DIR$/build/intermediates/gradle_project_sync_data.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/outputFileStates.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/outputFileStates.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExportActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExportActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Journal.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Journal.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/JournalFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/JournalFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/PartyInformationActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/PartyInformationActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/JournalTest.java" afterPath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/JournalTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/PartyTest.java" afterPath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/PartyTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Storage.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Storage.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/StorageTest.java" afterPath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/StorageTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Utils.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Utils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" afterPath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/UtilsTest.java" afterPath="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/UtilsTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -69,18 +63,24 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/DailyJournal$StorageTest.coverage" NAME="StorageTest Coverage Results" MODIFIED="1438380886089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/DailyJournal$StorageTest.coverage" NAME="StorageTest Coverage Results" MODIFIED="1438415359331" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.ndhunju.dailyjournal.model.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/DailyJournal$UtilsTest.coverage" NAME="UtilsTest Coverage Results" MODIFIED="1438379356379" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/DailyJournal$UtilsTest.coverage" NAME="UtilsTest Coverage Results" MODIFIED="1438398556909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.ndhunju.dailyjournal.model.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/DailyJournal$JournalTest.coverage" NAME="JournalTest Coverage Results" MODIFIED="1438373885542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/DailyJournal$JournalTest.coverage" NAME="JournalTest Coverage Results" MODIFIED="1438398327933" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.ndhunju.dailyjournal.model.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/DailyJournal$PartyTest.coverage" NAME="PartyTest Coverage Results" MODIFIED="1438377738489" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/DailyJournal$JournalTest_deletingAttchShouldDeleteFile.coverage" NAME="JournalTest.deletingAttchShouldDeleteFile Coverage Results" MODIFIED="1438398189914" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.ndhunju.dailyjournal.model.*</FILTER>
     </SUITE>
+    <SUITE FILE_PATH="coverage/DailyJournal$PartyTest.coverage" NAME="PartyTest Coverage Results" MODIFIED="1438400106952" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.ndhunju.dailyjournal.model.*</FILTER>
+    </SUITE>
+  </component>
+  <component name="CoverageOptionsProvider">
+    <option name="myAddOrReplace" value="1" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -97,139 +97,7 @@
     <favorites_list name="DailyJournal" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="Storage.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Storage.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="310" column="0" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#Storage#0;class#Storage#0" expanded="false" />
-                <element signature="method#getInstance#0;class#Storage#0" expanded="false" />
-                <element signature="docComment;method#setSharedPreference#0;class#Storage#0" expanded="false" />
-                <element signature="method#setSharedPreference#0;class#Storage#0" expanded="false" />
-                <element signature="method#isOldDataImported#1;class#Storage#0" expanded="false" />
-                <element signature="method#oldDataImportAttempted#0;class#Storage#0" expanded="false" />
-                <element signature="method#getPartyNames#0;class#Storage#0" expanded="false" />
-                <element signature="e#2598#2606#0" expanded="true" />
-                <element signature="method#getPartyIds#0;class#Storage#0" expanded="false" />
-                <element signature="e#2784#2793#0" expanded="true" />
-                <element signature="method#getParty#0;class#Storage#0" expanded="false" />
-                <element signature="method#getParty#1;class#Storage#0" expanded="false" />
-                <element signature="method#getJournal#0;class#Storage#0" expanded="false" />
-                <element signature="method#getJournal#1;class#Storage#0" expanded="false" />
-                <element signature="docComment;method#getJournal#2;class#Storage#0" expanded="false" />
-                <element signature="method#getJournal#2;class#Storage#0" expanded="false" />
-                <element signature="docComment;method#addParty#0;class#Storage#0" expanded="false" />
-                <element signature="method#addParty#0;class#Storage#0" expanded="false" />
-                <element signature="method#deleteParty#0;class#Storage#0" expanded="false" />
-                <element signature="method#deleteAllParties#0;class#Storage#0" expanded="false" />
-                <element signature="method#eraseAll#0;class#Storage#0" expanded="false" />
-                <element signature="method#deleteViaContentProvider#0;class#Storage#0" expanded="false" />
-                <element signature="method#getFileUri#0;class#Storage#0" expanded="false" />
-                <element signature="method#writeToDB#0;class#Storage#0" expanded="false" />
-                <element signature="method#writePartyToDB#0;class#Storage#0" expanded="false" />
-                <element signature="method#writeJournalToDB#0;class#Storage#0" expanded="false" />
-                <element signature="method#writeAttachemntPathsToDB#0;class#Storage#0" expanded="false" />
-                <element signature="method#readPartiesFromDB#0;class#Storage#0" expanded="false" />
-                <element signature="method#readJournalsFromDB#0;class#Storage#0" expanded="false" />
-                <element signature="method#readAttachmentPathsFromDB#0;class#Storage#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StorageTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/StorageTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="docComment;class#StorageTest#0" expanded="false" />
-                <element signature="method#firstCallToIsOldDataReturnAlwaysReturnsFalse#0;class#StorageTest#0" expanded="false" />
-                <element signature="method#partiesAreAddedInAlphabeticalOrder#0;class#StorageTest#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UtilsTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/UtilsTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="22" column="52" selection-start-line="22" selection-start-column="52" selection-end-line="22" selection-end-column="52" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Utils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.63188976">
-              <caret line="111" column="35" selection-start-line="111" selection-start-column="35" selection-end-line="111" selection-end-column="35" />
-              <folding>
-                <element signature="docComment;method#formatDate#0;class#Utils#0" expanded="false" />
-                <element signature="method#formatDate#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#formatCurrency#0;class#Utils#0" expanded="false" />
-                <element signature="method#formatCurrency#0;class#Utils#0" expanded="false" />
-                <element signature="method#parseCurrency#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#getStringId#0;class#Utils#0" expanded="false" />
-                <element signature="method#getStringId#0;class#Utils#0" expanded="false" />
-                <element signature="method#toast#0;class#Utils#0" expanded="false" />
-                <element signature="method#toast#1;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#alert#0;class#Utils#0" expanded="false" />
-                <element signature="method#alert#0;class#Utils#0" expanded="false" />
-                <element signature="method#alert#1;class#Utils#0" expanded="false" />
-                <element signature="method#alert#2;class#Utils#0" expanded="false" />
-                <element signature="method#getPictureFromCam#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#getAppFolder#0;class#Utils#0" expanded="false" />
-                <element signature="method#getAppFolder#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#oldAppFolderExist#0;class#Utils#0" expanded="false" />
-                <element signature="method#oldAppFolderExist#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#getAppFolder#1;class#Utils#0" expanded="false" />
-                <element signature="method#getAppFolder#1;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#getCacheDir#0;class#Utils#0" expanded="false" />
-                <element signature="method#getCacheDir#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#cleanCacheDir#0;class#Utils#0" expanded="false" />
-                <element signature="method#cleanCacheDir#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#replaceOldDir#0;class#Utils#0" expanded="false" />
-                <element signature="method#replaceOldDir#0;class#Utils#0" expanded="false" />
-                <element signature="method#getAttachmentFolder#0;class#Utils#0" expanded="false" />
-                <element signature="method#getPartyFolder#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#createExternalStoragePublicPicture#0;class#Utils#0" expanded="false" />
-                <element signature="method#createExternalStoragePublicPicture#0;class#Utils#0" expanded="false" />
-                <element signature="method#deleteExternalStoragePublicPicture#0;class#Utils#0" expanded="false" />
-                <element signature="method#createImageFile#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#deleteFile#0;class#Utils#0" expanded="false" />
-                <element signature="method#deleteFile#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#cleanDirectory#0;class#Utils#0" expanded="false" />
-                <element signature="method#cleanDirectory#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#zip#0;class#Utils#0" expanded="false" />
-                <element signature="method#zip#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#unzip#0;class#Utils#0" expanded="false" />
-                <element signature="method#unzip#0;class#Utils#0" expanded="false" />
-                <element signature="method#copy#0;class#Utils#0" expanded="false" />
-                <element signature="method#copyInputStream#0;class#Utils#0" expanded="false" />
-                <element signature="method#copy#1;class#Utils#0" expanded="false" />
-                <element signature="method#copy#2;class#Utils#0" expanded="false" />
-                <element signature="method#read#0;class#Utils#0" expanded="false" />
-                <element signature="method#read#1;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#getJSONFileName#0;class#Utils#0" expanded="false" />
-                <element signature="method#getJSONFileName#0;class#Utils#0" expanded="false" />
-                <element signature="method#getZipFileName#0;class#Utils#0" expanded="false" />
-                <element signature="docComment;method#storeImage#0;class#Utils#0" expanded="false" />
-                <element signature="method#storeImage#0;class#Utils#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -264,10 +132,6 @@
               <ExternalProjectPojo>
                 <option name="name" value=":app" />
                 <option name="path" value="$PROJECT_DIR$/app" />
-              </ExternalProjectPojo>
-              <ExternalProjectPojo>
-                <option name="name" value=":org.json-20131017" />
-                <option name="path" value="$PROJECT_DIR$/org.json-20131017" />
               </ExternalProjectPojo>
               <ExternalProjectPojo>
                 <option name="name" value="dailyJournal" />
@@ -1326,7 +1190,6 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4312857350807" />
         <entry key="$PROJECT_DIR$" value="4308369632800" />
       </map>
     </option>
@@ -1502,87 +1365,6 @@
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$/app" />
-                      </ExternalModuleBuildClasspathPojo>
-                    </value>
-                  </entry>
-                  <entry key="$PROJECT_DIR$/org.json-20131017">
-                    <value>
-                      <ExternalModuleBuildClasspathPojo>
-                        <option name="entries">
-                          <list>
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/gradle/1.2.3/gradle-1.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/gradle/1.2.3/gradle-1.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/gradle-core/1.2.3/gradle-core-1.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/gradle-core/1.2.3/gradle-core-1.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/net/sf/proguard/proguard-gradle/5.1/proguard-gradle-5.1-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/net/sf/proguard/proguard-gradle/5.1/proguard-gradle-5.1.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/lint/lint/24.2.3/lint-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/lint/lint/24.2.3/lint-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/builder/1.2.3/builder-1.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/builder/1.2.3/builder-1.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/net/sf/proguard/proguard-base/5.1/proguard-base-5.1-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/net/sf/proguard/proguard-base/5.1/proguard-base-5.1.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/eclipse/jdt/core/compiler/ecj/4.4/ecj-4.4-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/eclipse/jdt/core/compiler/ecj/4.4/ecj-4.4.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/lint/lint-checks/24.2.3/lint-checks-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/lint/lint-checks/24.2.3/lint-checks-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/bouncycastle/bcprov-jdk15on/1.48/bcprov-jdk15on-1.48-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/bouncycastle/bcprov-jdk15on/1.48/bcprov-jdk15on-1.48.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/sdk-common/24.2.3/sdk-common-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/sdk-common/24.2.3/sdk-common-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/builder-test-api/1.2.3/builder-test-api-1.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/builder-test-api/1.2.3/builder-test-api-1.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/ow2/asm/asm-tree/5.0.3/asm-tree-5.0.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/ow2/asm/asm-tree/5.0.3/asm-tree-5.0.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/squareup/javawriter/2.5.0/javawriter-2.5.0-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/squareup/javawriter/2.5.0/javawriter-2.5.0.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/common/24.2.3/common-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/common/24.2.3/common-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/builder-model/1.2.3/builder-model-1.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/builder-model/1.2.3/builder-model-1.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/sdklib/24.2.3/sdklib-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/sdklib/24.2.3/sdklib-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/manifest-merger/24.2.3/manifest-merger-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/build/manifest-merger/24.2.3/manifest-merger-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/ddms/ddmlib/24.2.3/ddmlib-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/ddms/ddmlib/24.2.3/ddmlib-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/ow2/asm/asm/5.0.3/asm-5.0.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/ow2/asm/asm/5.0.3/asm-5.0.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/google/code/gson/gson/2.2.4/gson-2.2.4-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/google/code/gson/gson/2.2.4/gson-2.2.4.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/bouncycastle/bcpkix-jdk15on/1.48/bcpkix-jdk15on-1.48-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/bouncycastle/bcpkix-jdk15on/1.48/bcpkix-jdk15on-1.48.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/lint/lint-api/24.2.3/lint-api-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/lint/lint-api/24.2.3/lint-api-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/ow2/asm/asm-analysis/5.0.3/asm-analysis-5.0.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/ow2/asm/asm-analysis/5.0.3/asm-analysis-5.0.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/google/guava/guava/17.0/guava-17.0-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/google/guava/guava/17.0/guava-17.0.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/annotations/24.2.3/annotations-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/annotations/24.2.3/annotations-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/layoutlib/layoutlib-api/24.2.3/layoutlib-api-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/layoutlib/layoutlib-api/24.2.3/layoutlib-api-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/apache/httpcomponents/httpclient/4.1.1/httpclient-4.1.1-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/apache/httpcomponents/httpclient/4.1.1/httpclient-4.1.1.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/apache/httpcomponents/httpmime/4.1/httpmime-4.1-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/apache/httpcomponents/httpmime/4.1/httpmime-4.1.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/apache/commons/commons-compress/1.8.1/commons-compress-1.8.1-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/apache/commons/commons-compress/1.8.1/commons-compress-1.8.1.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/dvlib/24.2.3/dvlib-24.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/dvlib/24.2.3/dvlib-24.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/net/sf/kxml/kxml2/2.3.0/kxml2-2.3.0-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/net/sf/kxml/kxml2/2.3.0/kxml2-2.3.0.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/apache/httpcomponents/httpcore/4.1/httpcore-4.1-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/apache/httpcomponents/httpcore/4.1/httpcore-4.1.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/commons-codec/commons-codec/1.4/commons-codec-1.4-sources.jar" />
-                            <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/commons-codec/commons-codec/1.4/commons-codec-1.4.jar" />
-                          </list>
-                        </option>
-                        <option name="path" value="$PROJECT_DIR$/org.json-20131017" />
                       </ExternalModuleBuildClasspathPojo>
                     </value>
                   </entry>
@@ -1935,17 +1717,17 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExportActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Journal.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java" />
-        <option value="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/PartyTest.java" />
-        <option value="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/JournalTest.java" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/JournalFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/PartyInformationActivity.java" />
         <option value="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/UtilsTest.java" />
+        <option value="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/JournalTest.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/JournalFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Utils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Storage.java" />
         <option value="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/StorageTest.java" />
+        <option value="$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/PartyTest.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Journal.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Storage.java" />
       </list>
     </option>
   </component>
@@ -1988,88 +1770,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DailyJournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Gradle Scripts" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DailyJournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DailyJournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DailyJournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dailyjournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DailyJournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dailyjournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -2189,6 +1889,44 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="Scope" />
     </panes>
   </component>
@@ -2235,7 +1973,7 @@
       <recent name="com.ndhunju.dailyjournal.model" />
     </key>
   </component>
-  <component name="RunManager" selected="Android Application.app">
+  <component name="RunManager" selected="JUnit.StorageTest">
     <configuration default="false" name="JournalTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -2328,6 +2066,32 @@
       <option name="MAIN_CLASS_NAME" value="com.ndhunju.dailyjournal.model.StorageTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="JournalTest.deletingAttchShouldDeleteFile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.ndhunju.dailyjournal.model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="app" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.ndhunju.dailyjournal.model" />
+      <option name="MAIN_CLASS_NAME" value="com.ndhunju.dailyjournal.model.JournalTest" />
+      <option name="METHOD_NAME" value="deletingAttchShouldDeleteFile" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -2507,19 +2271,21 @@
       <option name="INVALID_CLOUD_SELECTION_ERROR" value="" />
       <method />
     </configuration>
-    <list size="5">
+    <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Android Application.app" />
       <item index="1" class="java.lang.String" itemvalue="JUnit.JournalTest" />
       <item index="2" class="java.lang.String" itemvalue="JUnit.PartyTest" />
       <item index="3" class="java.lang.String" itemvalue="JUnit.UtilsTest" />
       <item index="4" class="java.lang.String" itemvalue="JUnit.StorageTest" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.JournalTest.deletingAttchShouldDeleteFile" />
     </list>
     <recent_temporary>
-      <list size="4">
+      <list size="5">
         <item index="0" class="java.lang.String" itemvalue="JUnit.StorageTest" />
         <item index="1" class="java.lang.String" itemvalue="JUnit.UtilsTest" />
         <item index="2" class="java.lang.String" itemvalue="JUnit.PartyTest" />
         <item index="3" class="java.lang.String" itemvalue="JUnit.JournalTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.JournalTest.deletingAttchShouldDeleteFile" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
@@ -2562,25 +2328,25 @@
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.4978678" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18829787" sideWeight="0.5310136" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1861702" sideWeight="0.5310136" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2246596" sideWeight="0.5252101" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4302721" sideWeight="0.5030257" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3212766" sideWeight="0.505295" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13432837" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28829786" sideWeight="0.505295" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.09434968" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.49159664" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42978725" sideWeight="0.6656581" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42857143" sideWeight="0.6656581" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19296375" sideWeight="0.47478992" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19189766" sideWeight="0.47478992" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946696" sideWeight="0.48319328" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35204083" sideWeight="0.5101279" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35106382" sideWeight="0.5101279" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2637,12 +2403,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Journal.java</url>
-          <line>208</line>
+          <line>213</line>
           <properties />
           <option name="timeStamp" value="69" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Utils.java</url>
+          <line>255</line>
+          <properties />
+          <option name="timeStamp" value="76" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="76" />
+      <option name="time" value="86" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="app">
@@ -2654,26 +2426,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_party_activity.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31564987">
-          <caret line="7" column="47" selection-start-line="7" selection-start-column="47" selection-end-line="7" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_export_import.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.24138">
-          <caret line="45" column="43" selection-start-line="45" selection-start-column="43" selection-end-line="45" selection-end-column="43" />
-          <folding>
-            <element signature="e#223#258#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/cell_shape.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2254642">
@@ -2682,13 +2434,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_party.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="22" column="35" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-21/android.jar!/java/util/ArrayList.class">
@@ -2733,13 +2485,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/FeedReaderDbHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38448277">
-          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-21/android.jar!/java/util/concurrent/CountDownLatch.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.24485597">
@@ -2775,7 +2520,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33530572">
           <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2787,14 +2531,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_journal.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.275862">
           <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
-          <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/PartyListDialog.java">
@@ -2805,25 +2548,23 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_party_list.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.794964">
           <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
-          <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_party_information.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7338129">
           <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
-          <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/DatePickerFragment.java">
@@ -2886,7 +2627,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.18214285">
           <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2894,7 +2634,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2902,7 +2641,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2910,7 +2648,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.51607144">
           <caret line="17" column="25" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2918,7 +2655,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.3981309">
           <caret line="44" column="39" selection-start-line="44" selection-start-column="39" selection-end-line="44" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2926,7 +2662,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.09577465">
           <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2934,7 +2669,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2942,7 +2676,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.02312925">
           <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2950,82 +2683,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.13877551">
           <caret line="6" column="56" selection-start-line="6" selection-start-column="56" selection-end-line="6" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/PartyTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#initialize#0;class#PartyTest#0" expanded="false" />
-            <element signature="method#addingOnlyCreditJournalsGivesNegativeBalance#0;class#PartyTest#0" expanded="false" />
-            <element signature="method#addingOnlyCreditJournalsGivesNegativeBalance#0;class#PartyTest#0" expanded="false" />
-            <element signature="method#addingOnlyCreditJournalsGivesNegativeBalance#0;class#PartyTest#0" expanded="false" />
-            <element signature="method#addingEqualNumOfDrCrJournalWithSameAmtGivesZeroBalance#0;class#PartyTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7846154">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding>
-            <element signature="method#getId#0;class#Party#0" expanded="false" />
-            <element signature="docComment;method#getBalance#0;class#Party#0" expanded="false" />
-            <element signature="method#getBalance#0;class#Party#0" expanded="false" />
-            <element signature="docComment;method#addJournal#0;class#Party#0" expanded="false" />
-            <element signature="method#addJournal#0;class#Party#0" expanded="false" />
-            <element signature="docComment;method#deleteJournal#0;class#Party#0" expanded="false" />
-            <element signature="method#deleteJournal#0;class#Party#0" expanded="false" />
-            <element signature="method#deleteAllJournals#0;class#Party#0" expanded="false" />
-            <element signature="docComment;method#toJSON#0;class#Party#0" expanded="false" />
-            <element signature="method#toJSON#0;class#Party#0" expanded="false" />
-            <element signature="method#incrementCurrentId#0;class#Party#0" expanded="false" />
-            <element signature="docComment;method#fromJSON#0;class#Party#0" expanded="false" />
-            <element signature="method#fromJSON#0;class#Party#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/JournalTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7245902">
-          <caret line="54" column="76" selection-start-line="54" selection-start-column="76" selection-end-line="54" selection-end-column="76" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#initialize#0;class#JournalTest#0" expanded="false" />
-            <element signature="method#correctlyParsesJSONStr#0;class#JournalTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Journal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.94426227">
-          <caret line="207" column="48" selection-start-line="207" selection-start-column="48" selection-end-line="207" selection-end-column="48" />
-          <folding>
-            <element signature="method#Journal#0;class#Journal#0" expanded="false" />
-            <element signature="method#Journal#1;class#Journal#0" expanded="false" />
-            <element signature="docComment;method#getAddedDate#0;class#Journal#0" expanded="false" />
-            <element signature="docComment;method#setAddedDate#0;class#Journal#0" expanded="false" />
-            <element signature="docComment;method#getType#0;class#Journal#0" expanded="false" />
-            <element signature="method#setAttachmentPaths#0;class#Journal#0" expanded="false" />
-            <element signature="method#deleteAllAttachment#0;class#Journal#0" expanded="false" />
-            <element signature="docComment;method#deleteAttachment#0;class#Journal#0" expanded="false" />
-            <element signature="method#deleteAttachment#0;class#Journal#0" expanded="false" />
-            <element signature="method#toJSON#0;class#Journal#0" expanded="false" />
-            <element signature="docComment;method#clone#0;class#Journal#0" expanded="false" />
-            <element signature="method#clone#0;class#Journal#0" expanded="false" />
-            <element signature="docComment;method#deepCopyFrom#0;class#Journal#0" expanded="false" />
-            <element signature="method#deepCopyFrom#0;class#Journal#0" expanded="false" />
-            <element signature="method#incrementCurrentId#0;class#Journal#0" expanded="false" />
-            <element signature="docComment;method#fromJSON#0;class#Journal#0" expanded="false" />
-            <element signature="method#fromJSON#0;class#Journal#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3033,17 +2690,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8974359">
           <caret line="39" column="75" selection-start-line="39" selection-start-column="75" selection-end-line="39" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/JournalFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="495" column="89" selection-start-line="495" selection-start-column="89" selection-end-line="495" selection-end-column="108" />
-          <folding>
-            <element signature="e#3748#3790#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3051,14 +2697,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.64761907">
           <caret line="46" column="73" selection-start-line="46" selection-start-column="73" selection-end-line="46" selection-end-column="73" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/ViewUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.89659864">
-          <caret line="17" column="3" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
           <folding />
         </state>
       </provider>
@@ -3096,78 +2734,55 @@
             <element signature="method#restoreFromGoogleDrive#0;class#ImportExportActivity#0" expanded="false" />
             <element signature="docComment;method#importOldData#0;class#ImportExportActivity#0" expanded="false" />
             <element signature="method#importOldData#0;class#ImportExportActivity#0" expanded="false" />
-            <element signature="method#onPostExecute#0;class#40191:47029" expanded="false" />
+            <element signature="method#onPostExecute#0;class#40193:47032" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Storage.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/ViewUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="310" column="0" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
+        <state vertical-scroll-proportion="-5.497778">
+          <caret line="26" column="7" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa/junit-4.12-sources.jar!/org/junit/internal/builders/JUnit4Builder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31989247">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/JournalFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7113402">
+          <caret line="434" column="87" selection-start-line="434" selection-start-column="87" selection-end-line="434" selection-end-column="87" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#Storage#0;class#Storage#0" expanded="false" />
-            <element signature="method#getInstance#0;class#Storage#0" expanded="false" />
-            <element signature="docComment;method#setSharedPreference#0;class#Storage#0" expanded="false" />
-            <element signature="method#setSharedPreference#0;class#Storage#0" expanded="false" />
-            <element signature="method#isOldDataImported#1;class#Storage#0" expanded="false" />
-            <element signature="method#oldDataImportAttempted#0;class#Storage#0" expanded="false" />
-            <element signature="method#getPartyNames#0;class#Storage#0" expanded="false" />
-            <element signature="e#2598#2606#0" expanded="true" />
-            <element signature="method#getPartyIds#0;class#Storage#0" expanded="false" />
-            <element signature="e#2784#2793#0" expanded="true" />
-            <element signature="method#getParty#0;class#Storage#0" expanded="false" />
-            <element signature="method#getParty#1;class#Storage#0" expanded="false" />
-            <element signature="method#getJournal#0;class#Storage#0" expanded="false" />
-            <element signature="method#getJournal#1;class#Storage#0" expanded="false" />
-            <element signature="docComment;method#getJournal#2;class#Storage#0" expanded="false" />
-            <element signature="method#getJournal#2;class#Storage#0" expanded="false" />
-            <element signature="docComment;method#addParty#0;class#Storage#0" expanded="false" />
-            <element signature="method#addParty#0;class#Storage#0" expanded="false" />
-            <element signature="method#deleteParty#0;class#Storage#0" expanded="false" />
-            <element signature="method#deleteAllParties#0;class#Storage#0" expanded="false" />
-            <element signature="method#eraseAll#0;class#Storage#0" expanded="false" />
-            <element signature="method#deleteViaContentProvider#0;class#Storage#0" expanded="false" />
-            <element signature="method#getFileUri#0;class#Storage#0" expanded="false" />
-            <element signature="method#writeToDB#0;class#Storage#0" expanded="false" />
-            <element signature="method#writePartyToDB#0;class#Storage#0" expanded="false" />
-            <element signature="method#writeJournalToDB#0;class#Storage#0" expanded="false" />
-            <element signature="method#writeAttachemntPathsToDB#0;class#Storage#0" expanded="false" />
-            <element signature="method#readPartiesFromDB#0;class#Storage#0" expanded="false" />
-            <element signature="method#readJournalsFromDB#0;class#Storage#0" expanded="false" />
-            <element signature="method#readAttachmentPathsFromDB#0;class#Storage#0" expanded="false" />
+            <element signature="method#onCreateOptionsMenu#0;class#JournalFragment#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#JournalFragment#0" expanded="false" />
+            <element signature="method#setValues#0;class#JournalFragment#0" expanded="false" />
+            <element signature="e#18237#18263#0" expanded="true" />
+            <element signature="method#setTextDrCr#0;class#JournalFragment#0" expanded="false" />
+            <element signature="method#onPause#0;class#JournalFragment#0" expanded="false" />
+            <element signature="method#onResume#0;class#JournalFragment#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/StorageTest.java">
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa/junit-4.12-sources.jar!/org/junit/internal/runners/model/ReflectiveCallable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="docComment;class#StorageTest#0" expanded="false" />
-            <element signature="method#firstCallToIsOldDataReturnAlwaysReturnsFalse#0;class#StorageTest#0" expanded="false" />
-            <element signature="method#partiesAreAddedInAlphabeticalOrder#0;class#StorageTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/UtilsTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="52" selection-start-line="22" selection-start-column="52" selection-end-line="22" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.46735394">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63188976">
-          <caret line="111" column="35" selection-start-line="111" selection-start-column="35" selection-end-line="111" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.31669268">
+          <caret line="241" column="52" selection-start-line="241" selection-start-column="52" selection-end-line="241" selection-end-column="52" />
           <folding>
             <element signature="docComment;method#formatDate#0;class#Utils#0" expanded="false" />
             <element signature="method#formatDate#0;class#Utils#0" expanded="false" />
@@ -3195,17 +2810,13 @@
             <element signature="method#cleanCacheDir#0;class#Utils#0" expanded="false" />
             <element signature="docComment;method#replaceOldDir#0;class#Utils#0" expanded="false" />
             <element signature="method#replaceOldDir#0;class#Utils#0" expanded="false" />
-            <element signature="method#getAttachmentFolder#0;class#Utils#0" expanded="false" />
-            <element signature="method#getPartyFolder#0;class#Utils#0" expanded="false" />
             <element signature="docComment;method#createExternalStoragePublicPicture#0;class#Utils#0" expanded="false" />
             <element signature="method#createExternalStoragePublicPicture#0;class#Utils#0" expanded="false" />
+            <element signature="e#10922#10984#0" expanded="false" />
             <element signature="method#deleteExternalStoragePublicPicture#0;class#Utils#0" expanded="false" />
-            <element signature="method#createImageFile#0;class#Utils#0" expanded="false" />
             <element signature="docComment;method#deleteFile#0;class#Utils#0" expanded="false" />
             <element signature="method#deleteFile#0;class#Utils#0" expanded="false" />
-            <element signature="docComment;method#cleanDirectory#0;class#Utils#0" expanded="false" />
-            <element signature="method#cleanDirectory#0;class#Utils#0" expanded="false" />
-            <element signature="docComment;method#zip#0;class#Utils#0" expanded="false" />
+            <element signature="docComment;method#deleteDirectory#0;class#Utils#0" expanded="false" />
             <element signature="method#zip#0;class#Utils#0" expanded="false" />
             <element signature="docComment;method#unzip#0;class#Utils#0" expanded="false" />
             <element signature="method#unzip#0;class#Utils#0" expanded="false" />
@@ -3220,6 +2831,193 @@
             <element signature="method#getZipFileName#0;class#Utils#0" expanded="false" />
             <element signature="docComment;method#storeImage#0;class#Utils#0" expanded="false" />
             <element signature="method#storeImage#0;class#Utils#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/UtilsTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6099844">
+          <caret line="46" column="73" selection-start-line="46" selection-start-column="73" selection-end-line="46" selection-end-column="73" />
+          <folding>
+            <element signature="docComment;class#UtilsTest#0" expanded="false" />
+            <element signature="method#getStringIdReturnsCorrectFormat#0;class#UtilsTest#0" expanded="false" />
+            <element signature="method#passingIncorrectFormatForDateThrowsNullPointerException#0;class#UtilsTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/StorageTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47737908">
+          <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
+          <folding>
+            <element signature="docComment;class#StorageTest#0" expanded="false" />
+            <element signature="method#setUp#0;class#StorageTest#0" expanded="false" />
+            <element signature="method#firstCallToIsOldDataReturnAlwaysReturnsFalse#0;class#StorageTest#0" expanded="false" />
+            <element signature="method#partiesAreAddedInAlphabeticalOrder#0;class#StorageTest#0" expanded="false" />
+            <element signature="method#deletingPartyShouldDeleteAllJournals#0;class#StorageTest#0" expanded="false" />
+            <element signature="method#eraseAllShouldEmptyAppDirAndParties#0;class#StorageTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/JournalTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42433697">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding>
+            <element signature="method#setUp#0;class#JournalTest#0" expanded="false" />
+            <element signature="method#correctlyParsesJSONStr#0;class#JournalTest#0" expanded="false" />
+            <element signature="method#passingTrueToNewIdIgnoresIdInJSONStr#0;class#JournalTest#0" expanded="false" />
+            <element signature="method#deletingAttchShouldDeleteFile#0;class#JournalTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/ndhunju/dailyjournal/model/PartyTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21216848">
+          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+          <folding>
+            <element signature="method#setUp#0;class#PartyTest#0" expanded="false" />
+            <element signature="method#addingOnlyCreditJournalsGivesNegativeBalance#0;class#PartyTest#0" expanded="false" />
+            <element signature="method#addingEqualNumOfDrCrJournalWithSameAmtGivesZeroBalance#0;class#PartyTest#0" expanded="false" />
+            <element signature="method#journalsAreAddedInDateOrder#0;class#PartyTest#0" expanded="false" />
+            <element signature="method#correctlyParsesJSONStr#0;class#PartyTest#0" expanded="false" />
+            <element signature="method#passingTrueToNewIdIgnoresIdInJSONStr#0;class#PartyTest#0" expanded="false" />
+            <element signature="method#deletingJournalShouldDeleteAllAttachments#0;class#PartyTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Journal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30265212">
+          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding>
+            <element signature="method#Journal#0;class#Journal#0" expanded="false" />
+            <element signature="method#Journal#1;class#Journal#0" expanded="false" />
+            <element signature="e#1414#1415#0" expanded="true" />
+            <element signature="e#1431#1432#0" expanded="true" />
+            <element signature="e#1460#1461#0" expanded="true" />
+            <element signature="e#1475#1476#0" expanded="true" />
+            <element signature="e#1525#1526#0" expanded="true" />
+            <element signature="e#1565#1566#0" expanded="true" />
+            <element signature="e#1590#1591#0" expanded="true" />
+            <element signature="e#1617#1618#0" expanded="true" />
+            <element signature="e#1636#1637#0" expanded="true" />
+            <element signature="e#1672#1673#0" expanded="true" />
+            <element signature="e#1697#1698#0" expanded="true" />
+            <element signature="docComment;method#getAddedDate#0;class#Journal#0" expanded="false" />
+            <element signature="e#1879#1880#0" expanded="true" />
+            <element signature="e#1903#1904#0" expanded="true" />
+            <element signature="docComment;method#setAddedDate#0;class#Journal#0" expanded="false" />
+            <element signature="e#2151#2152#0" expanded="true" />
+            <element signature="e#2175#2176#0" expanded="true" />
+            <element signature="docComment;method#getType#0;class#Journal#0" expanded="false" />
+            <element signature="e#2284#2285#0" expanded="true" />
+            <element signature="e#2303#2304#0" expanded="true" />
+            <element signature="e#2339#2340#0" expanded="true" />
+            <element signature="e#2364#2365#0" expanded="true" />
+            <element signature="e#2394#2395#0" expanded="true" />
+            <element signature="e#2415#2416#0" expanded="true" />
+            <element signature="e#2457#2458#0" expanded="true" />
+            <element signature="e#2486#2487#0" expanded="true" />
+            <element signature="e#2514#2515#0" expanded="true" />
+            <element signature="e#2533#2534#0" expanded="true" />
+            <element signature="e#2571#2572#0" expanded="true" />
+            <element signature="e#2596#2597#0" expanded="true" />
+            <element signature="e#2646#2647#0" expanded="true" />
+            <element signature="e#2676#2677#0" expanded="true" />
+            <element signature="method#setAttachmentPaths#0;class#Journal#0" expanded="false" />
+            <element signature="docComment;method#deleteAttachment#0;class#Journal#0" expanded="false" />
+            <element signature="method#deleteAttachment#0;class#Journal#0" expanded="false" />
+            <element signature="method#deleteAttachment#1;class#Journal#0" expanded="false" />
+            <element signature="method#toJSON#0;class#Journal#0" expanded="false" />
+            <element signature="docComment;method#clone#0;class#Journal#0" expanded="false" />
+            <element signature="method#clone#0;class#Journal#0" expanded="false" />
+            <element signature="docComment;method#deepCopyFrom#0;class#Journal#0" expanded="false" />
+            <element signature="method#deepCopyFrom#0;class#Journal#0" expanded="false" />
+            <element signature="method#incrementCurrentId#0;class#Journal#0" expanded="false" />
+            <element signature="docComment;method#fromJSON#0;class#Journal#0" expanded="false" />
+            <element signature="method#fromJSON#0;class#Journal#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.4056163">
+          <caret line="114" column="7" selection-start-line="114" selection-start-column="7" selection-end-line="114" selection-end-column="7" />
+          <folding>
+            <element signature="method#Party#0;class#Party#0" expanded="false" />
+            <element signature="docComment;method#getBalance#0;class#Party#0" expanded="false" />
+            <element signature="method#getBalance#0;class#Party#0" expanded="false" />
+            <element signature="docComment;method#addJournal#0;class#Party#0" expanded="false" />
+            <element signature="method#addJournal#0;class#Party#0" expanded="false" />
+            <element signature="docComment;method#deleteJournal#0;class#Party#0" expanded="false" />
+            <element signature="method#deleteJournal#0;class#Party#0" expanded="false" />
+            <element signature="method#deleteAllJournals#0;class#Party#0" expanded="false" />
+            <element signature="docComment;method#toJSON#0;class#Party#0" expanded="false" />
+            <element signature="method#toJSON#0;class#Party#0" expanded="false" />
+            <element signature="method#incrementCurrentId#0;class#Party#0" expanded="false" />
+            <element signature="docComment;method#fromJSON#0;class#Party#0" expanded="false" />
+            <element signature="method#fromJSON#0;class#Party#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/FeedReaderDbHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.70826834">
+          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Storage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1622465">
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Storage#0;class#Storage#0" expanded="false" />
+            <element signature="method#getInstance#0;class#Storage#0" expanded="false" />
+            <element signature="docComment;method#setSharedPreference#0;class#Storage#0" expanded="false" />
+            <element signature="method#setSharedPreference#0;class#Storage#0" expanded="false" />
+            <element signature="method#isOldDataImported#1;class#Storage#0" expanded="false" />
+            <element signature="method#oldDataImportAttempted#0;class#Storage#0" expanded="false" />
+            <element signature="method#getPartyNames#0;class#Storage#0" expanded="false" />
+            <element signature="method#getPartyIds#0;class#Storage#0" expanded="false" />
+            <element signature="e#2595#2596#0" expanded="true" />
+            <element signature="e#2617#2618#0" expanded="true" />
+            <element signature="method#getParty#0;class#Storage#0" expanded="false" />
+            <element signature="method#getParty#1;class#Storage#0" expanded="false" />
+            <element signature="docComment;method#getJournal#0;class#Storage#0" expanded="false" />
+            <element signature="method#getJournal#0;class#Storage#0" expanded="false" />
+            <element signature="method#getJournal#1;class#Storage#0" expanded="false" />
+            <element signature="docComment;method#getJournal#2;class#Storage#0" expanded="false" />
+            <element signature="method#getJournal#2;class#Storage#0" expanded="false" />
+            <element signature="docComment;method#addParty#0;class#Storage#0" expanded="false" />
+            <element signature="method#addParty#0;class#Storage#0" expanded="false" />
+            <element signature="method#deleteParty#0;class#Storage#0" expanded="false" />
+            <element signature="docComment;method#deleteAllParties#0;class#Storage#0" expanded="false" />
+            <element signature="method#deleteAllParties#0;class#Storage#0" expanded="false" />
+            <element signature="docComment;method#eraseAll#0;class#Storage#0" expanded="false" />
+            <element signature="method#eraseAll#0;class#Storage#0" expanded="false" />
+            <element signature="method#deleteViaContentProvider#0;class#Storage#0" expanded="false" />
+            <element signature="method#getFileUri#0;class#Storage#0" expanded="false" />
+            <element signature="method#writeToDB#0;class#Storage#0" expanded="false" />
+            <element signature="method#writePartyToDB#0;class#Storage#0" expanded="false" />
+            <element signature="method#writeJournalToDB#0;class#Storage#0" expanded="false" />
+            <element signature="method#writeAttachemntPathsToDB#0;class#Storage#0" expanded="false" />
+            <element signature="method#readPartiesFromDB#0;class#Storage#0" expanded="false" />
+            <element signature="e#11720#11787#0" expanded="false" />
+            <element signature="e#11972#12040#0" expanded="false" />
+            <element signature="e#12343#12401#0" expanded="false" />
+            <element signature="method#readJournalsFromDB#0;class#Storage#0" expanded="false" />
+            <element signature="method#readAttachmentPathsFromDB#0;class#Storage#0" expanded="false" />
           </folding>
         </state>
       </provider>
