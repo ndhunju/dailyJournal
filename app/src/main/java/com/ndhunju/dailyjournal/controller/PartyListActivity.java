@@ -53,7 +53,7 @@ public class PartyListActivity extends FragmentActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+									int position, long id) {
 				Intent i = new Intent(PartyListActivity.this, PartyActivity.class);
 				i.putExtra(Utils.KEY_PARTY_ID, partyAdapter.getItem(position).getId()); //ids array is parallel
 				startActivity(i);
@@ -63,7 +63,7 @@ public class PartyListActivity extends FragmentActivity {
 
 		//When user clicks on Add Party button, create a Party and pass the ID to previous activity
 		((Button)findViewById(R.id.fragment_party_list_add_party_btn)).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				String name = srchPartyET.getText().toString();
@@ -83,13 +83,19 @@ public class PartyListActivity extends FragmentActivity {
 	@Override
 	protected void onPause() {
 		//Storage.getInstance(PartyListActivity.this).writeToDB();
+		//update pass code time
+		LockScreenActivity.updatePasscodeTime();
 		super.onPause();
 	}
 	
 	@Override
 	protected void onResume() {
+		//check pass code
+		LockScreenActivity.checkPassCode(PartyListActivity.this);
+
 		partyAdapter = new ArrayAdapter<Party>(this, android.R.layout.simple_list_item_1, mStorage.getParties());
 		partyLV.setAdapter(partyAdapter);
 		super.onResume();
 	}
+
 }

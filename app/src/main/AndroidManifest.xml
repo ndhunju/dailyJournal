@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ndhunju.dailyjournal"
-    android:versionCode="7"
-    android:versionName="3.9" >
+    android:versionCode="8"
+    android:versionName="4" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -12,42 +12,54 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_ganesh_book"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme" >
         <service android:name=".controller.NotificationService" />
 
         <activity
             android:name=".controller.HomeActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".controller.JournalActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".controller.PartyListActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".controller.PartyActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".controller.PartyInformationActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".viewPager.ViewPagerActivity"
-            android:screenOrientation="portrait"></activity>
-        <!--https://developers.google.com/drive/android/java-client-->
+            android:screenOrientation="portrait" />
+
+        <!-- https://developers.google.com/drive/android/java-client -->
         <activity
             android:name=".controller.ImportExportActivity"
             android:label="@string/title_activity_import_export"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".controller.LockScreenActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_lock_screen"
+            >
         </activity>
     </application>
+
 </manifest>

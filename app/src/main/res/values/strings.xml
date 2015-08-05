@@ -15,7 +15,10 @@
     <string name="msg_importing">%1$s importing... </string>
     <string name="msg_delete_confirm">Delete the %1$s ?</string>
     <string name="msg_connecting">Connecting to %1$s ...</string>
+    <string name="msg_deleting">Deleting %1$s ...</string>
     <string name="msg_reminder">Don\'t forget to do the Journal Entry</string>
+    <string name="msg_erase_all">Are you sure you want to erase all data? This
+        action is irrevocable.</string>
     <string name="msg_restore_gdrive">The app is having problem restoring from Google
         Drive.You can download the backup file to SD Card and use "Restore backup from SD
         Card" Option</string>
@@ -48,9 +51,11 @@
     <string name="str_note">Note</string>
     <string name="str_save">Save</string>
     <string name="str_date">Date</string>
+    <string name="str_data">Data</string>
     <string name="str_tools">Tools</string>
     <string name="str_00.00">00.00</string>
     <string name="str_party">Party</string>
+    <string name="str_total">Total</string>
     <string name="str_alert">Alert!</string>
     <string name="str_failed">failed</string>
     <string name="str_backup">Backup</string>
@@ -58,15 +63,21 @@
     <string name="str_delete">Delete</string>
     <string name="str_parties">Parties</string>
     <string name="str_journal">Journal</string>
+    <string name="str_minutes">minutes</string>
     <string name="str_reminder">Reminder</string>
     <string name="str_balance">Balance :</string>
     <string name="str_finished">finished</string>
+    <string name="str_passcode">Passcode</string>
+    <string name="str_erase_all">Erase All</string>
+    <string name="str_lock_after">Lock after</string>
+    <string name="str_preference">Preference</string>
     <string name="str_attachment"> Attachment</string>
     <string name="str_pick_a_date">Pick a Date</string>
     <string name="str_information">Information</string>
     <string name="str_select_party">Select Party</string>
     <string name="str_google_drive">Google Drive</string>
     <string name="str_attch_delete">Attachment Deleted</string>
+    <string name="str_enable_pin_code_lock">Enable pin code lock</string>
     <string name="str_import_json_from_sd">Import JSON Backup File</string>
 	<string name="str_create_backup_in_sd">Create Backup in SD Card</string>
 	<string name="str_restore_backup_from_sd">Restore Backup from SD Card</string>
@@ -74,12 +85,16 @@
     <string name="str_restore_backup_from_google_drive">Restore from Google Drive</string>
 
 
-    <!--hing-->
+    <!--hint-->
 	<string name="hint_note">Write notes here....</string>
 
     <!--activity title name-->
     <string name="title_activity_party">Party List</string>
     <string name="title_activity_import_export">Tools</string>
     <string name="title_activity_journal">New Journal</string>
+    <string name="title_activity_lock_screen">Lock Screen</string>
+
+    <string name="action_settings">Settings</string>
+
 </resources>
 

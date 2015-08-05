@@ -49,6 +49,7 @@ public class Utils {
 	//Hex Value of colors
 	public static final String RED = "#f63752";
 	public static final String GREEN = "#5CB85C";
+	public static final String BLACK = "#000000";
 
 	//Folder Names that the App uses
 	public static final String HIDE_FOLDER = ".";

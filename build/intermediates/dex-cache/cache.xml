@@ -2,34 +2,6 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\7.5.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="f44d03c138cb6488fdbaa65e3a7e5878861a56d8">
-        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-5bc60c0a10680805d645c344752d3287c64db8c5.jar" />
-    </item>
-    <item
-        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\jars\libs\internal_impl-22.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-62dac5d78168975c431f4ed56fbf246b1eed3286.jar" />
-    </item>
-    <item
-        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\18.0.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="8f11f56e350eacabf2273f646d981356eea0ed77">
-        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-a7fdc75f24185edad72b4e2fe325e12441bd0b54.jar" />
-    </item>
-    <item
-        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-6144e4212dd7015747c6b32d4fdd02df57c19609.jar" />
-    </item>
-    <item
         jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\libs\org.json.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -37,11 +9,18 @@
         <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\org.json-64ba7ae1403cdc2029f62dc2c91027f622f5fe21.jar" />
     </item>
     <item
-        jar="C:\Users\dhunju\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-b4399b053913d6805730de7cd50c8d206374650f.jar" />
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-b41c7c86a3170101316bbc7f9ea1665d2c6d6eef.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-20771964dfb0e055acb881f9a3c6e98d6cedb334.jar" />
     </item>
     <item
         jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\jars\classes.jar"
@@ -49,6 +28,27 @@
         revision="22.0.1"
         sha1="a78183f30e769a98ab4820794f597763088d3065">
         <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-c08e4ed0cd6dea2c872396dc930ea3e6d6b1face.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-515ad0b187a574859d29bbc9284141f292bcc1a3.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f44d03c138cb6488fdbaa65e3a7e5878861a56d8">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-5bc60c0a10680805d645c344752d3287c64db8c5.jar" />
+    </item>
+    <item
+        jar="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\pre-dexed\debug\classes-46d0b9085ae624ca635d9c05d13f795c1e3c39f1.jar" />
     </item>
 
 </items>

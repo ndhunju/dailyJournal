@@ -26,6 +26,9 @@ public class Party {
     private Type mType;
 	private String mName;
 	private String mPhone;
+	private double mDebitTotal;
+	private double mCreditTotal;
+    private boolean mCalculateBalance;
 	private ArrayList<Journal> mJournals;
 
 	//Constructor
@@ -33,7 +36,10 @@ public class Party {
 		mId = id;
 		mPhone = "";
 		mName = name;
+		mDebitTotal = 0;
+		mCreditTotal = 0;
 		mType = Type.Debtors;
+        mCalculateBalance = true;
 		mJournals = new ArrayList<Journal>();
 	}
 	
@@ -71,17 +77,39 @@ public class Party {
 
 	/**
 	 * Returns the balance of this party. <b>NOTE: </b>This method should be used as less as
-	 * possible as it loops through all the journals to calculate the balance.
+	 * possible as it loops through all the journals to calculate the total debit, credit and balance.
 	 * @return
 	 */
-	public double getBalance() {
-		double balance = 0;
+	public double calculateBalances() {
+        //Reset debit and credit amounts
+        setDebitTotal(0);
+        setCreditTotal(0);
+
 		for(Journal j : mJournals)
 			if(j.getType().equals(Journal.Type.Debit))
-				balance += j.getAmount();
+				mDebitTotal += j.getAmount();
 			else
-				balance -= j.getAmount();
-		return balance;
+				mCreditTotal += j.getAmount();
+        mCalculateBalance = false;
+		return mDebitTotal - mCreditTotal;
+	}
+
+    private void setDebitTotal(double amount){
+        if( amount >= 0 ) mDebitTotal = amount;
+    }
+
+    private void setCreditTotal(double amount){
+        if( amount >= 0 ) mCreditTotal = amount;
+    }
+
+	public double getDebitTotal(){
+		if(mCalculateBalance) calculateBalances();
+		return mDebitTotal;
+	}
+
+	public double getCreditTotal(){
+		if(mCalculateBalance) calculateBalances();
+		return mCreditTotal;
 	}
 	
 	public ArrayList<Journal> getJournals() {

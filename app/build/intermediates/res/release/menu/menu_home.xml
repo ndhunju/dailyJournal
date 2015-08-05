@@ -4,17 +4,30 @@
     tools:context="com.ndhunju.dailyjournal.HomeActivity" >
 
     <item
-        android:id="@+id/Merchants"
+        android:id="@+id/meu_journal_merchants"
         android:orderInCategory="1"
-        android:title="@string/show_parties"
+        android:title="@string/str_parties"
         android:showAsAction="ifRoom|withText"
         tools:ignore="AppCompatResource" />
      <item
-        android:id="@+id/Tools"
+        android:id="@+id/meu_journal_tools"
         android:orderInCategory="2"
         android:title="@string/str_tools"
          android:icon="@android:drawable/ic_menu_manage"
         app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/menu_journal_preference"
+        android:orderInCategory="3"
+        android:title="@string/str_preference"
+        android:icon="@android:drawable/ic_menu_preferences"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/meu_journal_erase"
+        android:orderInCategory="4"
+        android:title="@string/str_erase_all"
+        app:showAsAction="never"
         />
      
 </menu>

@@ -213,6 +213,9 @@ public class ImportExportActivity extends Activity {
         //onPause() is called when a dialog for Google Drive is open
         //which disconnects ApiClient. However it is needed later
         // mGoogleApiClient.disconnect();
+
+        //Update lock time
+        LockScreenActivity.updatePasscodeTime();
     }
 
     @Override
@@ -236,6 +239,10 @@ public class ImportExportActivity extends Activity {
         //Check if this activity was called to import the old data ( data saved by v3.1)
         boolean importOldData = getIntent().getBooleanExtra(Utils.KEY_IMPORT_OLD_DATA, false);
         if(importOldData) importOldData();
+
+        //check pass code
+        LockScreenActivity.checkPassCode(ImportExportActivity.this);
+
     }
 
     @Override

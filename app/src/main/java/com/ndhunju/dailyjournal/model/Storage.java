@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.ndhunju.dailyjournal.controller.PreferencesFragment;
 import com.ndhunju.dailyjournal.database.FeedReaderContract.FeedEntry;
 import com.ndhunju.dailyjournal.database.FeedReaderDbHelper;
 
@@ -176,7 +177,7 @@ public class Storage {
 
 	/**
 	 * Clears all parties. <b>Note: </b> It doesn't delete corresponding files/attachments
-	 * from app folder. For that, {@link #eraseAll(Activity)} should be called
+	 * from app folder. For that, {@link #eraseAll(Context)} should be called
 	 * @return
 	 */
 	public boolean deleteAllParties(){
@@ -197,46 +198,61 @@ public class Storage {
 	 * @return
 	 */
 	public boolean eraseAll(Context context){
+		boolean success = true;
 		try{
-			deleteAllParties();
-			Utils.deleteDirectory(Utils.getAppFolder(context));
-			//writeToDB(); //while exiting the app, it will be called
-			return true;
+			success &= deleteAllParties();
+            success &= resetIds();
+			success &= eraseSharedPreferences();
+			success &= Utils.deleteDirectory(Utils.getAppFolder(context));
 		}catch (Exception e){
 			e.printStackTrace();
-			return false;
 		}
+
+		return success;
 	}
 
-	public static boolean deleteViaContentProvider(Context context, String fullname)
-	{
+    /**
+     * Resets Journal's and Party's current id to 1
+     * @return
+     */
+    private boolean resetIds(){
+        Journal.setCurrentId(1);
+        Party.setCurrentId(1);
+        return true;
+    }
+
+	/**
+	 * Erases all stored SharedPreferences
+	 * @return
+	 */
+	public boolean eraseSharedPreferences(){
+		//pm.edit().clear().clear(); // doesn't work for shared preference
+		SharedPreferences.Editor editor = pm.edit();
+		editor.putInt(KEY_CURRENT_JOURNAL_ID, 1);
+		editor.putInt(KEY_CURRENT_PARTY_ID, 1);
+		editor.putBoolean(KEY_OLD_DATA_IMPORTED, false);
+        editor.putBoolean(PreferencesFragment.KEY_ENABLE_PASSCODE, false);
+        editor.putString(PreferencesFragment.KEY_PASSCODE, "");
+		return editor.commit();
+	}
+
+	public static boolean deleteViaContentProvider(Context context, String fullname) {
 		Uri uri=getFileUri(context,fullname);
 
-		if (uri==null)
-		{
-			return false;
-		}
+		if (uri==null)  return false;
 
-		try
-		{
+		try{
 			ContentResolver resolver=context.getContentResolver();
-
 			// change type to image, otherwise nothing will be deleted
 			ContentValues contentValues = new ContentValues();
 			int media_type = 1;
 			contentValues.put("media_type", media_type);
 			resolver.update(uri, contentValues, null, null);
-
 			return resolver.delete(uri, null, null) > 0;
-		}
-		catch (Throwable e)
-		{
-			return false;
-		}
+		}catch (Throwable e){ return false; }
 	}
 
-	private static Uri getFileUri(Context context, String fullname)
-	{
+	private static Uri getFileUri(Context context, String fullname) {
 		// Note: check outside this class whether the OS version is >= 11
 		Uri uri = null;
 		Cursor cursor = null;
@@ -298,18 +314,6 @@ public class Storage {
 		return uri;
 	}
 	
-	/*
-	 * You should not initialize your helper object using with new DatabaseHelper(context).
-	   Instead, always use DatabaseHelper.getInstance(context), as it guarantees that only 
-	   one database helper will exist across the entire application's life cycle.
-	 * @return
-	 */
-	/*public FeedReaderDbHelper getDbHelper(){
-		if(mDbHelper == null)
-			mDbHelper = new FeedReaderDbHelper(mContext);
-		return mDbHelper;
-	}*/
-
 	public void writeToDB() {
 		
 		// Gets the data repository in write mode
@@ -365,8 +369,7 @@ public class Storage {
 
 	}
 
-	public long writeJournalToDB(Journal journal, SQLiteDatabase db,
-			int arrayHashCode) {
+	public long writeJournalToDB(Journal journal, SQLiteDatabase db, int arrayHashCode) {
 
 		// deleteAllFromDB();
 
@@ -397,8 +400,7 @@ public class Storage {
 
 	}
 
-	public long writeAttachemntPathsToDB(String path, SQLiteDatabase db,
-			int parentHashCode) {
+	public long writeAttachemntPathsToDB(String path, SQLiteDatabase db,int parentHashCode) {
 		ContentValues values_paths = new ContentValues();
 		values_paths.put(FeedEntry.COL_ATTACHMENT_NAME, path);
 		values_paths.put(FeedEntry.COL_ATTACHMENT_PARENT, parentHashCode);

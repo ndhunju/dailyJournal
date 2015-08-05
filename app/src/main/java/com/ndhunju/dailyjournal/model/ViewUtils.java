@@ -83,10 +83,11 @@ public class ViewUtils {
 	/**
 	 * * This method creates Footer for a Ledger with passed balance
 	 * @param activity
-	 * @param balance : Balance to show at the end of the Ledger
+	 * @param debit : Total debit amount to show at the end of the Ledger
+	 * @param credit : Total credit amount to show at the end of the Ledger
 	 * @return
 	 */
-	public static TableRow createLedgerFooter(Activity activity, double balance){
+	public static TableRow createLedgerFooter(Activity activity, double debit, double credit){
 		TableRow balanceRow = new TableRow(activity);
 		balanceRow.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		balanceRow.setWeightSum(LAYOUT_WT_SUM);
@@ -101,35 +102,35 @@ public class ViewUtils {
 		dateTV.setTypeface(null, Typeface.BOLD);
 		balanceRow.addView(dateTV);
 
-		TextView balanceTv = new TextView(activity);
-		balanceTv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		balanceTv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
-		balanceTv.setPadding(PADDING, PADDING, PADDING, PADDING);
-		balanceTv.setGravity(Gravity.CENTER);
-		balanceTv.setText(activity.getString(R.string.str_balance));
-		balanceTv.setTextSize(TEXT_SIZE);
-		balanceTv.setTypeface(null, Typeface.BOLD);
-		balanceRow.addView(balanceTv);
+		TextView totalTv = new TextView(activity);
+		totalTv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
+		totalTv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		totalTv.setPadding(PADDING, PADDING, PADDING, PADDING);
+		totalTv.setGravity(Gravity.CENTER);
+		totalTv.setText(activity.getString(R.string.str_total));
+		totalTv.setTextSize(TEXT_SIZE);
+		totalTv.setTypeface(null, Typeface.BOLD);
+		balanceRow.addView(totalTv);
 
-		TextView drCrTv = new TextView(activity);
-		drCrTv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		drCrTv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
-		drCrTv.setPadding(PADDING, PADDING, PADDING, PADDING);
-		drCrTv.setGravity(Gravity.END);
-		drCrTv.setTextSize(TEXT_SIZE);
-		drCrTv.setTypeface(null, Typeface.BOLD);
-		drCrTv.setText(balance < 0 ? "Cr" : "Dr");
-		balanceRow.addView(drCrTv);
+		TextView debitTotal = new TextView(activity);
+		debitTotal.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
+		debitTotal.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		debitTotal.setPadding(PADDING, PADDING, PADDING, PADDING);
+		debitTotal.setGravity(Gravity.END);
+		debitTotal.setTextSize(TEXT_SIZE);
+		debitTotal.setTypeface(null, Typeface.BOLD);
+		debitTotal.setText(Utils.formatCurrency(debit));
+		balanceRow.addView(debitTotal);
 
-		TextView balanceAmtTv = new TextView(activity);
-		balanceAmtTv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		balanceAmtTv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
-		balanceAmtTv.setPadding(PADDING, PADDING, PADDING, PADDING);
-		balanceAmtTv.setGravity(Gravity.CENTER);
-		balanceAmtTv.setTextSize(TEXT_SIZE);
-		balanceAmtTv.setText(Utils.formatCurrency(balance));
-		balanceAmtTv.setTypeface(null, Typeface.BOLD);
-		balanceRow.addView(balanceAmtTv);
+		TextView creditTotal = new TextView(activity);
+		creditTotal.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
+		creditTotal.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		creditTotal.setPadding(PADDING, PADDING, PADDING, PADDING);
+		creditTotal.setGravity(Gravity.END);
+		creditTotal.setTextSize(TEXT_SIZE);
+		creditTotal.setText(Utils.formatCurrency(credit));
+		creditTotal.setTypeface(null, Typeface.BOLD);
+		balanceRow.addView(creditTotal);
 		
 		return balanceRow;
 	}
@@ -171,7 +172,7 @@ public class ViewUtils {
 		drCol.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
 		drCol.setBackgroundDrawable(activity.getResources().getDrawable(	R.drawable.cell_shape));
 		drCol.setPadding(PADDING, PADDING, PADDING, PADDING);
-		drCol.setGravity(Gravity.CENTER);
+		drCol.setGravity(Gravity.END);
 		drCol.setTextSize(TEXT_SIZE);
 		drCol.setText(Utils.formatCurrency(journal.getAmount()));
 
@@ -179,7 +180,7 @@ public class ViewUtils {
 		crCol.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
 		crCol.setBackgroundDrawable(activity.getResources().getDrawable(	R.drawable.cell_shape));
 		crCol.setPadding(PADDING, PADDING, PADDING, PADDING);
-		crCol.setGravity(Gravity.CENTER);
+		crCol.setGravity(Gravity.END);
 		crCol.setTextSize(TEXT_SIZE);
 
 		if (journal.getType().equals(Journal.Type.Debit)) {

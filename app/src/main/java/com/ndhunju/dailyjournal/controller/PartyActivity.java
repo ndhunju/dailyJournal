@@ -48,11 +48,11 @@ public class PartyActivity extends FragmentActivity {
         //Get the Party object and set values
 		Party party = Storage.getInstance(PartyActivity.this).getParty(mPartyId);
 
-		double balance = party.getBalance();
+		double balance = party.calculateBalances();
 		balanceTV.setText(Utils.formatCurrency(balance));
 		balanceTV.setTextColor(balance > 0 ? Color.parseColor(Utils.RED): Color.parseColor(Utils.GREEN));
 
-		tableLL.addView(createLedgerView(party, balance));
+		tableLL.addView(createLedgerView(party));
 
 		setTitle(party.getName());
 
@@ -77,12 +77,12 @@ public class PartyActivity extends FragmentActivity {
                 //Since the Journal was changed, you need to get a fresh copy of mParty from Storage to reflect the change
                 Party party = Storage.getInstance(PartyActivity.this).getParty(mPartyId);
 
-                double balance = party.getBalance();
+                double balance = party.calculateBalances();
                 balanceTV.setText(Utils.formatCurrency(balance));
                 balanceTV.setTextColor(balance > 0 ? Color.parseColor(Utils.RED) : Color.parseColor(Utils.GREEN));
 
                 tableLL.removeAllViews();
-                tableLL.addView(createLedgerView(party, balance));
+                tableLL.addView(createLedgerView(party));
 
                 //Alert the user if balance is negative
                 /*if (balance > 0)
@@ -104,11 +104,11 @@ public class PartyActivity extends FragmentActivity {
 
     /**
      * This method creates a Ledger(Table) of the passed Party object. It takes balance of the mParty as well since
-     * the balance is usually already calculated and getBalance() increases overhead
+     * the balance is usually already calculated and calculateBalance() increases overhead
      * @param party
      * @return
      */
-	public TableLayout createLedgerView(Party party, double balance) {
+	public TableLayout createLedgerView(Party party) {
 
 		TableLayout ledgerTL = new TableLayout(PartyActivity.this);
 		ledgerTL.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -128,7 +128,7 @@ public class PartyActivity extends FragmentActivity {
 					}));
 		}
 
-		ledgerTL.addView(ViewUtils.createLedgerFooter(PartyActivity.this, balance));
+		ledgerTL.addView(ViewUtils.createLedgerFooter(PartyActivity.this, party.getDebitTotal(), party.getCreditTotal()));
 
 		return ledgerTL;
 	}
@@ -170,4 +170,19 @@ public class PartyActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		//update pass code time
+		LockScreenActivity.updatePasscodeTime();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		//check pass code
+		LockScreenActivity.checkPassCode(PartyActivity.this);
+	}
 }

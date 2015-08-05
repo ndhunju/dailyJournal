@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ndhunju.dailyjournal"
-    android:versionCode="7"
-    android:versionName="3.9" >
+    android:versionCode="8"
+    android:versionName="4" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -11,6 +11,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
+
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -43,10 +47,16 @@
         <activity
             android:name="com.ndhunju.dailyjournal.viewPager.ViewPagerActivity"
             android:screenOrientation="portrait" />
+
         <!-- https://developers.google.com/drive/android/java-client -->
         <activity
             android:name="com.ndhunju.dailyjournal.controller.ImportExportActivity"
             android:label="@string/title_activity_import_export"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.ndhunju.dailyjournal.controller.LockScreenActivity"
+            android:label="@string/title_activity_lock_screen"
             android:screenOrientation="portrait" >
         </activity>
 

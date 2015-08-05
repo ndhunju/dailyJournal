@@ -90,8 +90,13 @@ public class PartyInformationActivity extends FragmentActivity {
 	
 	@Override
 	protected void onPause() {
-		Storage.getInstance(PartyInformationActivity.this).writeToDB();
+		LockScreenActivity.updatePasscodeTime();
 		super.onPause();
 	}
 
+	@Override
+	protected void onResume() {
+		LockScreenActivity.checkPassCode(PartyInformationActivity.this);
+		super.onResume();
+	}
 }

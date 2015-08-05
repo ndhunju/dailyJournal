@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -61,7 +62,7 @@ public class PartyTest {
         }
 
         //Act
-        double testBalance = testParty.getBalance();
+        double testBalance = testParty.calculateBalances();
 
         //Assert
         assertTrue(testBalance < 0);
@@ -79,7 +80,7 @@ public class PartyTest {
         }
 
         //Act
-        double testBalance = testParty.getBalance();
+        double testBalance = testParty.calculateBalances();
 
         //Assert
         assertTrue(testBalance == 0);
@@ -140,5 +141,30 @@ public class PartyTest {
 
         //Assert
         assertThat(j1.getAttachmentPaths().size(), equalTo(0));
+    }
+
+    @Test
+    public void changingTypeOfJournalIsReflectedInPartyTotal(){
+        //Arrange
+        Party testParty = new Party("", 0);
+        for(int i = 0 ; i < 10; i++){
+            Journal j = new Journal(1213234+i, i);
+            j.setAmount(7);
+            //Odds are Debit, Evens are Credit
+            j.setType(i%2 == 0 ? Journal.Type.Credit : Journal.Type.Debit);
+            testParty.addJournal(j);
+        }
+
+        double testDebitTotal = testParty.getDebitTotal();
+        double testCreditTotal = testParty.getCreditTotal();
+        Journal testJournal = testParty.getJournals().get(0);
+
+        //Act
+        testJournal.setType(Journal.Type.Debit);
+        testParty.calculateBalances();
+
+        //Assert
+        assertThat(testParty.getDebitTotal(), is(equalTo(testDebitTotal+testJournal.getAmount())));
+        assertThat(testParty.getCreditTotal(), equalTo(testCreditTotal-testJournal.getAmount()));
     }
 }

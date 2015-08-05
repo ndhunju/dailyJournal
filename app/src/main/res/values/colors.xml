@@ -12,4 +12,6 @@
     <color name="orange_pressed">#C7500A</color>
     <color name="yellow_pressed">#CCA83D</color>
     <color name="red_light_pressed">#DD3639</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

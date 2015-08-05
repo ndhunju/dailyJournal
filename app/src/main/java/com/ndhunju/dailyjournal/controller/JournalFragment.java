@@ -2,6 +2,7 @@ package com.ndhunju.dailyjournal.controller;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -476,13 +477,66 @@ public class JournalFragment extends Fragment {
 		int id = item.getItemId();
 
 		switch (id) {
-            case R.id.Merchants:
+            case R.id.meu_journal_merchants:
                 startActivity(new Intent(getActivity(), PartyListActivity.class));
                 break;
 
-            case R.id.Tools:
+            case R.id.meu_journal_tools:
                 startActivityForResult(new Intent(getActivity(), ImportExportActivity.class), REQUEST_CODE_IMPORTED);
                 break;
+
+			case R.id.meu_journal_erase:
+				Utils.alert(getActivity(), getString(R.string.msg_erase_all), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						final ProgressDialog pd = new ProgressDialog(getActivity());;
+						new AsyncTask<Void, Integer, Boolean>() {
+							@Override
+							protected void onPreExecute() {
+								super.onPreExecute();
+								pd.setIndeterminate(true);
+								pd.setCancelable(false);
+								pd.setMessage(String.format(getString(R.string.msg_deleting), getString(R.string.str_data)));
+								pd.show();
+								;
+							}
+
+							@Override
+							protected Boolean doInBackground(Void... voids) {
+								return mStorage.eraseAll(getActivity());
+							}
+
+							@Override
+							protected void onPostExecute(Boolean success) {
+								pd.cancel();
+								String msg = String.format((success ? getString(R.string.msg_finished) : getString(R.string.msg_failed))
+										, getString(R.string.str_erase_all));
+								Utils.alert(getActivity(), msg, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialogInterface, int i) {
+										getActivity().recreate(); //update the view
+										getActivity().finish();
+									}
+								});
+								super.onPostExecute(success);
+							}
+						}.execute();
+
+					}
+				}, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						return;
+					}
+				});
+
+				break;
+
+			case R.id.menu_journal_preference:
+				PreferencesFragment pf = new PreferencesFragment();
+				pf.show(getActivity().getSupportFragmentManager(), TAG);
+				break;
+
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -529,6 +583,10 @@ public class JournalFragment extends Fragment {
 				mStorage.writeToDB();
 			}
 		});
+
+		//update pass code time
+		LockScreenActivity.updatePasscodeTime();
+
 		super.onPause();
 	}
 
@@ -541,6 +599,8 @@ public class JournalFragment extends Fragment {
 			setValues(tempJournal, mParty);
         }
 
+		//check pass code
+		LockScreenActivity.checkPassCode(getActivity());
 	}
 
 

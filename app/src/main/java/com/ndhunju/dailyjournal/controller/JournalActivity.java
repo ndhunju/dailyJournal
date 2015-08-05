@@ -24,4 +24,10 @@ public class JournalActivity extends FragmentActivity {
 
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//check pass code
+		LockScreenActivity.checkPassCode(JournalActivity.this);
+	}
 }
