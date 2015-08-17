@@ -14,20 +14,19 @@
         android:orderInCategory="2"
         android:title="@string/str_tools"
          android:icon="@android:drawable/ic_menu_manage"
-        app:showAsAction="ifRoom"
+        android:showAsAction="never"
         />
     <item
         android:id="@+id/menu_journal_preference"
         android:orderInCategory="3"
         android:title="@string/str_preference"
-        android:icon="@android:drawable/ic_menu_preferences"
-        app:showAsAction="ifRoom"
+        android:showAsAction="never"
         />
     <item
         android:id="@+id/meu_journal_erase"
         android:orderInCategory="4"
         android:title="@string/str_erase_all"
-        app:showAsAction="never"
+        android:showAsAction="never"
         />
      
 </menu>

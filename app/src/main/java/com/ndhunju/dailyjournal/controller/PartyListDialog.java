@@ -3,7 +3,7 @@ package com.ndhunju.dailyjournal.controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -67,8 +67,7 @@ public class PartyListDialog extends DialogFragment {
 					int position, long id) {
 				Intent i = new Intent();
 				i.putExtra(Utils.KEY_PARTY_ID, partyAdapter.getItem(position).getId());
-				((JournalFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.activity_home_journal_fl))
-                        .OnDialogPressedOk(i, getArguments().getInt(Utils.KEY_REQUEST_CODE));
+				((JournalFragment)getTargetFragment()).onDialogPositiveBtnClicked(i, Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
 			}
 		}); 
 
@@ -85,8 +84,7 @@ public class PartyListDialog extends DialogFragment {
 
 				Intent i = new Intent();
 				i.putExtra(Utils.KEY_PARTY_ID, newParty.getId());
-				((JournalFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.activity_home_journal_fl))
-                        .OnDialogPressedOk(i, getArguments().getInt(Utils.KEY_REQUEST_CODE));
+				((JournalFragment)getTargetFragment()).onDialogPositiveBtnClicked(i, Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
 
             }
 		});

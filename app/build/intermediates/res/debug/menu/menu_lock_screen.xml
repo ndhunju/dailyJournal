@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ndhunju.dailyjournal.controller.LockScreenActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="100" android:showAsAction="never" />
 </menu>
 <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/menu/menu_lock_screen.xml -->

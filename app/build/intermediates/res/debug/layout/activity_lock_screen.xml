@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/str_passcode"
+        android:text="@string/str_pincode"
         android:textAllCaps="true"
         android:layout_marginBottom="15dp"
         android:id="@+id/activity_lock_screen_passcodeTV"

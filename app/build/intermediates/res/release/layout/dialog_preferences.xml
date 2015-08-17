@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/str_passcode"
+                android:text="@string/str_pincode"
                 android:layout_margin="5dp"
                 android:layout_gravity="center_vertical"
                 />

@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -41,7 +41,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class JournalFragment extends Fragment {
+public class JournalFragment extends Fragment implements OnDialogButtonPressedListener{
 
     //Constants
 	private static final String TAG = JournalFragment.class.getCanonicalName();
@@ -155,8 +155,9 @@ public class JournalFragment extends Fragment {
 		dateBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DatePickerFragment.newInstance(new Date(tempJournal.getDate()), REQUEST_CHGED_DATE)
-						.show(getActivity().getSupportFragmentManager(), DatePickerFragment.TAG);
+				DatePickerFragment dpf = DatePickerFragment.newInstance(new Date(tempJournal.getDate()), REQUEST_CHGED_DATE);
+				dpf.setTargetFragment(JournalFragment.this, REQUEST_CHGED_DATE);
+				dpf.show(getActivity().getFragmentManager(), DatePickerFragment.TAG);
 				//the result is delivered to OnDialoguePressedOk()
 			}
 		});
@@ -172,7 +173,8 @@ public class JournalFragment extends Fragment {
 					return;
 				}
 				partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
-				partylistdialog.show(getActivity().getSupportFragmentManager(), Utils.KEY_PARTY_ID);
+				partylistdialog.setTargetFragment(JournalFragment.this, REQUEST_CHGD_PARTY);
+				partylistdialog.show(getActivity().getFragmentManager(), Utils.KEY_PARTY_ID);
 				//the result is delivered to OnDialoguePressedOk()
 			}
 		});
@@ -351,37 +353,6 @@ public class JournalFragment extends Fragment {
 		return v;
 	}
 
-    /**
-     * This method can be used to transfer data between a dialog and this Fragment
-     * @param data : Intent to transfer data
-     * @param requestCode : Code to distinguish the purpose
-     */
-	public void OnDialogPressedOk(Intent data, int requestCode) {
-		switch (requestCode) {
-
-            case REQUEST_CHGD_PARTY: //A Party is selected
-                int partyId = data.getIntExtra(Utils.KEY_PARTY_ID, 0);
-                mParty = mStorage.getParty(partyId);
-                partyBtn.setText(mParty.getName());
-                tempJournal.setPartyId(partyId);
-                partylistdialog.dismiss();
-                break;
-
-            case REQUEST_CHGED_DATE: //A Date is selected
-                long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
-                if(newDate != tempJournal.getDate()){
-                    //Set journalChanged to true is the date is changed. Journal needs to be reordered
-                    tempJournal.setDate(newDate);
-                    dateChanged = journalChanged = true;
-                }
-
-                dateBtn.setText(Utils.formatDate(new Date(tempJournal.getDate()), Utils.DATE_FORMAT));
-                Log.d("Selected Date", String.valueOf(tempJournal.getDate()));
-                break;
-
-		}
-
-	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -533,8 +504,11 @@ public class JournalFragment extends Fragment {
 				break;
 
 			case R.id.menu_journal_preference:
-				PreferencesFragment pf = new PreferencesFragment();
-				pf.show(getActivity().getSupportFragmentManager(), TAG);
+				Fragment pf = new MyPreferenceFragment();
+				getFragmentManager().beginTransaction()
+						.replace(R.id.activity_home_journal_fl, pf )
+						.addToBackStack(null)
+						.commit();
 				break;
 
 		}
@@ -586,7 +560,6 @@ public class JournalFragment extends Fragment {
 
 		//update pass code time
 		LockScreenActivity.updatePasscodeTime();
-
 		super.onPause();
 	}
 
@@ -598,10 +571,42 @@ public class JournalFragment extends Fragment {
             tempJournal.setId(Journal.getCurrentId());
 			setValues(tempJournal, mParty);
         }
-
-		//check pass code
+		//check pin code lock
 		LockScreenActivity.checkPassCode(getActivity());
 	}
 
 
+	@Override
+	public void onDialogPositiveBtnClicked(Intent data, int result, int requestCode) {
+
+		switch (requestCode) {
+
+			case REQUEST_CHGD_PARTY: //A Party is selected
+				int partyId = data.getIntExtra(Utils.KEY_PARTY_ID, 0);
+				mParty = mStorage.getParty(partyId);
+				partyBtn.setText(mParty.getName());
+				tempJournal.setPartyId(partyId);
+				partylistdialog.dismiss();
+				break;
+
+			case REQUEST_CHGED_DATE: //A Date is selected
+				long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
+				if(newDate != tempJournal.getDate()){
+					//Set journalChanged to true is the date is changed. Journal needs to be reordered
+					tempJournal.setDate(newDate);
+					dateChanged = journalChanged = true;
+				}
+
+				dateBtn.setText(Utils.formatDate(new Date(tempJournal.getDate()), Utils.DATE_FORMAT));
+				Log.d("Selected Date", String.valueOf(tempJournal.getDate()));
+				break;
+
+		}
+
+	}
+
+	@Override
+	public void onDialogNegativeBtnClicked(Intent data, int result, int requestCode) {
+
+	}
 }

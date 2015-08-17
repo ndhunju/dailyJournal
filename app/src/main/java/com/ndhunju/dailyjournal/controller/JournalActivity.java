@@ -1,13 +1,13 @@
 package com.ndhunju.dailyjournal.controller;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.app.Fragment;
+import android.app.Activity;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Utils;
 
-public class JournalActivity extends FragmentActivity {
+public class JournalActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class JournalActivity extends FragmentActivity {
 
 		//Add an instance of JournalFragment
 		Fragment jf = JournalFragment.newInstance(journalId, partyId);
-		getSupportFragmentManager().beginTransaction().add(R.id.activity_home_journal_fl, jf).commit();
+		getFragmentManager().beginTransaction().add(R.id.activity_home_journal_fl, jf).commit();
 
 	}
 

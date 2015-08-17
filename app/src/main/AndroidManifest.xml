@@ -5,16 +5,13 @@
     android:versionName="4" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="11"
         android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
-
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -56,9 +53,8 @@
         </activity>
         <activity
             android:name=".controller.LockScreenActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_lock_screen"
-            >
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

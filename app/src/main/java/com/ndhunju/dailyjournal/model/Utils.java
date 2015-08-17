@@ -250,11 +250,11 @@ public class Utils {
 	/**
 	 * Unlike {@link Activity#getCacheDir()} this method doesn't limit storage size
 	 * to 1 MB.
-	 * @param activity
+	 * @param con
 	 * @return
 	 */
-	public static File getCacheDir(Activity activity){
-		return activity.getDir(Utils.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
+	public static File getCacheDir(Context con){
+		return con.getDir(Utils.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
 	}
 
     /**
@@ -498,7 +498,7 @@ public class Utils {
 	}
 
 	public static void copy(InputStream in, OutputStream out) throws IOException {
-		byte[] buffer = new byte[1024];
+		byte[] buffer = new byte[2048];
 		while (true) {
 			int readCount = in.read(buffer);
 			if (readCount < 0) {

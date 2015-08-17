@@ -3,13 +3,14 @@ package com.ndhunju.dailyjournal.controller;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.LinearLayout;
@@ -85,12 +86,12 @@ public class DatePickerFragment extends DialogFragment {
 					Intent i = new Intent();
 					i.putExtra(EXTRA_CAL, mCal);
 					//So far, DatePickerFragment is called from JournalFragment only
-					((JournalFragment)getActivity().getSupportFragmentManager()
-							.findFragmentById(R.id.activity_home_journal_fl))
-							.OnDialogPressedOk(i, getArguments().getInt(Utils.KEY_REQUEST_CODE));
+					((JournalFragment)getTargetFragment())
+							.onDialogPositiveBtnClicked(i, Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
 				}
 			})
 			.setView(v)
 			.create();
 	}
+
 }

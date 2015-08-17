@@ -12,7 +12,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.ndhunju.dailyjournal.controller.PreferencesFragment;
+import com.ndhunju.dailyjournal.controller.MyPreferenceFragment;
 import com.ndhunju.dailyjournal.database.FeedReaderContract.FeedEntry;
 import com.ndhunju.dailyjournal.database.FeedReaderDbHelper;
 
@@ -226,14 +226,18 @@ public class Storage {
 	 * @return
 	 */
 	public boolean eraseSharedPreferences(){
-		//pm.edit().clear().clear(); // doesn't work for shared preference
+		//pm.edit().clear().clear(); // doesn't work for default shared preference
 		SharedPreferences.Editor editor = pm.edit();
 		editor.putInt(KEY_CURRENT_JOURNAL_ID, 1);
 		editor.putInt(KEY_CURRENT_PARTY_ID, 1);
 		editor.putBoolean(KEY_OLD_DATA_IMPORTED, false);
-        editor.putBoolean(PreferencesFragment.KEY_ENABLE_PASSCODE, false);
-        editor.putString(PreferencesFragment.KEY_PASSCODE, "");
-		return editor.commit();
+		boolean success = editor.commit();
+
+		//Get Shared preference
+		SharedPreferences sp = mContext.getSharedPreferences(
+				MyPreferenceFragment.DEF_NAME_SHARED_PREFERENCE, Activity.MODE_PRIVATE);
+		success &= sp.edit().clear().commit();
+		return success;
 	}
 
 	public static boolean deleteViaContentProvider(Context context, String fullname) {

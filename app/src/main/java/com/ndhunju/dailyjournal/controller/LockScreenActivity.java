@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -18,7 +16,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Utils;
 
-public class LockScreenActivity extends FragmentActivity {
+public class LockScreenActivity extends Activity {
 
     //Variable
     public static long passcodeActivatedTime;
@@ -29,8 +27,8 @@ public class LockScreenActivity extends FragmentActivity {
      * @param whichActivity : Activity that this method is called from
      */
     public static void checkPassCode(Activity whichActivity){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(whichActivity);
-        if(sp.getBoolean(PreferencesFragment.KEY_ENABLE_PASSCODE, false) && !isPasscodeActive(sp)){
+        SharedPreferences sp = whichActivity.getSharedPreferences(MyPreferenceFragment.DEF_NAME_SHARED_PREFERENCE, Activity.MODE_PRIVATE);
+        if(sp.getBoolean(whichActivity.getString(R.string.key_pref_pincode_cb), false) && !isPasscodeActive(sp, whichActivity)){
             Intent i = new Intent(whichActivity, LockScreenActivity.class);
             whichActivity.startActivity(i);
             updatePasscodeTime();
@@ -42,8 +40,9 @@ public class LockScreenActivity extends FragmentActivity {
      * @param sp
      * @return
      */
-    public static boolean isPasscodeActive(SharedPreferences sp){
-        int lockTimeInMin = sp.getInt(PreferencesFragment.KEY_LOCK_TIME, PreferencesFragment.DEFAULT_LOCK_TIME);
+    public static boolean isPasscodeActive(SharedPreferences sp, Activity con){
+        String lockTimeStr = sp.getString(con.getString(R.string.key_pref_pincode_time_et), String.valueOf(MyPreferenceFragment.DEFAULT_LOCK_TIME));
+        int lockTimeInMin = Integer.parseInt(lockTimeStr);
         long difference = (System.currentTimeMillis()-passcodeActivatedTime);
         passcodeActivatedTime = System.currentTimeMillis();
         return difference  < lockTimeInMin*60*1000;
@@ -62,8 +61,8 @@ public class LockScreenActivity extends FragmentActivity {
         setContentView(R.layout.activity_lock_screen);
         setTitle(getString(R.string.title_activity_lock_screen));
 
-        final String savedPassCode = PreferenceManager.getDefaultSharedPreferences(LockScreenActivity.this)
-                .getString(PreferencesFragment.KEY_PASSCODE, PreferencesFragment.NO_PASSCODE_VAL);
+        final String savedPassCode = getSharedPreferences(MyPreferenceFragment.DEF_NAME_SHARED_PREFERENCE, Activity.MODE_PRIVATE)
+                .getString(getString(R.string.key_pref_pincode_val_et), MyPreferenceFragment.NO_PASSCODE_VAL);
 
         //wire up
         final TextView passcodeTV = (TextView)findViewById(R.id.activity_lock_screen_passcodeTV);
@@ -93,7 +92,7 @@ public class LockScreenActivity extends FragmentActivity {
                         passcodeActivatedTime = System.currentTimeMillis();
                         LockScreenActivity.this.finish();
                     }else{
-                        passcodeET.setText(PreferencesFragment.NO_PASSCODE_VAL);
+                        passcodeET.setText(MyPreferenceFragment.NO_PASSCODE_VAL);
                         passcodeTV.setTextColor(Color.parseColor(Utils.RED));
                     }
                 }

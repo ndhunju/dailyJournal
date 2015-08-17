@@ -10,6 +10,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,8 +42,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
-public class ImportExportActivity extends Activity {
+public class ImportExportActivity extends Activity implements OnDialogButtonPressedListener{
 
     private static final String TAG = ImportExportActivity.class.getCanonicalName();
     private static final String BACK_FILE_TYPE = "application/zip";
@@ -55,11 +58,13 @@ public class ImportExportActivity extends Activity {
     private static final int REQUEST_CODE_GDRIVE_CREATOR = 1185;
     private static final int REQUEST_CODE_GDRIVE_PICKER = 1189;
     private static final int REQUEST_CODE_GDRIVE_RESOLUTION = 1258;
+    private static final int REQUEST_CODE_BACKUP_DIR = 3561;
 
-    //Declare GoogleApiClient to use Google Drive
-    private GoogleApiClient mGoogleApiClient;
+
+    private GoogleApiClient mGoogleApiClient;   //GoogleApiClient to use Google Drive
+    private ProgressDialog gDrivePd;            //Used while creating backup in Google Drive
+    android.os.Handler UIHandler;               //Used to update UI
     private boolean imported;                   //true if data were imported
-    private ProgressDialog gDrivePd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +105,9 @@ public class ImportExportActivity extends Activity {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        createBackUpToSdCard();
+                        DirectoryPickerDialogFragment dpdf = DirectoryPickerDialogFragment.newInstance(Utils.getAppFolder(false).getAbsolutePath(), REQUEST_CODE_BACKUP_DIR);
+                        //dpdf.getControlsLayout(getBaseContext()).setBackBtnImg(getResources().getDrawable(android.R.drawable.arrow_down_float));
+                        dpdf.show(getFragmentManager(), TAG);
                     }
                 });
 
@@ -131,6 +138,19 @@ public class ImportExportActivity extends Activity {
                 startActivityForResult(intent, REQUEST_CODE_PICK_JSON);
             }
         });*/
+
+        //So far it is used only for update progressbar
+        UIHandler = new android.os.Handler(){
+
+            @Override
+            public void handleMessage(Message msg) {
+                int progress = msg.arg1;
+                gDrivePd.setProgress(progress);
+                super.handleMessage(msg);
+            }
+        };
+
+
     }
 
     /**
@@ -249,7 +269,7 @@ public class ImportExportActivity extends Activity {
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         String msg = "";
         switch (requestCode) {
-            case REQUEST_CODE_GDRIVE_CREATOR: // Called after the file is created in the google drive.
+            case REQUEST_CODE_GDRIVE_CREATOR:   // Called after the file is created in the google drive.
                 gDrivePd.cancel();
                 //Format the message
                 msg = String.format(getString(R.string.msg_exporting), resultCode == RESULT_OK
@@ -257,7 +277,7 @@ public class ImportExportActivity extends Activity {
                 Utils.alert(ImportExportActivity.this, msg);
                 break;
 
-            case REQUEST_CODE_GDRIVE_RESOLUTION://Called after google drive connection issue has been resolved
+            case REQUEST_CODE_GDRIVE_RESOLUTION:    //Called after google drive connection issue has been resolved
                 Log.i(TAG, "Activity result request code resolution");
                 // Make sure the app is not already connected or attempting to connect
                 if (!mGoogleApiClient.isConnecting() && !mGoogleApiClient.isConnected())
@@ -265,7 +285,7 @@ public class ImportExportActivity extends Activity {
                 break;
 
             //Currently this feature is disabled. User needs some technical knowledge to use this
-            case REQUEST_CODE_PICK_JSON: //Called when the user has picked a json file to restore data from
+            case REQUEST_CODE_PICK_JSON:     //Called when the user has picked a json file to restore data from
                 if(resultCode != RESULT_OK) {
                     msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
                     Utils.alert(ImportExportActivity.this, msg);
@@ -314,36 +334,25 @@ public class ImportExportActivity extends Activity {
      */
     private void createBackUpFileToGDrive() {
 
-        new AsyncTask<Void, Void, Boolean>() {
+        gDrivePd = new ProgressDialog(ImportExportActivity.this);
+        gDrivePd.setMessage(String.format(getString(R.string.msg_creating), getString(R.string.str_backup)));
+        gDrivePd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        gDrivePd.setCanceledOnTouchOutside(false);
+        gDrivePd.setCancelable(false);
+        gDrivePd.setProgress(10);
+        gDrivePd.setMax(100);
+        gDrivePd.show();
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //TODO Spinner/Bar gets stuck. Sticking bar at 20 seems better than stuck Spinner
-                        gDrivePd = new ProgressDialog(ImportExportActivity.this);
-                        gDrivePd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        gDrivePd.setIndeterminate(true);
-                        gDrivePd.setMax(100);
-                        gDrivePd.setProgress(10);
-                        gDrivePd.setMessage(String.format(getString(R.string.msg_creating), getString(R.string.str_backup)));
-                        gDrivePd.setCancelable(false);
-                        gDrivePd.setCanceledOnTouchOutside(false);
-                        gDrivePd.show();
-                    }
-                });
-            }
 
+
+        //Worker thread
+        new Thread(new Runnable() {
             @Override
-            protected Boolean doInBackground(Void... voids) {
-                gDrivePd.setProgress(20);
+            public void run() {
 
                 //Create a new Content in google drive and set a callback
                 Drive.DriveApi.newDriveContents(mGoogleApiClient)
                         .setResultCallback(new ResultCallback<DriveContentsResult>() {
-
 
                             @Override
                             public void onResult(DriveContentsResult result) {
@@ -354,20 +363,22 @@ public class ImportExportActivity extends Activity {
 
                                 // If successful write the data to the new contents.
                                 Log.i(TAG, "Content created.");
-                                gDrivePd.setProgress(20);
+
 
                                 // Get an output stream for the contents.
                                 OutputStream outputStream = result.getDriveContents().getOutputStream();
 
                                 File backUpfile = null;
 
+                                Message msg1 = UIHandler.obtainMessage();
+                                msg1.arg1 = 25;
+                                msg1.sendToTarget();
+
                                 try {
                                     //Create a new full backup of data into local drive
-                                    String filePath = createBackUp(false);
-                                    gDrivePd.setProgress(30);
+                                    String filePath = createBackUp(false, null, getBaseContext());
                                     backUpfile = new File(filePath);
                                     outputStream.write(Utils.read(backUpfile));
-                                    gDrivePd.setProgress(40);
 
                                     //delete the backup file from internal mStorage
                                     Utils.deleteFile(filePath);
@@ -388,7 +399,6 @@ public class ImportExportActivity extends Activity {
                                             .build(mGoogleApiClient);
 
 
-                                    gDrivePd.setProgress(50);
 
                                     //Show a Google Drive Picker where user can select the folder to save backup file in
                                     //It usu takes a while for Drive Picker to show up. So cancel gDrivePD at onActivityResult();
@@ -402,21 +412,10 @@ public class ImportExportActivity extends Activity {
 
                             }
                         });
-
-                return true;
             }
+        }).start();
 
-            @Override
-            protected void onProgressUpdate(Void... values) {
-                super.onProgressUpdate(values);
-            }
-
-            @Override
-            protected void onPostExecute(Boolean aBoolean) {
-
-                super.onPostExecute(aBoolean);
-            }
-        }.execute();
+        //new android.os.Handler().postDelayed(workerThread, 1000);
     }
 
     /**
@@ -470,9 +469,9 @@ public class ImportExportActivity extends Activity {
      * background thread.
      * @return Full path of the file if successful otherwise null.
      */
-    public void createBackUpToSdCard() {
+    public void createBackUpToSdCard(final String dirToSave) {
 
-        new AsyncTask<Void, Void, String>() {
+        new AsyncTask<String, Void, String>() {
             ProgressDialog pd;
 
             @Override
@@ -487,10 +486,10 @@ public class ImportExportActivity extends Activity {
             }
 
             @Override
-            protected String doInBackground(Void... Void) {
+            protected String doInBackground(String... String) {
                 String filePath = "";
                 try {
-                    filePath = createBackUp(true);
+                    filePath = createBackUp(true,String[0], getBaseContext());
                 } catch (IOException e) {
                     Log.w(TAG, "Error creating backup file: " + e.getMessage());
                 } finally {
@@ -507,12 +506,12 @@ public class ImportExportActivity extends Activity {
                         String.format(getString(R.string.msg_finished), getString(R.string.str_backup))
                         : String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
 
-                resultMsg += String.format(getString(R.string.msg_saved_in), getString(R.string.backup_dir));
+                resultMsg += String.format(getString(R.string.msg_saved_in), dirToSave);
 
                 //Display the result
                 Utils.alert(ImportExportActivity.this, resultMsg);
             }
-        }.execute();
+        }.execute(dirToSave);
 
 
     }
@@ -524,16 +523,28 @@ public class ImportExportActivity extends Activity {
      * @return : It retuns the absolute path of the backup file.
      * @throws IOException
      */
-    public String createBackUp(boolean inExtDir) throws IOException {
+    public String createBackUp(boolean inExtDir, String extDir, Context con) throws IOException {
         //1.Create JSON with latest data
         createJSONFile();
 
         //2. Zip app folder  as all the attachments and json file are here
         //2.1 Get the app folder
-        File directoryToZip = Utils.getAppFolder(ImportExportActivity.this);
+        File directoryToZip = Utils.getAppFolder(con);
 
         //2.2 get App Folder that is not hidden. Backup file will be created here
-        File appFolder = inExtDir ? Utils.getAppFolder(false) : Utils.getCacheDir(ImportExportActivity.this);
+        File appFolder;
+        //if backup is to be created in sdcard
+        if(inExtDir){
+            //if folder where backup should be created is provided
+            if(extDir != null)
+                appFolder = new File(extDir);
+            else //if folder is not provided, get default app folder
+                appFolder = Utils.getAppFolder(false);
+        }else{
+            //if backup is to be created in internal storage
+            appFolder =  Utils.getCacheDir(con);
+        }
+
 
 
         //2.3 create a zip file in not hidden app folder so that user can use it
@@ -1079,4 +1090,20 @@ public class ImportExportActivity extends Activity {
 
     }
 
+    @Override
+    public void onDialogPositiveBtnClicked(Intent data, int result, int requestCode) {
+
+        switch(requestCode){
+            case REQUEST_CODE_BACKUP_DIR:
+                if(result != Activity.RESULT_OK) Utils.toast(getBaseContext(), getString(R.string.str_failed));
+                String dir = data.getStringExtra(DirectoryPickerDialogFragment.KEY_SELECTED_DIR);
+                createBackUpToSdCard(dir);
+        }
+
+    }
+
+    @Override
+    public void onDialogNegativeBtnClicked(Intent data, int result, int requestCode) {
+
+    }
 }
