@@ -16,6 +16,7 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.LinearLayout;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.model.Utils;
 
 public class DatePickerFragment extends DialogFragment {
@@ -87,7 +88,8 @@ public class DatePickerFragment extends DialogFragment {
 					i.putExtra(EXTRA_CAL, mCal);
 					//So far, DatePickerFragment is called from JournalFragment only
 					((JournalFragment)getTargetFragment())
-							.onDialogPositiveBtnClicked(i, Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
+							.onDialogBtnClicked(i, OnDialogBtnClickedListener.BUTTON_POSITIVE,
+									Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
 				}
 			})
 			.setView(v)

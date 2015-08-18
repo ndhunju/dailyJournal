@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.model.Storage;
@@ -41,7 +42,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class JournalFragment extends Fragment implements OnDialogButtonPressedListener{
+public class JournalFragment extends Fragment implements OnDialogBtnClickedListener {
 
     //Constants
 	private static final String TAG = JournalFragment.class.getCanonicalName();
@@ -553,7 +554,7 @@ public class JournalFragment extends Fragment implements OnDialogButtonPressedLi
         AsyncTask.execute(new Runnable() {
 			@Override
 			public void run() {
-                //Save data to local sql database
+				//Save data to local sql database
 				mStorage.writeToDB();
 			}
 		});
@@ -577,7 +578,7 @@ public class JournalFragment extends Fragment implements OnDialogButtonPressedLi
 
 
 	@Override
-	public void onDialogPositiveBtnClicked(Intent data, int result, int requestCode) {
+	public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode) {
 
 		switch (requestCode) {
 
@@ -602,11 +603,6 @@ public class JournalFragment extends Fragment implements OnDialogButtonPressedLi
 				break;
 
 		}
-
-	}
-
-	@Override
-	public void onDialogNegativeBtnClicked(Intent data, int result, int requestCode) {
 
 	}
 }

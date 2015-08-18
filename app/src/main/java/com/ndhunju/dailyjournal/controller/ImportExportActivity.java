@@ -27,6 +27,8 @@ import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.FolderPicker.FolderPickerDialogFragment;
+import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.model.Storage;
@@ -42,10 +44,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
-public class ImportExportActivity extends Activity implements OnDialogButtonPressedListener{
+public class ImportExportActivity extends Activity implements OnDialogBtnClickedListener {
 
     private static final String TAG = ImportExportActivity.class.getCanonicalName();
     private static final String BACK_FILE_TYPE = "application/zip";
@@ -105,7 +105,7 @@ public class ImportExportActivity extends Activity implements OnDialogButtonPres
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DirectoryPickerDialogFragment dpdf = DirectoryPickerDialogFragment.newInstance(Utils.getAppFolder(false).getAbsolutePath(), REQUEST_CODE_BACKUP_DIR);
+                        FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR);
                         //dpdf.getControlsLayout(getBaseContext()).setBackBtnImg(getResources().getDrawable(android.R.drawable.arrow_down_float));
                         dpdf.show(getFragmentManager(), TAG);
                     }
@@ -1091,19 +1091,18 @@ public class ImportExportActivity extends Activity implements OnDialogButtonPres
     }
 
     @Override
-    public void onDialogPositiveBtnClicked(Intent data, int result, int requestCode) {
+    public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode) {
 
         switch(requestCode){
             case REQUEST_CODE_BACKUP_DIR:
                 if(result != Activity.RESULT_OK) Utils.toast(getBaseContext(), getString(R.string.str_failed));
-                String dir = data.getStringExtra(DirectoryPickerDialogFragment.KEY_SELECTED_DIR);
-                createBackUpToSdCard(dir);
+                if(whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE){
+                    data.getData();
+                    String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
+                    createBackUpToSdCard(dir);
+                }
+
         }
-
-    }
-
-    @Override
-    public void onDialogNegativeBtnClicked(Intent data, int result, int requestCode) {
 
     }
 }

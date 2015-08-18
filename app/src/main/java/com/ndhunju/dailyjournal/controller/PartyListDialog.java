@@ -13,11 +13,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.model.Storage;
 import com.ndhunju.dailyjournal.model.Utils;
@@ -67,7 +67,8 @@ public class PartyListDialog extends DialogFragment {
 					int position, long id) {
 				Intent i = new Intent();
 				i.putExtra(Utils.KEY_PARTY_ID, partyAdapter.getItem(position).getId());
-				((JournalFragment)getTargetFragment()).onDialogPositiveBtnClicked(i, Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
+				((JournalFragment)getTargetFragment()).onDialogBtnClicked(i,
+						OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
 			}
 		}); 
 
@@ -84,7 +85,8 @@ public class PartyListDialog extends DialogFragment {
 
 				Intent i = new Intent();
 				i.putExtra(Utils.KEY_PARTY_ID, newParty.getId());
-				((JournalFragment)getTargetFragment()).onDialogPositiveBtnClicked(i, Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
+				((JournalFragment)getTargetFragment()).onDialogBtnClicked(i,
+						OnDialogBtnClickedListener.BUTTON_POSITIVE, Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
 
             }
 		});
