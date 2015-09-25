@@ -13,7 +13,7 @@ import com.ndhunju.dailyjournal.R;
 public class MyPreferenceFragment extends PreferenceFragment {
 
     //Constants
-    public static final int DEFAULT_LOCK_TIME = 3;
+    public static final int DEFAULT_LOCK_TIME = 3;      //3 mins
     public static final String NO_PASSCODE_VAL = "";
     public static final String DEF_NAME_SHARED_PREFERENCE =  "preferences";
 

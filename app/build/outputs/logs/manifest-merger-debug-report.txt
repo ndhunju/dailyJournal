@@ -73,25 +73,25 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:29:17
 	android:name
 		ADDED from AndroidManifest.xml:29:27
-activity#com.ndhunju.dailyjournal.controller.JournalActivity
+activity#com.ndhunju.dailyjournal.controller.Journal.JournalActivity
 ADDED from AndroidManifest.xml:32:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:34:13
 	android:name
 		ADDED from AndroidManifest.xml:33:13
-activity#com.ndhunju.dailyjournal.controller.PartyListActivity
+activity#com.ndhunju.dailyjournal.controller.Party.PartyListActivity
 ADDED from AndroidManifest.xml:35:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:37:13
 	android:name
 		ADDED from AndroidManifest.xml:36:13
-activity#com.ndhunju.dailyjournal.controller.PartyActivity
+activity#com.ndhunju.dailyjournal.controller.Party.PartyActivity
 ADDED from AndroidManifest.xml:38:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:40:13
 	android:name
 		ADDED from AndroidManifest.xml:39:13
-activity#com.ndhunju.dailyjournal.controller.PartyInformationActivity
+activity#com.ndhunju.dailyjournal.controller.Party.PartyInformationActivity
 ADDED from AndroidManifest.xml:41:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:43:13
@@ -103,7 +103,7 @@ ADDED from AndroidManifest.xml:44:9
 		ADDED from AndroidManifest.xml:46:13
 	android:name
 		ADDED from AndroidManifest.xml:45:13
-activity#com.ndhunju.dailyjournal.controller.ImportExportActivity
+activity#com.ndhunju.dailyjournal.controller.ImportExport.ImportExportActivity
 ADDED from AndroidManifest.xml:49:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:52:13

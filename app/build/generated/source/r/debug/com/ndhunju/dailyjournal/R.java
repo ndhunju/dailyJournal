@@ -10,10 +10,6 @@ package com.ndhunju.dailyjournal;
 public final class R {
     public static final class array {
         public static final int options_attch=0x7f080000;
-        public static final int pref_example_list_titles=0x7f080001;
-        public static final int pref_example_list_values=0x7f080002;
-        public static final int pref_sync_frequency_titles=0x7f080003;
-        public static final int pref_sync_frequency_values=0x7f080004;
     }
     public static final class attr {
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
@@ -255,77 +251,62 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int msg_restored=0x7f050037;
         public static final int msg_saved=0x7f050038;
         public static final int msg_saved_in=0x7f050039;
-        public static final int pref_default_display_name=0x7f05003a;
-        public static final int pref_description_social_recommendations=0x7f05003b;
-        public static final int pref_header_data_sync=0x7f05003c;
-        public static final int pref_header_general=0x7f05003d;
-        public static final int pref_header_notifications=0x7f05003e;
-        public static final int pref_ringtone_silent=0x7f05003f;
-        public static final int pref_title_add_friends_to_messages=0x7f050040;
-        public static final int pref_title_display_name=0x7f050041;
-        public static final int pref_title_new_message_notifications=0x7f050042;
-        public static final int pref_title_ringtone=0x7f050043;
-        public static final int pref_title_social_recommendations=0x7f050044;
-        public static final int pref_title_sync_frequency=0x7f050045;
-        public static final int pref_title_system_sync_settings=0x7f050046;
-        public static final int pref_title_vibrate=0x7f050047;
-        public static final int str_00_00=0x7f050048;
-        public static final int str_alert=0x7f050049;
-        public static final int str_attachment=0x7f05004a;
-        public static final int str_attch_delete=0x7f05004b;
-        public static final int str_backup=0x7f05004c;
-        public static final int str_balance=0x7f05004d;
-        public static final int str_choose=0x7f05004e;
-        public static final int str_cr=0x7f05004f;
-        public static final int str_create_backup_in_google_drive=0x7f050050;
-        public static final int str_create_backup_in_sd=0x7f050051;
-        public static final int str_data=0x7f050052;
-        public static final int str_date=0x7f050053;
-        public static final int str_delete=0x7f050054;
-        public static final int str_dr=0x7f050055;
-        public static final int str_enable=0x7f050056;
-        public static final int str_erase_all=0x7f050057;
-        public static final int str_failed=0x7f050058;
-        public static final int str_finished=0x7f050059;
-        public static final int str_folder=0x7f05005a;
-        public static final int str_google_drive=0x7f05005b;
-        public static final int str_id=0x7f05005c;
-        public static final int str_import_json_from_sd=0x7f05005d;
-        public static final int str_information=0x7f05005e;
-        public static final int str_journal=0x7f05005f;
-        public static final int str_lock=0x7f050060;
-        public static final int str_lock_time=0x7f050061;
-        public static final int str_minutes=0x7f050062;
-        public static final int str_new=0x7f050063;
-        public static final int str_new_folder_name=0x7f050064;
-        public static final int str_note=0x7f050065;
-        public static final int str_parties=0x7f050066;
-        public static final int str_party=0x7f050067;
-        public static final int str_pick_a_date=0x7f050068;
-        public static final int str_pincode=0x7f050069;
-        public static final int str_preference=0x7f05006a;
-        public static final int str_reminder=0x7f05006b;
-        public static final int str_restore_backup_from_google_drive=0x7f05006c;
-        public static final int str_restore_backup_from_sd=0x7f05006d;
-        public static final int str_save=0x7f05006e;
-        public static final int str_select_party=0x7f05006f;
-        public static final int str_tools=0x7f050070;
-        public static final int str_total=0x7f050071;
-        public static final int sum_lock_time=0x7f050072;
-        public static final int sum_pincode_val=0x7f050073;
-        public static final int title_activity_import_export=0x7f050074;
-        public static final int title_activity_journal=0x7f050075;
-        public static final int title_activity_lock_screen=0x7f050076;
-        public static final int title_activity_party=0x7f050077;
-        public static final int title_activity_settings=0x7f050078;
-        public static final int warning_cant_change_party=0x7f050079;
-        public static final int warning_ext_mismatch=0x7f05007a;
-        public static final int warning_format=0x7f05007b;
-        public static final int warning_no_attch=0x7f05007c;
-        public static final int warning_overpaid_msg=0x7f05007d;
-        public static final int warning_restore=0x7f05007e;
-        public static final int warning_see_attachment=0x7f05007f;
-        public static final int warning_select_party=0x7f050080;
+        public static final int str_00_00=0x7f05003a;
+        public static final int str_alert=0x7f05003b;
+        public static final int str_attachment=0x7f05003c;
+        public static final int str_attch_delete=0x7f05003d;
+        public static final int str_backup=0x7f05003e;
+        public static final int str_balance=0x7f05003f;
+        public static final int str_choose=0x7f050040;
+        public static final int str_cr=0x7f050041;
+        public static final int str_create_backup_in_google_drive=0x7f050042;
+        public static final int str_create_backup_in_sd=0x7f050043;
+        public static final int str_data=0x7f050044;
+        public static final int str_date=0x7f050045;
+        public static final int str_delete=0x7f050046;
+        public static final int str_dr=0x7f050047;
+        public static final int str_enable=0x7f050048;
+        public static final int str_erase_all=0x7f050049;
+        public static final int str_failed=0x7f05004a;
+        public static final int str_finished=0x7f05004b;
+        public static final int str_folder=0x7f05004c;
+        public static final int str_google_drive=0x7f05004d;
+        public static final int str_id=0x7f05004e;
+        public static final int str_import_json_from_sd=0x7f05004f;
+        public static final int str_information=0x7f050050;
+        public static final int str_journal=0x7f050051;
+        public static final int str_lock=0x7f050052;
+        public static final int str_lock_time=0x7f050053;
+        public static final int str_minutes=0x7f050054;
+        public static final int str_new=0x7f050055;
+        public static final int str_new_folder_name=0x7f050056;
+        public static final int str_note=0x7f050057;
+        public static final int str_parties=0x7f050058;
+        public static final int str_party=0x7f050059;
+        public static final int str_pick_a_date=0x7f05005a;
+        public static final int str_pincode=0x7f05005b;
+        public static final int str_preference=0x7f05005c;
+        public static final int str_reminder=0x7f05005d;
+        public static final int str_restore_backup_from_google_drive=0x7f05005e;
+        public static final int str_restore_backup_from_sd=0x7f05005f;
+        public static final int str_save=0x7f050060;
+        public static final int str_select_party=0x7f050061;
+        public static final int str_tools=0x7f050062;
+        public static final int str_total=0x7f050063;
+        public static final int sum_lock_time=0x7f050064;
+        public static final int sum_pincode_val=0x7f050065;
+        public static final int title_activity_import_export=0x7f050066;
+        public static final int title_activity_journal=0x7f050067;
+        public static final int title_activity_lock_screen=0x7f050068;
+        public static final int title_activity_party=0x7f050069;
+        public static final int warning_cant_change_party=0x7f05006a;
+        public static final int warning_ext_mismatch=0x7f05006b;
+        public static final int warning_format=0x7f05006c;
+        public static final int warning_no_attch=0x7f05006d;
+        public static final int warning_overpaid_msg=0x7f05006e;
+        public static final int warning_restore=0x7f05006f;
+        public static final int warning_see_attachment=0x7f050070;
+        public static final int warning_select_party=0x7f050071;
     }
     public static final class style {
         /**  API 11 theme customizations can go here. 
@@ -349,11 +330,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int Widget_Button_Warning=0x7f06000a;
     }
     public static final class xml {
-        public static final int pref_data_sync=0x7f040000;
-        public static final int pref_general=0x7f040001;
-        public static final int pref_headers=0x7f040002;
-        public static final int pref_notification=0x7f040003;
-        public static final int preferences=0x7f040004;
+        public static final int preferences=0x7f040000;
     }
     public static final class styleable {
         /** Attributes that can be used with a ButtonBarContainerTheme.

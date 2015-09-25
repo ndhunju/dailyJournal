@@ -19,7 +19,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.model.Utils;
+import com.ndhunju.dailyjournal.service.Constants;
+import com.ndhunju.dailyjournal.service.UtilsView;
 
 /**
  * Lock/Unlock button is added to the ActionBar. Use it to temporarily disable
@@ -43,12 +44,8 @@ public class ViewPagerActivity extends FragmentActivity {
 		setContentView(R.layout.activity_view_pager);
 		
 		attachmentChanged = false;
-		filePaths = getIntent().getStringArrayListExtra(Utils.KEY_ATTACHMENTS);
+		filePaths = getIntent().getStringArrayListExtra(Constants.KEY_ATTACHMENTS);
 		
-		/*merchantId = getIntent().getIntExtra(PartyListDialog.KEY_PARTY_ID, Utils.NO_PARTY);
-		journalId = getIntent().getIntExtra(Utils.KEY_JOURNAL_ID, 0);
-		filePaths = Storage.getInstance(ViewPagerActivity.this).getJournal(merchantId, journalId).getAttachmentPaths();
-*/		
 		mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
 		setContentView(mViewPager);
 		mViewPager.setAdapter(new SamplePagerAdapter(filePaths));
@@ -122,14 +119,14 @@ public class ViewPagerActivity extends FragmentActivity {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_attachment));
-				Utils.alert(ViewPagerActivity.this, msg, new DialogInterface.OnClickListener() {
+				UtilsView.alert(ViewPagerActivity.this, msg, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
 						int currentItemPos = mViewPager.getCurrentItem();
-						if(new File(filePaths.get(currentItemPos)).delete())
+						if (new File(filePaths.get(currentItemPos)).delete())
 							filePaths.remove(currentItemPos);//doesn't delete from the journal
-						Utils.toast(ViewPagerActivity.this, getString(R.string.str_attch_delete));
-						((SamplePagerAdapter)mViewPager.getAdapter()).notifyDataSetChanged();
+						UtilsView.toast(ViewPagerActivity.this, getString(R.string.str_attch_delete));
+						((SamplePagerAdapter) mViewPager.getAdapter()).notifyDataSetChanged();
 						attachmentChanged = true;
 
 					}
@@ -175,8 +172,8 @@ public class ViewPagerActivity extends FragmentActivity {
 	@Override
 	public void onBackPressed() {
 		Intent i = new Intent();
-		i.putExtra(Utils.KEY_ATTACHMENTS_IS_CHGD, attachmentChanged);
-		if(attachmentChanged) i.putStringArrayListExtra(Utils.KEY_ATTACHMENTS, filePaths);
+		i.putExtra(Constants.KEY_ATTACHMENTS_IS_CHGD, attachmentChanged);
+		if(attachmentChanged) i.putStringArrayListExtra(Constants.KEY_ATTACHMENTS, filePaths);
 		setResult(Activity.RESULT_OK, i);
 		super.onBackPressed();
 	}

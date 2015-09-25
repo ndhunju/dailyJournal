@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.model.Utils;
+import com.ndhunju.dailyjournal.service.UtilsView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -192,7 +192,7 @@ public class FolderPickerDialogFragment extends DialogFragment{
                                     mCurrentDir += "/" + newDirName;
                                     updateDirectory();
                                 } else {
-                                    Utils.toast(getActivity(), getString(R.string.str_failed));
+                                    UtilsView.toast(getActivity(), getString(R.string.str_failed));
                                 }
                             }
                         }).setNegativeButton(android.R.string.cancel, null).show();

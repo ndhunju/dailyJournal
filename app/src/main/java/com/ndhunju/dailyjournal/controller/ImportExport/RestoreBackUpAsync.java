@@ -1,0 +1,106 @@
+package com.ndhunju.dailyjournal.controller.ImportExport;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.media.MediaScannerConnection;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.JsonConverter;
+import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.service.UtilsFile;
+import com.ndhunju.dailyjournal.service.UtilsView;
+import com.ndhunju.dailyjournal.service.UtilsZip;
+
+import java.io.File;
+
+/**
+ * Restores the data from zipped/backup file
+ */
+public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
+
+    private static final String TAG = RestoreBackUpAsync.class.getSimpleName();
+
+    Activity mActivity;
+
+
+    public RestoreBackUpAsync(Activity context){
+        mActivity = context;
+    }
+
+    //Show progress bar
+    ProgressDialog pd;
+
+    @Override
+    protected void onPreExecute() {
+
+
+        String msg = String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_backup));
+        pd = new ProgressDialog(mActivity);
+        pd.setIndeterminate(true);
+        pd.setMessage(msg);
+        pd.setCancelable(false);
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+        //End progress bar
+        pd.cancel();
+        mActivity.setResult(result ? mActivity.RESULT_OK : Activity.RESULT_CANCELED);
+        //Display msg
+        String msg = result ? String.format(mActivity.getString(R.string.msg_restored), mActivity.getString(R.string.str_backup))
+                : String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_failed));
+        UtilsView.alert(mActivity, msg);
+    }
+
+    @Override
+    protected Boolean doInBackground(String... params) {
+
+        String filePath = params[0];
+
+        //Check if the file extension is correct
+        if (!(filePath.endsWith(UtilsFile.ZIP_EXT) || filePath.endsWith(UtilsFile.ZIP_EXT_OLD))) {
+            UtilsView.alert(mActivity, mActivity.getString(com.ndhunju.dailyjournal.R.string.warning_ext_mismatch));
+            return false;
+        }
+
+        try {
+            //Delete existing files, objects, database
+            Services.getInstance(mActivity).truncateAllTables();
+
+            //Get the app folder where the data are stored
+            File appFolder = UtilsFile.getAppFolder(mActivity);
+
+            //Delete old files, attachments
+            UtilsFile.deleteDirectory(appFolder);
+
+            //Unzip the files into app folder
+            UtilsZip.unzip(new File(params[0]), appFolder);
+
+            JsonConverter converter = new JsonConverter(Services.getInstance(mActivity));
+
+            //search .json file
+            File[] files = appFolder.listFiles();
+            for (int i = files.length - 1; i >= 0; i--)
+                if (files[i].isFile() && files[i].getName().endsWith(".json")) {
+                    if (!converter.parseJSONFile(files[i].getAbsolutePath()))
+                        return false; //false to preserve current Id
+                    //takes the first json file from the last
+                    //name of json file has date on it so the latest json file
+                    //wil likely be at the bottom of the list
+                    break;
+                }
+
+            //to let know that a new file has been created so that it appears in the computer
+            MediaScannerConnection.scanFile(mActivity
+                    , new String[]{appFolder.getAbsolutePath()}, null, null);
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating backup file: " + e.getMessage());
+            return false;
+        }
+    }
+}

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.model.Utils;
+import com.ndhunju.dailyjournal.service.Constants;
 
 public class LockScreenActivity extends Activity {
 
@@ -22,7 +22,7 @@ public class LockScreenActivity extends Activity {
     public static long passcodeActivatedTime;
 
     /**
-     * Checks if the user has enabled the pass code. If yes, starts
+     * Checks if the user has enabled the pass code. If yes, start
      * LockScreenActivity
      * @param whichActivity : Activity that this method is called from
      */
@@ -37,6 +37,7 @@ public class LockScreenActivity extends Activity {
 
     /**
      * Checks if the pass code or lock time has expired.
+     * if lock time has exceeded, it returns true
      * @param sp
      * @return
      */
@@ -70,7 +71,7 @@ public class LockScreenActivity extends Activity {
         passcodeET.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                passcodeTV.setTextColor(Color.parseColor(Utils.BLACK));
+                passcodeTV.setTextColor(Color.parseColor(Constants.BLACK));
                 //Unlock as soon as the pin code matches
                 if(savedPassCode.equals(s.toString())){
                     passcodeActivatedTime = System.currentTimeMillis();
@@ -86,14 +87,16 @@ public class LockScreenActivity extends Activity {
         passcodeET.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                //Block user from pressing BACK button
+                //Change the Default behavior of Enter button
                 if((event!=null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)){
                     if(savedPassCode.equals(passcodeET.getText().toString())){
                         passcodeActivatedTime = System.currentTimeMillis();
                         LockScreenActivity.this.finish();
                     }else{
+                        //if the user clicks Enter with wrong pass code,
+                        //Clear text and make PassCodeTextView red
                         passcodeET.setText(MyPreferenceFragment.NO_PASSCODE_VAL);
-                        passcodeTV.setTextColor(Color.parseColor(Utils.RED));
+                        passcodeTV.setTextColor(Color.parseColor(Constants.RED));
                     }
                 }
                 return false;

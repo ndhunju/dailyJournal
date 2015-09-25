@@ -90,7 +90,7 @@ public class ControlsLayout extends RelativeLayout {
 
     /**
      * This method returns instance of TextView used to display current path.
-     * It can be used to apply custom appearence
+     * It can be used to apply custom appearance
      * @return
      */
     public TextView getPathTextView(){

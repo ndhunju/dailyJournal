@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -30,16 +30,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ndhunju.dailyjournal.controller.JournalActivity"
+            android:name="com.ndhunju.dailyjournal.controller.Journal.JournalActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.ndhunju.dailyjournal.controller.PartyListActivity"
+            android:name="com.ndhunju.dailyjournal.controller.Party.PartyListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.ndhunju.dailyjournal.controller.PartyActivity"
+            android:name="com.ndhunju.dailyjournal.controller.Party.PartyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.ndhunju.dailyjournal.controller.PartyInformationActivity"
+            android:name="com.ndhunju.dailyjournal.controller.Party.PartyInformationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.ndhunju.dailyjournal.viewPager.ViewPagerActivity"
@@ -47,7 +47,7 @@
 
         <!-- https://developers.google.com/drive/android/java-client -->
         <activity
-            android:name="com.ndhunju.dailyjournal.controller.ImportExportActivity"
+            android:name="com.ndhunju.dailyjournal.controller.ImportExport.ImportExportActivity"
             android:label="@string/title_activity_import_export"
             android:screenOrientation="portrait" >
         </activity>

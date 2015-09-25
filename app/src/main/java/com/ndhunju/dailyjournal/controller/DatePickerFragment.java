@@ -17,25 +17,25 @@ import android.widget.LinearLayout;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
-import com.ndhunju.dailyjournal.model.Utils;
+import com.ndhunju.dailyjournal.controller.Journal.JournalFragment;
+import com.ndhunju.dailyjournal.service.Constants;
 
 public class DatePickerFragment extends DialogFragment {
 	
-	public static final String TAG = DialogFragment.class.getCanonicalName();
-	protected static final String EXTRA_CAL = "com.ndhunju.dailyJournal.datePickerFragment.extraCal";
+	public static final String TAG = DialogFragment.class.getSimpleName();
+	public static final String EXTRA_CAL = "com.ndhunju.dailyJournal.datePickerFragment.extraCal";
 	
 	static Calendar mCal;
 	
 	public static DatePickerFragment newInstance(Date d, int requestCode){
-		
-		//Create a calendar to get the year, month, and day
-		mCal = Calendar.getInstance();
-		mCal.setTime(d);
-		
+
 		DatePickerFragment dateFragment = new DatePickerFragment();
+
 		Bundle args = new Bundle();
-		args.putInt(Utils.KEY_REQUEST_CODE, requestCode);
+		args.putInt(Constants.KEY_REQUEST_CODE, requestCode);
 		dateFragment.setArguments(args);
+		mCal = Calendar.getInstance();			//Create a calendar to get the year, month, and day
+		mCal.setTime(d);
 
 		return dateFragment;
 	}
@@ -49,7 +49,8 @@ public class DatePickerFragment extends DialogFragment {
 		//int hour = mCal.get(Calendar.HOUR_OF_DAY);
 		//int min = mCal.get(Calendar.MINUTE);
 		
-		LinearLayout v = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.dialog_date_picker, new LinearLayout(getActivity()));
+		LinearLayout v = (LinearLayout) getActivity().getLayoutInflater()
+				.inflate(R.layout.dialog_date_picker, new LinearLayout(getActivity()));
 		DatePicker dp = (DatePicker)v.findViewById(R.id.dialog_edit_date); 
 		dp.init(year, month, day, new OnDateChangedListener() {
 			@Override
@@ -89,7 +90,7 @@ public class DatePickerFragment extends DialogFragment {
 					//So far, DatePickerFragment is called from JournalFragment only
 					((JournalFragment)getTargetFragment())
 							.onDialogBtnClicked(i, OnDialogBtnClickedListener.BUTTON_POSITIVE,
-									Activity.RESULT_OK, getArguments().getInt(Utils.KEY_REQUEST_CODE));
+									Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
 				}
 			})
 			.setView(v)

@@ -62,8 +62,6 @@ public class JournalTest {
         assertThat("Journal note didn't match", testJournal.getNote(), equalTo("checks no 56778"));
         assertThat("Journal attachment path didn't match", testJournal.getAttachmentPaths().get(0),
                 equalTo("/data/data/com.ndhunju.dailyjournal/app_DailyJournal/.attachments/.Bill Gates/2-2-0.png"));
-
-
     }
 
     @Test

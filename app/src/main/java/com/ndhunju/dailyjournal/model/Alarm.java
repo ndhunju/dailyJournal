@@ -9,11 +9,12 @@ import android.content.Intent;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.NotificationService;
+import com.ndhunju.dailyjournal.service.Constants;
 
 public class Alarm {
 	
-	public final static String MSG = Utils.APP_PREFIX + "Alarm.msg";
-	public static final String TITLE = Utils.APP_PREFIX + ".Alarm.title";
+	public final static String MSG = Constants.APP_PREFIX + "Alarm.msg";
+	public static final String TITLE = Constants.APP_PREFIX + ".Alarm.title";
 
 	public static void setAlarmForNotification(Context context, Class<?> serviceClass, Calendar cal, String title,
                                                String msg, boolean repeating, int repeatIntervel ){

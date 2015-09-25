@@ -30,16 +30,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.JournalActivity"
+            android:name=".controller.Journal.JournalActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".controller.PartyListActivity"
+            android:name=".controller.Party.PartyListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".controller.PartyActivity"
+            android:name=".controller.Party.PartyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".controller.PartyInformationActivity"
+            android:name=".controller.Party.PartyInformationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".viewPager.ViewPagerActivity"
@@ -47,7 +47,7 @@
 
         <!-- https://developers.google.com/drive/android/java-client -->
         <activity
-            android:name=".controller.ImportExportActivity"
+            android:name=".controller.ImportExport.ImportExportActivity"
             android:label="@string/title_activity_import_export"
             android:screenOrientation="portrait" >
         </activity>
