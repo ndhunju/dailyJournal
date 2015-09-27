@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,101 +9,105 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ndhunju.dailyjournal.JournalFragment" >
 
-    <TextView
-        android:id="@+id/fragment_journal_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
+        android:orientation="vertical">
         <TextView
-            android:id="@+id/fragment_journal_dr_cr_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/str_dr"
-            android:textSize="50sp" >
-        </TextView>
-        <EditText
-            android:id="@+id/fragment_home_amount_et"
+            android:id="@+id/fragment_journal_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="numberDecimal"
-            android:singleLine="true"
-            android:textColor="#5CB85C"
-            android:hint="@string/str_00.00"
-            android:textSize="50sp" >
-        </EditText>
-    </LinearLayout>
+            android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/activity_home_date_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        style="@style/Widget.Button_Normal"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/fragment_home_merchant_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/str_select_party"
-        style="@style/Widget.Button_Normal"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/fragment_journal_dr_cr_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_dr"
+                android:textSize="50sp" >
+            </TextView>
+            <EditText
+                android:id="@+id/fragment_home_amount_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:textColor="#5CB85C"
+                android:hint="@string/str_00.00"
+                android:textSize="50sp" >
+            </EditText>
+        </LinearLayout>
 
         <Button
-            android:id="@+id/fragment_home_debit_btn"
-            android:layout_width="wrap_content"
+            android:id="@+id/activity_home_date_btn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/str_dr"
-            style="@style/Widget.Button_Positive"/>
+            android:ems="10"
+            style="@style/Widget.Button_Normal"
+            />
 
         <Button
-            android:id="@+id/fragment_home_credit_btn"
-            android:layout_width="wrap_content"
+            android:id="@+id/fragment_home_merchant_btn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/str_cr"
-            style="@style/Widget.Button_Negative"/>
+            android:text="@string/str_select_party"
+            style="@style/Widget.Button_Normal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/fragment_home_debit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/str_dr"
+                style="@style/Widget.Button_Positive"/>
+
+            <Button
+                android:id="@+id/fragment_home_credit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/str_cr"
+                style="@style/Widget.Button_Negative"/>
+        </LinearLayout>
+
+         <Button
+            android:id="@+id/fragment_home_attach_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_attachment"
+             style="@style/Widget.Button_Normal"/>
+
+        <EditText
+            android:id="@+id/fragment_home_note_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_note"
+            />
+
+        <Button
+            android:id="@+id/fragment_home_save_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_save"
+            style="@style/Widget.Button_Neutral"/>
+
+        <Button
+            android:id="@+id/fragment_home_delete_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/str_delete"
+            style="@style/Widget.Button_Warning"
+            android:visibility="invisible" />
     </LinearLayout>
-
-     <Button
-        android:id="@+id/fragment_home_attach_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/str_attachment"
-         style="@style/Widget.Button_Normal"/>
-     
-    <EditText
-        android:id="@+id/fragment_home_note_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_note"
-        />
-
-    <Button
-        android:id="@+id/fragment_home_save_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/str_save"
-        style="@style/Widget.Button_Neutral"/>
-
-    <Button
-        android:id="@+id/fragment_home_delete_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/str_delete"
-        style="@style/Widget.Button_Warning"
-        android:visibility="invisible" />
-
-</LinearLayout>
+</ScrollView>

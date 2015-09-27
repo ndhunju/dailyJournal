@@ -144,7 +144,7 @@ public class UtilsLedger {
 	 * @param rowOnClickListener
 	 * @return
 	 */
-	public static TableRow createJournalRow(Activity activity, Journal journal, View.OnClickListener rowOnClickListener){
+	public static TableRow createLedgerRow(Activity activity, Journal journal, View.OnClickListener rowOnClickListener){
 		TableRow r = new TableRow(activity);
 		r.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		r.setWeightSum(LAYOUT_WT_SUM);

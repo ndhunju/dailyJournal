@@ -34,6 +34,10 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
     }
 
+    public static long create(Party party, SQLiteDatabase db){
+        return db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
+    }
+
     @Override
     public Party find(Long id) {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
@@ -49,6 +53,8 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_DR_AMT, amount, operation, PartyColumns.PARTY_ID, id);
     }
 
+
+
     public int updateCr(long id, double amount, String operation){
         return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_CR_AMT, amount, operation, PartyColumns.PARTY_ID, id);
     }
@@ -60,8 +66,6 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         sqlSt.bindLong(2, val);
         return sqlSt.executeUpdateDelete();
     }
-
-
 
 
 
@@ -122,7 +126,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return db.delete(PartyColumns.TABLE_PARTY, null,null);
     }
 
-    public ContentValues toContentValues(Party party){
+    public static ContentValues toContentValues(Party party){
         ContentValues values = new ContentValues();
         //values.put(PartyColumns.PARTY_ID, party.getId()); //will never change
         values.put(PartyColumns.COL_PARTY_NAME, party.getName());
@@ -133,7 +137,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return values;
     }
 
-    public Party fromCursor(Cursor c){
+    public static Party fromCursor(Cursor c){
         long id = c.getLong(c.getColumnIndexOrThrow(PartyColumns.PARTY_ID));
         String name = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_NAME));
         String phone = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_PHONE));

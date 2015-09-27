@@ -200,6 +200,25 @@ public class UtilsFile {
         return file;
     }
 
+	/**
+	 * Create a temporary image file in public Picture directory. It can be used to save an
+	 * image taken by camera app since camera app cannot access thus save image to app's
+	 * private folder
+	 * @return
+	 */
+	public static File createFileInDocumentFolder(String fileName) {
+		File path = Environment.getExternalStoragePublicDirectory(
+				Environment.DIRECTORY_DOCUMENTS);
+		// Make sure the Pictures directory exists.
+		path.mkdirs();
+		File file = new File(path, fileName);
+		return file;
+	}
+
+    public static String getPublicDocumentDir(){
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
+    }
+
     public static boolean deleteExternalStoragePublicPicture() {
         // Create a path where we will place our picture in the user's
         // public pictures directory and delete the file.  If external

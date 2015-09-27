@@ -28,6 +28,10 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         return db.insert(JournalColumns.TABLE_JOURNAL, null, toContentValues(journal));
     }
 
+    public static long create(Journal journal, SQLiteDatabase db){
+        return db.insert(JournalColumns.TABLE_JOURNAL, null, toContentValues(journal));
+    }
+
     @Override
     public Journal find(Long aLong) {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
@@ -89,7 +93,7 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         db.delete(JournalColumns.TABLE_JOURNAL, DailyJournalContract.PartyColumns.PARTY_ID + "=" + partyId, null);
     }
 
-    public ContentValues toContentValues(Journal journal){
+    public static ContentValues toContentValues(Journal journal){
         ContentValues values = new ContentValues();
         //values.put(JournalColumns.JOURNAL_ID, journal.getId());
         values.put(JournalColumns.COL_JOURNAL_AMOUNT, journal.getAmount());
@@ -106,7 +110,7 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         return db.delete(JournalColumns.TABLE_JOURNAL, null,null);
     }
 
-    public Journal fromCursor(Cursor c){
+    public static Journal fromCursor(Cursor c){
         long id = c.getLong(c.getColumnIndexOrThrow(JournalColumns.JOURNAL_ID));
         long date = c.getLong(c.getColumnIndexOrThrow(JournalColumns.COL_JOURNAL_DATE));
         long addedDate = c.getLong(c.getColumnIndexOrThrow(JournalColumns.COL_JOURNAL_ADDED_DATE));

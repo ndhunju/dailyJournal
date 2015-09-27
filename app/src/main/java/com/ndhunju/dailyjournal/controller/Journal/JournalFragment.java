@@ -139,6 +139,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
 		idTV = (TextView) v.findViewById(R.id.fragment_journal_id);
 		idTV.setText(UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
+		if(journalId == Constants.ID_NEW_JOURNAL) idTV.setVisibility(View.GONE);
 
 		drCrTv = (TextView) v.findViewById(R.id.fragment_journal_dr_cr_tv);
 

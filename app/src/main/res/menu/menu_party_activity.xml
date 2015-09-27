@@ -8,6 +8,12 @@
         android:title="@string/str_information"
         tools:ignore="AppCompatResource"/>
     <item
+        android:id="@+id/menu_party_activity_share"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/str_share"
+        android:icon="@android:drawable/ic_menu_share"
+        tools:ignore="AppCompatResource"/>
+    <item
         android:id="@+id/menu_party_activity_delete"
         android:showAsAction="ifRoom|withText"
         android:icon="@android:drawable/ic_delete"

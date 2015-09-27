@@ -29,6 +29,10 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
         return db.insert(AttachmentColumns.TABLE_NAME_ATTACHMENTS, null, toContentValues(attch));
     }
 
+    public static long create(Attachment attachment, SQLiteDatabase db){
+        return db.insert(AttachmentColumns.TABLE_NAME_ATTACHMENTS, null, toContentValues(attachment));
+    }
+
     @Override
     public Attachment find(Long id) {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
@@ -94,7 +98,7 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
         return db.delete(AttachmentColumns.TABLE_NAME_ATTACHMENTS, null,null);
     }
 
-    public ContentValues toContentValues(Attachment attch){
+    public static ContentValues toContentValues(Attachment attch){
         ContentValues values = new ContentValues();
         //values.put(AttachmentColumns.ATTACHMENT_ID, attch.getId());
         values.put(AttachmentColumns.COL_ATTACHMENT_NAME, attch.getPath());
@@ -102,7 +106,7 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
         return values;
     }
 
-    public Attachment fromCursor(Cursor c){
+    public static Attachment fromCursor(Cursor c){
         long id = c.getLong((c.getColumnIndexOrThrow(AttachmentColumns.ATTACHMENT_ID)));
         String name = c.getString(c.getColumnIndexOrThrow(AttachmentColumns.COL_ATTACHMENT_NAME));
         long journalId = c.getLong(c.getColumnIndexOrThrow(AttachmentColumns.COL_FK_JOURNAL_ID));

@@ -9,24 +9,19 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.Journal.JournalActivity;
 import com.ndhunju.dailyjournal.controller.LockScreenActivity;
-import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.service.UtilsFormat;
-import com.ndhunju.dailyjournal.service.UtilsLedger;
 import com.ndhunju.dailyjournal.service.UtilsView;
-
-import java.util.ArrayList;
 
 public class PartyActivity extends FragmentActivity {
 
@@ -37,7 +32,8 @@ public class PartyActivity extends FragmentActivity {
     //Variables
 	long mPartyId;
 	TextView balanceTV;
-	LinearLayout tableLL;
+	ListView ledgerListView;
+	LedgerAdapter ledgerAdapter;
 
 	Services mServices;
 
@@ -51,7 +47,7 @@ public class PartyActivity extends FragmentActivity {
 
         //Wire up the widgets/view
 		balanceTV = (TextView) findViewById(R.id.activity_party_balance_tv);
-		tableLL = (LinearLayout)findViewById(R.id.activity_party_ll);
+		ledgerListView = (ListView)findViewById(R.id.activity_party_ll);
 
 		mServices = Services.getInstance(PartyActivity.this);
 
@@ -60,9 +56,22 @@ public class PartyActivity extends FragmentActivity {
 
 		double balance = party.calculateBalances();
 		balanceTV.setText(UtilsFormat.formatCurrency(balance));
-		balanceTV.setTextColor(balance > 0 ? Color.parseColor(Constants.RED): Color.parseColor(Constants.GREEN));
+		balanceTV.setTextColor(balance > 0 ? Color.parseColor(Constants.RED) : Color.parseColor(Constants.GREEN));
 
-		tableLL.addView(createLedgerView(party));
+		ledgerAdapter = new LedgerAdapter(getBaseContext(), mServices.getJournals(mPartyId));
+		ledgerListView.setAdapter(ledgerAdapter);
+		ledgerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Open journal activity to show the detail info of the clicked Journal
+                Intent intent = new Intent(PartyActivity.this, JournalActivity.class);
+                intent.putExtra(Constants.KEY_JOURNAL_ID, l);
+                intent.putExtra(Constants.KEY_PARTY_ID, mPartyId);
+                startActivityForResult(intent, REQUEST_JOURNAL_CHGD);
+            }
+        });
+
+		ledgerListView.addFooterView(getFooterRow(party));
 
 		setTitle(party.getName());
 
@@ -70,7 +79,27 @@ public class PartyActivity extends FragmentActivity {
 
 	}
 
-	@Override
+    private TableRow getFooterRow(Party party) {
+        TableRow footerRow = (TableRow)getLayoutInflater().inflate(R.layout.ledger_row, null);
+        TextView col0 = (TextView) footerRow.findViewById(R.id.ledger_row_col0);
+        TextView col1 = (TextView) footerRow.findViewById(R.id.ledger_row_col1);
+        TextView col2 = (TextView) footerRow.findViewById(R.id.ledger_row_col2);
+        TextView col3 = (TextView) footerRow.findViewById(R.id.ledger_row_col3);
+        TextView col4 = (TextView) footerRow.findViewById(R.id.ledger_row_col4);
+
+        col1.setText("");
+        col2.setText(getString(R.string.str_total));
+        col3.setText(UtilsFormat.formatCurrency(party.getDebitTotal()));
+        col4.setText(UtilsFormat.formatCurrency(party.getCreditTotal()));
+        col0.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
+        col1.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
+        col2.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
+        col3.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
+        col4.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
+        return footerRow;
+    }
+
+    @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != Activity.RESULT_OK)
 			return;
@@ -88,8 +117,8 @@ public class PartyActivity extends FragmentActivity {
                 balanceTV.setText(UtilsFormat.formatCurrency(balance));
                 balanceTV.setTextColor(balance > 0 ? Color.parseColor(Constants.RED) : Color.parseColor(Constants.GREEN));
 
-                tableLL.removeAllViews();
-                tableLL.addView(createLedgerView(party));
+                ledgerAdapter = new LedgerAdapter(getBaseContext(), mServices.getJournals(mPartyId));
+                ledgerListView.setAdapter(ledgerAdapter);
 
                 //Alert the user if balance is negative
                 break;
@@ -103,38 +132,6 @@ public class PartyActivity extends FragmentActivity {
                 setTitle(data.getStringExtra(Constants.KEY_PARTY_NAME));
                 break;
 		}
-	}
-
-    /**
-     * This method creates a Ledger(Table) of the passed Party object. It takes balance of the mParty as well since
-     * the balance is usually already calculated and calculateBalance() increases overhead
-     * @param party
-     * @return
-     */
-	public TableLayout createLedgerView(Party party) {
-
-		TableLayout ledgerTL = new TableLayout(PartyActivity.this);
-		ledgerTL.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		ledgerTL.addView(UtilsLedger.createLedgerHeader(PartyActivity.this));
-
-		ArrayList<Journal> journals = mServices.getJournals(mPartyId);
-		for (final Journal j :  journals) {
-			ledgerTL.addView(UtilsLedger.createJournalRow(PartyActivity.this, j,
-					new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							//Open journal activity to show the detail info of the clicked Journal
-							Intent i = new Intent(PartyActivity.this, JournalActivity.class);
-							i.putExtra(Constants.KEY_JOURNAL_ID, j.getId());
-							i.putExtra(Constants.KEY_PARTY_ID, j.getPartyId());
-							startActivityForResult(i, REQUEST_JOURNAL_CHGD);
-						}
-					}));
-		}
-
-		ledgerTL.addView(UtilsLedger.createLedgerFooter(PartyActivity.this, party.getDebitTotal(), party.getCreditTotal()));
-
-		return ledgerTL;
 	}
 
 	@Override
@@ -169,6 +166,10 @@ public class PartyActivity extends FragmentActivity {
 					}
 				}, null);
 				break;
+
+            case R.id.menu_party_activity_share:
+                new ReportGeneratorAsync(PartyActivity.this).execute(mPartyId);
+                break;
 		}
 
 		return super.onOptionsItemSelected(item);

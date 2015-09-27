@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.model;
+package com.ndhunju.dailyjournal.controller;
 
 import java.util.Calendar;
 
@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.NotificationService;
 import com.ndhunju.dailyjournal.service.Constants;
 
 public class Alarm {

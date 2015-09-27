@@ -11,7 +11,6 @@ import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.Journal.JournalActivity;
-import com.ndhunju.dailyjournal.model.Alarm;
 
 public class NotificationService extends IntentService{
 	/*Imp Note: Services needs to be declared in AndroidManifest.xml file to work!!!!*/

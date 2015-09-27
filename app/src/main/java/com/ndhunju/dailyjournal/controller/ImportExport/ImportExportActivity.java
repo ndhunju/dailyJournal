@@ -19,11 +19,15 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.FolderPicker.FolderPickerDialogFragment;
 import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.LockScreenActivity;
+import com.ndhunju.dailyjournal.controller.Party.ReportGeneratorAsync;
+import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.JsonConverter;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.service.UtilsFile;
 import com.ndhunju.dailyjournal.service.UtilsView;
+
+import java.util.List;
 
 public class ImportExportActivity extends Activity implements OnDialogBtnClickedListener {
 
@@ -39,6 +43,7 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
     private static final int REQUEST_CODE_GDRIVE_CREATOR = 1185;
     private static final int REQUEST_CODE_GDRIVE_PICKER = 1189;
     private static final int REQUEST_CODE_GDRIVE_RESOLUTION = 1258;
+    private static final int REQUEST_CODE_BACKUP_DIR_PRINTABLE = 1264;
 
 
     private GoogleApiClientManager mGoogleClientMgr;
@@ -129,6 +134,15 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
                                         startActivityForResult(intent, REQUEST_CODE_PICK_BACKUP);
                                     }
                                 }, null);
+                    }
+                });
+
+        ((Button) findViewById(R.id.activity_import_export_export_printable_btn))
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
+                        dpdf.show(getFragmentManager(), TAG);
                     }
                 });
 
@@ -264,6 +278,19 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
                     String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
                     new BackUpAsyncTask(ImportExportActivity.this).execute(dir);
                 }
+                break;
+
+            case REQUEST_CODE_BACKUP_DIR_PRINTABLE:
+                if (result != Activity.RESULT_OK)
+                    UtilsView.toast(getBaseContext(), getString(R.string.str_failed));
+                if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
+                    data.getData();
+                    String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
+                    List<Party> parties = Services.getInstance(ImportExportActivity.this).getParties();
+                    new ExportPartiesReportAsync(ImportExportActivity.this, dir).execute(parties);
+                }
+
+                break;
 
         }
 
