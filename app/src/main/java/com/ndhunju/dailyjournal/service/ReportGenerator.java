@@ -1,6 +1,8 @@
 package com.ndhunju.dailyjournal.service;
 
 import android.content.Context;
+import android.media.MediaScannerConnection;
+import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -77,7 +79,6 @@ public class ReportGenerator{
         double balance = 0;
         int no = 1;
         for(Journal journal: mJournals){
-            //notifyObservers(no/mJournals.size()); //notify the progress
             sb.append(addSpaces(String.valueOf(no++),3));
             sb.append(addSpaces(UtilsFormat.formatDate(new Date(journal.getDate()), UtilsFormat.DATE_FORMAT)));
             if(journal.getType() == Journal.Type.Debit){
@@ -169,6 +170,10 @@ public class ReportGenerator{
 
             bw.flush();
             bw.close();
+
+            //to let know that a new file has been created so that it appears in the computer
+            MediaScannerConnection.scanFile(mContext, new String[]{reportFile.getAbsolutePath()}, null, null);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Pincode"
-        android:icon="@android:drawable/ic_lock_lock"
-        >
+    <PreferenceCategory android:title="@string/str_pincode"
+        android:icon="@android:drawable/ic_lock_lock">
+
         <CheckBoxPreference
-            android:title="@string/str_enable_pin_code_lock"
-            android:defaultValue="false"
             android:key="@string/key_pref_pincode_cb"
-            android:id="@+id/preference_pincode_cb">
-        </CheckBoxPreference>
+            android:id="@+id/preference_pincode_cb"
+            android:title="@string/str_enable"
+            android:defaultValue="false"/>
+
         <EditTextPreference
+            android:dependency="@string/key_pref_pincode_cb"
             android:key="@string/key_pref_pincode_val_et"
             android:id= "@+id/preference_pincode_val_et"
+            android:summary="@string/sum_pincode_val"
             android:title="@string/str_pincode"
-            android:defaultValue=""
             android:inputType="number"
-            android:maxLength="10"
-            />
+            android:defaultValue=""
+            android:maxLength="10" />
+
         <EditTextPreference
+            android:dependency="@string/key_pref_pincode_cb"
             android:key="@string/key_pref_pincode_time_et"
             android:id="@+id/preference_pincode_time_et"
-            android:title="@string/str_lock_after"
             android:summary="@string/sum_lock_time"
+            android:title="@string/str_lock_time"
             android:inputType="number"
-            android:maxLength="2"
-            />
+            android:defaultValue="3"
+            android:maxLength="2"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen><!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/xml/preferences.xml -->

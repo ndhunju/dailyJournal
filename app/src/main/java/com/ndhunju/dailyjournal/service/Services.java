@@ -174,12 +174,13 @@ public class Services {
 	}
 
 
-	public boolean deleteParty(long partyId){
+	public boolean deleteParty(Party party){
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		db.beginTransaction();;
 		try{
-			deleteAllJournals(partyId);
-			partyDAO.delete(partyId);
+			deleteAllJournals(party.getId());
+			UtilsFile.deleteFile(party.getPicturePath());
+			partyDAO.delete(party.getId());
 			db.setTransactionSuccessful();
 		}catch (Exception e){
 			e.printStackTrace();
@@ -258,6 +259,11 @@ public class Services {
 
 		return  success;
 
+	}
+
+	public boolean deleteJournal(long journalId){
+		Journal journal = getJournal(journalId);
+		return deleteJournal(journal);
 	}
 
 	/**

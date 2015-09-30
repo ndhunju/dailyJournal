@@ -134,6 +134,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         values.put(PartyColumns.COL_PARTY_TYPE, party.getType().toString());
         values.put(PartyColumns.COL_PARTY_DR_AMT, party.getDebitTotal());
         values.put(PartyColumns.COL_PARTY_CR_AMT, party.getCreditTotal());
+        values.put(PartyColumns.COL_PARTY_PICTURE, party.getPicturePath());
         return values;
     }
 
@@ -146,12 +147,14 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         Party.Type type = typeStr.equals("Debitors") ? Party.Type.Debtors : Party.Type.valueOf(typeStr);
         double drAmt = c.getDouble(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_DR_AMT));
         double crAmt = c.getDouble(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_CR_AMT));
+        String picture = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_PICTURE));
 
         Party party = new Party(name, id);
         party.setPhone(phone);
         party.setType(type);
         party.setDebitTotal(drAmt);
         party.setCreditTotal(crAmt);
+        party.setPicturePath(picture);
         //party.addJournal();
 
         return party;

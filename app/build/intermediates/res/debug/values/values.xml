@@ -7,6 +7,9 @@
         <item>Attach Picture</item>
         <item>See Attachment</item>
     </string-array>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/values.xml -->
+    <eat-comment/>
+    <bool name="noteCol">false</bool>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="black_overlay">#66000000</color>
@@ -40,8 +43,16 @@
     <declare-styleable name="LoadingImageView"><attr format="enum" name="imageAspectRatioAdjust"><enum name="none" value="0"/><enum name="adjust_width" value="1"/><enum name="adjust_height" value="2"/></attr><attr format="float" name="imageAspectRatio"/><attr format="boolean" name="circleCrop"/></declare-styleable>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">5dp</dimen>
+    <dimen name="activity_vertical_margin">5dp</dimen>
+    <dimen name="button_height">40dp</dimen>
+    <dimen name="party_pic_width">100dp</dimen>
+    <dimen name="text_size_large">22sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_micro">12sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_xlarge">30sp</dimen>
+    <dimen name="text_size_xxlarge">40sp</dimen>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/res/values/version.xml -->
     <eat-comment/>
     <integer name="google_play_services_version">7571000</integer>
@@ -90,6 +101,9 @@
     <string name="common_open_on_phone">Open on phone</string>
     <string name="common_signin_button_text">Sign in</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/values.xml -->
+    <eat-comment/>
+    <string name="dateFormat">MMM dd</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="hint_note">Write notes here....</string>
@@ -126,6 +140,7 @@
     <string name="str_backup">Backup</string>
     <string name="str_balance">Balance :</string>
     <string name="str_choose">Choose</string>
+    <string name="str_contact">Contact</string>
     <string name="str_cr">Cr. </string>
     <string name="str_create_backup_in_google_drive">Create Backup in Google Drive</string>
     <string name="str_create_backup_in_sd">Create Backup in SD Card</string>
@@ -133,6 +148,7 @@
     <string name="str_date">Date</string>
     <string name="str_delete">Delete</string>
     <string name="str_dr">Dr. </string>
+    <string name="str_edit">Edit</string>
     <string name="str_enable">Enable</string>
     <string name="str_erase_all">Erase All</string>
     <string name="str_export_printable">Export Printable</string>
@@ -142,6 +158,7 @@
     <string name="str_google_drive">Google Drive</string>
     <string name="str_id">ID :</string>
     <string name="str_import_json_from_sd">Import JSON Backup File</string>
+    <string name="str_import_party">Import Party</string>
     <string name="str_information">Information</string>
     <string name="str_journal">Journal</string>
     <string name="str_lock">Lock</string>
@@ -153,6 +170,7 @@
     <string name="str_note">Note</string>
     <string name="str_parties">Parties</string>
     <string name="str_party">Party</string>
+    <string name="str_phone_number">Phone Number</string>
     <string name="str_pick_a_date">Pick a Date</string>
     <string name="str_pincode">Pincode</string>
     <string name="str_preference">Preference</string>
@@ -213,7 +231,7 @@
         <item name="android:background">@drawable/button_negative</item>
     </style>
     <style name="Widget.Button_Neutral" parent="android:Widget">
-        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_margin">3dp</item>
         <item name="android:background">@drawable/button_neutral</item>
         <item name="android:textAllCaps">true</item>
     </style>

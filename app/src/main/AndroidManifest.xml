@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ndhunju.dailyjournal"
-    android:versionCode="8"
-    android:versionName="4" >
+    android:versionCode="10"
+    android:versionName="5.2" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -17,7 +18,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_ganesh_book"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:description="@string/app_descrip">
         <service android:name=".controller.NotificationService" />
 
         <activity
@@ -36,10 +38,10 @@
             android:name=".controller.Party.PartyListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".controller.Party.PartyActivity"
+            android:name=".controller.Party.JournalListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".controller.Party.PartyInformationActivity"
+            android:name=".controller.Party.PartyActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".viewPager.ViewPagerActivity"
@@ -56,6 +58,8 @@
             android:label="@string/title_activity_lock_screen"
             android:screenOrientation="portrait" >
         </activity>
+        <!--<service android:name=".controller.NotificationService"
+            android:exported="false"/>-->
     </application>
 
 </manifest>

@@ -37,26 +37,33 @@ public class LedgerAdapter extends ArrayAdapter<Journal> {
         if(convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.ledger_row, null);
 
-        TextView col0 = (TextView) convertView.findViewById(R.id.ledger_row_col0);
-        TextView col1 = (TextView) convertView.findViewById(R.id.ledger_row_col1);
-        TextView col2 = (TextView) convertView.findViewById(R.id.ledger_row_col2);
-        TextView col3 = (TextView) convertView.findViewById(R.id.ledger_row_col3);
-        TextView col4 = (TextView) convertView.findViewById(R.id.ledger_row_col4);
 
-        //Log.d("journals " + getCount(), " pos: " + position);
+
+        TextView idCol = (TextView) convertView.findViewById(R.id.ledger_row_col0);
+        TextView dateCol = (TextView) convertView.findViewById(R.id.ledger_row_col1);
+        TextView noteCol = (TextView) convertView.findViewById(R.id.ledger_row_col2);
+        TextView drCol = (TextView) convertView.findViewById(R.id.ledger_row_col3);
+        TextView crCol = (TextView) convertView.findViewById(R.id.ledger_row_col4);
+
+        //Log.d("journals " + getCount(), " pos: " + position + "date : " +  getContext().getString(R.string.dateFormat));
 
         Journal journal = getItem(position);
-        col0.setText(String.valueOf(getPosition(journal)+1));
-        col1.setText(UtilsFormat.formatDate(new Date(journal.getDate()), UtilsFormat.DATE_FORMAT));
-        col2.setText(journal.getNote());
+        idCol.setText(String.valueOf(getPosition(journal) + 1));
+        dateCol.setText(UtilsFormat.formatDate(new Date(journal.getDate()),
+                getContext().getString(R.string.dateFormat)));
+
+        boolean showNoteCol = getContext().getResources().getBoolean(R.bool.noteCol);
+        if(showNoteCol) {noteCol.setText(journal.getNote());}
+        else{noteCol.setVisibility(View.GONE); }
 
         if (journal.getType().equals(Journal.Type.Debit)) {
-            col3.setText(UtilsFormat.formatCurrency(journal.getAmount()));
-            col4.setText("");
+            drCol.setText(UtilsFormat.formatCurrency(journal.getAmount()));
+            crCol.setText("");
         } else {
-            col4.setText(UtilsFormat.formatCurrency(journal.getAmount()));
-            col3.setText("");
+            crCol.setText(UtilsFormat.formatCurrency(journal.getAmount()));
+            drCol.setText("");
         }
+
         return convertView;
     }
 }

@@ -18,6 +18,7 @@ public class Party {
 	private String mName;
 	private String mPhone;
 	private double mDebitTotal;
+	private String mPicturePath;
 	private double mCreditTotal;
 
 	//private ArrayList<Journal> mJournals;
@@ -28,7 +29,8 @@ public class Party {
 		mName = name;
 		mDebitTotal = 0;
 		mCreditTotal = 0;
-		mType = Type.Debtors;
+        mPicturePath = "";
+        mType = Type.Debtors;
 	}
 
 	public Party(String name, long id){
@@ -68,6 +70,13 @@ public class Party {
 		this.mType = mType;
 	}
 
+	public String getPicturePath(){
+		return this.mPicturePath;
+	}
+
+	public void setPicturePath(String path){
+		this.mPicturePath = path;
+	}
 	/**
 	 * Returns the balance of this party. <b>NOTE: </b>This method should be used as less as
 	 * possible as it loops through all the journals to calculate the total debit, credit and balance.

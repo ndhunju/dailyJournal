@@ -1,6 +1,8 @@
 package com.ndhunju.dailyjournal.service;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Toast;
@@ -48,5 +50,15 @@ public class UtilsView {
                 .setPositiveButton(android.R.string.ok, OkListener)
                 .setCancelable(false)
                 .create().show();
+    }
+
+    public static ProgressDialog createProgressDialog(Activity mActivity, String msg){
+        ProgressDialog pd= new ProgressDialog(mActivity);
+        pd.setIndeterminate(true);
+        pd.setMessage(msg);
+        pd.setCancelable(false);
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+        return pd;
     }
 }

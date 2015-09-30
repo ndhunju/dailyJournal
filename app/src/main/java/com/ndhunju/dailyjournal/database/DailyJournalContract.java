@@ -34,6 +34,7 @@ public final class DailyJournalContract {
         public static final String COL_PARTY_TYPE = "type";
         public static final String COL_PARTY_DR_AMT= "drAmt";
         public static final String COL_PARTY_CR_AMT= "crAmt";
+        public static final String COL_PARTY_PICTURE = "picturePath";
 
         public static final String SQL_CREATE_ENTRIES_PARTY =
                 "CREATE TABLE " + TABLE_PARTY +
@@ -43,7 +44,8 @@ public final class DailyJournalContract {
                         COL_PARTY_PHONE + TEXT_TYPE + COMMA_SEP +
                         COL_PARTY_TYPE + TEXT_TYPE + COMMA_SEP +
                         COL_PARTY_DR_AMT + DOUBLE + COMMA_SEP +
-                        COL_PARTY_CR_AMT +  DOUBLE +
+                        COL_PARTY_CR_AMT +  DOUBLE + COMMA_SEP +
+                        COL_PARTY_PICTURE + TEXT_TYPE +
                         " )";
 
         public static final String SQL_DROP_ENTRIES_PARTY =

@@ -19,9 +19,13 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.UUID;
 
@@ -36,7 +40,7 @@ public class UtilsFile {
 
 	//File Extension types
     public static final String ZIP_EXT = ".zip";
-	private static final String IMG_EXT = ".png";
+	public static final String IMG_EXT = ".png";
 	public static final String ZIP_EXT_OLD = ".dj";
 	public static final String BACK_FILE_TYPE = "application/zip";
     public static final String TEMP_IMG_FILE_NAME = "temp" + IMG_EXT;
@@ -308,6 +312,21 @@ public class UtilsFile {
 		}
 	}
 
+	public static void copyFile(File from, File to) throws IOException {
+		InputStreamReader fromIsr = new FileReader(from);
+		OutputStreamWriter toOsr = new OutputStreamWriter(new FileOutputStream(to));
+
+		char[] buffer = new char[2048];
+		int c;
+		while ((c = fromIsr.read(buffer)) != -1) {
+			toOsr.write(buffer, 0, c);
+		}
+
+		toOsr.flush();
+		toOsr.close();
+		fromIsr.close();
+	}
+
 	public static byte[] read(File file) throws IOException {
 
 		ByteArrayOutputStream ous = null;
@@ -372,6 +391,18 @@ public class UtilsFile {
 
 	public static String getZipFileName(){
 		return "dailyJournal-" + UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT_FOR_FILE) + UtilsFile.ZIP_EXT;
+	}
+
+	public static File getPartyPicture(Party party, Context con){
+		File partyFolder = getPartyFolder(getAttachmentFolder(getAppFolder(con),false), party.getName(), false);
+		File partyPic = new File(partyFolder, party.getName() + IMG_EXT);
+		if(partyPic.exists()) return  partyPic;
+		else try {
+			partyPic.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return partyPic;
 	}
 
     /**

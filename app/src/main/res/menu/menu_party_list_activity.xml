@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_party_list_activity_add"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/str_new"
+        android:icon="@android:drawable/ic_menu_add"
+        />
+
+    <item
+        android:id="@+id/menu_party_list_activity_import"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/str_import_party"
+        />
+
+
+</menu>

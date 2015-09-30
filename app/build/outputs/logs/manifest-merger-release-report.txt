@@ -35,28 +35,30 @@ uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from AndroidManifest.xml:12:5
 	android:name
 		ADDED from AndroidManifest.xml:12:22
+uses-permission#android.permission.READ_CONTACTS
+ADDED from AndroidManifest.xml:13:5
+	android:name
+		ADDED from AndroidManifest.xml:13:22
 uses-feature#android.hardware.camera
-ADDED from AndroidManifest.xml:14:5
+ADDED from AndroidManifest.xml:15:5
 	android:name
-		ADDED from AndroidManifest.xml:14:19
-android:uses-permission#android.permission.READ_PHONE_STATE
-ADDED from AndroidManifest.xml:16:5
-	android:name
-		ADDED from AndroidManifest.xml:16:30
+		ADDED from AndroidManifest.xml:15:19
 application
-ADDED from AndroidManifest.xml:18:5
+ADDED from AndroidManifest.xml:17:5
 MERGED from com.android.support:support-v4:22.2.0:22:5
 MERGED from com.google.android.gms:play-services-drive:7.5.0:19:5
 MERGED from com.google.android.gms:play-services-base:7.5.0:20:5
 MERGED from com.android.support:support-v4:22.2.0:22:5
 	android:label
-		ADDED from AndroidManifest.xml:21:9
-	android:allowBackup
-		ADDED from AndroidManifest.xml:19:9
-	android:icon
 		ADDED from AndroidManifest.xml:20:9
-	android:theme
+	android:allowBackup
+		ADDED from AndroidManifest.xml:18:9
+	android:icon
+		ADDED from AndroidManifest.xml:19:9
+	android:description
 		ADDED from AndroidManifest.xml:22:9
+	android:theme
+		ADDED from AndroidManifest.xml:21:9
 service#com.ndhunju.dailyjournal.controller.NotificationService
 ADDED from AndroidManifest.xml:23:9
 	android:name
@@ -77,25 +79,25 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:31:17
 	android:name
 		ADDED from AndroidManifest.xml:31:27
-activity#com.ndhunju.dailyjournal.controller.JournalActivity
+activity#com.ndhunju.dailyjournal.controller.Journal.JournalActivity
 ADDED from AndroidManifest.xml:34:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:36:13
 	android:name
 		ADDED from AndroidManifest.xml:35:13
-activity#com.ndhunju.dailyjournal.controller.PartyListActivity
+activity#com.ndhunju.dailyjournal.controller.Party.PartyListActivity
 ADDED from AndroidManifest.xml:37:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:39:13
 	android:name
 		ADDED from AndroidManifest.xml:38:13
-activity#com.ndhunju.dailyjournal.controller.PartyActivity
+activity#com.ndhunju.dailyjournal.controller.Party.JournalListActivity
 ADDED from AndroidManifest.xml:40:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:42:13
 	android:name
 		ADDED from AndroidManifest.xml:41:13
-activity#com.ndhunju.dailyjournal.controller.PartyInformationActivity
+activity#com.ndhunju.dailyjournal.controller.Party.PartyActivity
 ADDED from AndroidManifest.xml:43:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:45:13
@@ -107,7 +109,7 @@ ADDED from AndroidManifest.xml:46:9
 		ADDED from AndroidManifest.xml:48:13
 	android:name
 		ADDED from AndroidManifest.xml:47:13
-activity#com.ndhunju.dailyjournal.controller.ImportExportActivity
+activity#com.ndhunju.dailyjournal.controller.ImportExport.ImportExportActivity
 ADDED from AndroidManifest.xml:51:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:54:13

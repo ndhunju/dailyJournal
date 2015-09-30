@@ -322,15 +322,11 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //If the result is not success, return
-		if (resultCode != Activity.RESULT_OK){
-			UtilsView.alert(getActivity(), String.format(getString(R.string.msg_failed), getString(R.string.str_save)));
-			return;
-		}
-
 		switch (requestCode) {
 
             case REQUEST_TAKE_PHOTO: //Picture was taken from the Camera App
+
+				showResult(resultCode);
 
 				//Since camera cannot save picture in file created inside app's folder
 				//1. Create a file in external mServices
@@ -363,6 +359,8 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
             case REQUEST_IMAGE:  //Image was picked from the mServices
 
+				showResult(resultCode);
+
                 Uri selectedImage = data.getData();
                 Bitmap bitmap;
                 try {
@@ -380,7 +378,9 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
                 break;
 
             case REQUEST_CHGD_ATTACHMENTS: //Attachments were viewed and maybe changed as well
-                boolean isAttachmentChanged = data.getBooleanExtra(Constants.KEY_ATTACHMENTS_IS_CHGD, false);
+
+				showResult(resultCode);
+				boolean isAttachmentChanged = data.getBooleanExtra(Constants.KEY_ATTACHMENTS_IS_CHGD, false);
                 if(isAttachmentChanged){
                     //If attachments were changed, update it
 					ArrayList<String> filePath = data.getStringArrayListExtra(Constants.KEY_ATTACHMENTS);
@@ -402,11 +402,20 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 				break;
 
 			case REQUEST_CODE_IMPORT_OLD_DATA: //Old Data were imported to new directory
+				showResult(resultCode);
 				Log.i(TAG, "Importing old data finished");
 				break;
 
         }
 
+	}
+
+	public void showResult(int resultCode){
+		//If the result is not success, return
+		if (resultCode != Activity.RESULT_OK){
+			UtilsView.alert(getActivity(), String.format(getString(R.string.msg_failed), getString(R.string.str_save)));
+			return;
+		}
 	}
 	
 	@Override
@@ -454,6 +463,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 						.addToBackStack(null)
 						.commit();
 				break;
+
 
 		}
 

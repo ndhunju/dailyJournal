@@ -20,7 +20,7 @@
     </style>
 
     <style name="Widget.Button_Neutral" parent="android:Widget">
-        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_margin">3dp</item>
         <item name="android:background">@drawable/button_neutral</item>
         <item name="android:textAllCaps">true</item>
     </style>

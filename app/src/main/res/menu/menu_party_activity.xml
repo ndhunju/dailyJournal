@@ -6,6 +6,7 @@
         android:id="@+id/menu_party_activity_info"
         android:showAsAction="ifRoom|withText"
         android:title="@string/str_information"
+        android:icon="@android:drawable/ic_menu_info_details"
         tools:ignore="AppCompatResource"/>
     <item
         android:id="@+id/menu_party_activity_share"

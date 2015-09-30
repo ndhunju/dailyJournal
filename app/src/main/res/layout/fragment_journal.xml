@@ -17,7 +17,7 @@
             android:id="@+id/fragment_journal_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size_small" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/str_dr"
-                android:textSize="50sp" >
+                android:textSize="@dimen/text_size_xxlarge" >
             </TextView>
             <EditText
                 android:id="@+id/fragment_home_amount_et"
@@ -39,15 +39,16 @@
                 android:inputType="numberDecimal"
                 android:singleLine="true"
                 android:textColor="#5CB85C"
+                android:ellipsize="start"
                 android:hint="@string/str_00.00"
-                android:textSize="50sp" >
+                android:textSize="@dimen/text_size_xxlarge" >
             </EditText>
         </LinearLayout>
 
         <Button
             android:id="@+id/activity_home_date_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:ems="10"
             style="@style/Widget.Button_Normal"
             />
@@ -55,9 +56,9 @@
         <Button
             android:id="@+id/fragment_home_merchant_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:text="@string/str_select_party"
-            style="@style/Widget.Button_Normal"/>
+            style="@style/Widget.Button_Normal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,7 +68,7 @@
             <Button
                 android:id="@+id/fragment_home_debit_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_weight="1"
                 android:text="@string/str_dr"
                 style="@style/Widget.Button_Positive"/>
@@ -75,7 +76,7 @@
             <Button
                 android:id="@+id/fragment_home_credit_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_weight="1"
                 android:text="@string/str_cr"
                 style="@style/Widget.Button_Negative"/>
@@ -84,7 +85,7 @@
          <Button
             android:id="@+id/fragment_home_attach_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:text="@string/str_attachment"
              style="@style/Widget.Button_Normal"/>
 
@@ -98,16 +99,17 @@
         <Button
             android:id="@+id/fragment_home_save_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:text="@string/str_save"
             style="@style/Widget.Button_Neutral"/>
 
         <Button
             android:id="@+id/fragment_home_delete_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:text="@string/str_delete"
             style="@style/Widget.Button_Warning"
             android:visibility="invisible" />
+
     </LinearLayout>
 </ScrollView>

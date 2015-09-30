@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ndhunju.dailyjournal"
-    android:versionCode="8"
-    android:versionName="4" >
+    android:versionCode="9"
+    android:versionName="5" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -36,10 +37,10 @@
             android:name="com.ndhunju.dailyjournal.controller.Party.PartyListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.ndhunju.dailyjournal.controller.Party.PartyActivity"
+            android:name="com.ndhunju.dailyjournal.controller.Party.JournalListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.ndhunju.dailyjournal.controller.Party.PartyInformationActivity"
+            android:name="com.ndhunju.dailyjournal.controller.Party.PartyActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.ndhunju.dailyjournal.viewPager.ViewPagerActivity"
@@ -56,7 +57,10 @@
             android:label="@string/title_activity_lock_screen"
             android:screenOrientation="portrait" >
         </activity>
-
+        <!--
+            <service android:name=".controller.NotificationService"
+            android:exported="false"/>
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

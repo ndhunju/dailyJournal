@@ -34,6 +34,7 @@ public final class JsonConverter {
     private static final String KEY_PHONE = "phone";
     private static final String KEY_DEBIT = "debit";
     private static final String KEY_CREDIT = "credit";
+    private static final String KEY_PICTURE = "picPath";
     private static final String KEY_JOURNALS = "journals";
 
 
@@ -70,6 +71,7 @@ public final class JsonConverter {
             json.put(KEY_DEBIT, party.getDebitTotal());
             json.put(KEY_CREDIT, party.getCreditTotal());
             json.put(KEY_TYPE, party.getType().toString());
+            json.put(KEY_PICTURE, party.getPicturePath());
 
             JSONArray journalJSONs = new JSONArray();
             List<Journal> mJournals = mServices.getJournals(party.getId());
@@ -195,12 +197,14 @@ public final class JsonConverter {
             String type = json.getString(KEY_TYPE);
             double debit = json.getDouble(KEY_DEBIT);
             double credit = json.getDouble(KEY_CREDIT);
+            String picPath = json.getString(KEY_PICTURE);
 
             Party newParty = new Party(name);
             newParty.setId(id);
             newParty.setPhone(phone);
             newParty.setDebitTotal(debit);
             newParty.setCreditTotal(credit);
+            newParty.setPicturePath(picPath);
             newParty.setType(Party.Type.valueOf(type));
 
             return newParty;

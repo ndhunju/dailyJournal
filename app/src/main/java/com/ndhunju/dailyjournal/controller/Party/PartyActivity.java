@@ -3,191 +3,179 @@ package com.ndhunju.dailyjournal.controller.Party;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TableRow;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.Journal.JournalActivity;
 import com.ndhunju.dailyjournal.controller.LockScreenActivity;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.model.Party.Type;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.service.UtilsFile;
 import com.ndhunju.dailyjournal.service.UtilsFormat;
 import com.ndhunju.dailyjournal.service.UtilsView;
 
+import java.io.File;
+
 public class PartyActivity extends FragmentActivity {
 
-    //Constants
-    private static final int REQUEST_JOURNAL_CHGD = 5457;
-    private static final int REQUEST_PARTY_INFO_CHGD = 5793;
+    private static final int REQUEST_IMAGE = 123;
+    private static final String TAG = PartyActivity.class.getSimpleName();
 
     //Variables
-	long mPartyId;
-	TextView balanceTV;
-	ListView ledgerListView;
-	LedgerAdapter ledgerAdapter;
-
+	Spinner typeSpinner;
 	Services mServices;
+	EditText phoneET;
+    ImageButton partyPicIV;
+    EditText nameET;
+	Party mParty;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
+
 		setContentView(R.layout.activity_party);
 
-        //Get the mParty id
-		mPartyId = getIntent().getLongExtra(Constants.KEY_PARTY_ID, 0);
+		//Get the party id
+		long partyId = getIntent().getLongExtra(Constants.KEY_PARTY_ID, Constants.ID_NEW_PARTY);
+		mServices =  Services.getInstance(this);
+		if(partyId == Constants.ID_NEW_PARTY)
+			mParty = new Party(getString(R.string.str_new));
+		else
+			mParty = mServices.getParty(partyId);
+		
+		setTitle(mParty.getName());
 
-        //Wire up the widgets/view
-		balanceTV = (TextView) findViewById(R.id.activity_party_balance_tv);
-		ledgerListView = (ListView)findViewById(R.id.activity_party_ll);
+		//Wire up widgets
+		TextView idTV = (TextView)findViewById(R.id.activity_party_id_tv);
+		idTV.setText(UtilsFormat.getStringId(mParty.getId(), UtilsFormat.NUM_OF_DIGITS));
 
-		mServices = Services.getInstance(PartyActivity.this);
+        partyPicIV = (ImageButton)findViewById(R.id.activity_party_pic_iv);
+        Drawable image = Drawable.createFromPath(mParty.getPicturePath());
+        if(image != null) partyPicIV.setBackgroundDrawable(image);
 
-        //Get the Party object and set values
-		Party party = mServices.getParty(mPartyId);
-
-		double balance = party.calculateBalances();
-		balanceTV.setText(UtilsFormat.formatCurrency(balance));
-		balanceTV.setTextColor(balance > 0 ? Color.parseColor(Constants.RED) : Color.parseColor(Constants.GREEN));
-
-		ledgerAdapter = new LedgerAdapter(getBaseContext(), mServices.getJournals(mPartyId));
-		ledgerListView.setAdapter(ledgerAdapter);
-		ledgerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        partyPicIV.setOnClickListener(new OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Open journal activity to show the detail info of the clicked Journal
-                Intent intent = new Intent(PartyActivity.this, JournalActivity.class);
-                intent.putExtra(Constants.KEY_JOURNAL_ID, l);
-                intent.putExtra(Constants.KEY_PARTY_ID, mPartyId);
-                startActivityForResult(intent, REQUEST_JOURNAL_CHGD);
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, REQUEST_IMAGE);
             }
         });
 
-		ledgerListView.addFooterView(getFooterRow(party));
 
-		setTitle(party.getName());
+		nameET = (EditText)findViewById(R.id.activity_party_name_et);
+		nameET.setText(mParty.getName());
+		
+		phoneET = (EditText)findViewById(R.id.activity_party_phone_et);
+		phoneET.setText(mParty.getPhone());
+		
+		typeSpinner = (Spinner)findViewById(R.id.activity_party_type_spinner);
+		String[] merchantTypes = new String[Type.values().length];
+		for(int i = 0; i < Type.values().length ; i++)
+			merchantTypes[i] = Type.values()[i].toString();
+		
+		typeSpinner.setAdapter(new ArrayAdapter<String>(this
+                , android.R.layout.simple_list_item_1, merchantTypes));
+		typeSpinner.setSelection(mParty.getType().ordinal());
+		
+		Button okBtn = (Button)findViewById(R.id.activity_party_ok_btn);
+		okBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mParty.setName(nameET.getText().toString());
+				mParty.setPhone(phoneET.getText().toString());
+				mParty.setType(Party.Type.valueOf(typeSpinner.getSelectedItem().toString()));
 
-        //Alert the user if balance is negative
+				if(mParty.getId() == Constants.NO_PARTY)
+					mServices.addParty(mParty);
+				else
+					mServices.updateParty(mParty);
 
+                //Let the previous activity know that party information was changed
+				Intent i = new Intent();
+				i.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
+				i.putExtra(Constants.KEY_PARTY_NAME, mParty.getName());
+                i.putExtra(Constants.KEY_CHANGE_TYPE, Constants.ChangeType.EDITED);
+				setResult(Activity.RESULT_OK, i);
+				PartyActivity.this.finish();
+			}
+		});
+
+        Button deleteBtn = (Button)findViewById(R.id.activity_party_delete_btn);
+        deleteBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UtilsView.alert(PartyActivity.this,
+                        getString(R.string.msg_delete_confirm, R.string.str_party), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mServices.deleteParty(mParty);
+                                UtilsView.toast(PartyActivity.this, getString(R.string.msg_deleted, mParty.getName()));
+                                Intent intent = new Intent();
+                                intent.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
+                                intent.putExtra(Constants.KEY_CHANGE_TYPE, Constants.ChangeType.DELETED);
+                                setResult(Activity.RESULT_OK, intent);
+                                finish();
+                            }
+                        }, null);
+
+            }
+        });
 	}
 
-    private TableRow getFooterRow(Party party) {
-        TableRow footerRow = (TableRow)getLayoutInflater().inflate(R.layout.ledger_row, null);
-        TextView col0 = (TextView) footerRow.findViewById(R.id.ledger_row_col0);
-        TextView col1 = (TextView) footerRow.findViewById(R.id.ledger_row_col1);
-        TextView col2 = (TextView) footerRow.findViewById(R.id.ledger_row_col2);
-        TextView col3 = (TextView) footerRow.findViewById(R.id.ledger_row_col3);
-        TextView col4 = (TextView) footerRow.findViewById(R.id.ledger_row_col4);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        col1.setText("");
-        col2.setText(getString(R.string.str_total));
-        col3.setText(UtilsFormat.formatCurrency(party.getDebitTotal()));
-        col4.setText(UtilsFormat.formatCurrency(party.getCreditTotal()));
-        col0.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col1.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col2.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col3.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col4.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        return footerRow;
+        switch (requestCode){
+            case REQUEST_IMAGE:
+
+                //If the result is not success, return
+                if (resultCode != Activity.RESULT_OK){
+                    UtilsView.alert(PartyActivity.this, String.format(getString(R.string.msg_failed), getString(R.string.str_save)));
+                    return;
+                }
+
+                Uri selectedImage = data.getData();
+                Bitmap bitmap;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                } catch (Exception e) { Log.d(TAG, "couldn't load selected image");
+                    return;
+                }
+
+                File picFile = UtilsFile.getPartyPicture(mParty, PartyActivity.this);
+                UtilsFile.storeImage(bitmap, picFile, PartyActivity.this);
+                mParty.setPicturePath(picFile.getAbsolutePath());
+                partyPicIV.setImageDrawable(Drawable.createFromPath(mParty.getPicturePath()));
+                partyPicIV.invalidate();
+                break;
+        }
     }
 
     @Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != Activity.RESULT_OK)
-			return;
-
-		switch (requestCode) {
-            case REQUEST_JOURNAL_CHGD:
-
-                if(!data.getBooleanExtra(Constants.KEY_JOURNAL_CHGD, false))
-                    return;
-
-                //Since the Journal was changed, you need to get a fresh copy of mParty from Services to reflect the change
-                Party party = mServices.getParty(mPartyId);
-
-                double balance = party.calculateBalances();
-                balanceTV.setText(UtilsFormat.formatCurrency(balance));
-                balanceTV.setTextColor(balance > 0 ? Color.parseColor(Constants.RED) : Color.parseColor(Constants.GREEN));
-
-                ledgerAdapter = new LedgerAdapter(getBaseContext(), mServices.getJournals(mPartyId));
-                ledgerListView.setAdapter(ledgerAdapter);
-
-                //Alert the user if balance is negative
-                break;
-
-            case REQUEST_PARTY_INFO_CHGD:
-
-                if(!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false))
-                    return;
-
-                //Party information was changed, update the title
-                setTitle(data.getStringExtra(Constants.KEY_PARTY_NAME));
-                break;
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-		getMenuInflater().inflate(R.menu.menu_party_activity, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch(item.getItemId()){
-			case R.id.menu_party_activity_info:
-                //Create intent to pass current mParty id to PartyInformationActivity
-				Intent i = new Intent(PartyActivity.this,PartyInformationActivity.class);
-				i.putExtra(Constants.KEY_PARTY_ID, mPartyId);
-				startActivityForResult(i, REQUEST_PARTY_INFO_CHGD);
-				break;
-
-			case R.id.menu_party_activity_delete:
-                //User wants to delete the Party but first confirm the deletion
-				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_party));
-				UtilsView.alert(PartyActivity.this, msg, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						boolean success = Services.getInstance(PartyActivity.this).deleteParty(mPartyId);
-						String msg1 = success ? String.format(getString(R.string.msg_deleted), getString(R.string.str_party))
-								: String.format(getString(R.string.msg_failed), getString(R.string.str_delete));
-						UtilsView.toast(PartyActivity.this, msg1);
-						PartyActivity.this.finish();
-					}
-				}, null);
-				break;
-
-            case R.id.menu_party_activity_share:
-                new ReportGeneratorAsync(PartyActivity.this).execute(mPartyId);
-                break;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
 	protected void onPause() {
-		super.onPause();
-
-		//update pass code time
 		LockScreenActivity.updatePasscodeTime();
+		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
-		super.onResume();
-
-		//check pass code
 		LockScreenActivity.checkPassCode(PartyActivity.this);
+		super.onResume();
 	}
 }

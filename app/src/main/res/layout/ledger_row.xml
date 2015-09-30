@@ -10,7 +10,8 @@
         android:background="@drawable/cell_shape"
         android:padding="3dp"
         android:gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:textSize="@dimen/text_size_medium"/>
     <TextView
         android:id="@+id/ledger_row_col1"
         android:text="@string/str_date"
@@ -18,7 +19,8 @@
         android:layout_weight="1"
         android:background="@drawable/cell_shape"
         android:padding="3dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textSize="@dimen/text_size_medium"/>
     <TextView
         android:id="@+id/ledger_row_col2"
         android:text="@string/str_note"
@@ -29,7 +31,8 @@
         android:background="@drawable/cell_shape"
         android:padding="3dp"
         android:gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:textSize="@dimen/text_size_medium"/>
     <TextView
         android:id="@+id/ledger_row_col3"
         android:layout_height="wrap_content"
@@ -37,7 +40,8 @@
         android:text="@string/str_dr"
         android:background="@drawable/cell_shape"
         android:padding="3dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textSize="@dimen/text_size_medium"/>
     <TextView
         android:id="@+id/ledger_row_col4"
         android:layout_height="wrap_content"
@@ -45,5 +49,6 @@
         android:text="@string/str_cr"
         android:background="@drawable/cell_shape"
         android:padding="3dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textSize="@dimen/text_size_medium"/>
 </TableRow>
