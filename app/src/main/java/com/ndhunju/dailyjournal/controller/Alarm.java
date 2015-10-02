@@ -16,7 +16,7 @@ public class Alarm {
 	public static final String TITLE = Constants.APP_PREFIX + ".Alarm.title";
 
 	public static void setAlarmForNotification(Context context, Class<?> serviceClass, Calendar cal, String title,
-                                               String msg, boolean repeating, int repeatIntervel ){
+                                               String msg, boolean repeating, int repeatInterval ){
 
 		//constructing a Pending Intent to starts DataService
 		Intent i = new Intent(context, serviceClass );
@@ -26,7 +26,7 @@ public class Alarm {
 		
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 
-		if (repeating) am.setRepeating(AlarmManager.RTC, cal.getTimeInMillis(),	repeatIntervel, pi);
+		if (repeating) am.setRepeating(AlarmManager.RTC, cal.getTimeInMillis(),	repeatInterval, pi);
 		else am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pi);
 
 	}

@@ -13,6 +13,7 @@
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values-ne/strings.xml -->
     <eat-comment/>
     <string name="action_settings">"सेटिङ"</string>
+    <string name="app_descrip">This accounting app allows you to record your daily transactions in the easiest way possible. It achieves easiness by altering the usual flow of journal entry.</string>
     <string name="app_name">"दैनिक जर्नल"</string>
     <string name="backup_dir">"'Daily Journal' Folder in the Storage."</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values-ne/values.xml -->

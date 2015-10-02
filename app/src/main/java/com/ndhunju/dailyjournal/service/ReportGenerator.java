@@ -2,7 +2,6 @@ package com.ndhunju.dailyjournal.service;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
-import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -17,17 +16,20 @@ import java.util.List;
 
 /**
  * Created by dhunju on 9/27/2015.
+ * This class generates report for respective party
  */
 public class ReportGenerator{
 
-    private static final int TOTAL_SIZE =15;
+    private static final int TOTAL_SIZE = 15;
     private static final String FILE_EXT = ".txt";
-    private static final String SEPARATOR = "|";
+    private static final String COL_SEPARATOR = "|";
 
+    //variables
     Party mParty;
     Context mContext;
     List<Journal> mJournals;
 
+    //Constructors
     public ReportGenerator(Context context, long partyId){
         Services services = Services.getInstance(context);
         mJournals = services.getJournals(partyId);
@@ -51,6 +53,10 @@ public class ReportGenerator{
         return getString(R.string.str_report) + " " + mParty.getName();
     }
 
+    /**
+     * Returns report header (like banner)
+     * @return
+     */
     public String getReportHeader(){
         StringBuilder sb = new StringBuilder();
         String ad= String.format(getString(R.string.msg_generated_by), getString(R.string.app_name));
@@ -64,6 +70,10 @@ public class ReportGenerator{
         return sb.toString();
     }
 
+    /**
+     * Returns Ledger in a String
+     * @return
+     */
     public String getReportBody(){
         StringBuilder sb = new StringBuilder();
 
@@ -106,6 +116,11 @@ public class ReportGenerator{
         return sb.toString();
     }
 
+    /**
+     * Stores the report in the specified path
+     * @param path
+     * @return
+     */
     public File storeReportFile(String path){
 
         File reportFile = new File(path, getSubject() + FILE_EXT);
@@ -182,8 +197,12 @@ public class ReportGenerator{
     }
 
 
+    /**
+     * Create report file in public document folder
+     * and returns the created file
+     * @return
+     */
     public File getReportFile(){
-
         String path = UtilsFile.getPublicDocumentDir();
         return storeReportFile(path);
     }
@@ -192,12 +211,14 @@ public class ReportGenerator{
         return System.getProperty("line.separator");
     }
 
+    /**Deletes the report file stored in public folder**/
     public boolean deleteReportFile(){
         File reportFile = UtilsFile.createFileInDocumentFolder(getSubject()+ FILE_EXT);
         if(reportFile.exists()) return reportFile.delete();
         else return true;
     }
 
+    //helper method to get string by resource id
     public String getString(int resId){
         return mContext.getString(resId);
     }
@@ -214,6 +235,14 @@ public class ReportGenerator{
         return addSpaces(str, TOTAL_SIZE);
     }
 
+    /**
+     * This method adds spaces to a string so that
+     * all the string in the ledger are of equal
+     * length.
+     * @param str
+     * @param spaces
+     * @return
+     */
     public static String addSpaces(String str, int spaces){
         StringBuilder sb = new StringBuilder(str);
         int len = str.length();
@@ -223,7 +252,7 @@ public class ReportGenerator{
         for(int i = add; i > 0; i--)
             sb.append(" ");
 
-        sb.append(SEPARATOR);
+        sb.append(COL_SEPARATOR);
         return (sb.toString());
     }
 }

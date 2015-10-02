@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.ImportContacts;
 import com.ndhunju.dailyjournal.service.ReportGenerator;
 import com.ndhunju.dailyjournal.service.UtilsFile;
 import com.ndhunju.dailyjournal.service.UtilsView;
@@ -15,17 +16,23 @@ import com.ndhunju.dailyjournal.service.UtilsView;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 /**
  * Created by dhunju on 9/27/2015.
+ * This class is a child class of {@link AsyncTask} that generates
+ * report for a party by calling {@link ReportGenerator#getReportFile()}
+ * This class displays Progress dialog before starting the operation
+ * and notifies user once the operation is completed
  */
 public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
 
+    Intent intent;
     ProgressDialog pd;
     Activity mActivity;
-    Intent intent;
+
 
     public ReportGeneratorAsync(Activity activity){
         mActivity = activity;

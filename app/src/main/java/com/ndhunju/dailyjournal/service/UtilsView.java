@@ -52,6 +52,15 @@ public class UtilsView {
                 .create().show();
     }
 
+    public static void showResult(Activity activity, int resultCode){
+        //If the result is not success, return
+        if (resultCode != Activity.RESULT_OK){
+            alert(activity, String.format(activity.getString(R.string.msg_failed),
+                    activity.getString(R.string.str_save)));
+            return;
+        }
+    }
+
     public static ProgressDialog createProgressDialog(Activity mActivity, String msg){
         ProgressDialog pd= new ProgressDialog(mActivity);
         pd.setIndeterminate(true);

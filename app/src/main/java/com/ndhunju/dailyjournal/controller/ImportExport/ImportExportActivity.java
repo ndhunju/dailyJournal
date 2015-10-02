@@ -19,7 +19,6 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.FolderPicker.FolderPickerDialogFragment;
 import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.LockScreenActivity;
-import com.ndhunju.dailyjournal.controller.Party.ReportGeneratorAsync;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.JsonConverter;
@@ -60,7 +59,7 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
         .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoogleClientMgr = GoogleApiClientManager.getInstance(ImportExportActivity.this);
+                mGoogleClientMgr = new GoogleApiClientManager(ImportExportActivity.this);
                 //Initaite the connection to create a file in drive
                 mGoogleClientMgr.connectGoogleApiClient(new GoogleApiClient.ConnectionCallbacks() {
                 @Override
@@ -79,7 +78,7 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mGoogleClientMgr = GoogleApiClientManager.getInstance(ImportExportActivity.this);
+                        mGoogleClientMgr =  new GoogleApiClientManager(ImportExportActivity.this);
                         UtilsView.alert(ImportExportActivity.this, getString(R.string.warning_restore),
                                 new DialogInterface.OnClickListener() {
                                     @Override
@@ -193,7 +192,7 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
 
         //Check if this activity was called to import the old data ( data saved by v3.1)
         boolean importOldData = getIntent().getBooleanExtra(Constants.KEY_IMPORT_OLD_DATA, false);
-        if (importOldData) new ImportOldDataAsyncTask(ImportExportActivity.this).execute();
+        if (importOldData) new TransferOldDataAsyncTask(ImportExportActivity.this).execute();
 
         //check pass code
         LockScreenActivity.checkPassCode(ImportExportActivity.this);
@@ -228,7 +227,7 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
                 }
 
                 Uri selectedJsonFile = data.getData();
-                JsonConverter converter = new JsonConverter(Services.getInstance(getBaseContext()));
+                JsonConverter converter = JsonConverter.getInstance(Services.getInstance(getBaseContext()));
                 boolean success = converter.parseJSONFile((selectedJsonFile.getPath()));
 
                 //Prepare msg

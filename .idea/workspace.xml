@@ -7,10 +7,10 @@
     <shared>
       <config>
         <devices>
-          <device id="Nexus 7 2013" />
-          <device id="Nexus 7" />
           <device id="Nexus 10" />
+          <device id="Nexus 7 2013" />
           <device id="Nexus 4" />
+          <device id="Nexus 7" />
           <device id="Nexus S" />
           <device id="tv_1080p" />
           <device id="Nexus 5" />
@@ -19,7 +19,7 @@
       </config>
     </shared>
     <layouts>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_list_journal.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_ledger_party_old.xml">
         <config>
           <theme>@style/AppTheme</theme>
         </config>
@@ -29,7 +29,13 @@
           <theme>@style/AppTheme</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_list_journal.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_ledger_party_old.xml">
+        <config>
+          <state>Portrait</state>
+          <theme>@style/AppTheme</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_party_list.xml">
         <config>
           <state>Portrait</state>
           <theme>@style/AppTheme</theme>
@@ -40,306 +46,227 @@
           <theme>@style/AppTheme</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_party_list.xml">
+        <config>
+          <theme>@style/AppTheme</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_journal.xml">
         <config>
+          <state>Portrait</state>
           <theme>@style/AppBaseTheme</theme>
         </config>
       </layout>
     </layouts>
   </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="d45b2b90-b2f3-476c-a06d-3fa06318282b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/party_default_pic.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/CheckedListAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ImportContacts.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ImportContactsAsync.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-large/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-small/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-xlarge/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_party_list_activity.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-ne/strings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values/values.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-large/values.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-ne/values.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-normal/values.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-small/values.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/values-xlarge/values.xml" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\PartyInformationActivity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\PartyInformationActivity.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$10.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$11$1$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$11$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$11$2$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$11$2.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$11$3.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$11.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$12$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$12$2.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$12$3.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$12.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$2$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$2.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$3.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$4$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$4.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$5.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$6.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$7$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$7$2.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$7.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$8.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity$9.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\ImportExportActivity.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalActivity.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$10$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$10.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$11$1$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$11$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$11.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$12.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$13.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$2.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$3.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$4.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$5.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$6.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$7.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$8$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$8.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment$9.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\JournalFragment.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyActivity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyActivity$2.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyActivity.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyInformationActivity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyInformationActivity.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyListActivity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyListActivity$2.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyListActivity$3.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyListActivity.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyListDialog$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyListDialog$2.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyListDialog$3.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\controller\PartyListDialog.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\database\FeedReaderContract$FeedEntry.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\database\FeedReaderContract.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\database\FeedReaderDbHelper.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\model\Alarm.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\model\Storage.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\model\Utils$1.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\model\Utils.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\release\com\ndhunju\dailyjournal\model\ViewUtils.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\layout\activity_party_information.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\values-w820dp\values-w820dp.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\release\layout\activity_party_information.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\release\layout\dialog_preferences.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\release\values-w820dp\values-w820dp.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\release\xml\pref_data_sync.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\release\xml\pref_general.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\release\xml\pref_headers.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\release\xml\pref_notification.xml" afterPath="" />
-      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\java\com\ndhunju\dailyjournal\controller\Party\PartyActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/JournalListActivity.java" />
-      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\java\com\ndhunju\dailyjournal\controller\Party\PartyInformationActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyActivity.java" />
-      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout-sw600dp\activity_party.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_list_journal.xml" />
-      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout-sw720dp\activity_party.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_list_journal.xml" />
-      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout\activity_party.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_list_journal.xml" />
-      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout\activity_party_information.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_party.xml" />
-      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-w820dp\dimens.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values-normal/dimens.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyAdapter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyDetailActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyDetailFragment.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListFragment.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_party_detail.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_party_list.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp-land/activity_party_list.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_party_list.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_party_detail.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/fragment_party_detail.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp-land/fragment_party_detail.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/fragment_party_detail.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp-land/ledger_row.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/party_row.xml" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\ImportExport\ImportOldDataAsyncTask$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\ImportExport\ImportOldDataAsyncTask$2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\ImportExport\ImportOldDataAsyncTask.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\JournalListActivity$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\JournalListActivity$2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\JournalListActivity$3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\JournalListActivity$4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\JournalListActivity.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\PartyListActivity$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\PartyListActivity$2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\PartyListActivity$3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\PartyListActivity$4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\classes\debug\com\ndhunju\dailyjournal\controller\Party\PartyListActivity$5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\layout-sw600dp\activity_list_journal.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\layout-sw720dp\activity_list_journal.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\layout\activity_list_journal.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\layout\fragment_party_list.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\values-large\values-large.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\values-normal\values-normal.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\build\intermediates\res\debug\values-xlarge\values-xlarge.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-xlarge\values.xml" afterPath="" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\java\com\ndhunju\dailyjournal\controller\ImportExport\ImportOldDataAsyncTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/TransferOldDataAsyncTask.java" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\java\com\ndhunju\dailyjournal\controller\Party\JournalListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyLedgerActivityOld.java" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\java\com\ndhunju\dailyjournal\controller\Party\PartyListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListActivityOld.java" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout-sw600dp\activity_list_journal.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_ledger_party_old.xml" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout-sw720dp\activity_list_journal.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_ledger_party_old.xml" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout\activity_list_journal.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_ledger_party_old.xml" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout\fragment_party_list.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_party_list_old.xml" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-large\dimens.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values-sw600dp-land/dimens.xml" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-large\values.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values-sw600dp/values.xml" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-normal\dimens.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values-sw600dp/dimens.xml" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-normal\values.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values-sw720dp/values.xml" />
+      <change type="MOVED" beforePath="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-xlarge\dimens.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values-sw720dp/dimens.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Alarm.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Alarm.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/AttachmentDAO.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/AttachmentDAO.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/BackUpAsyncTask.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/BackUpAsyncTask.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/BuildConfig.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/BuildConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/BuildConfig.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/BuildConfig.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/Constants$ChangeType.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/Constants$ChangeType.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/Constants.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/Constants.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/DailyJournalContract$AttachmentColumns.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/DailyJournalContract$AttachmentColumns.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/DailyJournalContract$JournalColumns.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/DailyJournalContract$JournalColumns.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/DailyJournalContract$PartyColumns.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/DailyJournalContract$PartyColumns.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/DatePickerFragment$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/DatePickerFragment$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/DatePickerFragment$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/DatePickerFragment$2.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/DatePickerFragment.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/DatePickerFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/DatePickerFragment.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/DatePickerFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/DbHelper.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/DbHelper.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/FolderPicker/DirListAdapter.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/FolderPicker/DirListAdapter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/EraseAllAsyncTask$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/EraseAllAsyncTask$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/EraseAllAsyncTask.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/EraseAllAsyncTask.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ExportPartiesReportAsync.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ExportPartiesReportAsync.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync$2.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/FolderPicker/FolderPickerDialogFragment$4$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/FolderPicker/FolderPickerDialogFragment$4$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/FolderPicker/FolderPickerDialogFragment$4.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/FolderPicker/FolderPickerDialogFragment$4.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/FolderPicker/FolderPickerDialogFragment.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/FolderPicker/FolderPickerDialogFragment.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/GoogleApiClientManager$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/GoogleApiClientManager$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/GoogleApiClientManager$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/GoogleApiClientManager$2.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/GoogleApiClientManager.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/GoogleApiClientManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/HomeActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/HomeActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/ImportContacts$Contact.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/ImportContacts$Contact.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/ImportContacts.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/ImportContacts.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/ImportContactsAsync.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/ImportContactsAsync.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportDataAsyncTask.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportDataAsyncTask.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$1$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$1$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$2$1$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$2$1$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$2$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$2$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$3.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$4$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$4$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$4.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$5.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$6.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity$6.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportOldDataAsyncTask.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/ImportOldDataAsyncTask.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/model/Journal$Type.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/model/Journal$Type.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/model/Journal.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/model/Journal.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/JournalDAO.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/JournalDAO.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$10$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$10$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$10.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$10.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$11.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$11.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$12.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$12.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$13.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$13.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$3.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$3.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$4.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$5.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$6.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$6.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$7.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$7.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$8.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$8.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$9.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment$9.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Journal/JournalFragment.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/JsonConverter$OldJsonConverter.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/JsonConverter$OldJsonConverter.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/JsonConverter.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/JsonConverter.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/LedgerAdapter.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/LedgerAdapter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/LockScreenActivity$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/LockScreenActivity$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/LockScreenActivity$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/LockScreenActivity$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/LockScreenActivity$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/LockScreenActivity$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/LockScreenActivity$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/LockScreenActivity$2.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/LockScreenActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/LockScreenActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/LockScreenActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/LockScreenActivity.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/MyPreferenceFragment.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/MyPreferenceFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/MyPreferenceFragment.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/MyPreferenceFragment.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/NotificationService.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/controller/NotificationService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/model/Party$Type.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/model/Party$Type.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Party.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/model/Party.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/model/Party.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/model/Party.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity$3$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity$3$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity$3.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity$3.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyActivity.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/PartyDAO.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/database/PartyDAO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListActivity$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListActivity$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListActivity$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListActivity$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListActivity$3.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListActivity$3.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListActivity.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListDialog$3.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListDialog$3.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListDialog.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/PartyListDialog.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$array.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$array.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$attr.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$attr.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/R$color.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/R$color.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/drive/R$color.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/drive/R$color.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$color.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$color.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/R$color.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/R$color.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/drive/R$color.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/drive/R$color.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$color.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$color.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$array.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$array.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$bool.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$bool.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$dimen.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$dimen.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$dimen.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$dimen.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$drawable.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$drawable.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$drawable.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$drawable.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/R$id.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/drive/R$id.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/drive/R$id.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$id.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/R$id.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/drive/R$id.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/drive/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$id.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/R$integer.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/R$integer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/drive/R$integer.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/drive/R$integer.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$integer.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$integer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/R$integer.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/R$integer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/drive/R$integer.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/drive/R$integer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$integer.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$integer.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$layout.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$layout.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$layout.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$menu.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$menu.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$menu.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$menu.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/R$string.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/R$string.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/drive/R$string.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/google/android/gms/drive/R$string.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$string.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$string.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/R$string.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/R$string.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/drive/R$string.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/google/android/gms/drive/R$string.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$string.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$string.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$style.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$style.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$style.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$style.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$styleable.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$styleable.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$styleable.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$styleable.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$xml.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R$xml.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$xml.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R$xml.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/R.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/R.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/ReportGenerator.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/ReportGenerator.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/ReportGeneratorAsync.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/Party/ReportGeneratorAsync.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/RestoreBackUpAsync.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/RestoreBackUpAsync.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/Services.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/Services.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/UploadBackUpToGDriveAsync$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/UploadBackUpToGDriveAsync$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/UploadBackUpToGDriveAsync.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/controller/ImportExport/UploadBackUpToGDriveAsync.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/UtilsFile$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/UtilsFile$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/UtilsFile.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/UtilsFile.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/UtilsLedger.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/UtilsLedger.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/UtilsView.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/service/UtilsView.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$2$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$2$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$2$1.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$2$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$2.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$SamplePagerAdapter.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity$SamplePagerAdapter.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/debug/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity.class" afterPath="$PROJECT_DIR$/app/build/intermediates/classes/release/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/apk/app-debug-unaligned.apk" afterPath="$PROJECT_DIR$/app/build/outputs/apk/app-debug-unaligned.apk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/apk/app-debug.apk" afterPath="$PROJECT_DIR$/app/build/outputs/apk/app-debug.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/apk/app-release-unaligned.apk" afterPath="$PROJECT_DIR$/app/build/outputs/apk/app-release-unaligned.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app-release.apk" afterPath="$PROJECT_DIR$/app/app-release.apk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/dex/debug/classes.dex" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/debug/classes.dex" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/dex/release/classes.dex" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/release/classes.dex" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/gradle_project_sync_data.bin" afterPath="$PROJECT_DIR$/build/intermediates/gradle_project_sync_data.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/resources/resources-debug.ap_" afterPath="$PROJECT_DIR$/app/build/intermediates/resources/resources-debug.ap_" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/resources/resources-release.ap_" afterPath="$PROJECT_DIR$/app/build/intermediates/resources/resources-release.ap_" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Alarm.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Alarm.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/manifests/full/debug/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/manifests/full/debug/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/manifests/full/release/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/manifests/full/release/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/AttachmentDAO.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/AttachmentDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/BackUpAsyncTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/BackUpAsyncTask.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/generated/source/buildConfig/debug/com/ndhunju/dailyjournal/BuildConfig.java" afterPath="$PROJECT_DIR$/app/build/generated/source/buildConfig/debug/com/ndhunju/dailyjournal/BuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/generated/source/buildConfig/release/com/ndhunju/dailyjournal/BuildConfig.java" afterPath="$PROJECT_DIR$/app/build/generated/source/buildConfig/release/com/ndhunju/dailyjournal/BuildConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Constants.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Constants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/DailyJournalContract.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/DailyJournalContract.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/DbHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/DbHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/FolderPicker/DirListAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/FolderPicker/DirListAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/EraseAllAsyncTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/EraseAllAsyncTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ExportPartiesReportAsync.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ExportPartiesReportAsync.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/GenericDAO.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/GenericDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/GoogleApiClientManager.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/GoogleApiClientManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ImportContacts.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ImportContacts.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ImportContactsAsync.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ImportContactsAsync.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportDataAsyncTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportDataAsyncTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/JournalDAO.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/JournalDAO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Journal/JournalFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Journal/JournalFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/JsonConverter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/JsonConverter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/LedgerAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/LedgerAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/LockScreenActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/LockScreenActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/PartyDAO.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/PartyDAO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListDialog.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListDialog.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/generated/source/r/debug/com/google/android/gms/R.java" afterPath="$PROJECT_DIR$/app/build/generated/source/r/debug/com/google/android/gms/R.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/generated/source/r/debug/com/google/android/gms/drive/R.java" afterPath="$PROJECT_DIR$/app/build/generated/source/r/debug/com/google/android/gms/drive/R.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/generated/source/r/debug/com/ndhunju/dailyjournal/R.java" afterPath="$PROJECT_DIR$/app/build/generated/source/r/debug/com/ndhunju/dailyjournal/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/generated/source/r/release/com/google/android/gms/R.java" afterPath="$PROJECT_DIR$/app/build/generated/source/r/release/com/google/android/gms/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/generated/source/r/release/com/google/android/gms/drive/R.java" afterPath="$PROJECT_DIR$/app/build/generated/source/r/release/com/google/android/gms/drive/R.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/generated/source/r/release/com/ndhunju/dailyjournal/R.java" afterPath="$PROJECT_DIR$/app/build/generated/source/r/release/com/ndhunju/dailyjournal/R.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/symbols/debug/R.txt" afterPath="$PROJECT_DIR$/app/build/intermediates/symbols/debug/R.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/symbols/release/R.txt" afterPath="$PROJECT_DIR$/app/build/intermediates/symbols/release/R.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ReportGenerator.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ReportGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ReportGeneratorAsync.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ReportGeneratorAsync.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/RestoreBackUpAsync.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/RestoreBackUpAsync.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Services.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Services.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsFile.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsFile.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/UploadBackUpToGDriveAsync.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/UploadBackUpToGDriveAsync.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsView.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/activity_export_import.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/activity_export_import.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/release/layout/activity_export_import.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/release/layout/activity_export_import.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_export_import.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_export_import.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/activity_party.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/activity_party.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout-sw600dp/activity_party.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout-sw600dp/activity_party.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout-sw720dp/activity_party.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout-sw720dp/activity_party.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/release/layout/activity_party.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/release/layout/activity_party.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_party.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_party.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_party.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_party.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/fragment_journal.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/fragment_journal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/release/layout/fragment_journal.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/release/layout/fragment_journal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_journal.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_journal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/fragment_party_list.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/fragment_party_list.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/release/layout/fragment_party_list.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/release/layout/fragment_party_list.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_party_list.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_party_list.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/ledger_row.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout/ledger_row.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout-sw600dp/ledger_row.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout-sw600dp/ledger_row.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout-sw720dp/ledger_row.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/layout-sw720dp/ledger_row.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/ledger_row.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/ledger_row.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/ledger_row.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/ledger_row.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/ledger_row.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/ledger_row.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/lint-results-release-fatal.html" afterPath="$PROJECT_DIR$/app/build/outputs/lint-results-release-fatal.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/logs/manifest-merger-debug-report.txt" afterPath="$PROJECT_DIR$/app/build/outputs/logs/manifest-merger-debug-report.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/outputs/logs/manifest-merger-release-report.txt" afterPath="$PROJECT_DIR$/app/build/outputs/logs/manifest-merger-release-report.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/menu/menu_home.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/menu/menu_home.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_home.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_home.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/menu/menu_party_activity.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/menu/menu_party_activity.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/release/menu/menu_party_activity.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/release/menu/menu_party_activity.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_party_activity.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_party_activity.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/menu/menu_party_list_activity.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/menu/menu_party_list_activity.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_party_list_activity.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_party_list_activity.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeResources/debug/merger.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeResources/debug/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeResources/release/merger.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeResources/release/merger.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/release/xml/preferences.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/release/xml/preferences.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values-large/values-large.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values-large/values-large.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/values-ne/values-ne.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/values-ne/values-ne.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values-xlarge-land/values-xlarge-land.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values-xlarge-land/values-xlarge-land.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values-xlarge/values-xlarge.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values-xlarge/values-xlarge.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/18.0.0/res/values-xlarge/values.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/18.0.0/res/values-xlarge/values.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/debug/values/values.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/debug/values/values.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build/intermediates/res/release/values/values.xml" afterPath="$PROJECT_DIR$/app/build/intermediates/res/release/values/values.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -389,20 +316,7 @@
     <favorites_list name="DailyJournal" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2994129">
-              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-              <folding>
-                <element signature="e#804#825#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -413,6 +327,7 @@
         <option value="valueResourceFile" />
         <option value="resourceFile" />
         <option value="Class" />
+        <option value="layoutResourceFile_vertical" />
       </list>
     </option>
   </component>
@@ -1972,57 +1887,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ReportGeneraterAsync.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ExportPartiesReportAsync.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-w820dp-port/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-w820dp/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_journal.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_party_information.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_party_list.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/ledger_row.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/ledger_row.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/ledger_row.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/attrs.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-small/values.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-large/values.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/values.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-small/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ReportGeneratorAsync.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Journal/JournalFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_party_activity.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/LedgerAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-ne/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/JsonConverter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/DailyJournalContract.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_party_list_activity.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/PartyDAO.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyInformationActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsView.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ImportContactAysnc.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_export_import.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/RetrieveContactAysnc.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/CheckedListAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-xlarge/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Services.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ReportGenerator.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-large/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-normal/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_party.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_party.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_party.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsFile.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ImportContacts.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListDialog.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ReportGeneratorAsync.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Alarm.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/DbHelper.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/GenericDAO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/AttachmentDAO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/PartyDAO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/JournalDAO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/LockScreenActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Constants.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ReportGenerator.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_item_detail.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_item_list.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_item_detail.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/JsonConverter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportDataAsyncTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/TransferOldDataAsyncTask.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Services.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/RestoreBackUpAsync.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_item_list.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/LedgerAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/party_row.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/button_positive.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ItemDetailActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_party_activity.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Journal/JournalFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ItemListFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/JournalListActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ItemDetailFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ItemListActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/PartyListActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ImportContactsAsync.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/fragment_party_detail.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_party_detail.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout-sw600dp/fragment_party_detail.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout-sw720dp/ledger_row.xml" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyDetailFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ImportContactsAsync.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListActivityOld.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_party_list_activity.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values-sw600dp/dimens.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values-sw600dp-land/dimens.xml" />
       </list>
     </option>
   </component>
@@ -2085,24 +2000,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="res" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DailyJournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2186,39 +2083,10 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dailyjournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Journal" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DailyJournal" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="manifests" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -2292,9 +2160,428 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values-v14" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values-sw720dp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values-sw600dp-land" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values-sw600dp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values-small" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="menu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout-sw720dp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout-sw600dp-land" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout-sw600dp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyjournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyJournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dailyjournal" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controller" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -2313,7 +2600,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="recentsLimit" value="5" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="0a83eaaa" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="emulator-5554" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus_5_API_22_x86" />
     <property name="FullScreen" value="false" />
     <property name="settings.editor.selected.configurable" value="configurable.group.build" />
@@ -2332,27 +2619,29 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.includeInheritedMembers" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="extract.method.default.visibility" value="private" />
+    <property name="restartRequiresConfirmation" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.ndhunju.dailyjournal.controller" />
     </key>
     <key name="android.template.packageName">
-      <recent name="com.ndhunju.dailyjournal" />
       <recent name="com.ndhunju.dailyjournal.controller" />
+      <recent name="com.ndhunju.dailyjournal" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-sw600dp-land" />
+      <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout-sw600dp-land" />
       <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout-sw720dp" />
       <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout-sw600dp" />
       <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\drawable" />
-      <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-ne" />
-      <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-large" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
       <recent name="junit.framework.TestCase" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\layout-sw720dp" />
       <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\drawable" />
       <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\src\main\res\values-ne" />
       <recent name="C:\Users\dhunju\workspace_opensource\dailyJournal\app\libs" />
@@ -2368,9 +2657,9 @@
       <recent name="" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.ndhunju.dailyjournal.controller.Party" />
       <recent name="com.ndhunju.dailyjournal.controller" />
       <recent name="com.ndhunju.dailyjournal.controller.Journal" />
-      <recent name="com.ndhunju.dailyjournal.controller.Party" />
       <recent name="com.ndhunju.dailyjournal.controller.ImportExport" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
@@ -2645,7 +2934,7 @@
       <option name="DEPLOY" value="true" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="true" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
       <option name="PREFERRED_AVD" value="" />
       <option name="USE_COMMAND_LINE" value="true" />
       <option name="COMMAND_LINE" value="" />
@@ -2656,10 +2945,10 @@
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="SELECTED_MATRIX_CONFIGURATION_ID" value="0" />
-      <option name="SELECTED_CLOUD_PROJECT_ID" value="" />
+      <option name="SELECTED_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_PROJECT_ID" value="Please select a project..." />
       <option name="IS_VALID_CLOUD_SELECTION" value="false" />
-      <option name="INVALID_CLOUD_SELECTION_ERROR" value="" />
+      <option name="INVALID_CLOUD_SELECTION_ERROR" value="Matrix configuration not specified" />
       <method />
     </configuration>
     <configuration default="false" name="JournalTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
@@ -2744,7 +3033,7 @@
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24255319" sideWeight="0.48614073" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19468085" sideWeight="0.55490404" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19361702" sideWeight="0.55490404" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2246596" sideWeight="0.5252101" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40212765" sideWeight="0.5298507" order="7" side_tool="true" content_ui="tabs" />
@@ -2752,14 +3041,14 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.4946695" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29042554" sideWeight="0.4402985" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28829786" sideWeight="0.4402985" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.49573562" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16897655" sideWeight="0.49159664" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42659575" sideWeight="0.67697227" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3212766" sideWeight="0.67697227" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32993197" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19349681" sideWeight="0.47478992" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5170068" sideWeight="0.47014925" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2585288" sideWeight="0.47478992" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5159575" sideWeight="0.47014925" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946696" sideWeight="0.48319328" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
@@ -2787,7 +3076,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="145" />
+      <option name="time" value="147" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="app">
@@ -2799,164 +3088,66 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/attrs.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ReportGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25972223">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.42713568">
+          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/ledger_row.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-          <folding>
-            <element signature="e#1998#2023#0" expanded="false" />
-          </folding>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsDb.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1281407">
+          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
         </state>
       </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="166" column="23" selection-start-line="166" selection-start-column="23" selection-end-line="166" selection-end-column="23" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsFormat.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="52" selection-start-line="22" selection-start-column="52" selection-end-line="22" selection-end-column="63" />
-          <folding />
+          <caret line="74" column="25" selection-start-line="74" selection-start-column="25" selection-end-line="74" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-xlarge/values.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsZip.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="29" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="29" />
-          <folding />
+        <state vertical-scroll-proportion="-3.4422112">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-small/values.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsLedger.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="37" />
-          <folding />
+        <state vertical-scroll-proportion="-2.9723618">
+          <caret line="27" column="7" selection-start-line="27" selection-start-column="7" selection-end-line="27" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-normal/values.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-small/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35018727">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-21/data/res/values/attrs.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.9550562">
-          <caret line="132" column="20" selection-start-line="132" selection-start-column="20" selection-end-line="132" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_list_journal.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.32673267">
-          <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
-          <folding>
-            <element signature="e#1191#1217#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_party_list_old.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_list_journal.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5049505">
-          <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
-          <folding>
-            <element signature="e#942#967#0" expanded="false" />
-            <element signature="e#1191#1216#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_ledger_party_old.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_list_journal.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="37" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
-          <folding>
-            <element signature="e#1717#1742#0" expanded="false" />
-            <element signature="e#2607#2623#0" expanded="false" />
-            <element signature="e#2939#2955#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ReportGeneratorAsync.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46067417">
-          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-          <folding>
-            <element signature="e#813#814#0" expanded="false" />
-            <element signature="e#849#850#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5093633">
-          <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/LedgerAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71348315">
-          <caret line="66" column="26" selection-start-line="66" selection-start-column="26" selection-end-line="66" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-ne/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="52" column="41" selection-start-line="52" selection-start-column="41" selection-end-line="52" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/values.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/DBTransferService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2446429">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        <state vertical-scroll-proportion="-4.1034484">
+          <caret line="58" column="43" selection-start-line="58" selection-start-column="43" selection-end-line="58" selection-end-column="43" />
           <folding />
         </state>
       </provider>
@@ -2964,358 +3155,417 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/JsonConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="206" column="45" selection-start-line="206" selection-start-column="45" selection-end-line="206" selection-end-column="45" />
+          <caret line="63" column="18" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/DailyJournalContract.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/FetchBackUpFromGDriveAsync.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33214286">
-          <caret line="50" column="8" selection-start-line="50" selection-start-column="8" selection-end-line="50" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="129" column="63" selection-start-line="129" selection-start-column="63" selection-end-line="129" selection-end-column="63" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_party_list.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportDataAsyncTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.862069">
-          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-          <folding>
-            <element signature="e#841#863#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="69" column="64" selection-start-line="69" selection-start-column="64" selection-end-line="69" selection-end-column="64" />
+          <folding />
         </state>
       </provider>
-      <provider editor-type-id="android-designer">
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/TransferOldDataAsyncTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="98" column="64" selection-start-line="98" selection-start-column="64" selection-end-line="98" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/ImportExportActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="229" column="68" selection-start-line="229" selection-start-column="68" selection-end-line="229" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/RestoreBackUpAsync.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="83" column="64" selection-start-line="83" selection-start-column="64" selection-end-line="83" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/LedgerAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.91967213">
+          <caret line="50" column="54" selection-start-line="50" selection-start-column="54" selection-end-line="50" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/party_row.xml">
+      <provider selected="true" editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_party_activity.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18214285">
-          <caret line="6" column="46" selection-start-line="6" selection-start-column="46" selection-end-line="6" selection-end-column="46" />
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="44" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_party_list_activity.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.425">
-          <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
-          <folding>
-            <element signature="e#240#257#0" expanded="false" />
-            <element signature="e#460#486#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33214286">
-          <caret line="26" column="11" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="11" />
+        <state vertical-scroll-proportion="0.27868852">
+          <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/DailyJournalContract.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/button_positive.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48392856">
-          <caret line="45" column="63" selection-start-line="45" selection-start-column="63" selection-end-line="45" selection-end-column="63" />
+        <state vertical-scroll-proportion="0.13934426">
+          <caret line="5" column="54" selection-start-line="5" selection-start-column="54" selection-end-line="5" selection-end-column="54" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/ImportExport/BackUpAsyncTask.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/button_normal.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7285714">
-          <caret line="35" column="18" selection-start-line="29" selection-start-column="8" selection-end-line="35" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/platforms/android-21/android.jar!/android/content/DialogInterface.class">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/button_neutral.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35798818">
-          <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_export_import.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6825726">
-          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/CheckedListAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37245697">
-          <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+        <state vertical-scroll-proportion="-0.47704917">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="false" />
-            <element signature="e#1549#1814#0" expanded="false" />
-            <element signature="e#1813#1814#0" expanded="false" />
+            <element signature="e#739#740#0" expanded="false" />
+            <element signature="e#787#788#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/viewPager/ViewPagerActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyDetailActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="53" column="36" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Services.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48336595">
-          <caret line="181" column="57" selection-start-line="181" selection-start-column="57" selection-end-line="181" selection-end-column="57" />
-          <folding>
-            <element signature="e#5977#5978#0" expanded="false" />
-            <element signature="e#6019#6020#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/PartyDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39921722">
-          <caret line="102" column="14" selection-start-line="102" selection-start-column="14" selection-end-line="102" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ReportGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.66536206">
-          <caret line="175" column="12" selection-start-line="175" selection-start-column="12" selection-end-line="175" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Journal/JournalFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.16634052">
-          <caret line="407" column="0" selection-start-line="407" selection-start-column="0" selection-end-line="407" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5322896">
-          <caret line="16" column="36" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-normal/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49902153">
-          <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-large/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49902153">
-          <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-xlarge/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5322896">
-          <caret line="16" column="35" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_party.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="32" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
-          <folding>
-            <element signature="e#254#287#0" expanded="true" />
-            <element signature="e#312#347#0" expanded="true" />
-            <element signature="e#373#408#0" expanded="true" />
-            <element signature="e#432#465#0" expanded="true" />
-            <element signature="e#795#820#0" expanded="true" />
-            <element signature="e#1053#1078#0" expanded="true" />
-            <element signature="e#1321#1345#0" expanded="true" />
-            <element signature="e#1380#1404#0" expanded="true" />
-            <element signature="e#2139#2163#0" expanded="true" />
-            <element signature="e#2414#2440#0" expanded="true" />
-            <element signature="e#2516#2540#0" expanded="true" />
-            <element signature="e#2965#2987#0" expanded="true" />
-            <element signature="e#3218#3240#0" expanded="true" />
-            <element signature="e#3262#3282#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw600dp/activity_party.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="32" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
-          <folding>
-            <element signature="e#254#287#0" expanded="true" />
-            <element signature="e#312#347#0" expanded="true" />
-            <element signature="e#373#408#0" expanded="true" />
-            <element signature="e#432#465#0" expanded="true" />
-            <element signature="e#796#821#0" expanded="true" />
-            <element signature="e#1054#1079#0" expanded="true" />
-            <element signature="e#1322#1346#0" expanded="true" />
-            <element signature="e#1381#1405#0" expanded="true" />
-            <element signature="e#2140#2164#0" expanded="true" />
-            <element signature="e#2415#2441#0" expanded="true" />
-            <element signature="e#2517#2541#0" expanded="true" />
-            <element signature="e#2965#2987#0" expanded="true" />
-            <element signature="e#3218#3240#0" expanded="true" />
-            <element signature="e#3262#3282#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_party.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="32" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
-          <folding>
-            <element signature="e#254#287#0" expanded="true" />
-            <element signature="e#312#347#0" expanded="true" />
-            <element signature="e#373#408#0" expanded="true" />
-            <element signature="e#432#465#0" expanded="true" />
-            <element signature="e#796#821#0" expanded="true" />
-            <element signature="e#1054#1079#0" expanded="true" />
-            <element signature="e#1322#1346#0" expanded="true" />
-            <element signature="e#1381#1405#0" expanded="true" />
-            <element signature="e#2140#2164#0" expanded="true" />
-            <element signature="e#2415#2441#0" expanded="true" />
-            <element signature="e#2517#2541#0" expanded="true" />
-            <element signature="e#2941#2963#0" expanded="true" />
-            <element signature="e#3194#3216#0" expanded="true" />
-            <element signature="e#3238#3258#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/UtilsFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33268103">
-          <caret line="166" column="23" selection-start-line="166" selection-start-column="23" selection-end-line="166" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/ImportContacts.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44227007">
-          <caret line="118" column="91" selection-start-line="118" selection-start-column="91" selection-end-line="118" selection-end-column="91" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73189825">
-          <caret line="22" column="62" selection-start-line="22" selection-start-column="62" selection-end-line="22" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/JournalListActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.8630137">
-          <caret line="146" column="32" selection-start-line="146" selection-start-column="32" selection-end-line="146" selection-end-column="32" />
+        <state vertical-scroll-proportion="0.6655738">
+          <caret line="48" column="61" selection-start-line="48" selection-start-column="53" selection-end-line="48" selection-end-column="61" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30136988">
-          <caret line="150" column="97" selection-start-line="150" selection-start-column="97" selection-end-line="150" selection-end-column="97" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-sw720dp/values.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw600dp/fragment_party_detail.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="65" column="12" selection-start-line="65" selection-start-column="12" selection-end-line="65" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw600dp/ledger_row.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw720dp/fragment_party_detail.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5198188">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
           <folding>
-            <element signature="e#4972#5035#0" expanded="true" />
-            <element signature="e#5003#5034#0" expanded="true" />
+            <element signature="e#941#966#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw720dp/ledger_row.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6316872">
-          <caret line="117" column="18" selection-start-line="117" selection-start-column="18" selection-end-line="117" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.15402038">
+          <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-small/values.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0745614">
+          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-sw600dp/values.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_party_detail.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.596829">
+          <caret line="64" column="37" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/service/Services.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.110745616">
+          <caret line="290" column="19" selection-start-line="290" selection-start-column="19" selection-end-line="290" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Journal/JournalFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="272" column="47" selection-start-line="272" selection-start-column="47" selection-end-line="272" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_party_detail.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.038505096">
+          <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36594912">
-          <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="23" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
           <folding>
-            <element signature="e#4395#4453#0" expanded="true" />
-            <element signature="e#4455#5228#0" expanded="true" />
-            <element signature="e#5227#5228#0" expanded="true" />
+            <element signature="e#4424#4480#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyLedgerActivityOld.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.3557377">
+          <caret line="211" column="33" selection-start-line="211" selection-start-column="33" selection-end-line="211" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
+          <folding>
+            <element signature="e#2631#2658#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/model/Party.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="84" column="18" selection-start-line="84" selection-start-column="18" selection-end-line="84" selection-end-column="18" />
+          <folding>
+            <element signature="e#1581#1582#0" expanded="false" />
+            <element signature="e#1621#1622#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyDetailFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="154" column="111" selection-start-line="154" selection-start-column="111" selection-end-line="154" selection-end-column="111" />
+          <folding>
+            <element signature="docComment;method#PartyDetailFragment#0;class#PartyDetailFragment#0" expanded="false" />
+            <element signature="e#2292#2323#0" expanded="true" />
+            <element signature="e#4779#4808#0" expanded="true" />
+            <element signature="e#9491#9519#0" expanded="true" />
+            <element signature="e#9694#9724#0" expanded="true" />
+            <element signature="e#10781#10819#0" expanded="true" />
+            <element signature="e#10821#10852#0" expanded="true" />
+            <element signature="e#10964#11602#0" expanded="true" />
+            <element signature="e#11435#11466#0" expanded="true" />
+            <element signature="e#11468#11499#0" expanded="true" />
+            <element signature="e#11601#11602#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/ImportContactsAsync.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7005871">
-          <caret line="27" column="64" selection-start-line="27" selection-start-column="64" selection-end-line="27" selection-end-column="64" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#792#833#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/database/AttachmentDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36594912">
-          <caret line="42" column="22" selection-start-line="42" selection-start-column="22" selection-end-line="42" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="53" column="5" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2994129">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="270" column="38" selection-start-line="270" selection-start-column="38" selection-end-line="270" selection-end-column="38" />
           <folding>
-            <element signature="e#804#825#0" expanded="true" />
+            <element signature="docComment;class#Callbacks#0;class#PartyListFragment#0" expanded="false" />
+            <element signature="docComment;field#sDummyCallbacks#0;class#PartyListFragment#0" expanded="false" />
+            <element signature="e#9709#10302#0" expanded="true" />
+            <element signature="e#9948#10220#0" expanded="true" />
+            <element signature="e#10219#10220#0" expanded="true" />
+            <element signature="e#10301#10302#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ndhunju/dailyjournal/controller/Party/PartyListActivityOld.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="170" column="54" selection-start-line="170" selection-start-column="54" selection-end-line="170" selection-end-column="54" />
+          <folding>
+            <element signature="e#6234#6506#0" expanded="true" />
+            <element signature="e#6505#6506#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_party_list_activity.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27945206">
+          <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_party_activity.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.37260273">
+          <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-sw720dp/dimens.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-sw600dp-land/dimens.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19508196">
+          <caret line="7" column="47" selection-start-line="7" selection-start-column="47" selection-end-line="7" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-sw600dp/dimens.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19508196">
+          <caret line="7" column="47" selection-start-line="7" selection-start-column="47" selection-end-line="7" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_journal.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw720dp/activity_party_list.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-sw600dp-land/activity_party_list.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_party_list.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

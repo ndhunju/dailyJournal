@@ -118,6 +118,8 @@
     <string name="str_contact">Contact</string>
     <string name="str_phone_number">Phone Number</string>
     <string name="app_descrip">This accounting app allows you to record your daily transactions in the easiest way possible. It achieves easiness by altering the usual flow of journal entry.</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
 
 
 </resources>

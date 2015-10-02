@@ -14,10 +14,4 @@
         android:title="@string/str_share"
         android:icon="@android:drawable/ic_menu_share"
         tools:ignore="AppCompatResource"/>
-    <item
-        android:id="@+id/menu_party_activity_delete"
-        android:showAsAction="ifRoom|withText"
-        android:icon="@android:drawable/ic_delete"
-        android:title="@string/str_delete"
-        tools:ignore="AppCompatResource" />
 </menu><!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/menu/menu_party_activity.xml -->

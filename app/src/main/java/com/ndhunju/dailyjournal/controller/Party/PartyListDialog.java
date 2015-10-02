@@ -44,7 +44,7 @@ public class PartyListDialog extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.fragment_party_list, container);
+		View view = inflater.inflate(R.layout.fragment_party_list_old, container);
 		mServices = Services.getInstance(getActivity());
 
 		//Wire up widgets
@@ -73,7 +73,7 @@ public class PartyListDialog extends DialogFragment {
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, partyAdapter.getItem(position).getId());
 				((JournalFragment)getTargetFragment()).onDialogBtnClicked(i,
-						OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
+					OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
 			}
 		}); 
 
@@ -89,7 +89,8 @@ public class PartyListDialog extends DialogFragment {
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, addedParty.getId());
 				((JournalFragment)getTargetFragment()).onDialogBtnClicked(i,
-						OnDialogBtnClickedListener.BUTTON_POSITIVE, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
+						OnDialogBtnClickedListener.BUTTON_POSITIVE, Activity.RESULT_OK,
+						getArguments().getInt(Constants.KEY_REQUEST_CODE));
 
             }
 		});

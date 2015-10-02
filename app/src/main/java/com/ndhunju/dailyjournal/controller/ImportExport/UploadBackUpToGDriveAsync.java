@@ -21,11 +21,17 @@ import java.io.OutputStream;
 
 /**
  * Created by dhunju on 9/24/2015.
+ * This class is a child class of {@link AsyncTask} that creates
+ * back up in temp folder, uploads it to google drive and
+ * deletes the file from temp folder. This
+ * class displays Progress dialog before starting the operation
+ * and notifies user once the operation is completed
  */
 public class UploadBackUpToGDriveAsync extends AsyncTask<Void,Void,Void> {
 
     public static final String TAG = UploadBackUpToGDriveAsync.class.getSimpleName();
 
+    //variables
     GoogleApiClient mGoogleApiClient;
     int mReturnRequestCode;
     Activity mActivity;

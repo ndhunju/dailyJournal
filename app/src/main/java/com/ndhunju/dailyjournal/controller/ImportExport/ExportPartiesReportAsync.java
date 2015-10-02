@@ -13,12 +13,17 @@ import java.util.List;
 
 /**
  * Created by dhunju on 9/27/2015.
+ * This class is a child class of {@link AsyncTask} that creates
+ * reports for each parties in the list. Reports are stored in
+ * the directory selected by the user. This
+ * class displays Progress dialog before starting the operation
+ * and notifies user once the operation is completed
  */
 public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Boolean> {
 
     ProgressDialog pd;
     Activity mActivity;
-    String mPath;
+    String mPath;           //path to save the report
 
     public ExportPartiesReportAsync(Activity activity, String path){
         mActivity = activity;

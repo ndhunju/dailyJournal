@@ -13,6 +13,10 @@ import java.io.IOException;
 
 /**
  * Created by dhunju on 9/24/2015.
+ * This class is a child class of {@link AsyncTask} that creates
+ * back up in a user selected folder in the external storage. This
+ * class displays Progress dialog before starting the operation
+ * and notifies user once the operation is completed
  */
 public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
 

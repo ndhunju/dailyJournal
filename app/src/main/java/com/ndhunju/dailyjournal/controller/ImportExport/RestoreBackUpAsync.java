@@ -17,25 +17,26 @@ import java.io.File;
 
 /**
  * Restores the data from zipped/backup file
+ * This class is a child class of {@link AsyncTask} that creates
+ * deletes existing data and restores from a backup file selected
+ * by the user. This
+ * class displays Progress dialog before starting the operation
+ * and notifies user once the operation is completed
  */
 public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
 
     private static final String TAG = RestoreBackUpAsync.class.getSimpleName();
 
+    //variables
     Activity mActivity;
-
+    ProgressDialog pd;
 
     public RestoreBackUpAsync(Activity context){
         mActivity = context;
     }
 
-    //Show progress bar
-    ProgressDialog pd;
-
     @Override
     protected void onPreExecute() {
-
-
         String msg = String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_backup));
         pd = new ProgressDialog(mActivity);
         pd.setIndeterminate(true);
@@ -50,10 +51,9 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
         //End progress bar
         pd.cancel();
         mActivity.setResult(result ? mActivity.RESULT_OK : Activity.RESULT_CANCELED);
-        //Display msg
         String msg = result ? String.format(mActivity.getString(R.string.msg_restored), mActivity.getString(R.string.str_backup))
                 : String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_failed));
-        UtilsView.alert(mActivity, msg);
+        UtilsView.alert(mActivity, msg);//Display msg
     }
 
     @Override
@@ -80,14 +80,15 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
             //Unzip the files into app folder
             UtilsZip.unzip(new File(params[0]), appFolder);
 
-            JsonConverter converter = new JsonConverter(Services.getInstance(mActivity));
+            //Get data from json file
+            JsonConverter converter = JsonConverter.getInstance(Services.getInstance(mActivity));
 
             //search .json file
             File[] files = appFolder.listFiles();
             for (int i = files.length - 1; i >= 0; i--)
                 if (files[i].isFile() && files[i].getName().endsWith(".json")) {
                     if (!converter.parseJSONFile(files[i].getAbsolutePath()))
-                        return false; //false to preserve current Id
+                        return false;
                     //takes the first json file from the last
                     //name of json file has date on it so the latest json file
                     //wil likely be at the bottom of the list
@@ -95,8 +96,8 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
                 }
 
             //to let know that a new file has been created so that it appears in the computer
-            MediaScannerConnection.scanFile(mActivity
-                    , new String[]{appFolder.getAbsolutePath()}, null, null);
+            MediaScannerConnection.scanFile(mActivity, new String[]{appFolder.getAbsolutePath()}
+                                            , null, null);
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Error creating backup file: " + e.getMessage());

@@ -14,21 +14,33 @@ import com.ndhunju.dailyjournal.R;
 
 /**
  * Created by dhunju on 9/24/2015.
+ * This is a wrapper class that wraps {@link GoogleApiClient} class
  */
 public class GoogleApiClientManager {
 
     private static final String TAG = GoogleApiClientManager.class.getSimpleName();
+
+    //variables
     private GoogleApiClient mGoogleApiClient;   //GoogleApiClient to use Google Drive
     private Activity mActivity;
 
+    //Static instances
     private static GoogleApiClientManager mGoogleApiClientMgr;
 
+    /**
+     * Static method
+     * <Note>Even though old instance is still present, the {@link GoogleApiClient}
+     * it stores gets invalid. So user the constructor instead</Note>
+     * @param activity
+     * @return
+     */
     public static GoogleApiClientManager getInstance(Activity activity){
-        mGoogleApiClientMgr = new GoogleApiClientManager(activity);
+        if(mGoogleApiClientMgr == null)
+            mGoogleApiClientMgr = new GoogleApiClientManager(activity);
         return mGoogleApiClientMgr;
     }
 
-    private GoogleApiClientManager(Activity context){
+    public GoogleApiClientManager(Activity context){
         mActivity = context;
     }
 
@@ -51,8 +63,7 @@ public class GoogleApiClientManager {
                     @Override
                     public void onConnected(Bundle bundle) {
                         Log.i(TAG, "API client connected.");
-                        connectionPd.cancel();
-                    }
+                        connectionPd.cancel();             }
 
                     @Override
                     public void onConnectionSuspended(int i) {
@@ -67,8 +78,8 @@ public class GoogleApiClientManager {
                         if (!result.hasResolution()) {
                             // show the localized error dialog.
                             GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), mActivity, 0).show();
-                            return;
-                        }
+                            return;}
+
                         // If the failure has a resolution. Resolve it. Called typically when the app is
                         // not yet authorized, and an authorization dialog is displayed to the user.
                         try {

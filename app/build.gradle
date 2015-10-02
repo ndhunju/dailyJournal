@@ -28,11 +28,10 @@ android {
 
 
 
+
 dependencies {
 
-    compile 'com.android.support:support-v4:22.2.0'
     //compile 'com.android.support:appcompat-v7:22.2.0'
-    
 
     //http://tools.android.com/tech-docs/unit-testing-support
     testCompile 'junit:junit:4.12'
@@ -42,6 +41,7 @@ dependencies {
     //Any code that makes a call to Android provided library it gives error
     compile files('libs/org.json.jar')
 
-    compile 'com.google.android.gms:play-services-drive:7.5.0'
     compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.google.android.gms:play-services-drive:7.5.0'
 }

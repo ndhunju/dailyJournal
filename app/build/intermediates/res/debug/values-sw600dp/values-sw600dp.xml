@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values-sw600dp/values.xml -->
+    <eat-comment/>
+    <bool name="noteCol">true</bool>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values-sw600dp/dimens.xml -->
+    <eat-comment/>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">5dp</dimen>
+    <dimen name="button_height">45dp</dimen>
+    <dimen name="party_pic_width">100dp</dimen>
+    <dimen name="text_size_xlarge">35sp</dimen>
+    <dimen name="text_size_xxlarge">50sp</dimen>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values-sw600dp/values.xml -->
+    <eat-comment/>
+    <string name="dateFormat">MMM-d-yyy</string>
+</resources>

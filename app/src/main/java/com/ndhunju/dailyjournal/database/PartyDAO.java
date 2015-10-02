@@ -34,29 +34,48 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
     }
 
-    public static long create(Party party, SQLiteDatabase db){
-        return db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
-    }
-
     @Override
     public Party find(Long id) {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
-        Cursor c = db.query(PartyColumns.TABLE_PARTY, null, PartyColumns.PARTY_ID + "=" + id, null, null, null, null, null);
-        if(!c.moveToFirst())
-            return null;
+        Cursor c = db.query(PartyColumns.TABLE_PARTY, null,
+                   PartyColumns.PARTY_ID + "=" + id, null, null, null, null, null);
+
+        if(!c.moveToFirst()) return null;
 
         return fromCursor(c);
     }
 
-
+    /**
+     * This method updates the Debit column of respective party row
+     * <h1>Eg. 1. current row</h1>
+     * id | .... | drAmt | crAmt<br></br>
+     * 1  | .... | 200.00| 100.00 <br></br>
+     * exec -> updateDr(1, 100.00, "+")<br></br>
+     * new row, <br></br>
+     * id | .... | drAmt | crAmt<br></br>
+     * 1  | .... | 300.00| 100.00<br></br>
+     *
+     * @param id
+     * @param amount
+     * @param operation
+     * @return
+     */
     public int updateDr(long id, double amount, String operation){
-        return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_DR_AMT, amount, operation, PartyColumns.PARTY_ID, id);
+        return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_DR_AMT,
+                           amount, operation, PartyColumns.PARTY_ID, id);
     }
 
 
-
+    /**
+     * Updates the credit column of respective party row
+     * @param id
+     * @param amount
+     * @param operation
+     * @return
+     */
     public int updateCr(long id, double amount, String operation){
-        return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_CR_AMT, amount, operation, PartyColumns.PARTY_ID, id);
+        return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_CR_AMT,
+                           amount, operation, PartyColumns.PARTY_ID, id);
     }
 
     public int execUpdate(String table, String column, double amount, String operation, String pk, long val){
@@ -71,19 +90,22 @@ public class PartyDAO implements GenericDAO<Party, Long> {
 
     public Party find(String partyName){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
-        Cursor c = db.query(PartyColumns.TABLE_PARTY, null, PartyColumns.COL_PARTY_NAME + "= ?", new String[]{partyName}, null, null, null);
-        if(!c.moveToFirst())
-            return null;
+        Cursor c = db.query(PartyColumns.TABLE_PARTY, null, PartyColumns.COL_PARTY_NAME + "= ?",
+                            new String[]{partyName}, null, null, null);
+
+        if(!c.moveToFirst())   return null;
         return fromCursor(c);
     }
 
     @Override
     public List<Party> findAll() {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
-        Cursor c = db.query(true, PartyColumns.TABLE_PARTY, null, null, null, null, null, PartyColumns.COL_PARTY_NAME, null);
+        Cursor c = db.query(true, PartyColumns.TABLE_PARTY, null, null, null, null, null,
+                            PartyColumns.COL_PARTY_NAME, null);
+
         List<Party> temp = new ArrayList<Party>();
-        if(!c.moveToFirst())
-            return temp;
+        if(!c.moveToFirst()) return temp;
+
         do{
             temp.add(fromCursor(c));
         }while(c.moveToNext());
@@ -94,7 +116,8 @@ public class PartyDAO implements GenericDAO<Party, Long> {
     @Override
     public long update(Party party) {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-        return db.update(PartyColumns.TABLE_PARTY, toContentValues(party), PartyColumns.PARTY_ID +"="+party.getId(), null);
+        return db.update(PartyColumns.TABLE_PARTY, toContentValues(party),
+                         PartyColumns.PARTY_ID +"="+party.getId(), null);
     }
 
     @Override
@@ -110,10 +133,11 @@ public class PartyDAO implements GenericDAO<Party, Long> {
 
     public List<String> getNames(){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
-        Cursor c = db.query(PartyColumns.TABLE_PARTY, new String[]{PartyColumns.COL_PARTY_NAME}, null, null, null, PartyColumns.COL_PARTY_NAME, null);
+        Cursor c = db.query(PartyColumns.TABLE_PARTY, new String[]{PartyColumns.COL_PARTY_NAME},
+                            null, null, null, PartyColumns.COL_PARTY_NAME, null);
+
         List<String> names = new ArrayList<>();
-        if(!c.moveToFirst())
-            return names;
+        if(!c.moveToFirst())return names;
 
         do{
             names.add(c.getString(c.getColumnIndex(PartyColumns.COL_PARTY_NAME)));
@@ -121,9 +145,20 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return names;
     }
 
+    /**
+     * Deletes all the entry from the table but keeps the schema
+     * @return
+     */
     public int truncateTable(){
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         return db.delete(PartyColumns.TABLE_PARTY, null,null);
+    }
+
+
+    //Static methods
+
+    public static long create(Party party, SQLiteDatabase db){
+        return db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
     }
 
     public static ContentValues toContentValues(Party party){

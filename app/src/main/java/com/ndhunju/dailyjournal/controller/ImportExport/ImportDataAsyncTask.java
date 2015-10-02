@@ -16,14 +16,14 @@ import com.ndhunju.dailyjournal.service.UtilsZip;
 import java.io.File;
 
 /**
- * Imports data from zipped/backup file
- * 1. Merging journals with duplicate id
+ * Imports data from zipped/backup file. As opposed to {@link RestoreBackUpAsync}
+ * this doesn't erase old data rather mergers it with the existing data
+ * TODO Merging journals with duplicate id
  */
 public class ImportDataAsyncTask extends AsyncTask<String, Void, Boolean> {
 
-
+    //Variables
     Activity mActivity;
-    //Show progress bar
     ProgressDialog pd;
 
     public ImportDataAsyncTask(Activity activity) {
@@ -67,7 +67,7 @@ public class ImportDataAsyncTask extends AsyncTask<String, Void, Boolean> {
             //Unzip the files into app folder
             UtilsZip.unzip(new File(params[0]), appFolder);
 
-            JsonConverter converter = new JsonConverter(Services.getInstance(mActivity));
+            JsonConverter converter = JsonConverter.getInstance(Services.getInstance(mActivity));
 
             //search .json file
             File[] files = appFolder.listFiles();

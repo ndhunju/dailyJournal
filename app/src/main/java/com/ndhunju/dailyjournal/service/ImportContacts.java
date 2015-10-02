@@ -16,6 +16,8 @@ import com.ndhunju.dailyjournal.controller.CheckedListAdapter;
 import com.ndhunju.dailyjournal.model.Party;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -23,9 +25,12 @@ import java.util.List;
 
 /**
  * Created by dhunju on 9/29/2015.
+ * This is a services class that deals with retrieving
+ * contact details
  */
 public class ImportContacts {
 
+    //Sub class to hold basic details of a contact
     public static class Contact{
         public String id;
         public String name;
@@ -83,7 +88,7 @@ public class ImportContacts {
     }
 
     /**
-     * This method read ContentProvider for Contacts and creates respective Parties and saves it to
+     * This method reads ContentProvider for Contacts and creates respective Parties and saves it to
      * the database. <Note>This method should be called in the background thread</Note>
      * @param activity
      * @param contactsToImport

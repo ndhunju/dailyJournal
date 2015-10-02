@@ -23,10 +23,10 @@ public class DirListAdapter<String> extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = super.getView(position, convertView, parent);
         if (v instanceof TextView) {
-            //ellipsize long directores
             TextView tv = (TextView) v;
             tv.setBackgroundColor(Color.LTGRAY);
             tv.setSingleLine();
+            //ellipsize long directories
             tv.setEllipsize(TextUtils.TruncateAt.END);
         }
         return v;

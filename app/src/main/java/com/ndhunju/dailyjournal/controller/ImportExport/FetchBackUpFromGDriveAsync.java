@@ -25,22 +25,23 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 /**
- * Retrieves DriveFileContent, make a local copy, uses it to restore the backed up data
+ * Retrieves DriveFileContent, make a local copy, uses it to restore the backed up data and
+ * deletes the downloaded backup file
  * https://github.com/googledrive/android-demos/blob/master/src/com/google/android/gms/drive/sample/demo
  */
 public class FetchBackUpFromGDriveAsync extends AsyncTask<DriveId, Integer, String> {
 
     public final static String TAG = FetchBackUpFromGDriveAsync.class.getSimpleName();
 
-
+    //Variables
     private GoogleApiClient mGoogleApiClient;
     ProgressDialog fileRetrievePd;
     private Activity mActivity;
 
 
     public FetchBackUpFromGDriveAsync(Activity context, GoogleApiClient googleApiClient) {
-        mActivity = context;
         mGoogleApiClient = googleApiClient;
+        mActivity = context;
     }
 
     @Override
@@ -126,7 +127,7 @@ public class FetchBackUpFromGDriveAsync extends AsyncTask<DriveId, Integer, Stri
             //search .json file
             File[] files = appFolder.listFiles();
 
-            JsonConverter converter = new JsonConverter(Services.getInstance(mActivity));
+            JsonConverter converter = JsonConverter.getInstance(Services.getInstance(mActivity));
 
             for (int i = files.length - 1; i >= 0; i--)
                 if (files[i].isFile() && files[i].getName().endsWith(".json")) {

@@ -4,7 +4,7 @@
     tools:context="com.ndhunju.dailyjournal.HomeActivity" >
 
     <item
-        android:id="@+id/meu_journal_merchants"
+        android:id="@+id/menu_party_list"
         android:orderInCategory="1"
         android:title="@string/str_parties"
         android:showAsAction="ifRoom|withText"

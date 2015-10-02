@@ -33,14 +33,15 @@ import java.io.File;
 
 public class PartyActivity extends FragmentActivity {
 
-    private static final int REQUEST_IMAGE = 123;
     private static final String TAG = PartyActivity.class.getSimpleName();
+    private static final int REQUEST_IMAGE = 123;
+
 
     //Variables
-	Spinner typeSpinner;
+    ImageButton partyPicIV;
+    Spinner typeSpinner;
 	Services mServices;
 	EditText phoneET;
-    ImageButton partyPicIV;
     EditText nameET;
 	Party mParty;
 
@@ -53,10 +54,10 @@ public class PartyActivity extends FragmentActivity {
 		//Get the party id
 		long partyId = getIntent().getLongExtra(Constants.KEY_PARTY_ID, Constants.ID_NEW_PARTY);
 		mServices =  Services.getInstance(this);
+
 		if(partyId == Constants.ID_NEW_PARTY)
-			mParty = new Party(getString(R.string.str_new));
-		else
-			mParty = mServices.getParty(partyId);
+        {mParty = new Party(getString(R.string.str_new), Constants.ID_NEW_PARTY);}
+		else{mParty = mServices.getParty(partyId);}
 		
 		setTitle(mParty.getName());
 
@@ -84,12 +85,13 @@ public class PartyActivity extends FragmentActivity {
 		phoneET.setText(mParty.getPhone());
 		
 		typeSpinner = (Spinner)findViewById(R.id.activity_party_type_spinner);
+
 		String[] merchantTypes = new String[Type.values().length];
 		for(int i = 0; i < Type.values().length ; i++)
 			merchantTypes[i] = Type.values()[i].toString();
-		
-		typeSpinner.setAdapter(new ArrayAdapter<String>(this
-                , android.R.layout.simple_list_item_1, merchantTypes));
+
+		typeSpinner.setAdapter(new ArrayAdapter<String>
+        (this, android.R.layout.simple_list_item_1, merchantTypes));
 		typeSpinner.setSelection(mParty.getType().ordinal());
 		
 		Button okBtn = (Button)findViewById(R.id.activity_party_ok_btn);
@@ -101,7 +103,7 @@ public class PartyActivity extends FragmentActivity {
 				mParty.setPhone(phoneET.getText().toString());
 				mParty.setType(Party.Type.valueOf(typeSpinner.getSelectedItem().toString()));
 
-				if(mParty.getId() == Constants.NO_PARTY)
+				if(mParty.getId() == Constants.ID_NEW_PARTY)
 					mServices.addParty(mParty);
 				else
 					mServices.updateParty(mParty);
@@ -121,7 +123,7 @@ public class PartyActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 UtilsView.alert(PartyActivity.this,
-                        getString(R.string.msg_delete_confirm, R.string.str_party), new DialogInterface.OnClickListener() {
+                        getString(R.string.msg_delete_confirm, mParty.getName()), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 mServices.deleteParty(mParty);

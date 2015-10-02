@@ -83,7 +83,7 @@ public class DbHelper extends SQLiteOpenHelper {
     	try{db.execSQL(PartyColumns.SQL_DROP_ENTRIES_PARTY);
 		}catch(Exception e){e.printStackTrace();}
 		try{db.execSQL(JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
-		}catch (Exception e) {		}
+		}catch (Exception e) {}
 		try{db.execSQL(AttachmentColumns.SQL_DROP_ENTRIES_ATTACHMENTS);
 		}catch (Exception e) {}
 		

@@ -71,7 +71,7 @@ public class LockScreenActivity extends Activity {
         passcodeET.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                passcodeTV.setTextColor(Color.parseColor(Constants.BLACK));
+                passcodeTV.setTextColor(getResources().getColor(android.R.color.black));
                 //Unlock as soon as the pin code matches
                 if(savedPassCode.equals(s.toString())){
                     passcodeActivatedTime = System.currentTimeMillis();
@@ -96,7 +96,7 @@ public class LockScreenActivity extends Activity {
                         //if the user clicks Enter with wrong pass code,
                         //Clear text and make PassCodeTextView red
                         passcodeET.setText(MyPreferenceFragment.NO_PASSCODE_VAL);
-                        passcodeTV.setTextColor(Color.parseColor(Constants.RED));
+                        passcodeTV.setTextColor(getResources().getColor(R.color.red_light_pressed));
                     }
                 }
                 return false;

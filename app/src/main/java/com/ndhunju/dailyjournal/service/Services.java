@@ -69,7 +69,7 @@ public class Services {
      */
     public String createBackUp(boolean inExtDir, String extDir) throws IOException {
         //1.Create JSON with latest data
-        JsonConverter converter = new JsonConverter(mServices);
+        JsonConverter converter = JsonConverter.getInstance(mServices);
         converter.createJSONFile();
 
         //2. Zip app folder  as all the attachments and json file are here

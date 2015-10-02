@@ -5,22 +5,32 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.service.ImportContacts;
 import com.ndhunju.dailyjournal.service.UtilsView;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by dhunju on 9/29/2015.
+ * This class is a child class of {@link AsyncTask} that imports
+ * contacts by calling method {@link ImportContacts#importContacts(Activity, List)}
+ * This class displays Progress dialog before starting the operation
+ * and notifies user once the operation is completed
  */
 public class ImportContactsAsync extends AsyncTask<List<ImportContacts.Contact>, Integer, Boolean> {
 
+    Callback mCallback;
     Activity mActivity;
     ProgressDialog pd;
 
-    public ImportContactsAsync(Activity activity){
+    interface Callback{
+        public void onFinished();
+    }
+
+    public ImportContactsAsync(Activity activity, Callback callback){
         mActivity = activity;
+        mCallback = callback;
     }
 
     @Override
@@ -40,6 +50,6 @@ public class ImportContactsAsync extends AsyncTask<List<ImportContacts.Contact>,
         pd.cancel();
         String msg = mActivity.getString(R.string.msg_finished, "");
         UtilsView.alert(mActivity, msg);
-        ((PartyListActivity)mActivity).refreshList();
+        if(mCallback != null) mCallback.onFinished();
     }
 }

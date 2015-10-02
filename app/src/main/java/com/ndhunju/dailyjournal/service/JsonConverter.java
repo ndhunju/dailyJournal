@@ -22,6 +22,8 @@ import java.util.List;
 
 /**
  * Created by dhunju on 9/21/2015.
+ * This class converts model objects into equivalent json format
+ * and vice versa
  */
 public final class JsonConverter {
     
@@ -53,8 +55,19 @@ public final class JsonConverter {
 
     //Variables
     Services mServices;
+    static JsonConverter mJsonConverter;
 
-    public JsonConverter(Services ser){
+    //If the methods are using same object then using singleton pattern
+    // helps make your code clean because you don't have to use static key
+    //and pass same object for each method
+
+    public static JsonConverter getInstance(Services services){
+        if(mJsonConverter == null)
+            mJsonConverter = new JsonConverter(services);
+        return mJsonConverter;
+    }
+
+    private JsonConverter(Services ser){
         mServices = ser;
     }
 
@@ -75,9 +88,11 @@ public final class JsonConverter {
 
             JSONArray journalJSONs = new JSONArray();
             List<Journal> mJournals = mServices.getJournals(party.getId());
+
             for(Journal j: mJournals){
                 journalJSONs.put(toJSON(j));
             }
+
             json.put(KEY_JOURNALS, journalJSONs);
         }catch(Exception e){
             e.printStackTrace();
@@ -93,9 +108,10 @@ public final class JsonConverter {
             j.put(KEY_DATE, journal.getDate());
             j.put(KEY_NOTE , journal.getNote());
             j.put(KEY_AMOUNT, journal.getAmount());
+            j.put(KEY_PARTY_ID, journal.getPartyId());
             j.put(KEY_ADDED_DATE , journal.getAddedDate());
             j.put(KEY_TYPE , journal.getType().toString());
-            j.put(KEY_PARTY_ID, journal.getPartyId());
+
             JSONArray attachmentJSONs = new JSONArray();
             List<Attachment> attachments = mServices.getAttachments(journal.getId());
             for(Attachment a : attachments){
@@ -103,6 +119,7 @@ public final class JsonConverter {
             }
 
             j.put(KEY_ATTACHMENTS, attachmentJSONs);
+
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -111,16 +128,14 @@ public final class JsonConverter {
     }
 
     public JSONObject toJSON(Attachment attachment){
-        JSONObject j = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         try{
-            j.put(KEY_ID, attachment.getId());
-            j.put(KEY_PATH, attachment.getPath());
-            j.put(KEY_JOURNAL_ID, attachment.getJournalId());
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
+            jsonObject.put(KEY_ID, attachment.getId());
+            jsonObject.put(KEY_PATH, attachment.getPath());
+            jsonObject.put(KEY_JOURNAL_ID, attachment.getJournalId());
+        }catch (JSONException e) {e.printStackTrace();}
 
-        return j;
+        return jsonObject;
     }
 
     /**
@@ -135,8 +150,9 @@ public final class JsonConverter {
             if(newParty == null) return null;
             //while adding the journal, credit and debit amount as increment respectively
             //In other words, credit and debit will be calculated again
-            newParty.setCreditTotal(0);
             newParty.setDebitTotal(0);
+            newParty.setCreditTotal(0);
+
             long id = mServices.addParty(newParty);
 
             JSONArray journalJSONS = json.getJSONArray(KEY_JOURNALS);
@@ -176,6 +192,7 @@ public final class JsonConverter {
     public Attachment insertAttchIntoDb(JSONObject jsonObject, long journalId) {
         Attachment newAttachment = getAttachment(jsonObject);
         newAttachment.setJournalId(journalId);
+
         mServices.addAttachment(newAttachment);
 
         return newAttachment;
@@ -193,13 +210,14 @@ public final class JsonConverter {
         try {
             int id = json.getInt(KEY_ID);
             String name = json.getString(KEY_NAME);
-            String phone = json.getString(KEY_PHONE);
             String type = json.getString(KEY_TYPE);
+            String phone = json.getString(KEY_PHONE);
             double debit = json.getDouble(KEY_DEBIT);
             double credit = json.getDouble(KEY_CREDIT);
             String picPath = json.getString(KEY_PICTURE);
 
             Party newParty = new Party(name);
+
             newParty.setId(id);
             newParty.setPhone(phone);
             newParty.setDebitTotal(debit);
@@ -249,6 +267,7 @@ public final class JsonConverter {
             int id = jsonObject.getInt(KEY_ID);
             String path = jsonObject.getString(KEY_PATH);
             int journalId = jsonObject.getInt(KEY_JOURNAL_ID);
+
             attachment = new Attachment(journalId);
             attachment.setPath(path);
             attachment.setId(id);
@@ -310,6 +329,7 @@ public final class JsonConverter {
      */
     public JSONArray getJSONDb(){
         JSONArray partyJSONs = new JSONArray();
+
         for (Party party : mServices.getParties()) {
             partyJSONs.put(toJSON(party));
         }
@@ -333,6 +353,7 @@ public final class JsonConverter {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             StringBuilder jsonString = new StringBuilder();
             String line;
+
             while((line = reader.readLine()) != null)
                 jsonString.append(line );
 
@@ -343,7 +364,6 @@ public final class JsonConverter {
             return true;
         } catch (Exception e) {
             Log.d(TAG, "Failed to parse JSON file. " + e.getMessage());
-
             e.printStackTrace();
         }
         return false;
@@ -369,9 +389,12 @@ public final class JsonConverter {
     //Json converter for old backup file
     class OldJsonConverter{
 
+        public final String TAG = OldJsonConverter.class.getSimpleName();
+
         public boolean insertIntoDB(String jsonString){
-            Log.i("OLD " + TAG , "Attempting to parse json with old keys");
+            Log.i(TAG , "Attempting to parse json with old keys");
             JSONArray partyJSONArray = null;
+
             try {
                 partyJSONArray = new JSONArray(jsonString);
                 for (int i = 0; i < partyJSONArray.length(); i++) {
@@ -379,7 +402,7 @@ public final class JsonConverter {
                         return false;
                 }
             } catch (JSONException e) {
-                Log.w("OLD " + TAG , "Error parsing json file" );
+                Log.w(TAG , "Error parsing json file" );
                 return false;
             }
             return true;
@@ -391,8 +414,9 @@ public final class JsonConverter {
                 Party newParty = getParty(json);
                 //while adding the journal, credit and debit amount as increment respectively
                 //In other words, credit and debit will be calculated again
-                newParty.setCreditTotal(0);
                 newParty.setDebitTotal(0);
+                newParty.setCreditTotal(0);
+
                 long id = mServices.addParty(newParty);
 
                 JSONArray journalJSONS = json.getJSONArray("journals");
@@ -488,9 +512,10 @@ public final class JsonConverter {
                 String phone = json.getString("phone");
 
                 //Since Debitors was corrected to Debtors, Type.valueOf("Debitors") throws error
-                String type = json.getString("type");
-                Party.Type t = type.equals("Debitors") ? Party.Type.Debtors : Party.Type.valueOf(type);
                 newParty.setPhone(phone);
+                String type = json.getString("type");
+                Party.Type t = type.equals("Debitors") ? Party.Type.Debtors
+                                                       : Party.Type.valueOf(type);
                 newParty.setType(t);
 
                 return newParty;

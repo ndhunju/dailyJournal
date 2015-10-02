@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,9 +29,9 @@ import com.ndhunju.dailyjournal.controller.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.ImportExport.EraseAllAsyncTask;
 import com.ndhunju.dailyjournal.controller.ImportExport.ImportExportActivity;
+import com.ndhunju.dailyjournal.controller.Party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.LockScreenActivity;
 import com.ndhunju.dailyjournal.controller.MyPreferenceFragment;
-import com.ndhunju.dailyjournal.controller.Party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.Party.PartyListDialog;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -238,7 +237,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 					UtilsView.alert(getActivity(), getString(R.string.warning_select_party));
 					return;
 				}
-				getAttachmetnAlertDialogOption().show();
+				getAttachmentAlertDialogOption().show();
 			}
 		});
 
@@ -326,7 +325,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
             case REQUEST_TAKE_PHOTO: //Picture was taken from the Camera App
 
-				showResult(resultCode);
+				UtilsView.showResult(getActivity(), resultCode);
 
 				//Since camera cannot save picture in file created inside app's folder
 				//1. Create a file in external mServices
@@ -359,7 +358,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
             case REQUEST_IMAGE:  //Image was picked from the mServices
 
-				showResult(resultCode);
+				UtilsView.showResult(getActivity(), resultCode);
 
                 Uri selectedImage = data.getData();
                 Bitmap bitmap;
@@ -379,7 +378,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
             case REQUEST_CHGD_ATTACHMENTS: //Attachments were viewed and maybe changed as well
 
-				showResult(resultCode);
+				UtilsView.showResult(getActivity(), resultCode);
 				boolean isAttachmentChanged = data.getBooleanExtra(Constants.KEY_ATTACHMENTS_IS_CHGD, false);
                 if(isAttachmentChanged){
                     //If attachments were changed, update it
@@ -402,7 +401,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 				break;
 
 			case REQUEST_CODE_IMPORT_OLD_DATA: //Old Data were imported to new directory
-				showResult(resultCode);
+				UtilsView.showResult(getActivity(), resultCode);
 				Log.i(TAG, "Importing old data finished");
 				break;
 
@@ -410,13 +409,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
 	}
 
-	public void showResult(int resultCode){
-		//If the result is not success, return
-		if (resultCode != Activity.RESULT_OK){
-			UtilsView.alert(getActivity(), String.format(getString(R.string.msg_failed), getString(R.string.str_save)));
-			return;
-		}
-	}
+
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -433,7 +426,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		int id = item.getItemId();
 
 		switch (id) {
-            case R.id.meu_journal_merchants:
+            case R.id.menu_party_list:
                 startActivity(new Intent(getActivity(), PartyListActivity.class));
                 break;
 
@@ -492,13 +485,16 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
      * @param journalType
      */
     public void setTextDrCr(Journal.Type journalType){
+		int red = getResources().getColor(R.color.red_light_pressed);
+		int green = getResources().getColor(R.color.green);
+
         if (journalType.equals(Journal.Type.Debit)) {
-			amountEt.setTextColor(Color.parseColor(Constants.GREEN));
-			drCrTv.setTextColor(Color.parseColor(Constants.GREEN));
+			amountEt.setTextColor(green);
+			drCrTv.setTextColor(green);
 			drCrTv.setText(getString(R.string.str_dr));
         } else {
-			amountEt.setTextColor(Color.parseColor(Constants.RED));
-			drCrTv.setTextColor(Color.parseColor(Constants.RED));
+			amountEt.setTextColor(red);
+			drCrTv.setTextColor(red);
 			drCrTv.setText(getString(R.string.str_cr));
         }
     }
@@ -552,7 +548,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
 	}
 
-	private AlertDialog getAttachmetnAlertDialogOption(){
+	private AlertDialog getAttachmentAlertDialogOption(){
 		CharSequence[] options = getResources().getStringArray(R.array.options_attch);
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(getString(R.string.str_choose))

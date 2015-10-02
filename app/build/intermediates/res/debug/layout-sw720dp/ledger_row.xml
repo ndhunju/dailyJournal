@@ -6,7 +6,7 @@
         android:id="@+id/ledger_row_col0"
         android:text="@string/str_no"
         android:layout_height="wrap_content"
-        android:layout_width="45dp"
+        android:layout_width="55dp"
         android:background="@drawable/cell_shape"
         android:padding="3dp"
         android:gravity="center"

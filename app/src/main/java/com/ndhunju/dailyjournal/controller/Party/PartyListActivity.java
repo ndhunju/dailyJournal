@@ -1,180 +1,97 @@
 package com.ndhunju.dailyjournal.controller.Party;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.app.Activity;
+
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.CheckedListAdapter;
 import com.ndhunju.dailyjournal.controller.LockScreenActivity;
-import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.ImportContacts;
-import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.service.UtilsView;
 
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * An activity representing a list of Parties. This activity
+ * has different presentations for handset and tablet-size devices. On
+ * handsets, the activity presents a list of items, which when touched,
+ * lead to a {@link PartyDetailActivity} representing
+ * item details. On tablets, the activity presents the list of items and
+ * item details side-by-side using two vertical panes.
+ * <p>
+ * The activity makes heavy use of fragments. The list of items is a
+ * {@link PartyListFragment} and the item details
+ * (if present) is a {@link PartyDetailFragment}.
+ * <p>
+ * This activity also implements the required
+ * {@link PartyListFragment.Callbacks} interface
+ * to listen for item selections.
+ */
+public class PartyListActivity extends Activity implements PartyListFragment.Callbacks {
 
-public class PartyListActivity extends FragmentActivity {
+    //Whether or not the activity is in two-pane mode, i.e. running on a tablet
+    private boolean mTwoPane;
 
-	private static final int REQUEST_PARTY_INFO_CHGD = 135;
-
-	//Declare variables
-	private Services mServices;
-	private ListView partyLV;
-	private EditText srchPartyET;
-	private ArrayAdapter<Party> partyAdapter;
-
-	
-	@Override
-	protected void onCreate(Bundle arg0) {
-		super.onCreate(arg0);
-		setContentView(R.layout.fragment_party_list);
-		setTitle(getString(R.string.title_activity_party));
-		
-		mServices = Services.getInstance(PartyListActivity.this);
-
-		//Wire up widgets
-		srchPartyET = (EditText)findViewById(R.id.fragment_party_list_search_et);
-		srchPartyET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                partyAdapter.getFilter().filter(s); //filter the list below
-            }
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-		
-		partyLV = (ListView)findViewById(R.id.fragment_party_list_party_list_lv);
-		partyLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(PartyListActivity.this, JournalListActivity.class);
-                i.putExtra(Constants.KEY_PARTY_ID, partyAdapter.getItem(position).getId()); //ids array is parallel
-                startActivityForResult(i, REQUEST_PARTY_INFO_CHGD);
-            }
-
-        });
-
-		//When user clicks on Add Party button, create a Party and pass the ID to previous activity
-		((Button)findViewById(R.id.fragment_party_list_add_party_btn)).setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String name = srchPartyET.getText().toString();
-                Party newParty = mServices.addParty(name);
-                UtilsView.toast(PartyListActivity.this, name + " saved.");
-
-                Intent i = new Intent(PartyListActivity.this, JournalListActivity.class);
-                i.putExtra(Constants.KEY_PARTY_ID, newParty.getId());
-                startActivity(i);
-            }
-        });
-
-        refreshList();
-
-				
-	}
-	
-	@Override
-	protected void onPause() {
-		//Services.getInstance(PartyListActivity.this).writeToDB();
-		//update pass code time
-		LockScreenActivity.updatePasscodeTime();
-		super.onPause();
-	}
-	
-	@Override
-	protected void onResume() {
-		//check pass code
-		LockScreenActivity.checkPassCode(PartyListActivity.this);
-
-		super.onResume();
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(data == null)
-            return;;
-
-		switch (requestCode){
-			case REQUEST_PARTY_INFO_CHGD:
-				if(!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false))
-					return;
-
-                refreshList();
-
-				break;
+    //Context menu id for {@link PartyListFragment} and {@link PartyDetailFragment}
+    public static final int CONTEXT_MENU_DELETE = 0;
+    public static final int CONTEXT_MENU_EDIT = 1;
+    public static final int CONTEXT_MENU_PARTY_DELETE = 2;
+    public static final int CONTEXT_MENU_PARTY_EDIT = 3;
 
 
-		}
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.clear();;
-		getMenuInflater().inflate(R.menu.menu_party_list_activity, menu);
-		return  super.onCreateOptionsMenu(menu);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_party_list);
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+        if (findViewById(R.id.item_detail_container) != null) {
+            // The detail container view will be present only in the sw600dp screen
+            mTwoPane = true;
+            // In two-pane mode, list items should be given the 'activated' state when touched.
+            ((PartyListFragment) getFragmentManager()
+                                .findFragmentById(R.id.item_list))
+                                .setActivateOnItemClick(true);
+        }
+    }
 
-		switch (item.getItemId()){
-			case R.id.menu_party_list_activity_add:
-				Intent newPartyIntent = new Intent(PartyListActivity.this, PartyActivity.class);
-				startActivityForResult(newPartyIntent, REQUEST_PARTY_INFO_CHGD);
-				break;
+    /**
+     * Callback method from {@link PartyListFragment.Callbacks}
+     * indicating that the item with the given ID was selected.
+     */
+    @Override
+    public void onItemSelected(String id) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle arguments = new Bundle();
+            arguments.putString(Constants.KEY_PARTY_ID, id);
+            PartyDetailFragment fragment = new PartyDetailFragment();
+            fragment.setArguments(arguments);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.item_detail_container, fragment)
+                    .commit();
 
-            case R.id.menu_party_list_activity_import:
-                final List<ImportContacts.Contact> contacts = ImportContacts.getContacts(PartyListActivity.this);
-                final ArrayList<ImportContacts.Contact> importContacts = new ArrayList<>();
+        } else {
+            // In single-pane mode, simply start the detail activity
+            // for the selected item ID.
+            Intent detailIntent = new Intent(this, PartyDetailActivity.class);
+            detailIntent.putExtra(Constants.KEY_PARTY_ID, id);
+            startActivityForResult(detailIntent, PartyListFragment.REQUEST_PARTY_INFO_CHGD);
+        }
+    }
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(PartyListActivity.this);
-                builder.setTitle(getString(R.string.msg_choose, getString(R.string.str_contact)));
-                builder.setNegativeButton(getString(android.R.string.cancel), null);
-                builder.setMultiChoiceItems(ImportContacts.getNames(contacts), null,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                                if (b) importContacts.add(contacts.get(i));
-                                else importContacts.remove(contacts.get(i));
-                            }
-                        });
-                builder.setPositiveButton(getString(android.R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                new ImportContactsAsync(PartyListActivity.this).execute(importContacts);
-                            }
-                        });
-                AlertDialog selectContactsAD = builder.create();
-                selectContactsAD.show();
-                break;
-		}
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //update pass code time
+        LockScreenActivity.updatePasscodeTime();
+    }
 
-		return super.onOptionsItemSelected(item);
-	}
-
-    public void refreshList(){
-        partyAdapter = new ArrayAdapter<Party>(this, android.R.layout.simple_list_item_1, mServices.getParties());
-        partyLV.setAdapter(partyAdapter);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //check pass code
+        LockScreenActivity.checkPassCode(PartyListActivity.this);
     }
 }

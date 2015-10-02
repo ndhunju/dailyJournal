@@ -3,8 +3,9 @@ package com.ndhunju.dailyjournal.service;
 /**
  * Created by dhunju on 9/24/2015.
  */
-public class Constants {
-    
+public final class Constants {
+
+    //Constants
     public static final int NO_PARTY = -1;
     public static final int ID_NEW_JOURNAL=-2;
     public static final long ID_NEW_PARTY = -3;
@@ -22,11 +23,7 @@ public class Constants {
     public static final String KEY_ATTACHMENTS_IS_CHGD = APP_PREFIX + "isAttachmentChanged";
     public static final String KEY_CHANGE_TYPE = "changeType";
 
-    //Hex Value of colors
-    public static final String RED = "#f63752";
-    public static final String BLACK = "#000000";
-    public static final String GREEN = "#5CB85C";
 
-    public static enum ChangeType{EDITED, DELETED};
+    public enum ChangeType{EDITED, DELETED};
 
 }
