@@ -1,25 +1,19 @@
 package com.ndhunju.dailyjournal.service;
 
 import android.app.Activity;
-import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
-import com.ndhunju.dailyjournal.controller.CheckedListAdapter;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 

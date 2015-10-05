@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.ImportExport;
+package com.ndhunju.dailyjournal.controller.importExport;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.ReportGenerator;
-import com.ndhunju.dailyjournal.service.UtilsView;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.util.List;
 

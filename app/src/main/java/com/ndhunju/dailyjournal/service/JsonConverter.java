@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -437,7 +438,7 @@ public final class JsonConverter {
          */
         public Journal insertJournalIntoDb(JSONObject json, long partyId){
             try {
-                Journal newJournal = getJournal(json);
+                Journal newJournal = getJournal(json, partyId);
                 newJournal.setPartyId(partyId);
                 long newId = mServices.addJournal(newJournal);
 
@@ -458,7 +459,6 @@ public final class JsonConverter {
             //we need to check if the path for attachments are still referring to external(old)
             //storage. If it is, then change it to the new one
             path = UtilsFile.replaceOldDir(path);
-            attachment.setJournalId(journalId);
             attachment.setPath(path);
 
             mServices.addAttachment(attachment);
@@ -472,7 +472,7 @@ public final class JsonConverter {
          * @param json
          * @return
          */
-        public  Journal getJournal(JSONObject json){
+        public  Journal getJournal(JSONObject json, long partyId){
             try {
                 int id = json.getInt("id");
                 long date = json.getLong("date");
@@ -482,9 +482,10 @@ public final class JsonConverter {
                 String note = json.getString("mNote");
 
 
-                Journal newJournal = new Journal(date);
+                Journal newJournal = new Journal(partyId);
                 newJournal.setAddedDate(added_date);
                 newJournal.setAmount(amount);
+                newJournal.setDate(date);
                 newJournal.setType(type);
                 newJournal.setNote(note);
 

@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/arrays.xml -->
     <eat-comment/>
+    <string-array name="currency">
+        <item>Dollar ($)</item>
+        <item>Rupee (Rs.)</item>
+    </string-array>
+    <string-array name="currency_val">
+        <item>US</item>
+        <item>IN</item>
+    </string-array>
+    <string-array name="date_format">
+        <item>Jan-27-2015</item>
+        <item>01/27/2015</item>
+        <item>01/27/15</item>
+        <item>27-Jan-2015</item>
+        <item>27/01/2015</item>
+        <item>27/01/15</item>
+    </string-array>
+    <string-array name="date_format_val">
+        <item>MMM-d-yyyy</item>
+        <item>MM/d/yyyy</item>
+        <item>MM/d/yy</item>
+        <item>d-MMM-yyyy</item>
+        <item>d/MM/yyyy</item>
+        <item>d/MM/yy</item>
+    </string-array>
     <string-array name="options_attch">
         <item>Take Picture</item>
         <item>Attach Picture</item>
-        <item>See Attachment</item>
+    </string-array>
+    <string-array name="reminder_intervals">
+        <item>Hourly</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+    <string-array name="reminder_intervals_val">
+        <item>10000</item>
+        <item>86400000</item>
+        <item>604800000</item>
+        <item>2592000000</item>
     </string-array>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/values.xml -->
     <eat-comment/>
-    <bool name="noteCol">false</bool>
+    <bool name="note_col">false</bool>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="black_overlay">#66000000</color>
@@ -51,23 +86,21 @@
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_micro">12sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
-    <dimen name="text_size_xlarge">30sp</dimen>
+    <dimen name="text_size_xlarge">25sp</dimen>
     <dimen name="text_size_xxlarge">40sp</dimen>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/res/values/version.xml -->
     <eat-comment/>
     <integer name="google_play_services_version">7571000</integer>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="action_settings">Settings</string>
-    <string name="app_descrip">This accounting app allows you to record your daily transactions in the easiest way possible. It achieves easiness by altering the usual flow of journal entry.</string>
+    <string name="app_descrip">This accounting app allows you to record your
+         daily transactions in the easiest way possible. It achieves easiness
+         by altering the usual flow of journal entry.</string>
     <string name="app_name">Daily Journal</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/res/values/auth_strings.xml -->
     <eat-comment/>
     <string name="auth_google_play_services_client_facebook_display_name">Facebook</string>
     <string name="auth_google_play_services_client_google_display_name">Google</string>
-    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
-    <eat-comment/>
-    <string name="backup_dir">\'Daily Journal\' Folder in the Storage.</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/res/values/common_strings.xml -->
     <eat-comment/>
     <string name="common_android_wear_notification_needs_update_text"><ns1:g id="app_name">%1$s</ns1:g> requires an update to the Android Wear app.</string>
@@ -104,13 +137,22 @@
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/values.xml -->
     <eat-comment/>
-    <string name="dateFormat">MMM dd</string>
+    <string name="date_format">MM/d/yy</string>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="hint_note">Write notes here....</string>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/keys.xml -->
+    <eat-comment/>
+    <string name="key_pref_currency">preferenceCurrencyLP</string>
+    <string name="key_pref_date_format">prefenceDateFormatLP</string>
     <string name="key_pref_pincode_cb">preferencesPincodeCB</string>
     <string name="key_pref_pincode_time_et">preferencePincodeTimeET</string>
     <string name="key_pref_pincode_val_et">preferencesPincodeValET</string>
+    <string name="key_pref_reminder_backup_cb">keyPrefereceReminderBackup</string>
+    <string name="key_pref_reminder_interval_lp">preferencesReminderBackupIntervalLP</string>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/msgs.xml -->
+    <eat-comment/>
+    <string name="msg_backup">%1$s backup reminder</string>
     <string name="msg_choose">Choose %1$s</string>
     <string name="msg_connecting">Connecting to %1$s ...</string>
     <string name="msg_creating">Creating %1$s ...</string>
@@ -126,6 +168,7 @@
     <string name="msg_importing">%1$s importing... </string>
     <string name="msg_move_old_data">For better security, Daily Journal now uses a secure folder.
         The app will move old data to the secure folder. This can take few minutes.</string>
+    <string name="msg_please">Please $1%s</string>
     <string name="msg_reminder">Don\'t forget to do the Journal Entry</string>
     <string name="msg_report">Report for %1$s ...</string>
     <string name="msg_restore_gdrive">The app is having problem restoring from Google
@@ -134,7 +177,10 @@
     <string name="msg_restored">%1$s restored</string>
     <string name="msg_saved">%1$s saved</string>
     <string name="msg_saved_in">Saved in %1$s .</string>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
     <string name="str_00.00">00.00</string>
+    <string name="str_add">Add</string>
     <string name="str_alert">Alert!</string>
     <string name="str_attachment"> Attachment</string>
     <string name="str_attch_delete">Attachment Deleted</string>
@@ -145,17 +191,20 @@
     <string name="str_cr">Cr. </string>
     <string name="str_create_backup_in_google_drive">Create Backup in Google Drive</string>
     <string name="str_create_backup_in_sd">Create Backup in SD Card</string>
+    <string name="str_currency">Currency</string>
     <string name="str_data">Data</string>
     <string name="str_date">Date</string>
     <string name="str_delete">Delete</string>
     <string name="str_dr">Dr. </string>
     <string name="str_edit">Edit</string>
     <string name="str_enable">Enable</string>
+    <string name="str_enable_reminder_backup">Enable Back Up Reminder</string>
     <string name="str_erase_all">Erase All</string>
     <string name="str_export_printable">Export Printable</string>
     <string name="str_failed">failed</string>
     <string name="str_finished">finished</string>
     <string name="str_folder">Folder</string>
+    <string name="str_format">Format</string>
     <string name="str_google_drive">Google Drive</string>
     <string name="str_id">ID :</string>
     <string name="str_import_json_from_sd">Import JSON Backup File</string>
@@ -176,6 +225,7 @@
     <string name="str_pincode">Pincode</string>
     <string name="str_preference">Preference</string>
     <string name="str_reminder">Reminder</string>
+    <string name="str_reminder_backup_interval">Backup reminder interval</string>
     <string name="str_report">Report</string>
     <string name="str_restore_backup_from_google_drive">Restore from Google Drive</string>
     <string name="str_restore_backup_from_sd">Restore Backup from SD Card</string>
@@ -192,6 +242,8 @@
     <string name="title_activity_party">Party List</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_item_list">Items</string>
+    <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/warnings.xml -->
+    <eat-comment/>
     <string name="warning_cant_change_party">You can not change the party.</string>
     <string name="warning_ext_mismatch">The extension of the backup file is incorrect</string>
     <string name="warning_format">The format is incorrect</string>

@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.Party;
+package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -6,9 +6,8 @@ import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.ImportContacts;
-import com.ndhunju.dailyjournal.service.UtilsView;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**

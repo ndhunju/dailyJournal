@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.ImportExport;
+package com.ndhunju.dailyjournal.controller.importExport;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

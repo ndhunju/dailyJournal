@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.FolderPicker;
+package com.ndhunju.dailyjournal.controller.folderPicker;
 
 import android.content.Context;
 import android.graphics.Color;

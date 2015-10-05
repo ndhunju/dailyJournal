@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="com.ndhunju.dailyjournal.controller.Party.PartyListActivity">
+    tools:context="com.ndhunju.dailyjournal.controller.party.PartyListActivity">
 
     <!--
     This layout is a two-pane layout for the Items
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/item_list"
-        android:name="com.ndhunju.dailyjournal.controller.Party.PartyListFragment"
+        android:name="com.ndhunju.dailyjournal.controller.party.PartyListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

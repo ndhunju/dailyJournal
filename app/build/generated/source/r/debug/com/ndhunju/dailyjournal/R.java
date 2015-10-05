@@ -9,7 +9,13 @@ package com.ndhunju.dailyjournal;
 
 public final class R {
     public static final class array {
-        public static final int options_attch=0x7f060000;
+        public static final int currency=0x7f090000;
+        public static final int currency_val=0x7f090001;
+        public static final int date_format=0x7f090002;
+        public static final int date_format_val=0x7f090003;
+        public static final int options_attch=0x7f090004;
+        public static final int reminder_intervals=0x7f090005;
+        public static final int reminder_intervals_val=0x7f090006;
     }
     public static final class attr {
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
@@ -50,7 +56,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int metaButtonBarStyle=0x7f010000;
     }
     public static final class bool {
-        public static final int noteCol=0x7f070000;
+        public static final int note_col=0x7f070000;
     }
     public static final class color {
         public static final int black_overlay=0x7f0a0000;
@@ -80,16 +86,16 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int yellow_pressed=0x7f0a0016;
     }
     public static final class dimen {
-        public static final int activity_horizontal_margin=0x7f080000;
-        public static final int activity_vertical_margin=0x7f080001;
-        public static final int button_height=0x7f080002;
-        public static final int party_pic_width=0x7f080003;
-        public static final int text_size_large=0x7f080006;
-        public static final int text_size_medium=0x7f080007;
-        public static final int text_size_micro=0x7f080008;
-        public static final int text_size_small=0x7f080009;
-        public static final int text_size_xlarge=0x7f080004;
-        public static final int text_size_xxlarge=0x7f080005;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
+        public static final int button_height=0x7f060002;
+        public static final int party_pic_width=0x7f060003;
+        public static final int text_size_large=0x7f060006;
+        public static final int text_size_medium=0x7f060007;
+        public static final int text_size_micro=0x7f060008;
+        public static final int text_size_small=0x7f060009;
+        public static final int text_size_xlarge=0x7f060004;
+        public static final int text_size_xxlarge=0x7f060005;
     }
     public static final class drawable {
         public static final int button_negative=0x7f020000;
@@ -135,7 +141,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int party_default_pic=0x7f020028;
     }
     public static final class id {
-        public static final int action_settings=0x7f0d0036;
         public static final int activity_home_date_btn=0x7f0d001d;
         public static final int activity_home_journal_fl=0x7f0d0009;
         public static final int activity_import_export_export_printable_btn=0x7f0d0007;
@@ -158,7 +163,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_party_type_spinner=0x7f0d0013;
         public static final int adjust_height=0x7f0d0000;
         public static final int adjust_width=0x7f0d0001;
-        public static final int delete_picture=0x7f0d003c;
         public static final int dialog_edit_date=0x7f0d0019;
         public static final int fragment_home_amount_et=0x7f0d001c;
         public static final int fragment_home_attach_btn=0x7f0d0021;
@@ -181,12 +185,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ledger_row_col3=0x7f0d002b;
         public static final int ledger_row_col4=0x7f0d002c;
         public static final int menu_journal_preference=0x7f0d0034;
-        public static final int menu_lock=0x7f0d003b;
-        public static final int menu_party_activity_info=0x7f0d0037;
-        public static final int menu_party_activity_share=0x7f0d0038;
+        public static final int menu_party_activity_info=0x7f0d0036;
+        public static final int menu_party_activity_share=0x7f0d0037;
         public static final int menu_party_list=0x7f0d0032;
-        public static final int menu_party_list_activity_add=0x7f0d0039;
-        public static final int menu_party_list_activity_import=0x7f0d003a;
+        public static final int menu_party_list_activity_add=0x7f0d0038;
+        public static final int menu_party_list_activity_import=0x7f0d0039;
         public static final int meu_journal_erase=0x7f0d0035;
         public static final int meu_journal_tools=0x7f0d0033;
         public static final int none=0x7f0d0002;
@@ -196,6 +199,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int preference_pincode_time_et=0x7f0d0031;
         public static final int preference_pincode_val_et=0x7f0d0030;
         public static final int view_pager=0x7f0d0018;
+        public static final int viewpager_delete_picture=0x7f0d003c;
+        public static final int viewpager_menu_lock=0x7f0d003a;
+        public static final int viewpager_new_picture=0x7f0d003b;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f0b0000;
@@ -219,18 +225,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class menu {
         public static final int menu_home=0x7f0c0000;
-        public static final int menu_lock_screen=0x7f0c0001;
-        public static final int menu_party_activity=0x7f0c0002;
-        public static final int menu_party_list_activity=0x7f0c0003;
-        public static final int menu_viewpager=0x7f0c0004;
+        public static final int menu_party_activity=0x7f0c0001;
+        public static final int menu_party_list_activity=0x7f0c0002;
+        public static final int menu_viewpager=0x7f0c0003;
     }
     public static final class string {
-        public static final int action_settings=0x7f050020;
         public static final int app_descrip=0x7f050021;
         public static final int app_name=0x7f050022;
-        public static final int auth_google_play_services_client_facebook_display_name=0x7f05007c;
-        public static final int auth_google_play_services_client_google_display_name=0x7f05007d;
-        public static final int backup_dir=0x7f050023;
+        public static final int auth_google_play_services_client_facebook_display_name=0x7f050023;
+        public static final int auth_google_play_services_client_google_display_name=0x7f050024;
         public static final int common_android_wear_notification_needs_update_text=0x7f050000;
         public static final int common_android_wear_update_text=0x7f050001;
         public static final int common_android_wear_update_title=0x7f050002;
@@ -263,96 +266,108 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int common_open_on_phone=0x7f05001d;
         public static final int common_signin_button_text=0x7f05001e;
         public static final int common_signin_button_text_long=0x7f05001f;
-        public static final int dateFormat=0x7f050024;
-        public static final int hint_note=0x7f050025;
-        public static final int key_pref_pincode_cb=0x7f050026;
-        public static final int key_pref_pincode_time_et=0x7f050027;
-        public static final int key_pref_pincode_val_et=0x7f050028;
-        public static final int msg_choose=0x7f050029;
-        public static final int msg_connecting=0x7f05002a;
-        public static final int msg_creating=0x7f05002b;
-        public static final int msg_delete_confirm=0x7f05002c;
-        public static final int msg_deleted=0x7f05002d;
-        public static final int msg_deleting=0x7f05002e;
-        public static final int msg_erase_all=0x7f05002f;
-        public static final int msg_exporting=0x7f050030;
-        public static final int msg_failed=0x7f050031;
-        public static final int msg_finished=0x7f050032;
-        public static final int msg_generated_by=0x7f050033;
-        public static final int msg_importing=0x7f050034;
-        public static final int msg_move_old_data=0x7f050035;
-        public static final int msg_reminder=0x7f050036;
-        public static final int msg_report=0x7f050037;
-        public static final int msg_restore_gdrive=0x7f050038;
-        public static final int msg_restored=0x7f050039;
-        public static final int msg_saved=0x7f05003a;
-        public static final int msg_saved_in=0x7f05003b;
-        public static final int str_00_00=0x7f05003c;
-        public static final int str_alert=0x7f05003d;
-        public static final int str_attachment=0x7f05003e;
-        public static final int str_attch_delete=0x7f05003f;
-        public static final int str_backup=0x7f050040;
-        public static final int str_balance=0x7f050041;
-        public static final int str_choose=0x7f050042;
-        public static final int str_contact=0x7f050043;
-        public static final int str_cr=0x7f050044;
-        public static final int str_create_backup_in_google_drive=0x7f050045;
-        public static final int str_create_backup_in_sd=0x7f050046;
-        public static final int str_data=0x7f050047;
-        public static final int str_date=0x7f050048;
-        public static final int str_delete=0x7f050049;
-        public static final int str_dr=0x7f05004a;
-        public static final int str_edit=0x7f05004b;
-        public static final int str_enable=0x7f05004c;
-        public static final int str_erase_all=0x7f05004d;
-        public static final int str_export_printable=0x7f05004e;
-        public static final int str_failed=0x7f05004f;
-        public static final int str_finished=0x7f050050;
-        public static final int str_folder=0x7f050051;
-        public static final int str_google_drive=0x7f050052;
-        public static final int str_id=0x7f050053;
-        public static final int str_import_json_from_sd=0x7f050054;
-        public static final int str_import_party=0x7f050055;
-        public static final int str_information=0x7f050056;
-        public static final int str_journal=0x7f050057;
-        public static final int str_lock=0x7f050058;
-        public static final int str_lock_time=0x7f050059;
-        public static final int str_minutes=0x7f05005a;
-        public static final int str_new=0x7f05005b;
-        public static final int str_new_folder_name=0x7f05005c;
-        public static final int str_no=0x7f05005d;
-        public static final int str_note=0x7f05005e;
-        public static final int str_parties=0x7f05005f;
-        public static final int str_party=0x7f050060;
-        public static final int str_phone_number=0x7f050061;
-        public static final int str_pick_a_date=0x7f050062;
-        public static final int str_pincode=0x7f050063;
-        public static final int str_preference=0x7f050064;
-        public static final int str_reminder=0x7f050065;
-        public static final int str_report=0x7f050066;
-        public static final int str_restore_backup_from_google_drive=0x7f050067;
-        public static final int str_restore_backup_from_sd=0x7f050068;
-        public static final int str_save=0x7f050069;
-        public static final int str_select_party=0x7f05006a;
-        public static final int str_share=0x7f05006b;
-        public static final int str_tools=0x7f05006c;
-        public static final int str_total=0x7f05006d;
-        public static final int sum_lock_time=0x7f05006e;
-        public static final int sum_pincode_val=0x7f05006f;
-        public static final int title_activity_import_export=0x7f050070;
-        public static final int title_activity_journal=0x7f050071;
-        public static final int title_activity_lock_screen=0x7f050072;
-        public static final int title_activity_party=0x7f050073;
-        public static final int title_item_detail=0x7f05007e;
-        public static final int title_item_list=0x7f05007f;
-        public static final int warning_cant_change_party=0x7f050074;
-        public static final int warning_ext_mismatch=0x7f050075;
-        public static final int warning_format=0x7f050076;
-        public static final int warning_no_attch=0x7f050077;
-        public static final int warning_overpaid_msg=0x7f050078;
-        public static final int warning_restore=0x7f050079;
-        public static final int warning_see_attachment=0x7f05007a;
-        public static final int warning_select_party=0x7f05007b;
+        public static final int dateFormat=0x7f050020;
+        public static final int date_format=0x7f050025;
+        public static final int hint_note=0x7f050026;
+        public static final int key_pref_currency=0x7f050027;
+        public static final int key_pref_date_format=0x7f050028;
+        public static final int key_pref_pincode_cb=0x7f050029;
+        public static final int key_pref_pincode_time_et=0x7f05002a;
+        public static final int key_pref_pincode_val_et=0x7f05002b;
+        public static final int key_pref_reminder_backup_cb=0x7f05002c;
+        public static final int key_pref_reminder_interval_lp=0x7f05002d;
+        public static final int msg_backup=0x7f05002e;
+        public static final int msg_choose=0x7f05002f;
+        public static final int msg_connecting=0x7f050030;
+        public static final int msg_creating=0x7f050031;
+        public static final int msg_delete_confirm=0x7f050032;
+        public static final int msg_deleted=0x7f050033;
+        public static final int msg_deleting=0x7f050034;
+        public static final int msg_erase_all=0x7f050035;
+        public static final int msg_exporting=0x7f050036;
+        public static final int msg_failed=0x7f050037;
+        public static final int msg_finished=0x7f050038;
+        public static final int msg_generated_by=0x7f050039;
+        public static final int msg_importing=0x7f05003a;
+        public static final int msg_move_old_data=0x7f05003b;
+        public static final int msg_please=0x7f05003c;
+        public static final int msg_reminder=0x7f05003d;
+        public static final int msg_report=0x7f05003e;
+        public static final int msg_restore_gdrive=0x7f05003f;
+        public static final int msg_restored=0x7f050040;
+        public static final int msg_saved=0x7f050041;
+        public static final int msg_saved_in=0x7f050042;
+        public static final int str_00_00=0x7f050043;
+        public static final int str_add=0x7f050044;
+        public static final int str_alert=0x7f050045;
+        public static final int str_attachment=0x7f050046;
+        public static final int str_attch_delete=0x7f050047;
+        public static final int str_backup=0x7f050048;
+        public static final int str_balance=0x7f050049;
+        public static final int str_choose=0x7f05004a;
+        public static final int str_contact=0x7f05004b;
+        public static final int str_cr=0x7f05004c;
+        public static final int str_create_backup_in_google_drive=0x7f05004d;
+        public static final int str_create_backup_in_sd=0x7f05004e;
+        public static final int str_currency=0x7f05004f;
+        public static final int str_data=0x7f050050;
+        public static final int str_date=0x7f050051;
+        public static final int str_delete=0x7f050052;
+        public static final int str_dr=0x7f050053;
+        public static final int str_edit=0x7f050054;
+        public static final int str_enable=0x7f050055;
+        public static final int str_enable_reminder_backup=0x7f050056;
+        public static final int str_erase_all=0x7f050057;
+        public static final int str_export_printable=0x7f050058;
+        public static final int str_failed=0x7f050059;
+        public static final int str_finished=0x7f05005a;
+        public static final int str_folder=0x7f05005b;
+        public static final int str_format=0x7f05005c;
+        public static final int str_google_drive=0x7f05005d;
+        public static final int str_id=0x7f05005e;
+        public static final int str_import_json_from_sd=0x7f05005f;
+        public static final int str_import_party=0x7f050060;
+        public static final int str_information=0x7f050061;
+        public static final int str_journal=0x7f050062;
+        public static final int str_lock=0x7f050063;
+        public static final int str_lock_time=0x7f050064;
+        public static final int str_minutes=0x7f050065;
+        public static final int str_new=0x7f050066;
+        public static final int str_new_folder_name=0x7f050067;
+        public static final int str_no=0x7f050068;
+        public static final int str_note=0x7f050069;
+        public static final int str_parties=0x7f05006a;
+        public static final int str_party=0x7f05006b;
+        public static final int str_phone_number=0x7f05006c;
+        public static final int str_pick_a_date=0x7f05006d;
+        public static final int str_pincode=0x7f05006e;
+        public static final int str_preference=0x7f05006f;
+        public static final int str_reminder=0x7f050070;
+        public static final int str_reminder_backup_interval=0x7f050071;
+        public static final int str_report=0x7f050072;
+        public static final int str_restore_backup_from_google_drive=0x7f050073;
+        public static final int str_restore_backup_from_sd=0x7f050074;
+        public static final int str_save=0x7f050075;
+        public static final int str_select_party=0x7f050076;
+        public static final int str_share=0x7f050077;
+        public static final int str_tools=0x7f050078;
+        public static final int str_total=0x7f050079;
+        public static final int sum_lock_time=0x7f05007a;
+        public static final int sum_pincode_val=0x7f05007b;
+        public static final int title_activity_import_export=0x7f05007c;
+        public static final int title_activity_journal=0x7f05007d;
+        public static final int title_activity_lock_screen=0x7f05007e;
+        public static final int title_activity_party=0x7f05007f;
+        public static final int title_item_detail=0x7f050080;
+        public static final int title_item_list=0x7f050081;
+        public static final int warning_cant_change_party=0x7f050082;
+        public static final int warning_ext_mismatch=0x7f050083;
+        public static final int warning_format=0x7f050084;
+        public static final int warning_no_attch=0x7f050085;
+        public static final int warning_overpaid_msg=0x7f050086;
+        public static final int warning_restore=0x7f050087;
+        public static final int warning_see_attachment=0x7f050088;
+        public static final int warning_select_party=0x7f050089;
     }
     public static final class style {
         /**  API 11 theme customizations can go here. 
@@ -363,17 +378,17 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
             backward-compatibility can go here.
         
          */
-        public static final int AppBaseTheme=0x7f090000;
-        public static final int AppTheme=0x7f090003;
-        public static final int ButtonBar=0x7f090004;
-        public static final int ButtonBarButton=0x7f090005;
-        public static final int FullscreenActionBarStyle=0x7f090001;
-        public static final int FullscreenTheme=0x7f090002;
-        public static final int Widget_Button_Negative=0x7f090006;
-        public static final int Widget_Button_Neutral=0x7f090007;
-        public static final int Widget_Button_Normal=0x7f090008;
-        public static final int Widget_Button_Positive=0x7f090009;
-        public static final int Widget_Button_Warning=0x7f09000a;
+        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppTheme=0x7f080003;
+        public static final int ButtonBar=0x7f080004;
+        public static final int ButtonBarButton=0x7f080005;
+        public static final int FullscreenActionBarStyle=0x7f080001;
+        public static final int FullscreenTheme=0x7f080002;
+        public static final int Widget_Button_Negative=0x7f080006;
+        public static final int Widget_Button_Neutral=0x7f080007;
+        public static final int Widget_Button_Normal=0x7f080008;
+        public static final int Widget_Button_Positive=0x7f080009;
+        public static final int Widget_Button_Warning=0x7f08000a;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;

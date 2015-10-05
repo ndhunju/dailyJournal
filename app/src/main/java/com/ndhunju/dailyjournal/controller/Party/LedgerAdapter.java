@@ -1,18 +1,15 @@
-package com.ndhunju.dailyjournal.controller.Party;
+package com.ndhunju.dailyjournal.controller.party;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;
-import com.ndhunju.dailyjournal.model.Party;
-import com.ndhunju.dailyjournal.service.UtilsFormat;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -58,19 +55,19 @@ public class LedgerAdapter extends ArrayAdapter<Journal> {
         Journal journal = getItem(position);
         holder.idCol.setText(String.valueOf(getPosition(journal) + 1));
         holder.dateCol.setText(UtilsFormat.formatDate(
-                new Date(journal.getDate()), getContext().getString(R.string.dateFormat)));
+                new Date(journal.getDate()), getContext()));
 
 
-        boolean showNoteCol = getContext().getResources().getBoolean(R.bool.noteCol);
+        boolean showNoteCol = getContext().getResources().getBoolean(R.bool.note_col);
         if(showNoteCol) {holder.noteCol.setText(journal.getNote());}
         else{holder.noteCol.setVisibility(View.GONE); }
 
 
         if (journal.getType().equals(Journal.Type.Debit)) {
-            holder.drCol.setText(UtilsFormat.formatCurrency(journal.getAmount()));
+            holder.drCol.setText(UtilsFormat.formatCurrency(journal.getAmount(), getContext()));
             holder.crCol.setText("");
         } else {
-            holder.crCol.setText(UtilsFormat.formatCurrency(journal.getAmount()));
+            holder.crCol.setText(UtilsFormat.formatCurrency(journal.getAmount(),getContext() ));
             holder.drCol.setText("");
         }
 

@@ -1,26 +1,32 @@
 package com.ndhunju.dailyjournal.viewPager;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.UtilsView;
+import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.util.UtilsView;
+import com.ndhunju.dailyjournal.util.UtilsZip;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Lock/Unlock button is added to the ActionBar. Use it to temporarily disable
@@ -31,66 +37,34 @@ import com.ndhunju.dailyjournal.service.UtilsView;
  * Julia Zudikova
  */
 public class ViewPagerActivity extends FragmentActivity {
+
+	private static final String TAG = ViewPagerActivity.class.getSimpleName();
+	private static final int REQUEST_TAKE_PHOTO= 2646;
+	private static final int REQUEST_IMAGE  = 4646;
+
+
 	private static final String ISLOCKED_ARG = "isLocked";
+	private AttachmentPagerAdapter attachmentPagerAdapter;
 	private ViewPager mViewPager;
 	private MenuItem menuLockItem;
-	ArrayList<String> filePaths; 
-	int merchantId, journalId;
-	boolean attachmentChanged;
+	private Services mServices;
+	long journalId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_pager);
-		
-		attachmentChanged = false;
-		filePaths = getIntent().getStringArrayListExtra(Constants.KEY_ATTACHMENTS);
-		
 		mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
 		setContentView(mViewPager);
-		mViewPager.setAdapter(new SamplePagerAdapter(filePaths));
+
+		journalId = getIntent().getLongExtra(Constants.KEY_JOURNAL_ID, Constants.ID_NEW_JOURNAL);
+		mServices = Services.getInstance(ViewPagerActivity.this);
+		attachmentPagerAdapter = new AttachmentPagerAdapter(mServices.getAttachments(journalId));
+		mViewPager.setAdapter(attachmentPagerAdapter);
+
 		if (savedInstanceState != null) {
 			boolean isLocked = savedInstanceState.getBoolean(ISLOCKED_ARG,false);
 			((HackyViewPager) mViewPager).setLocked(isLocked);
-		}
-	}
-
-	static class SamplePagerAdapter extends PagerAdapter {
-		
-		private static ArrayList<String> sDrawables = null;
-		
-		public SamplePagerAdapter(ArrayList<String> imageFilePaths) {
-			sDrawables = imageFilePaths;
-		}
-
-		@Override
-		public int getCount() {
-			return sDrawables.size();
-		}
-		
-		@Override
-		public int getItemPosition(Object object) {
-			return POSITION_NONE;
-		}
-
-		@Override
-		public View instantiateItem(ViewGroup container, int position) {
-			PhotoView photoView = new PhotoView(container.getContext());
-			photoView.setImageDrawable(Drawable.createFromPath(sDrawables.get(position)));
-			// Now just add PhotoView to ViewPager and return it
-			container.addView(photoView, LayoutParams.MATCH_PARENT,
-					LayoutParams.MATCH_PARENT);
-			return photoView;
-		}
-
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			container.removeView((View) object);
-		}
-
-		@Override
-		public boolean isViewFromObject(View view, Object object) {
-			return view == object;
 		}
 	}
 
@@ -100,9 +74,10 @@ public class ViewPagerActivity extends FragmentActivity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menuLockItem = menu.findItem(R.id.menu_lock);
+		menuLockItem = menu.findItem(R.id.viewpager_menu_lock);
 		toggleLockBtnTitle();
 		menuLockItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
@@ -112,31 +87,99 @@ public class ViewPagerActivity extends FragmentActivity {
 				return true;
 			}
 		});
-		
-		MenuItem menuDeletePic = menu.findItem(R.id.delete_picture);
-		menuDeletePic.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()){
+			case R.id.viewpager_delete_picture:
 				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_attachment));
 				UtilsView.alert(ViewPagerActivity.this, msg, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
 						int currentItemPos = mViewPager.getCurrentItem();
-						if (new File(filePaths.get(currentItemPos)).delete())
-							filePaths.remove(currentItemPos);//doesn't delete from the journal
 						UtilsView.toast(ViewPagerActivity.this, getString(R.string.str_attch_delete));
-						((SamplePagerAdapter) mViewPager.getAdapter()).notifyDataSetChanged();
-						attachmentChanged = true;
-
+						mServices.deleteAttachment(attachmentPagerAdapter.getItem(currentItemPos));
+						attachmentPagerAdapter.deleteItem(currentItemPos);
+						attachmentPagerAdapter.notifyDataSetChanged();
 					}
 				}, null);
-				return true;
-			}
-		});
-		return super.onPrepareOptionsMenu(menu);
+				break;
+
+			case R.id.viewpager_new_picture:
+				getAttachmentAlertDialogOption().show();
+				break;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
-	
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode){
+			case REQUEST_TAKE_PHOTO: //Picture was taken from the Camera App
+
+				UtilsView.showResult(getActivity(), resultCode);
+
+				//Since camera cannot save picture in file created inside app's folder
+				//1. Create a file in external mServices
+				//2. Provide that file's path to camera where it will stream picture data
+				//3. Copy the file into internal mServices
+				//4. Delete file in external mServices
+
+				File tempPicFile = UtilsFile.createExternalStoragePublicPicture();
+				File internalPicFile = UtilsFile.createImageFile(getActivity());
+
+				try{
+					FileInputStream picFileIS  = new FileInputStream(tempPicFile);
+					FileOutputStream internalFileOS = new FileOutputStream(internalPicFile);
+					UtilsZip.copy(picFileIS, internalFileOS);
+					picFileIS.close();
+					internalFileOS.close();
+					//deleting this file works fine. May be files in public folder can be deleted
+					String log = tempPicFile.delete()? "Temp pic file deleted" : "Temp file NOT deleted";
+					Log.d(TAG, log);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				Attachment tempAttch = new Attachment(journalId);
+				tempAttch.setPath(internalPicFile.getAbsolutePath());
+
+				attachmentPagerAdapter.addItem(tempAttch);
+				mServices.addAttachment(tempAttch);
+				break;
+
+			case REQUEST_IMAGE:  //Image was picked from the storage
+
+				UtilsView.showResult(getActivity(), resultCode);
+
+				Uri selectedImage = data.getData();
+				Bitmap bitmap;
+				try {
+					bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+				} catch (Exception e) { Log.d(TAG, "couldn't load selected image");
+					return;
+				}
+
+				File picFile = UtilsFile.createImageFile(getActivity());
+				UtilsFile.storeImage(bitmap, picFile, getActivity());
+				Attachment tempAttch2 = new Attachment(journalId);
+				tempAttch2.setPath(picFile.getAbsolutePath());
+				attachmentPagerAdapter.addItem(tempAttch2);
+				mServices.addAttachment(tempAttch2);
+
+				break;
+		}
+
+		attachmentPagerAdapter.notifyDataSetChanged();
+	}
 
 	private void toggleViewPagerScrolling() {
 		if (isViewPagerActive()) {
@@ -168,13 +211,32 @@ public class ViewPagerActivity extends FragmentActivity {
 		}
 		super.onSaveInstanceState(outState);
 	}
-	
-	@Override
-	public void onBackPressed() {
-		Intent i = new Intent();
-		i.putExtra(Constants.KEY_ATTACHMENTS_IS_CHGD, attachmentChanged);
-		if(attachmentChanged) i.putStringArrayListExtra(Constants.KEY_ATTACHMENTS, filePaths);
-		setResult(Activity.RESULT_OK, i);
-		super.onBackPressed();
+
+	private AlertDialog getAttachmentAlertDialogOption(){
+		CharSequence[] options = getResources().getStringArray(R.array.options_attch);
+		return new AlertDialog.Builder(getActivity())
+				.setTitle(getString(R.string.str_choose))
+				.setItems(options, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent i = null;
+						switch (which) {
+							case 0: //Take Picture using installed camera app
+								Intent takePictureIntent = UtilsFile.getPictureFromCam(getActivity());
+								startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+								break;
+
+							case 1: //Select image from the storage
+								i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+								startActivityForResult(i, REQUEST_IMAGE);
+								break;
+
+						}
+					}
+				}).create();
+	}
+
+	public Activity getActivity(){
+		return ViewPagerActivity.this;
 	}
 }

@@ -6,7 +6,8 @@ import android.test.mock.MockContext;
 
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.service.UtilsFile;
+import com.ndhunju.dailyjournal.service.KeyValPersistence;
+import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,7 +39,7 @@ public class ServicesTest {
     @Before
     public void setUp(){
         //Create Mock Objects
-        Services.setSharedPreference(mock(SharedPreferences.class));
+        KeyValPersistence.setSharedPreference(mock(SharedPreferences.class));
         testServices = Services.getInstance(new MockContext());
     }
 
@@ -49,8 +50,8 @@ public class ServicesTest {
         when(pm.getBoolean(Constants.KEY_IMPORT_OLD_DATA, false)).thenReturn(false);
 
         //Act
-        Services.setSharedPreference(pm);
-        boolean testValue = Services.isOldDataImported();
+        KeyValPersistence.setSharedPreference(pm);
+        boolean testValue = KeyValPersistence.isOldDataImported();
 
         //Assert
         assertFalse(testValue);

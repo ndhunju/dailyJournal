@@ -1,14 +1,10 @@
 package com.ndhunju.dailyjournal.service;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaScannerConnection;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.ndhunju.dailyjournal.controller.MyPreferenceFragment;
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
 import com.ndhunju.dailyjournal.database.DbHelper;
 import com.ndhunju.dailyjournal.database.JournalDAO;
@@ -16,6 +12,8 @@ import com.ndhunju.dailyjournal.database.PartyDAO;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.util.UtilsZip;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,15 +22,9 @@ import java.util.List;
 
 public class Services {
 
-	//Constant variables
-	private static final String KEY_CURRENT_PARTY_ID = Constants.APP_PREFIX + "currentMerchantId";
-	private static final String KEY_CURRENT_JOURNAL_ID = Constants.APP_PREFIX + "currentJournalId";
-	private static final String KEY_OLD_DATA_IMPORTED = Constants.APP_PREFIX + "oldDataImported";
-
-    //Declare variables
+	//Declare variables
 	private Context mContext;
 	private DbHelper mDbHelper;
-	private static SharedPreferences sharedPref;
 
 	//DAOs
 	private PartyDAO partyDAO;
@@ -54,9 +46,6 @@ public class Services {
 		partyDAO = new PartyDAO(mDbHelper);
 		journalDAO = new JournalDAO(mDbHelper);
 		attachmentDAO = new AttachmentDAO(mDbHelper);
-
-		//Get current id for party and journal
-		if(sharedPref == null ) sharedPref = PreferenceManager.getDefaultSharedPreferences(con);
 	}
 
     /**
@@ -113,27 +102,6 @@ public class Services {
         return  mContext;
     }
 
-
-	/********************SHARED PREFERENCES SERVICES ************************/
-
-	/**
-	 * Created to use it while JUnit testing
-	 * @param sp
-	 * @return
-	 */
-	public static boolean setSharedPreference(SharedPreferences sp){
-		if(sp == null) return false;
-		sharedPref = sp;
-		return true;
-	}
-
-	public static boolean isOldDataImported(){
-		return sharedPref.getBoolean(KEY_OLD_DATA_IMPORTED, false);
-	}
-
-	public void oldDataImportAttempted(boolean imported){
-		sharedPref.edit().putBoolean(KEY_OLD_DATA_IMPORTED, imported).commit();
-	}
 
 	/********************PARTY SERVICES ************************/
 
@@ -204,11 +172,55 @@ public class Services {
 	 */
 	public Journal getJournal(long journalId) {
 		Journal journal = journalDAO.find(journalId);
-		if(journal != null) return journal;
-		else journal = new Journal(Constants.NO_PARTY);
-		journal.setId(Constants.ID_NEW_JOURNAL);
 		return journal;
 	}
+
+    public Journal getNewJournal(){
+        //get the last created new journal's id
+        KeyValPersistence persistence = KeyValPersistence.from(mContext);
+        String rowId = persistence.get(String.valueOf(Constants.ID_NEW_JOURNAL));
+        //get the journal from the table
+        Journal newJournal = null;
+        if(rowId != null){newJournal= journalDAO.find(Long.parseLong(rowId));}
+        //check if this journal has been associated with a party
+        if(newJournal == null || (newJournal.getPartyId() != Constants.NO_PARTY)){
+            //if the journal is null or has been associated with a party, create new
+            newJournal = new Journal(Constants.NO_PARTY);
+            long id = journalDAO.create(newJournal);
+            newJournal.setId(id);
+            //save the id of new journal
+            persistence.put(String.valueOf(Constants.ID_NEW_JOURNAL)
+                    , String.valueOf(id));
+        }
+        return newJournal;
+    }
+
+    public long getNewJournalId(){
+        //get the last created new journal's id
+        KeyValPersistence persistence = KeyValPersistence.from(mContext);
+        String rowId = persistence.get(String.valueOf(Constants.ID_NEW_JOURNAL));
+        return Long.parseLong(rowId);
+    }
+
+
+    public void deleteNewJournal(Journal newJournal){
+        journalDAO.delete(newJournal);
+    }
+
+    public void addNewJournal(Journal newJournal){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.beginTransaction();
+        try{
+            journalDAO.update(newJournal);
+            updatePartyAmount(newJournal, "+");
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            //can have custom exception such as negative balance
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+    }
 
 	public ArrayList<Journal> getJournals(long partyId){
 		ArrayList<Journal> journals = (ArrayList<Journal>)journalDAO.findAll(partyId);
@@ -304,11 +316,17 @@ public class Services {
 		try{
 			//make changes to party
 			//when the journal type is changed, the logic fails. So,
-			//1. get old journal from database and use it to delete
+			//1. get old journal from database and use it to update the party table
 			Journal oldJournal = journalDAO.find(journal.getId());
-			deleteJournal(oldJournal);
-			//2. add the new one
-			addJournal(journal);
+			//subtract from the Dr/Cr column in party table
+			if(!(updatePartyAmount(oldJournal, "-") > 0)) throw new Exception("No rows updated");
+
+			//update the party table with new values of the journal
+			updatePartyAmount(journal, "+");
+
+            //update the journal
+            journalDAO.update(journal);
+
 			db.setTransactionSuccessful();
 			success = true;
 		}catch (Exception e){
@@ -404,31 +422,13 @@ public class Services {
 		boolean success = true;
 		try{
 			success &= truncateAllTables();
-			success &= eraseSharedPreferences();
+			success &= KeyValPersistence.from(context).nukeAll(mContext);
+			success &= PreferenceService.from(context).nukeAll();
 			success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(context));
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 
-		return success;
-	}
-
-	/**
-	 * Erases all stored SharedPreferences
-	 * @return
-	 */
-	public boolean eraseSharedPreferences(){
-		//sharedPref.edit().clear().clear(); // doesn't work for default shared preference
-		SharedPreferences.Editor editor = sharedPref.edit();
-		editor.putInt(KEY_CURRENT_JOURNAL_ID, 1);
-		editor.putInt(KEY_CURRENT_PARTY_ID, 1);
-		editor.putBoolean(KEY_OLD_DATA_IMPORTED, false);
-		boolean success = editor.commit();
-
-		//Get Shared preference
-		SharedPreferences sp = mContext.getSharedPreferences(
-				MyPreferenceFragment.DEF_NAME_SHARED_PREFERENCE, Activity.MODE_PRIVATE);
-		success &= sp.edit().clear().commit();
 		return success;
 	}
 

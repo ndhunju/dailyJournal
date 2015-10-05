@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="key_pref_pincode_cb">preferencesPincodeCB</string>
+    <string name="key_pref_pincode_val_et">preferencesPincodeValET</string>
+    <string name="key_pref_pincode_time_et">preferencePincodeTimeET</string>
+    <string name="key_pref_reminder_backup_cb">keyPrefereceReminderBackup</string>
+    <string name="key_pref_date_format">prefenceDateFormatLP</string>
+    <string name="key_pref_currency">preferenceCurrencyLP</string>
+    <string name="key_pref_reminder_interval_lp">preferencesReminderBackupIntervalLP</string>
+
+</resources>

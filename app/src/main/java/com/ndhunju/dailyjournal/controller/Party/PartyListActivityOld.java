@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.Party;
+package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.LockScreenActivity;
+import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
@@ -97,14 +97,14 @@ public class PartyListActivityOld extends FragmentActivity {
 	protected void onPause() {
 		//Services.getInstance(PartyListActivityOld.this).writeToDB();
 		//update pass code time
-		LockScreenActivity.updatePasscodeTime();
+		LockService.updatePasscodeTime();
 		super.onPause();
 	}
 	
 	@Override
 	protected void onResume() {
 		//check pass code
-		LockScreenActivity.checkPassCode(PartyListActivityOld.this);
+		LockService.checkPassCode(PartyListActivityOld.this);
 		super.onResume();
 	}
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/str_pincode"
+    <PreferenceScreen android:title="@string/str_pincode"
         android:icon="@android:drawable/ic_lock_lock">
 
         <CheckBoxPreference
@@ -28,7 +28,36 @@
             android:inputType="number"
             android:defaultValue="3"
             android:maxLength="2"/>
-
+    </PreferenceScreen>
+    <PreferenceCategory
+        android:title="@string/str_reminder">
+        <CheckBoxPreference
+            android:title="@string/str_enable_reminder_backup"
+            android:defaultValue="true"
+            android:key="@string/key_pref_reminder_backup_cb"
+            />
+        <ListPreference
+            android:title="@string/str_reminder_backup_interval"
+            android:entries="@array/reminder_intervals"
+            android:entryValues="@array/reminder_intervals_val"
+            android:key="@string/key_pref_reminder_interval_lp"
+            android:dependency="@string/key_pref_reminder_backup_cb"
+            android:defaultValue="86400000"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/str_format">
+        <ListPreference
+            android:title="@string/str_date"
+            android:entries="@array/date_format"
+            android:entryValues="@array/date_format_val"
+            android:key="@string/key_pref_date_format"
+            android:defaultValue="@string/date_format"/>
+        <ListPreference
+            android:title="@string/str_currency"
+            android:entries="@array/currency"
+            android:entryValues="@array/currency_val"
+            android:key="@string/key_pref_currency"
+            android:defaultValue="US"/>
     </PreferenceCategory>
 
 </PreferenceScreen><!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/xml/preferences.xml -->

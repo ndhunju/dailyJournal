@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.ImportExport;
+package com.ndhunju.dailyjournal.controller.importExport;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -11,9 +11,10 @@ import android.util.Log;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.JsonConverter;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.service.UtilsFile;
-import com.ndhunju.dailyjournal.service.UtilsView;
-import com.ndhunju.dailyjournal.service.UtilsZip;
+import com.ndhunju.dailyjournal.service.KeyValPersistence;
+import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.util.UtilsView;
+import com.ndhunju.dailyjournal.util.UtilsZip;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -182,7 +183,7 @@ public class TransferOldDataAsyncTask extends AsyncTask<Void,Integer,Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         pd.cancel();
         //Record that the old data were imported so that it doesn't happen again
-        Services.getInstance(mActivity).oldDataImportAttempted(true);
+        KeyValPersistence.oldDataImportAttempted(true, mActivity);
 
         mActivity.setResult(aBoolean ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
 

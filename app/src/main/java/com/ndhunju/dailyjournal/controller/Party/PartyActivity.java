@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.Party;
+package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -20,14 +20,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.LockScreenActivity;
+import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.model.Party.Type;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.service.UtilsFile;
-import com.ndhunju.dailyjournal.service.UtilsFormat;
-import com.ndhunju.dailyjournal.service.UtilsView;
+import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.io.File;
 
@@ -171,13 +171,13 @@ public class PartyActivity extends FragmentActivity {
 
     @Override
 	protected void onPause() {
-		LockScreenActivity.updatePasscodeTime();
+		LockService.updatePasscodeTime();
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
-		LockScreenActivity.checkPassCode(PartyActivity.this);
+		LockService.checkPassCode(PartyActivity.this);
 		super.onResume();
 	}
 }

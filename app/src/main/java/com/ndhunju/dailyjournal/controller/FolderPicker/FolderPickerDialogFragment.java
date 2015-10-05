@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.FolderPicker;
+package com.ndhunju.dailyjournal.controller.folderPicker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.UtilsView;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.io.File;
 import java.util.ArrayList;

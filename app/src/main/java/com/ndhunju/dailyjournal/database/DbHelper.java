@@ -8,7 +8,7 @@ import android.util.Log;
 import com.ndhunju.dailyjournal.database.DailyJournalContract.*;
 import com.ndhunju.dailyjournal.database.DailyJournalContractOld.*;
 import com.ndhunju.dailyjournal.service.DBTransferService;
-import com.ndhunju.dailyjournal.service.UtilsDb;
+import com.ndhunju.dailyjournal.util.UtilsDb;
 
 public class DbHelper extends SQLiteOpenHelper {
 

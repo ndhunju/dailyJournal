@@ -1,6 +1,6 @@
 package com.ndhunju.dailyjournal.model;
 
-import com.ndhunju.dailyjournal.service.UtilsFormat;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import static org.hamcrest.CoreMatchers.*;
 

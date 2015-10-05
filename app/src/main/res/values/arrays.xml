@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="options_attch">
+        <item>Take Picture</item>
+        <item>Attach Picture</item>
+    </string-array>
+
+
+    <string-array name="reminder_intervals">
+        <item >Hourly</item>
+        <item >Daily</item>
+        <item >Weekly</item>
+        <item >Monthly</item>
+    </string-array>
+    <!--integer-arrary not supproted for entryValues-->
+    <string-array name="reminder_intervals_val">
+        <item >10000</item>
+        <item >86400000</item>
+        <item >604800000</item>
+        <item >2592000000</item>
+    </string-array>
+
+    <string-array name="date_format">
+        <item>Jan-27-2015</item>
+        <item>01/27/2015</item>
+        <item>01/27/15</item>
+        <item>27-Jan-2015</item>
+        <item>27/01/2015</item>
+        <item>27/01/15</item>
+    </string-array>
+
+    <string-array name="date_format_val">
+        <item>MMM-d-yyyy</item>
+        <item>MM/d/yyyy</item>
+        <item>MM/d/yy</item>
+        <item>d-MMM-yyyy</item>
+        <item>d/MM/yyyy</item>
+        <item>d/MM/yy</item>
+    </string-array>
+
+    <string-array name="currency">
+        <item>Dollar ($)</item>
+        <item>Rupee (Rs.)</item>
+    </string-array>
+
+    <string-array name="currency_val">
+        <item>US</item>
+        <item>IN</item>
+    </string-array>
+
+
+</resources>

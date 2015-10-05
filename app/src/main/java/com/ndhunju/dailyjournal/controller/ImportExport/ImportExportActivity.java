@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.ImportExport;
+package com.ndhunju.dailyjournal.controller.importExport;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -16,15 +16,15 @@ import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.FolderPicker.FolderPickerDialogFragment;
-import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
-import com.ndhunju.dailyjournal.controller.LockScreenActivity;
+import com.ndhunju.dailyjournal.service.LockService;
+import com.ndhunju.dailyjournal.controller.folderPicker.FolderPickerDialogFragment;
+import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.JsonConverter;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.service.UtilsFile;
-import com.ndhunju.dailyjournal.service.UtilsView;
+import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.util.List;
 
@@ -177,7 +177,7 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
         // mGoogleClientMgr.disconnect();
 
         //Update lock time
-        LockScreenActivity.updatePasscodeTime();
+        LockService.updatePasscodeTime();
     }
 
     @Override
@@ -195,7 +195,7 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
         if (importOldData) new TransferOldDataAsyncTask(ImportExportActivity.this).execute();
 
         //check pass code
-        LockScreenActivity.checkPassCode(ImportExportActivity.this);
+        LockService.checkPassCode(ImportExportActivity.this);
 
     }
 

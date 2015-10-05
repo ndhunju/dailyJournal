@@ -16,8 +16,8 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.LinearLayout;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.FolderPicker.OnDialogBtnClickedListener;
-import com.ndhunju.dailyjournal.controller.Journal.JournalFragment;
+import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
+import com.ndhunju.dailyjournal.controller.journal.JournalFragment;
 import com.ndhunju.dailyjournal.service.Constants;
 
 public class DatePickerFragment extends DialogFragment {

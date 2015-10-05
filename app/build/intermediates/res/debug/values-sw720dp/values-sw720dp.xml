@@ -2,7 +2,7 @@
 <resources>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values-sw720dp/values.xml -->
     <eat-comment/>
-    <bool name="noteCol">true</bool>
+    <bool name="note_col">true</bool>
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values-sw720dp/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">64dp</dimen>

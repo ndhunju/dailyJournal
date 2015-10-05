@@ -1,8 +1,9 @@
 package com.ndhunju.dailyjournal.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class Journal{
+public class Journal implements Serializable{
 
     //Custom Type of a Journal
 	public enum Type { Debit, Credit}

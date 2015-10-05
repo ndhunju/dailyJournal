@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.Party;
+package com.ndhunju.dailyjournal.controller.party;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.LockScreenActivity;
+import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Constants;
 
 /**
@@ -73,13 +73,13 @@ public class PartyDetailActivity extends Activity {
     protected void onPause() {
         super.onPause();
         //update pass code time
-        LockScreenActivity.updatePasscodeTime();
+        LockService.updatePasscodeTime();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //check pass code
-        LockScreenActivity.checkPassCode(PartyDetailActivity.this);
+        LockService.checkPassCode(PartyDetailActivity.this);
     }
 }

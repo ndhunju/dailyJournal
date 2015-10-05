@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ndhunju.dailyjournal"
     android:versionCode="10"
-    android:versionName="5.2" >
+    android:versionName="5.2">
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -21,61 +21,43 @@
         android:description="@string/app_descrip"
         android:icon="@drawable/ic_ganesh_book"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <service android:name=".controller.NotificationService" />
+        android:theme="@style/AppTheme">
 
-        <activity
-            android:name=".controller.HomeActivity"
-            android:screenOrientation="portrait" >
+        <service android:name=".controller.NotificationService"
+            android:exported="false"/>
+
+        <activity android:name=".controller.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".controller.Journal.JournalActivity"
-            />
-        <activity
-            android:name=".controller.Party.PartyListActivityOld"
-            />
-        <activity
-            android:name=".controller.Party.PartyLedgerActivityOld"
-             />
-        <activity
-            android:name=".controller.Party.PartyActivity"
-             />
-        <activity
-            android:name=".viewPager.ViewPagerActivity"
-             />
+        <activity android:name=".controller.journal.JournalActivity"
+                  android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".controller.party.PartyListActivityOld"
+                  android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".controller.party.PartyLedgerActivityOld"
+                  android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".controller.party.PartyActivity"
+                  android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".viewPager.ViewPagerActivity"
+                  android:windowSoftInputMode="stateHidden"/>
 
         <!-- https://developers.google.com/drive/android/java-client -->
-        <activity
-            android:name=".controller.ImportExport.ImportExportActivity"
-            android:label="@string/title_activity_import_export"
-            >
+        <activity android:name=".controller.importExport.ImportExportActivity"
+                  android:label="@string/title_activity_import_export"/>
+        <activity android:name=".controller.lock.LockScreenActivity"
+                  android:label="@string/title_activity_lock_screen"/>
+        <activity android:name=".controller.party.PartyListActivity"
+                  android:label="@string/title_item_list"
+                  android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".controller.party.PartyDetailActivity"
+                  android:label="@string/title_item_detail">
         </activity>
-        <activity
-            android:name=".controller.LockScreenActivity"
-            android:label="@string/title_activity_lock_screen"
-             >
-        </activity>
-        <!--
-            <service android:name=".controller.NotificationService"
-            android:exported="false"/>
-        -->
-        <activity
-            android:name=".controller.Party.PartyListActivity"
-            android:label="@string/title_item_list" >
-        </activity>
-        <activity
-            android:name=".controller.Party.PartyDetailActivity"
-            android:label="@string/title_item_detail"
-            android:parentActivityName=".controller.Party.PartyListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".controller.Party.PartyListActivity" />
-        </activity>
+
+        <receiver android:name=".controller.AlarmReceiver" >
+            </receiver>
+
     </application>
 
 </manifest>

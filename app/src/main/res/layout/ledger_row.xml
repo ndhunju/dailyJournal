@@ -9,8 +9,9 @@
         android:layout_width="40dp"
         android:background="@drawable/cell_shape"
         android:padding="3dp"
-        android:gravity="center"
+        android:gravity="right"
         android:visibility="gone"
+        android:ellipsize="end"
         android:textSize="@dimen/text_size_medium"/>
     <TextView
         android:id="@+id/ledger_row_col1"
@@ -20,6 +21,7 @@
         android:background="@drawable/cell_shape"
         android:padding="3dp"
         android:gravity="center"
+        android:ellipsize="end"
         android:textSize="@dimen/text_size_medium"/>
     <TextView
         android:id="@+id/ledger_row_col2"
@@ -30,8 +32,9 @@
         android:layout_weight="1"
         android:background="@drawable/cell_shape"
         android:padding="3dp"
-        android:gravity="center"
+        android:gravity="left"
         android:visibility="gone"
+        android:layout_gravity="left"
         android:textSize="@dimen/text_size_medium"/>
     <TextView
         android:id="@+id/ledger_row_col3"
@@ -40,7 +43,9 @@
         android:text="@string/str_dr"
         android:background="@drawable/cell_shape"
         android:padding="3dp"
-        android:gravity="center"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:layout_gravity="left"
         android:textSize="@dimen/text_size_medium"/>
     <TextView
         android:id="@+id/ledger_row_col4"
@@ -49,6 +54,8 @@
         android:text="@string/str_cr"
         android:background="@drawable/cell_shape"
         android:padding="3dp"
-        android:gravity="center"
+        android:gravity="right"
+        android:ellipsize="end"
+        android:layout_gravity="left"
         android:textSize="@dimen/text_size_medium"/>
 </TableRow>

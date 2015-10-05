@@ -1,13 +1,12 @@
-package com.ndhunju.dailyjournal.controller.Party;
+package com.ndhunju.dailyjournal.controller.party;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.LockScreenActivity;
+import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Constants;
 
 /**
@@ -44,6 +43,7 @@ public class PartyListActivity extends Activity implements PartyListFragment.Cal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_party_list);
 
+        //Fragments are added by android as defined in layout
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the sw600dp screen
             mTwoPane = true;
@@ -85,13 +85,13 @@ public class PartyListActivity extends Activity implements PartyListFragment.Cal
     protected void onPause() {
         super.onPause();
         //update pass code time
-        LockScreenActivity.updatePasscodeTime();
+        LockService.updatePasscodeTime();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //check pass code
-        LockScreenActivity.checkPassCode(PartyListActivity.this);
+        LockService.checkPassCode(PartyListActivity.this);
     }
 }

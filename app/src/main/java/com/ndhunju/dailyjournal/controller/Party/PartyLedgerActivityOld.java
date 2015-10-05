@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller.Party;
+package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -15,14 +15,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.Journal.JournalActivity;
-import com.ndhunju.dailyjournal.controller.LockScreenActivity;
+import com.ndhunju.dailyjournal.service.LockService;
+import com.ndhunju.dailyjournal.controller.journal.JournalActivity;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.service.UtilsFormat;
-import com.ndhunju.dailyjournal.service.UtilsView;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
 public class PartyLedgerActivityOld extends FragmentActivity {
 
@@ -60,7 +60,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 		mParty = mServices.getParty(mPartyId);
 
 		double balance = mParty.calculateBalances();
-		balanceTV.setText(UtilsFormat.formatCurrency(balance));
+		balanceTV.setText(UtilsFormat.formatCurrency(balance, getActivity()));
 		balanceTV.setTextColor(balance > 0 ? getResources().getColor(R.color.red_light_pressed)
                                            : getResources().getColor(R.color.green));
 
@@ -79,6 +79,10 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 
         //Alert the user if balance is negative
 
+	}
+
+	public Activity getActivity(){
+		return PartyLedgerActivityOld.this;
 	}
 
 	private void createJournalIntent(long id) {
@@ -100,8 +104,8 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 
         col1.setText("");
         col2.setText(getString(R.string.str_total));
-        col3.setText(UtilsFormat.formatCurrency(party.getDebitTotal()));
-        col4.setText(UtilsFormat.formatCurrency(party.getCreditTotal()));
+        col3.setText(UtilsFormat.formatCurrency(party.getDebitTotal(),getActivity() ));
+        col4.setText(UtilsFormat.formatCurrency(party.getCreditTotal(), getActivity()));
         col0.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
         col1.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
         col2.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
@@ -122,7 +126,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
                     return;
 
                 double balance = mParty.calculateBalances();
-                balanceTV.setText(UtilsFormat.formatCurrency(balance));
+                balanceTV.setText(UtilsFormat.formatCurrency(balance,getActivity() ));
                 balanceTV.setTextColor(balance > 0 ? getResources().getColor(R.color.red_light_pressed)
                                                  : getResources().getColor(R.color.green));
 
@@ -240,13 +244,13 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 	protected void onPause() {
 		super.onPause();
 		//update pass code time
-		LockScreenActivity.updatePasscodeTime();
+		LockService.updatePasscodeTime();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		//check pass code
-		LockScreenActivity.checkPassCode(PartyLedgerActivityOld.this);
+		LockService.checkPassCode(PartyLedgerActivityOld.this);
 	}
 }

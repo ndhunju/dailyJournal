@@ -4,10 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Party {
+public class Party implements Serializable{
 
 	//Custom Type of Party
 	public static enum Type { Debtors, Creditors }

@@ -1,56 +1,34 @@
 package com.ndhunju.dailyjournal.controller;
 
-import android.app.IntentService;
 import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
+import android.app.Service;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import android.os.IBinder;
 
-import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.Journal.JournalActivity;
+import com.ndhunju.dailyjournal.service.MyNotificationManager;
 
-public class NotificationService extends IntentService{
+public class NotificationService extends Service{
 	/*Imp Note: Services needs to be declared in AndroidManifest.xml file to work!!!!*/
-	private static final String TAG = "NotificationService";
+	private static final String TAG = NotificationService.class.getSimpleName();
 	
 	public NotificationService() {
-		super(TAG);
+		super();
 	}
-	
+
 	@Override
-	protected void onHandleIntent(Intent intent) {
-		Log.i(TAG, "Received a notification intent : " + intent);
-		
-		String msg = (String)intent.getSerializableExtra(Alarm.MSG);
-		String title = (String)intent.getSerializableExtra(Alarm.TITLE);
-
-
-		sendNotification(title, msg);
-		
+	public IBinder onBind(Intent intent) {
+		return null;
 	}
 
-    /**
-     * Sends notification to the user.
-     * @param title: Title for the notification
-     * @param text: Notification message
-     */
-	public void sendNotification(String title, String text){
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		//Log.d(TAG, "Received a notification intent : " + intent);
+		Notification notif = intent.getParcelableExtra(MyNotificationManager.ARG_NOTIF);
+		MyNotificationManager nm = MyNotificationManager.from(this);
+		nm.notify(notif, 0);
+		stopSelf();
 
-		PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, JournalActivity.class), 0);
-		Notification notification = new NotificationCompat.Builder(this)
-										.setSmallIcon(R.drawable.ic_ganesh_book_small)
-										.setContentTitle(title)
-										.setContentText(text)
-										.setContentIntent(pi)
-										.setAutoCancel(true)
-										.build();
-
-
-		NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-		//assign different notification id so that old one is not updated by new one
-		nm.notify(7, notification);
+		return START_NOT_STICKY;
 	}
+
 }

@@ -6,6 +6,8 @@ import android.media.MediaScannerConnection;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -65,7 +67,7 @@ public class ReportGenerator{
         sb.append(mParty.getName());
         sb.append(newLine());
         sb.append(getString(R.string.str_balance));
-        sb.append(UtilsFormat.formatCurrency(mParty.getDebitTotal() - mParty.getCreditTotal()));
+        sb.append(UtilsFormat.formatCurrency(mParty.getDebitTotal() - mParty.getCreditTotal(),mContext));
         sb.append(newLine());
         return sb.toString();
     }
@@ -90,17 +92,17 @@ public class ReportGenerator{
         int no = 1;
         for(Journal journal: mJournals){
             sb.append(addSpaces(String.valueOf(no++),3));
-            sb.append(addSpaces(UtilsFormat.formatDate(new Date(journal.getDate()), UtilsFormat.DATE_FORMAT)));
+            sb.append(addSpaces(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)));
             if(journal.getType() == Journal.Type.Debit){
-                sb.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount())));
+                sb.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount(),mContext )));
                 sb.append(addSpaces(""));
                 balance += journal.getAmount();
-                sb.append(addSpaces(UtilsFormat.formatCurrency(balance)));
+                sb.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
             }else{
                 sb.append(addSpaces(""));
-                sb.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount())));
+                sb.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount(), mContext)));
                 balance -= journal.getAmount();
-                sb.append(addSpaces(UtilsFormat.formatCurrency(balance)));
+                sb.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
             }
         }
 
@@ -108,10 +110,10 @@ public class ReportGenerator{
 
         /**Footer Row **/
         sb.append(addSpaces("", 3));
-        sb.append(addSpaces(UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT)));
-        sb.append(addSpaces(UtilsFormat.formatCurrency(mParty.getDebitTotal())));
-        sb.append(addSpaces(UtilsFormat.formatCurrency(mParty.getCreditTotal())));
-        sb.append(addSpaces(UtilsFormat.formatCurrency(balance)));
+        sb.append(addSpaces(UtilsFormat.formatDate(new Date(), mContext)));
+        sb.append(addSpaces(UtilsFormat.formatCurrency(mParty.getDebitTotal(), mContext)));
+        sb.append(addSpaces(UtilsFormat.formatCurrency(mParty.getCreditTotal(),mContext )));
+        sb.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
 
         return sb.toString();
     }
@@ -140,7 +142,7 @@ public class ReportGenerator{
             bw.append(mParty.getName());
             bw.append(newLine());
             bw.append(getString(R.string.str_balance));
-            bw.append(UtilsFormat.formatCurrency(mParty.getDebitTotal() - mParty.getCreditTotal()));
+            bw.append(UtilsFormat.formatCurrency(mParty.getDebitTotal() - mParty.getCreditTotal(),mContext ));
             bw.append(newLine());
             bw.append(newLine());
 
@@ -158,17 +160,17 @@ public class ReportGenerator{
             int no = 1;
             for (Journal journal : mJournals) {
                 bw.append(addSpaces(String.valueOf(no++), 3));
-                bw.append(addSpaces(UtilsFormat.formatDate(new Date(journal.getDate()), UtilsFormat.DATE_FORMAT)));
+                bw.append(addSpaces(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)));
                 if (journal.getType() == Journal.Type.Debit) {
-                    bw.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount())));
+                    bw.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount(), mContext)));
                     bw.append(addSpaces(""));
                     balance += journal.getAmount();
-                    bw.append(addSpaces(UtilsFormat.formatCurrency(balance)));
+                    bw.append(addSpaces(UtilsFormat.formatCurrency(balance,mContext )));
                 } else {
                     bw.append(addSpaces(""));
-                    bw.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount())));
+                    bw.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount(),mContext )));
                     balance -= journal.getAmount();
-                    bw.append(addSpaces(UtilsFormat.formatCurrency(balance)));
+                    bw.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
                 }
                 bw.append(newLine());
             }
@@ -177,9 +179,9 @@ public class ReportGenerator{
             /**Footer Row **/
             bw.append(addSpaces("", 3));
             bw.append(addSpaces(R.string.str_total));
-            bw.append(addSpaces(UtilsFormat.formatCurrency(mParty.getDebitTotal())));
-            bw.append(addSpaces(UtilsFormat.formatCurrency(mParty.getCreditTotal())));
-            bw.append(addSpaces(UtilsFormat.formatCurrency(balance)));
+            bw.append(addSpaces(UtilsFormat.formatCurrency(mParty.getDebitTotal(), mContext)));
+            bw.append(addSpaces(UtilsFormat.formatCurrency(mParty.getCreditTotal(),mContext )));
+            bw.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
 
             bw.append(newLine());
 
