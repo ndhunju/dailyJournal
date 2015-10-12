@@ -78,6 +78,7 @@ public class GoogleApiClientManager {
                         if (!result.hasResolution()) {
                             // show the localized error dialog.
                             GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), mActivity, 0).show();
+                            connectionPd.cancel();
                             return;}
 
                         // If the failure has a resolution. Resolve it. Called typically when the app is
@@ -105,6 +106,7 @@ public class GoogleApiClientManager {
     }
 
     public void disconnect(){
+        if(mGoogleApiClient == null) return;
         if(!mGoogleApiClient.isConnecting() && !mGoogleApiClient.isConnected())
             mGoogleApiClient.disconnect();
     }

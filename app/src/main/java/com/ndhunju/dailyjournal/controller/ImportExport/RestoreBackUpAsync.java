@@ -28,8 +28,8 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
     private static final String TAG = RestoreBackUpAsync.class.getSimpleName();
 
     //variables
-    Activity mActivity;
-    ProgressDialog pd;
+    private Activity mActivity;
+    private ProgressDialog pd;
 
     public RestoreBackUpAsync(Activity context){
         mActivity = context;
@@ -50,7 +50,7 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
     protected void onPostExecute(Boolean result) {
         //End progress bar
         pd.cancel();
-        mActivity.setResult(result ? mActivity.RESULT_OK : Activity.RESULT_CANCELED);
+        mActivity.setResult(result ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
         String msg = result ? String.format(mActivity.getString(R.string.msg_restored), mActivity.getString(R.string.str_backup))
                 : String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_failed));
         UtilsView.alert(mActivity, msg);//Display msg
@@ -69,7 +69,7 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
 
         try {
             //Delete existing files, objects, database
-            Services.getInstance(mActivity).truncateAllTables();
+            Services.getInstance(mActivity).recreateDB();
 
             //Get the app folder where the data are stored
             File appFolder = UtilsFile.getAppFolder(mActivity);

@@ -10,16 +10,16 @@
 
     <EditText
         android:id="@+id/fragment_party_list_search_et"
-        android:capitalize="words"
+        android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Party" />
+        android:hint="@string/str_party" />
 
     <Button
         android:id="@+id/fragment_party_list_add_party_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
-        android:text="Add"
+        android:text="@string/str_add"
         style="@style/Widget.Button_Neutral">
     </Button>
 

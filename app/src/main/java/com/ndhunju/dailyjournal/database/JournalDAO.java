@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class JournalDAO implements GenericDAO<Journal, Long> {
 
-    SQLiteOpenHelper mSqLiteOpenHelper;
+    private SQLiteOpenHelper mSqLiteOpenHelper;
 
     public JournalDAO(SQLiteOpenHelper sqLiteOpenHelper){
         mSqLiteOpenHelper = sqLiteOpenHelper;
@@ -105,7 +105,7 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         return db.insert(JournalColumns.TABLE_JOURNAL, null, toContentValues(journal));
     }
 
-    public static ContentValues toContentValues(Journal journal){
+    private static ContentValues toContentValues(Journal journal){
         ContentValues values = new ContentValues();
         //values.put(JournalColumns.JOURNAL_ID, journal.getId());
         values.put(JournalColumns.COL_JOURNAL_AMOUNT, journal.getAmount());
@@ -117,7 +117,7 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         return values;
     }
 
-    public static Journal fromCursor(Cursor c){
+    private static Journal fromCursor(Cursor c){
         long id = c.getLong(c.getColumnIndexOrThrow(JournalColumns.JOURNAL_ID));
         long date = c.getLong(c.getColumnIndexOrThrow(JournalColumns.COL_JOURNAL_DATE));
         long addedDate = c.getLong(c.getColumnIndexOrThrow(JournalColumns.COL_JOURNAL_ADDED_DATE));

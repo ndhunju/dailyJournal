@@ -11,13 +11,10 @@ public class KeyValPersistence {
 
 
     //Constant variables
-    private static final String KEY_CURRENT_PARTY_ID = Constants.APP_PREFIX + "currentMerchantId";
-    private static final String KEY_CURRENT_JOURNAL_ID = Constants.APP_PREFIX + "currentJournalId";
     private static final String KEY_OLD_DATA_IMPORTED = Constants.APP_PREFIX + "oldDataImported";
 
     private static final String XML_NAME = "hashMap";
 
-    private Context mContext;
     private SharedPreferences preference;
 
     private static KeyValPersistence keyValPersistence;
@@ -29,16 +26,23 @@ public class KeyValPersistence {
     }
 
     private KeyValPersistence(Context context){
-        mContext = context;
         preference = context.getSharedPreferences(XML_NAME, Context.MODE_PRIVATE);
     }
 
-    public String get(String key) {
-        return preference.getString(key, null);
+    public String get(String key, String defVal) {
+        return preference.getString(key, defVal);
     }
 
-    public boolean put(String key, String value){
+    public long get(String key, long defLongVal){
+        return preference.getLong(key, defLongVal);
+    }
+
+    public boolean putString(String key, String value){
         return preference.edit().putString(key, value).commit();
+    }
+
+    public boolean putLong(String key, long val){
+        return preference.edit().putLong(key, val).commit();
     }
 
     /**

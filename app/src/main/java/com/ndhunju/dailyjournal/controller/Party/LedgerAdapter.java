@@ -1,6 +1,7 @@
 package com.ndhunju.dailyjournal.controller.party;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,10 @@ import java.util.List;
  * Created by dhunju on 9/26/2015.
  * This adapter provides view for row of a Ledger
  */
-public class LedgerAdapter extends ArrayAdapter<Journal> {
+class LedgerAdapter extends ArrayAdapter<Journal> {
 
+    private String formattedAmt;
+    private boolean showNoteCol;
 
     public LedgerAdapter(Context context, List<Journal> journals) {
         super(context, R.layout.ledger_row, journals);
@@ -42,6 +45,12 @@ public class LedgerAdapter extends ArrayAdapter<Journal> {
             holder.drCol = (TextView) convertView.findViewById(R.id.ledger_row_col3);
             holder.crCol = (TextView) convertView.findViewById(R.id.ledger_row_col4);
 
+            //apply common settings
+            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.END, holder.dateCol,
+                                                                        holder.noteCol);
+            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.START,holder.idCol,
+                                                            holder.drCol, holder.crCol);
+
             //tag the holder to the view to retrieve it later
             convertView.setTag(holder);
         }else{
@@ -57,17 +66,18 @@ public class LedgerAdapter extends ArrayAdapter<Journal> {
         holder.dateCol.setText(UtilsFormat.formatDate(
                 new Date(journal.getDate()), getContext()));
 
-
-        boolean showNoteCol = getContext().getResources().getBoolean(R.bool.note_col);
+        //showNoteCol will be false for smaller devices
+        showNoteCol = getContext().getResources().getBoolean(R.bool.note_col);
         if(showNoteCol) {holder.noteCol.setText(journal.getNote());}
         else{holder.noteCol.setVisibility(View.GONE); }
 
+        formattedAmt = UtilsFormat.formatDecimal(journal.getAmount(), getContext());
 
         if (journal.getType().equals(Journal.Type.Debit)) {
-            holder.drCol.setText(UtilsFormat.formatCurrency(journal.getAmount(), getContext()));
+            holder.drCol.setText(formattedAmt);
             holder.crCol.setText("");
         } else {
-            holder.crCol.setText(UtilsFormat.formatCurrency(journal.getAmount(),getContext() ));
+            holder.crCol.setText(formattedAmt);
             holder.drCol.setText("");
         }
 

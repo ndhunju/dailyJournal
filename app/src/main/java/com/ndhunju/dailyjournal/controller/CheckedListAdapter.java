@@ -1,13 +1,10 @@
 package com.ndhunju.dailyjournal.controller;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -74,11 +71,11 @@ public class CheckedListAdapter<T extends CheckedListAdapter.Id> extends BaseAda
     }
 
     public interface Id{
-        public long getId();
-        public String getText();
+        long getId();
+        String getText();
     }
 
     public interface OnMultiChoiceClickListener{
-        public void onClick(int pos, boolean selected);
+        void onClick(int pos, boolean selected);
     }
 }

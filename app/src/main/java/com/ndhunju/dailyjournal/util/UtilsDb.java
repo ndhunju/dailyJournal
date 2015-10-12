@@ -6,16 +6,15 @@ package com.ndhunju.dailyjournal.util;
 public class UtilsDb {
 
     public static String formatInsertSt(String newTable, String newCols, String oldTable, String oldCols){
-        String sqlTrans = String.format("INSERT INTO %s (%s) SELECT %s FROM %S",
+        return String.format("INSERT INTO %s (%s) SELECT %s FROM %S",
                 newTable, newCols, oldCols, oldTable);
-        return  sqlTrans;
     }
 
     public static String getColumns(String[] columns){
         StringBuilder builder = new StringBuilder();
         String delimiter = ",";
         for(int i = 0; i < columns.length -1 ; i++)
-            builder.append(columns[i]+delimiter);
+            builder.append(columns[i]).append(delimiter);
         builder.append(columns[columns.length-1]);
         return builder.toString();
     }

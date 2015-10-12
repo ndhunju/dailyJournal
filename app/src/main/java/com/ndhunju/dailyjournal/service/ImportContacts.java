@@ -123,10 +123,14 @@ public class ImportContacts {
                         e.printStackTrace();
                     }
                 }
+                c.close();
             }
             Services mServices = Services.getInstance(activity);
             mServices.addParty(newParty);
+
         }
+
+
 
     }
 

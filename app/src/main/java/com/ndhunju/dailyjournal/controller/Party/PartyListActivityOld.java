@@ -118,9 +118,9 @@ public class PartyListActivityOld extends FragmentActivity {
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(data == null) return;;
+        if(data == null) return;
 
-		switch (requestCode){
+        switch (requestCode){
 			case REQUEST_PARTY_INFO_CHGD:
 				if(!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false))
 					return;
@@ -131,8 +131,8 @@ public class PartyListActivityOld extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.clear();;
-		getMenuInflater().inflate(R.menu.menu_party_list_activity, menu);
+		menu.clear();
+        getMenuInflater().inflate(R.menu.menu_party_list_activity, menu);
 		return  super.onCreateOptionsMenu(menu);
 	}
 
@@ -182,8 +182,8 @@ public class PartyListActivityOld extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-    public void refreshList(){
-        partyAdapter = new ArrayAdapter<Party>(this, android.R.layout.simple_list_item_1, mServices.getParties());
+    private void refreshList(){
+        partyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mServices.getParties());
         partyLV.setAdapter(partyAdapter);
     }
 }

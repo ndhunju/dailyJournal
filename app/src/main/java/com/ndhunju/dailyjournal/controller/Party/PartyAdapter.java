@@ -17,9 +17,9 @@ import java.util.ArrayList;
 /**
  * Created by dhunju on 10/2/2015.
  */
-public class PartyAdapter extends ArrayAdapter<Party> {
+class PartyAdapter extends ArrayAdapter<Party> {
 
-    Party currentParty;
+    private Party currentParty;
 
     public PartyAdapter(Context context, ArrayList<Party> parties){
         super(context, R.layout.party_row, parties);
@@ -49,7 +49,9 @@ public class PartyAdapter extends ArrayAdapter<Party> {
 
         currentParty  =  getItem(position);
         holder.displayName.setText(currentParty.getName());
-        holder.imageView.setImageDrawable(Drawable.createFromPath(currentParty.getPicturePath()));
+        holder.imageView.setImageDrawable(currentParty.getPicturePath().equals("")?
+                getContext().getResources().getDrawable(R.drawable.party_default_pic):
+                Drawable.createFromPath(currentParty.getPicturePath()));
 
         return convertView;
     }

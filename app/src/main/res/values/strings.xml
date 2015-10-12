@@ -33,10 +33,10 @@
     <string name="str_edit">Edit</string>
     <string name="str_date">Date</string>
     <string name="str_data">Data</string>
+    <string name="str_00.00">00.00</string>
     <string name="str_tools">Tools</string>
     <string name="str_share">Share</string>
     <string name="str_report">Report</string>
-    <string name="str_00.00">00.00</string>
     <string name="str_party">Party</string>
     <string name="str_total">Total</string>
     <string name="str_alert">Alert!</string>
@@ -50,7 +50,6 @@
     <string name="str_journal">Journal</string>
     <string name="str_minutes">minutes</string>
     <string name="str_pincode">Pincode</string>
-    <string name="str_reminder">Reminder</string>
     <string name="str_balance">Balance :</string>
     <string name="str_finished">finished</string>
     <string name="str_erase_all">Erase All</string>
@@ -72,11 +71,22 @@
     <string name="str_import_party">Import Party</string>
     <string name="str_contact">Contact</string>
     <string name="str_phone_number">Phone Number</string>
-    <string name="str_enable_reminder_backup">Enable Back Up Reminder</string>
-    <string name="str_reminder_backup_interval">Backup reminder interval</string>
     <string name="str_format">Format</string>
     <string name="str_currency">Currency</string>
     <string name="str_add">Add</string>
+    <string name="str_restore_backup_from_auto">Restore From Automatic Backup</string>
+    <string name="str_auto_backup">Automatic Backup</string>
+    <string name="str_enable_auto_backup">Enable Auto Backup</string>
+    <string name="str_auto_backup_interval">Auto Backup Interval</string>
+    <string name="str_no_thanks">No, thanks</string>
+    <string name="str_later">Later</string>
+    <string name="str_rate">Rate</string>
+    <string name="str_security">Security</string>
+    <string name="str_unlock">Unlock</string>
+    <string name="msg_share_body">Organize your accounts and cashbook in the simplest way possible with Daily Journal App</string>
+    <string name="str_sd_card">SD Card</string>
+    <string name="str_thank_you">Thank you.</string>
+    <string name="str_amount">Amount</string>
 
 </resources>
 

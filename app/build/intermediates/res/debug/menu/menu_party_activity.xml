@@ -6,12 +6,12 @@
         android:id="@+id/menu_party_activity_info"
         android:showAsAction="ifRoom|withText"
         android:title="@string/str_information"
-        android:icon="@android:drawable/ic_menu_info_details"
+        android:icon="@drawable/ic_report_black_48dp"
         tools:ignore="AppCompatResource"/>
     <item
         android:id="@+id/menu_party_activity_share"
         android:showAsAction="ifRoom|withText"
         android:title="@string/str_share"
-        android:icon="@android:drawable/ic_menu_share"
+        android:icon="@drawable/ic_share_black_48dp"
         tools:ignore="AppCompatResource"/>
 </menu><!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/menu/menu_party_activity.xml -->

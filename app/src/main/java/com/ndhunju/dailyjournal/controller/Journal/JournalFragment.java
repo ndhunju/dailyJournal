@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,11 +24,6 @@ import android.widget.TextView;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
-import com.ndhunju.dailyjournal.controller.importExport.EraseAllAsyncTask;
-import com.ndhunju.dailyjournal.controller.importExport.ImportExportActivity;
-import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
-import com.ndhunju.dailyjournal.controller.MyPreferenceFragment;
-import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
@@ -45,15 +41,18 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	private static final String TAG = JournalFragment.class.getSimpleName();
     private static final int REQUEST_CHGED_DATE = 6656;
 
-    EditText amountEt, noteEt;
-    Button partyBtn,dateBtn;
-	TextView drCrTv, idTV;
+    private EditText amountEt;
+	private EditText noteEt;
+    private Button partyBtn;
+	private Button dateBtn;
+	private TextView drCrTv;
+	private TextView idTV;
 
 	//Declaring variables
-    boolean dateChanged, journalChanged;
-    Services mServices;
-    Journal mJournal;
-    Party mParty;
+	private boolean journalChanged;
+    private Services mServices;
+    private Journal mJournal;
+    private Party mParty;
 
 	/**
 	 * Returns new instance of a JournalFragment Class based on passed arguments. Implements
@@ -84,7 +83,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
         mParty = mServices.getParty(partyId);
         mJournal = mServices.getJournal(journalId);
         getActivity().setTitle(mParty.getName());
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
 
 	}
 
@@ -109,7 +108,6 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 						journalChanged = true;
 					}catch(Exception e){
 						e.printStackTrace();
-						UtilsView.alert(getActivity(), getString(R.string.warning_format));
 					}
 				  }
 				}
@@ -137,7 +135,6 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 			@Override
 			public void onClick(View v) {
                 UtilsView.alert(getActivity(), getString(R.string.warning_cant_change_party));
-				return;
 			}
 		});
 
@@ -194,43 +191,26 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		saveJournalBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent();
-                if (journalChanged) {
-                    i.putExtra(Constants.KEY_JOURNAL_CHGD, true);
-                    mServices.updateJournal(mJournal);
-                    mJournal = null;
-                }
-                getActivity().setResult(Activity.RESULT_OK, i);
-                getActivity().finish(); //Finish the Activity once user is done changing
+                try{
+					UtilsFormat.parseCurrency(amountEt.getText().toString(), getActivity());
+					Intent i = new Intent();
+					if (journalChanged) {
+						i.putExtra(Constants.KEY_JOURNAL_CHGD, true);
+						mServices.updateJournal(mJournal);
+						mJournal = null;
+					}
+					getActivity().setResult(Activity.RESULT_OK, i);
+					getActivity().finish(); //Finish the Activity once user is done changing
 
-                UtilsView.toast(getActivity(), String.format(getString(R.string.msg_saved),
-                        getString(R.string.str_journal)));
+					UtilsView.toast(getActivity(), String.format(getString(R.string.msg_saved),
+							getString(R.string.str_journal)));
+				}catch (NumberFormatException nfe){
+					UtilsView.alert(getActivity(), getString(R.string.msg_is_not_valid
+					,getString(R.string.str_amount)));
+				}
+
             }
         });
-
-		Button deleteBtn = (Button) v.findViewById(R.id.fragment_home_delete_btn);
-			deleteBtn.setVisibility(View.VISIBLE);
-			deleteBtn.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-                    //Prepare warning msg
-					String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_journal));
-                    //Alert user before deleting the Journal
-					UtilsView.alert(getActivity(), msg, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialogInterface, int i) {
-							journalChanged = true;
-							mServices.deleteJournal(mJournal);
-							String msg = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
-							UtilsView.toast(getActivity(), msg);
-							Intent intent = new Intent();
-							intent.putExtra(Constants.KEY_JOURNAL_CHGD, true);
-							getActivity().setResult(Activity.RESULT_OK, intent);
-							getActivity().finish();
-						}
-					}, null);
-				}
-			});
 
         //Refresh values in UI
 		setValues(mJournal, mParty);
@@ -238,11 +218,42 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		return v;
 	}
 
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_fragment_journal, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()){
+			case R.id.menu_fragment_journal_delete_picture:
+				//Prepare warning msg
+				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_journal));
+				//Alert user before deleting the Journal
+				UtilsView.alert(getActivity(), msg, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						journalChanged = true;
+						mServices.deleteJournal(mJournal);
+						String msg = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
+						UtilsView.toast(getActivity(), msg);
+						Intent intent = new Intent();
+						intent.putExtra(Constants.KEY_JOURNAL_CHGD, true);
+						getActivity().setResult(Activity.RESULT_OK, intent);
+						getActivity().finish();
+					}
+				}, null);
+				break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
 
 	/**
 	 * Sets value of the UI Widgets based on passed parameters
 	 */
-	public void setValues(Journal tempJournal, Party party) {
+	private void setValues(Journal tempJournal, Party party) {
 		idTV.setText(getString(R.string.str_id) + UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
 		amountEt.setText(tempJournal.getAmount() == 0 ? "" :UtilsFormat.formatCurrency(tempJournal.getAmount(),getActivity() ));
 		dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
@@ -250,9 +261,6 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
         noteEt.setText(tempJournal.getNote());
         setTextDrCr(tempJournal.getType());
 		mParty = party;
-
-
-        amountEt.requestFocus();
 	}
 
     /**
@@ -260,7 +268,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
      * Journal Type
      * @param journalType
      */
-    public void setTextDrCr(Journal.Type journalType){
+	private void setTextDrCr(Journal.Type journalType){
 		int red = getResources().getColor(R.color.red_light_pressed);
 		int green = getResources().getColor(R.color.green);
 
@@ -284,7 +292,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 				long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
 				if(newDate != mJournal.getDate()){
 					//Set journalChanged to true is the date is changed. Journal needs to be reordered
-					dateChanged = journalChanged = true;
+					journalChanged = true;
 					mJournal.setDate(newDate);
 				}
 				dateBtn.setText(UtilsFormat.formatDate(new Date(mJournal.getDate()), getActivity()));

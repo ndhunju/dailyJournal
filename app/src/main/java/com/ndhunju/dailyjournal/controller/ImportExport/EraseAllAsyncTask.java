@@ -19,8 +19,8 @@ import com.ndhunju.dailyjournal.util.UtilsView;
  */
 public class EraseAllAsyncTask extends AsyncTask<Void,Integer,Boolean> {
 
-    ProgressDialog pd;
-    Activity mActivity;
+    private ProgressDialog pd;
+    private Activity mActivity;
 
     public EraseAllAsyncTask(Activity activity){
         mActivity = activity;
@@ -34,7 +34,6 @@ public class EraseAllAsyncTask extends AsyncTask<Void,Integer,Boolean> {
         pd.setCancelable(false);
         pd.setMessage(String.format(mActivity.getString(R.string.msg_deleting), mActivity.getString(R.string.str_data)));
         pd.show();
-        ;
     }
 
     @Override

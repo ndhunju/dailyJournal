@@ -31,10 +31,10 @@ import java.util.InputMismatchException;
  */
 public class TransferOldDataAsyncTask extends AsyncTask<Void,Integer,Boolean> {
 
-    public static final String TAG = TransferOldDataAsyncTask.class.getSimpleName();
+    private static final String TAG = TransferOldDataAsyncTask.class.getSimpleName();
 
-    ProgressDialog pd ;
-    Activity mActivity;
+    private ProgressDialog pd ;
+    private Activity mActivity;
 
     public TransferOldDataAsyncTask(Activity activity) {
         this.mActivity = activity;
@@ -134,7 +134,7 @@ public class TransferOldDataAsyncTask extends AsyncTask<Void,Integer,Boolean> {
             Log.i(TAG, "old file's backup created");
 
             //Delete existing files, objects, database
-            Services.getInstance(mActivity).truncateAllTables();
+            Services.getInstance(mActivity).recreateDB();
 
             //3. Restore the backup file
 

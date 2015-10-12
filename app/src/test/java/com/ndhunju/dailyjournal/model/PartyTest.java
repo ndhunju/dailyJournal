@@ -20,8 +20,8 @@ import static org.junit.Assert.fail;
  */
 public class PartyTest {
 
-    Party testParty;
-    String jsonParty;
+    private Party testParty;
+    private String jsonParty;
 
     @BeforeClass
     public static void initializeSomethingReallyExpensive(){}

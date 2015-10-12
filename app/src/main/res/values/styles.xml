@@ -68,5 +68,9 @@
     <!-- Backward-compatible version of ?android:attr/buttonBarButtonStyle -->
     <style name="ButtonBarButton" />
 
+    <style name="Underline">
+        <item name="android:background">@drawable/buttom_border</item>
+    </style>
+
 
 </resources>

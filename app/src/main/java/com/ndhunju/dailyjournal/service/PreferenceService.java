@@ -1,13 +1,15 @@
 package com.ndhunju.dailyjournal.service;
 
-import android.app.Activity;
-import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.AutoBackupService;
+import com.ndhunju.dailyjournal.util.UtilsDate;
 
 /**
  * Created by dhunju on 10/4/2015.
@@ -18,7 +20,7 @@ public class PreferenceService {
     private static final String TAG = PreferenceService.class.getSimpleName();
     public static final String DEF_NAME_SHARED_PREFERENCE =  "preferences";
     public static final long DEFAULT_REMINDER_TIME = 604800000; //1 week
-    public static final int DEFAULT_LOCK_TIME = 3;             //3 mins
+    private static final int DEFAULT_LOCK_TIME = 3;             //3 mins
     public static final String NO_PASSCODE_VAL = "";
 
 
@@ -44,41 +46,40 @@ public class PreferenceService {
      * {@link android.preference.PreferenceFragment#addPreferencesFromResource(int)}
      * and {@link PreferenceManager#setSharedPreferencesName(String)}
      */
-    public void loadSharedPreference(){
+    private void loadSharedPreference(){
         //Set the name of the preference file
-        PreferenceManager.setDefaultValues(context, DEF_NAME_SHARED_PREFERENCE, context.MODE_PRIVATE, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(context, DEF_NAME_SHARED_PREFERENCE,
+                Context.MODE_PRIVATE, R.xml.preference_backup, true);
     }
 
-
-
-    public SharedPreferences getSharedPreference(){
-        return context.getSharedPreferences(DEF_NAME_SHARED_PREFERENCE, context.MODE_PRIVATE);
+    private SharedPreferences getSharedPreference(){
+        return context.getSharedPreferences(DEF_NAME_SHARED_PREFERENCE,
+                Context.MODE_PRIVATE);
     }
 
-    /**
-     * This method either sets the alarm for back up reminder or disables it depending
-     * upon the user preference
-     */
-    public  void updateBackupReminder(){
+    public void updateAutoBackup(){
+        //get the key for Reminder Checkbox and Reminder Interval Preference List
+        String reminderCbKey = context.getString(R.string.key_pref_auto_backup_cb);
+
+        Intent intent = new Intent(context, AutoBackupService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //check if reminder Checkbox is enabled or not
+        if (getSharedPreference().getBoolean(reminderCbKey, true)) {
             //get the selected value for reminder interval eg, 3600000
-            long selectedVal = getVal(R.string.key_pref_reminder_interval_lp, DEFAULT_REMINDER_TIME);
-            //get respective Entry eg. 1 hours
-            String selectedEntry = getEntryForIntervalPL(selectedVal);
-            //create notification
-            Notification notif= MyNotificationManager.from(context).createBackupNotif(selectedEntry);
-            //get the key for Reminder Checkbox and Reminder Interval Preference List
-            String reminderCbKey = context.getString(R.string.key_pref_reminder_backup_cb);
+            long selectedInterval = getVal(R.string.key_pref_auto_backup_interval_lp,
+                    PreferenceService.DEFAULT_REMINDER_TIME);
 
-            //check if reminder Checkbox is enabled or not
-            if(getSharedPreference().getBoolean(reminderCbKey, true)){
-                //parse the value and create a reminder
-                MyAlarmManager.setNotificationReminder(selectedVal, context, notif);
-                Log.d(TAG, "reminder set for backup : " + selectedVal);
-            }else{
-                //cancel the reminder
-                MyAlarmManager.cancelNotificationReminder(context, notif);
-                Log.d(TAG, "reminder not set for backup : " + selectedVal);
-            }
+            //set an alarm
+            MyAlarmManager.from(context).setRepeating(UtilsDate.get(selectedInterval),
+                    pendingIntent, selectedInterval);
+            Log.d(TAG, "alarm set for auto backup : " + selectedInterval);
+        } else {
+            //cancel the alarm
+            MyAlarmManager.from(context).cancel(pendingIntent);
+            Log.d(TAG, "alarm not set for auto backup : ");
+        }
     }
 
     /**
@@ -100,7 +101,7 @@ public class PreferenceService {
      * @param resKeyId : resource id for the key
      * @return
      */
-    public String getKey(int resKeyId){
+    private String getKey(int resKeyId){
         return context.getString(resKeyId);
     }
 
@@ -126,7 +127,7 @@ public class PreferenceService {
         return getSharedPreference().getBoolean(getKey(resKeyId), defaultVal);
     }
 
-    public int getVal(int resKeyId, int defaultVal){
+    private int getVal(int resKeyId, int defaultVal){
         return Integer.parseInt(getSharedPreference().getString(getKey(resKeyId),
                 String.valueOf(defaultVal)));
     }

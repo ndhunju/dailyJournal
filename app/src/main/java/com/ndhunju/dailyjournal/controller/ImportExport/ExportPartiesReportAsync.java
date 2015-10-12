@@ -21,9 +21,9 @@ import java.util.List;
  */
 public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Boolean> {
 
-    ProgressDialog pd;
-    Activity mActivity;
-    String mPath;           //path to save the report
+    private ProgressDialog pd;
+    private Activity mActivity;
+    private String mPath;           //path to save the report
 
     public ExportPartiesReportAsync(Activity activity, String path){
         mActivity = activity;
@@ -47,7 +47,7 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
         for(int i = 0; i < partyList.size() ; i++){
             ReportGenerator rg = new ReportGenerator(mActivity, partyList.get(i));
             rg.storeReportFile(mPath);
-            publishProgress((int) i / partyList.size());
+            publishProgress(i / partyList.size());
         }
         return true;
 

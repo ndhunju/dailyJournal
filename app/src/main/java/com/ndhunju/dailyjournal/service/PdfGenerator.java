@@ -1,6 +1,5 @@
 package com.ndhunju.dailyjournal.service;
 
-import android.graphics.Rect;
 import android.graphics.pdf.PdfDocument;
 import android.view.View;
 
@@ -13,7 +12,7 @@ import java.io.OutputStream;
 /**
  * Created by dhunju on 9/27/2015.
  */
-public class PdfGenerator {
+class PdfGenerator {
 
 
 

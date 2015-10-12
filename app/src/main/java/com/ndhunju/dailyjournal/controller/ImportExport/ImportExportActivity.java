@@ -1,11 +1,13 @@
 package com.ndhunju.dailyjournal.controller.importExport;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImportExportActivity extends Activity implements OnDialogBtnClickedListener {
@@ -46,7 +49,7 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
 
 
     private GoogleApiClientManager mGoogleClientMgr;
-    private android.os.Handler UIHandler; //Used to update UI
+    private static Handler UIHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,19 +62,21 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
         .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoogleClientMgr = new GoogleApiClientManager(ImportExportActivity.this);
-                //Initaite the connection to create a file in drive
-                mGoogleClientMgr.connectGoogleApiClient(new GoogleApiClient.ConnectionCallbacks() {
-                @Override
-                public void onConnected(Bundle bundle) {
-                    new UploadBackUpToGDriveAsync(ImportExportActivity.this,
+
+            }
+        });mGoogleClientMgr = new GoogleApiClientManager(ImportExportActivity.this);
+        //Initaite the connection to create a file in drive
+        mGoogleClientMgr.connectGoogleApiClient(new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(Bundle bundle) {
+                new UploadBackUpToGDriveAsync(ImportExportActivity.this,
                         mGoogleClientMgr.getGoogleApiClient(), REQUEST_CODE_GDRIVE_CREATOR).execute();
-                    }
-                        @Override
-                        public void onConnectionSuspended(int i) {}
-                    }, REQUEST_CODE_GDRIVE_RESOLUTION);
-                }
-            });
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+            }
+        }, REQUEST_CODE_GDRIVE_RESOLUTION);
 
         //Restore from google drive
         ((Button) findViewById(R.id.activity_import_export_restore__google_drive_btn))
@@ -136,28 +141,35 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
                     }
                 });
 
-        ((Button) findViewById(R.id.activity_import_export_export_printable_btn))
+        ((Button)findViewById(R.id.activity_import_export_restore_from_auto_backup_btn))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
-                        dpdf.show(getFragmentManager(), TAG);
+
+                        UtilsView.alert(ImportExportActivity.this, getString(R.string.warning_restore),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int pos) {
+                                        new AutoBackupAlertDialog(ImportExportActivity.this)
+                                                .create().show();
+                                    }
+                                }, null);
                     }
                 });
 
-        //Disabling Import JSON File feature as it need some technical knowledge. Not user friendly
-        ((Button) findViewById(R.id.activity_import_export_restore_json_from_sd_btn)).setVisibility(View.INVISIBLE);
-        /*.setOnClickListener(new View.OnClickListener() {
+        ((Button) findViewById(R.id.activity_import_export_export_printable_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/.json");
-                startActivityForResult(intent, REQUEST_CODE_PICK_JSON);
+                FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
+                dpdf.show(getFragmentManager(), TAG);
             }
-        });*/
+        });
+
+        //Disabling Import JSON File feature as it need some technical knowledge. Not user friendly
+        ((Button) findViewById(R.id.activity_import_export_restore_json_from_sd_btn)).setVisibility(View.GONE);
 
         //So far it is used only for update progressbar
-        UIHandler = new android.os.Handler() {
+         UIHandler = new Handler() {
 
             @Override
             public void handleMessage(Message msg) {
@@ -284,14 +296,68 @@ public class ImportExportActivity extends Activity implements OnDialogBtnClicked
                     UtilsView.toast(getBaseContext(), getString(R.string.str_failed));
                 if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
                     data.getData();
-                    String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-                    List<Party> parties = Services.getInstance(ImportExportActivity.this).getParties();
-                    new ExportPartiesReportAsync(ImportExportActivity.this, dir).execute(parties);
+                    final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
+                    final Services services = Services.getInstance(ImportExportActivity.this);
+
+                    //Let the user choose the parties
+                    final List<Party> parties = services.getParties();
+
+                    CharSequence[] options = getResources().getStringArray(R.array.options_export_print);
+                    AlertDialog chooseDialog = new AlertDialog.Builder(getActivity())
+                            .setTitle(getString(R.string.str_choose))
+                            .setItems(options, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0: //All parties
+                                            new ExportPartiesReportAsync(ImportExportActivity.this, dir).execute(parties);
+                                            break;
+
+                                        case 1: //Select parties
+                                            createPartySelectDialog(services, parties, dir).show();
+                                            break;
+
+                                    }
+                                }
+                            }).create();
+
+                    chooseDialog.show();
+
                 }
 
                 break;
 
         }
 
+    }
+
+    private AlertDialog createPartySelectDialog(Services services, final List<Party> parties, final String dir) {
+        final ArrayList<Party> selectedParties = new ArrayList<>();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.msg_choose, getString(R.string.str_contact)));
+        builder.setNegativeButton(getString(android.R.string.cancel), null);
+        builder.setMultiChoiceItems(services.getPartyNameAsArray(), null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        //Add checked contacts into importContacts list
+                        if (b) selectedParties.add(parties.get(i));
+                        else selectedParties.remove(parties.get(i));
+                    }
+                });
+        builder.setPositiveButton(getString(android.R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        new ExportPartiesReportAsync(ImportExportActivity.this, dir).execute(selectedParties);
+                    }
+                });
+
+        return builder.create();
+    }
+
+    private Activity getActivity(){
+        return ImportExportActivity.this;
     }
 }

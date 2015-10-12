@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/str_format">
+        <ListPreference
+            android:defaultValue="@string/date_format"
+            android:entries="@array/date_format"
+            android:entryValues="@array/date_format_val"
+            android:key="@string/key_pref_date_format"
+            android:title="@string/str_date"
+            android:icon="@drawable/ic_today_black_24dp"/>
+        <ListPreference
+            android:defaultValue="US"
+            android:entries="@array/currency"
+            android:entryValues="@array/currency_val"
+            android:key="@string/key_pref_currency"
+            android:title="@string/str_currency"
+            android:icon="@drawable/ic_attach_money_black_24dp"/>
+    </PreferenceCategory>
+</PreferenceScreen>

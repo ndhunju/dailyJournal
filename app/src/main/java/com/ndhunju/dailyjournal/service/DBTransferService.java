@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
+import com.ndhunju.dailyjournal.controller.DatePickerFragment;
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
 import com.ndhunju.dailyjournal.database.DailyJournalContract.*;
 import com.ndhunju.dailyjournal.database.DailyJournalContractOld.*;
@@ -18,8 +19,8 @@ import com.ndhunju.dailyjournal.model.Party;
  */
 public class DBTransferService {
 
-    static DBTransferService mServiceOld;
-    SQLiteDatabase mDb;
+    private static DBTransferService mServiceOld;
+    private SQLiteDatabase mDb;
 
     public static DBTransferService getInstance(SQLiteDatabase db){
         if(mServiceOld == null) mServiceOld = new DBTransferService(db);
@@ -34,7 +35,7 @@ public class DBTransferService {
         addOldPartiesToNewDB(prefix);
     }
 
-    public void addOldPartiesToNewDB(String prefix) {
+    private void addOldPartiesToNewDB(String prefix) {
 
         String[] projectionOld = {PartyColumnsOld.COL_MERCHANT_NAME,
                 PartyColumnsOld.COL_MERCHANT_PHONE,
@@ -112,10 +113,12 @@ public class DBTransferService {
             String selectionArgs = AttachmentColumnsOld.COL_ATTACHMENT_PARENT + "=" + attachmentHashCode;
             addOldAttchToNewDB(prefix, selectionArgs,db, journalId);
         }while (c.moveToNext());
+
+        c.close();
     }
 
 
-    public int execUpdateOnParty(String column, double amount, String operation, long val){
+    private int execUpdateOnParty(String column, double amount, String operation, long val){
         String sql = "UPDATE " + PartyColumns.TABLE_PARTY + " SET " + column + "=" + column + operation + " ? WHERE " + PartyColumns.PARTY_ID + "=?";
         SQLiteStatement sqlSt = mDb.compileStatement(sql);
         sqlSt.bindDouble(1, amount);
@@ -140,6 +143,8 @@ public class DBTransferService {
             attachment.setPath(name);
             AttachmentDAO.create(attachment, mDb);
         }while (c.moveToNext());
+
+        c.close();
     }
 
 }

@@ -71,6 +71,5 @@ public class LockScreenActivity extends Activity {
     @Override
     public void onBackPressed() {
         //Don't let user exit the activity with back button
-        return;
     }
 }

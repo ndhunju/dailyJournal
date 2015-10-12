@@ -31,11 +31,11 @@ import java.io.InputStream;
  */
 public class FetchBackUpFromGDriveAsync extends AsyncTask<DriveId, Integer, String> {
 
-    public final static String TAG = FetchBackUpFromGDriveAsync.class.getSimpleName();
+    private final static String TAG = FetchBackUpFromGDriveAsync.class.getSimpleName();
 
     //Variables
     private GoogleApiClient mGoogleApiClient;
-    ProgressDialog fileRetrievePd;
+    private ProgressDialog fileRetrievePd;
     private Activity mActivity;
 
 
@@ -94,7 +94,7 @@ public class FetchBackUpFromGDriveAsync extends AsyncTask<DriveId, Integer, Stri
 
         //create the file in local drive to store retrieved data
         String fileName = UtilsFile.getZipFileName();
-        File backUpFileFromGDrive = new File(UtilsFile.getCacheDir(mActivity).getAbsolutePath(), fileName);
+        File backUpFileFromGDrive = new File(UtilsFile.getCacheDir(mActivity), fileName);
 
 
         //Buffered input streams read data from a memory area known as a buffer;
@@ -113,7 +113,7 @@ public class FetchBackUpFromGDriveAsync extends AsyncTask<DriveId, Integer, Stri
             driveContents.discard(mGoogleApiClient);
 
             //Delete existing objects
-            Services.getInstance(mActivity).truncateAllTables();
+            Services.getInstance(mActivity).recreateDB();
 
             //Get the app folder where the data are stored
             File appFolder = UtilsFile.getAppFolder(mActivity);
@@ -163,7 +163,7 @@ public class FetchBackUpFromGDriveAsync extends AsyncTask<DriveId, Integer, Stri
         super.onPostExecute(result);
         final String msg;
         boolean success = result != null;
-        mActivity.setResult(success ? mActivity.RESULT_OK : Activity.RESULT_CANCELED);
+        mActivity.setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
         if (success) {
             Log.i(TAG, "Successfully restored from GoogleDrive");
             msg = String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_finished));

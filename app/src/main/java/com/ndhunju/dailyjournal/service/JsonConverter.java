@@ -55,8 +55,8 @@ public final class JsonConverter {
     private static final String KEY_JOURNAL_ID= "journalId";
 
     //Variables
-    Services mServices;
-    static JsonConverter mJsonConverter;
+    private Services mServices;
+    private static JsonConverter mJsonConverter;
 
     //If the methods are using same object then using singleton pattern
     // helps make your code clean because you don't have to use static key
@@ -76,7 +76,7 @@ public final class JsonConverter {
      * Creates and returns JSON object for this party
      * @return
      */
-    public JSONObject toJSON(Party party){
+    private JSONObject toJSON(Party party){
         JSONObject json = new JSONObject();
         try{
             json.put(KEY_ID, party.getId());
@@ -102,7 +102,7 @@ public final class JsonConverter {
         return json;
     }
 
-    public JSONObject toJSON(Journal journal){
+    private JSONObject toJSON(Journal journal){
         JSONObject j = new JSONObject();
         try{
             j.put(KEY_ID,  journal.getId());
@@ -128,7 +128,7 @@ public final class JsonConverter {
         return j;
     }
 
-    public JSONObject toJSON(Attachment attachment){
+    private JSONObject toJSON(Attachment attachment){
         JSONObject jsonObject = new JSONObject();
         try{
             jsonObject.put(KEY_ID, attachment.getId());
@@ -144,7 +144,7 @@ public final class JsonConverter {
      * @param json
      * @return
      */
-    public Party insetPartyIntoDb(JSONObject json){
+    private Party insetPartyIntoDb(JSONObject json){
 
         try {
             Party newParty = getParty(json);
@@ -172,7 +172,7 @@ public final class JsonConverter {
      * @param json
      * @return
      */
-    public Journal insertJournalIntoDb(JSONObject json, long partyId){
+    private Journal insertJournalIntoDb(JSONObject json, long partyId){
         try {
             Journal newJournal = getJournal(json);
             newJournal.setPartyId(partyId);
@@ -190,7 +190,7 @@ public final class JsonConverter {
 
     }
 
-    public Attachment insertAttchIntoDb(JSONObject jsonObject, long journalId) {
+    private Attachment insertAttchIntoDb(JSONObject jsonObject, long journalId) {
         Attachment newAttachment = getAttachment(jsonObject);
         newAttachment.setJournalId(journalId);
 
@@ -206,7 +206,7 @@ public final class JsonConverter {
      * @param json
      * @return
      */
-    public Party getParty(JSONObject json){
+    private Party getParty(JSONObject json){
 
         try {
             int id = json.getInt(KEY_ID);
@@ -238,7 +238,7 @@ public final class JsonConverter {
      * @param json
      * @return
      */
-    public Journal getJournal(JSONObject json){
+    private Journal getJournal(JSONObject json){
         try {
             int id = json.getInt("id");
             long date = json.getLong(KEY_DATE);
@@ -248,11 +248,12 @@ public final class JsonConverter {
             long added_date = json.getLong(KEY_ADDED_DATE);
             Journal.Type type = Journal.Type.valueOf(json.getString(KEY_TYPE));
 
-            Journal newJournal = new Journal(date);
+            Journal newJournal = new Journal(partyId);
             newJournal.setAddedDate(added_date);
             newJournal.setAmount(amount);
             newJournal.setType(type);
             newJournal.setNote(note);
+            newJournal.setDate(date);
             newJournal.setId(id);
 
             return newJournal;
@@ -262,7 +263,7 @@ public final class JsonConverter {
 
     }
 
-    public Attachment getAttachment(JSONObject jsonObject){
+    private Attachment getAttachment(JSONObject jsonObject){
         Attachment attachment = null;
         try {
             int id = jsonObject.getInt(KEY_ID);
@@ -371,8 +372,8 @@ public final class JsonConverter {
 
     }
 
-    public boolean insertIntoDB(String jsonString){
-        JSONArray partyJSONArray = null;
+    private boolean insertIntoDB(String jsonString){
+        JSONArray partyJSONArray;
         try {
             partyJSONArray = new JSONArray(jsonString);
             for (int i = 0; i < partyJSONArray.length(); i++) {
@@ -394,7 +395,7 @@ public final class JsonConverter {
 
         public boolean insertIntoDB(String jsonString){
             Log.i(TAG , "Attempting to parse json with old keys");
-            JSONArray partyJSONArray = null;
+            JSONArray partyJSONArray;
 
             try {
                 partyJSONArray = new JSONArray(jsonString);
@@ -488,6 +489,7 @@ public final class JsonConverter {
                 newJournal.setDate(date);
                 newJournal.setType(type);
                 newJournal.setNote(note);
+                newJournal.setId(id);
 
                 return newJournal;
             } catch (JSONException e) {

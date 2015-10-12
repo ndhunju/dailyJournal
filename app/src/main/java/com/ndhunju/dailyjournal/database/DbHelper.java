@@ -13,10 +13,10 @@ import com.ndhunju.dailyjournal.util.UtilsDb;
 public class DbHelper extends SQLiteOpenHelper {
 
 	// If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "DailyJournal.db";
+    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "DailyJournal.db";
     
-    Context mContext;
+    private Context mContext;
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -78,18 +78,19 @@ public class DbHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
     
-    public void recreateDB(){
+    public boolean recreateDB(){
     	SQLiteDatabase db = getWritableDatabase();
     	try{db.execSQL(PartyColumns.SQL_DROP_ENTRIES_PARTY);
-		}catch(Exception e){e.printStackTrace();}
+		}catch(Exception e){e.printStackTrace(); return false;}
 		try{db.execSQL(JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
-		}catch (Exception e) {}
+		}catch (Exception e) {e.printStackTrace();return false;}
 		try{db.execSQL(AttachmentColumns.SQL_DROP_ENTRIES_ATTACHMENTS);
-		}catch (Exception e) {}
+		}catch (Exception e) {e.printStackTrace();return false;}
 		
 		db.execSQL(PartyColumns.SQL_CREATE_ENTRIES_PARTY);
         db.execSQL(JournalColumns.SQL_CREATE_ENTRIES_JOURNALS);
         db.execSQL(AttachmentColumns.SQL_CREATE_ENTRIES_ATTACHMENTS);
+        return true;
     }
 
     public boolean dropAllTables(){

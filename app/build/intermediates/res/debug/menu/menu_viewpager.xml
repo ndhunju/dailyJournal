@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/viewpager_menu_lock"
         android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_lock_black_48dp"
         android:title="@string/str_lock"/>
 
     <item
         android:id="@+id/viewpager_new_picture"
         android:showAsAction="ifRoom|withText"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/ic_add_to_photos_black_48dp"
         android:title="@string/str_add"
          />
 

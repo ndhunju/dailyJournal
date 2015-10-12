@@ -19,15 +19,19 @@ import java.io.File;
  * This class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
-public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
+class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
 
-    Intent intent;
-    ProgressDialog pd;
-    Activity mActivity;
+    private Type mType;
+    private Intent intent;
+    private ProgressDialog pd;
+    private Activity mActivity;
+
+    static enum Type{FILE, TEXT}
 
 
-    public ReportGeneratorAsync(Activity activity){
+    public ReportGeneratorAsync(Activity activity, Type type){
         mActivity = activity;
+        mType = type;
     }
 
     @Override
@@ -44,16 +48,22 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
     @Override
     protected Boolean doInBackground(Long... longs) {
         ReportGenerator rg = new ReportGenerator(mActivity, longs[0]);
-        File report = rg.getReportFile();
-
         intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
-        intent.putExtra(Intent.EXTRA_TEXT, rg.getReportHeader());
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(report));
-        intent.setType("text/plain");
+        switch (mType){
+            case FILE:
+                File report = rg.getReportFile();
+                intent.putExtra(Intent.EXTRA_TEXT, rg.getReportHeader());
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(report));
+                break;
+            case TEXT:
+                intent.putExtra(Intent.EXTRA_TEXT,
+                        rg.getReportHeader() + rg.getSimpleReportBody());
+
+                break;
+        }
 
         return true;
-
     }
 
     @Override
@@ -62,7 +72,16 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         if(!success){
             UtilsView.alert(mActivity, String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_report)));
         }
-
+        intent.setType("text/plain");
         mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));
+    }
+
+    //helper
+    public static String[] getStrTypes(){
+        Type types[] = Type.values();
+        String[] strTypes = new String[types.length];
+        for(int index=0; index < types.length;index++)
+            strTypes[index] = types[index].name();
+        return strTypes;
     }
 }

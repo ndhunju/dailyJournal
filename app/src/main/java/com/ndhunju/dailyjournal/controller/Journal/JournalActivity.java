@@ -1,14 +1,13 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.app.Activity;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.AppRater;
 import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.Services;
 
 public class JournalActivity extends Activity {
 
@@ -39,6 +38,9 @@ public class JournalActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		askUserToRate();
+
 		//check pass code
 		LockService.checkPassCode(JournalActivity.this);
 	}
@@ -47,5 +49,14 @@ public class JournalActivity extends Activity {
 	protected void onPause() {
 		LockService.updatePasscodeTime();
 		super.onPause();
+	}
+
+	private void askUserToRate(){
+		//ask users to rate the app
+		AppRater rater = new AppRater(JournalActivity.this);
+		rater.setLaunchesBeforePrompt(20);
+		rater.setPhrases(R.string.msg_rate_title, R.string.msg_rate_body, R.string.str_rate,
+				R.string.str_later, R.string.str_no_thanks);
+		rater.show();
 	}
 }

@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
  */
 public class ServicesTest {
 
-    Services testServices;
+    private Services testServices;
 
     @BeforeClass
     public static void initializeSomethingReallyExpensive(){}

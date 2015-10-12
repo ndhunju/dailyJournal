@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by dhunju on 10/4/2015.
  */
-public class AttachmentPagerAdapter extends PagerAdapter {
+class AttachmentPagerAdapter extends PagerAdapter {
 
         private List<Attachment> mAttachments = null;
 

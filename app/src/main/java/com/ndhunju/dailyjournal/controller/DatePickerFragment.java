@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
-import com.ndhunju.dailyjournal.controller.journal.JournalFragment;
 import com.ndhunju.dailyjournal.service.Constants;
 
 public class DatePickerFragment extends DialogFragment {
@@ -25,7 +24,7 @@ public class DatePickerFragment extends DialogFragment {
 	public static final String TAG = DialogFragment.class.getSimpleName();
 	public static final String EXTRA_CAL = "com.ndhunju.dailyJournal.datePickerFragment.extraCal";
 	
-	static Calendar mCal;
+	private static Calendar mCal;
 	
 	public static DatePickerFragment newInstance(Date d, int requestCode){
 
@@ -88,7 +87,7 @@ public class DatePickerFragment extends DialogFragment {
 					Intent i = new Intent();
 					i.putExtra(EXTRA_CAL, mCal);
 					//So far, DatePickerFragment is called from JournalFragment only
-					((JournalFragment)getTargetFragment())
+					((OnDialogBtnClickedListener)getTargetFragment())
 							.onDialogBtnClicked(i, OnDialogBtnClickedListener.BUTTON_POSITIVE,
 									Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
 				}

@@ -7,9 +7,9 @@ import android.content.Intent;
  */
 public interface OnDialogBtnClickedListener {
 
-    public final static int BUTTON_POSITIVE = 1;
-    public final static int BUTTON_NEUTRAL = 0;
-    public final static int BUTTON_NEGATIVE = -1;
+    int BUTTON_POSITIVE = 1;
+    int BUTTON_NEUTRAL = 0;
+    int BUTTON_NEGATIVE = -1;
 
     /**
      * This a callback which can be invoked in a DialogFragment to pass data back to
@@ -19,6 +19,6 @@ public interface OnDialogBtnClickedListener {
      * @param result : was it a success
      * @param requestCode
      */
-    public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode);
+    void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode);
 
 }

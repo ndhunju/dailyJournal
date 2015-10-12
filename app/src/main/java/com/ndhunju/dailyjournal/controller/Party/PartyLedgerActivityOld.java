@@ -1,6 +1,7 @@
 package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,12 +36,12 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 	private static final int CONTEXT_MENU_EDIT = 1;
 
     //Variables
-	Party mParty;
-	TextView balanceTV;
-	ListView ledgerListView;
-	LedgerAdapter ledgerAdapter;
+	private Party mParty;
+	private TextView balanceTV;
+	private ListView ledgerListView;
+	private LedgerAdapter ledgerAdapter;
 
-	Services mServices;
+	private Services mServices;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -81,7 +82,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 
 	}
 
-	public Activity getActivity(){
+	private Activity getActivity(){
 		return PartyLedgerActivityOld.this;
 	}
 
@@ -184,7 +185,16 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 				break;
 
             case R.id.menu_party_activity_share:
-                new ReportGeneratorAsync(PartyLedgerActivityOld.this).execute(mParty.getId());
+				String[] options = ReportGeneratorAsync.getStrTypes();
+				new AlertDialog.Builder(getActivity()).setItems(options,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialogInterface, int i) {
+								new ReportGeneratorAsync(getActivity(), ReportGeneratorAsync.Type.values()[i])
+										.execute(mParty.getId());
+							}
+						})
+						.create().show();
                 break;
 		}
 

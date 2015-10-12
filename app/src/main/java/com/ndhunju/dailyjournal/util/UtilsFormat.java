@@ -22,7 +22,7 @@ public class UtilsFormat {
     public static final int NUM_OF_DIGITS = 7; // Number of digits for ID
 
     //Date Formats
-    public static final String DATE_FORMAT = "MMM-d-yyy";
+    private static final String DATE_FORMAT = "MMM-d-yyy";
     public static final String DATE_FORMAT_DASH = "M-d-yyy";
     public static final String DATE_FORMAT_NEPALI = "d/M/yyy";
     public static final String DATE_FORMAT_DAY = "EEEE, MMM dd";
@@ -30,7 +30,7 @@ public class UtilsFormat {
     public static final String DATE_FORMAT_FOR_FILE = "M-d-yyy-kk-mm-ss";            //kk for 24 hours format
     public static final String DATE_FORMAT_FULL = "EEEE, MMM dd, yyy @ kk:mm a";
 
-    public static final String DEFAULT_COUNTRY = "US";
+    private static final String DEFAULT_COUNTRY = "US";
     public static final String DEFAULT_LANG = "en";
 
     /**
@@ -61,7 +61,13 @@ public class UtilsFormat {
         return nf.format(currency);
     }
 
-    public static Locale getLocaleFromPref(Context context){
+    public static String formatDecimal(Double amount, Context context){
+        NumberFormat nf = NumberFormat.getNumberInstance(getLocaleFromPref(context));
+        nf.setMinimumFractionDigits(2);
+        return nf.format(amount);
+    }
+
+    private static Locale getLocaleFromPref(Context context){
         PreferenceService ps = PreferenceService.from(context);
         String country = ps.getVal(R.string.key_pref_currency, DEFAULT_COUNTRY);
         Locale locale = new Locale(Locale.getDefault().getLanguage(), country);
@@ -69,7 +75,7 @@ public class UtilsFormat {
         return  locale;
     }
 
-    public static String getDateFormatFromPref(Context context){
+    private static String getDateFormatFromPref(Context context){
         PreferenceService ps = PreferenceService.from(context);
         return ps.getVal(R.string.key_pref_date_format, DATE_FORMAT);
     }
@@ -106,4 +112,5 @@ public class UtilsFormat {
             zeros += "0";
         return zeros + nextId;
     }
+
 }

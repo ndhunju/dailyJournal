@@ -23,7 +23,6 @@
             android:textStyle="bold"
             android:textSize="@dimen/text_size_xlarge" >
         </TextView>
-
         <TextView
             android:id="@+id/activity_party_balance_tv"
             android:layout_width="wrap_content"

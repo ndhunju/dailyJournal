@@ -7,7 +7,7 @@ import java.util.Calendar;
  */
 public class UtilsDate {
 
-    public static Calendar get(int timeOfDay){
+    private static Calendar get(int timeOfDay){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, timeOfDay);

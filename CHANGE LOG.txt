@@ -1,3 +1,18 @@
+Daily Journal (6.7)
+
+    - In the preference, now you can
+        - choose the currency format
+        - choose the date format
+        - choose backup reminder
+    - Other minor UI improvements and bug fixes
+
+Daily Journal (v5.2)
+
+    - Import Party from your Contact List
+    - Send Party's Ledger via Email, Bluetooth etc.
+    - Enhanced UI for different Screen Sizes
+    - Generate Ledger for all parties in SD Card.
+
 Daily Journal (3.9)
     
     - Improved UI 

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.journal.StoreImageAsync;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
@@ -124,7 +125,9 @@ public class ViewPagerActivity extends FragmentActivity {
 		switch (requestCode){
 			case REQUEST_TAKE_PHOTO: //Picture was taken from the Camera App
 
-				UtilsView.showResult(getActivity(), resultCode);
+				if(!UtilsView.showResult(getActivity(), resultCode)){
+					return;
+				}
 
 				//Since camera cannot save picture in file created inside app's folder
 				//1. Create a file in external mServices
@@ -154,11 +157,16 @@ public class ViewPagerActivity extends FragmentActivity {
 
 				attachmentPagerAdapter.addItem(tempAttch);
 				mServices.addAttachment(tempAttch);
+				attachmentPagerAdapter.notifyDataSetChanged();
 				break;
 
 			case REQUEST_IMAGE:  //Image was picked from the storage
 
-				UtilsView.showResult(getActivity(), resultCode);
+				//if not image is selected data is null even tho result code is OK
+				if(!UtilsView.showResult(getActivity(), resultCode)){
+					return;
+				}
+
 
 				Uri selectedImage = data.getData();
 				Bitmap bitmap;
@@ -168,17 +176,20 @@ public class ViewPagerActivity extends FragmentActivity {
 					return;
 				}
 
-				File picFile = UtilsFile.createImageFile(getActivity());
-				UtilsFile.storeImage(bitmap, picFile, getActivity());
-				Attachment tempAttch2 = new Attachment(journalId);
-				tempAttch2.setPath(picFile.getAbsolutePath());
-				attachmentPagerAdapter.addItem(tempAttch2);
-				mServices.addAttachment(tempAttch2);
+				new StoreImageAsync(getActivity(), new StoreImageAsync.Callback() {
+					@Override
+					public void onFinished(File[] newPicFiles) {
+						Attachment tempAttch2 = new Attachment(journalId);
+						tempAttch2.setPath(newPicFiles[0].getAbsolutePath());
+						attachmentPagerAdapter.addItem(tempAttch2);
+						mServices.addAttachment(tempAttch2);
+						attachmentPagerAdapter.notifyDataSetChanged();
+					}
+				}).execute(bitmap);
 
 				break;
 		}
 
-		attachmentPagerAdapter.notifyDataSetChanged();
 	}
 
 	private void toggleViewPagerScrolling() {
@@ -192,10 +203,18 @@ public class ViewPagerActivity extends FragmentActivity {
 		if (isViewPagerActive()) {
 			isLocked = ((HackyViewPager) mViewPager).isLocked();
 		}
-		String title = (isLocked) ? "Unlock"
-				: "Lock";
+		String title;
+		int drawableResId;
+		if(isLocked){
+			title = getString(R.string.str_lock);
+			drawableResId = R.drawable.ic_lock_black_48dp;
+		}else{
+			title = getString(R.string.str_unlock);
+			drawableResId = R.drawable.ic_lock_open_black_48dp;
+		}
 		if (menuLockItem != null) {
 			menuLockItem.setTitle(title);
+			menuLockItem.setIcon(drawableResId);
 		}
 	}
 

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ndhunju.dailyjournal"
-    android:versionCode="10"
-    android:versionName="5.2" >
+    android:versionCode="14"
+    android:versionName="6.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name="com.ndhunju.dailyjournal.controller.DailyJournalApplication"
         android:allowBackup="true"
         android:description="@string/app_descrip"
         android:icon="@drawable/ic_ganesh_book"
@@ -24,6 +25,9 @@
         android:theme="@style/AppTheme" >
         <service
             android:name="com.ndhunju.dailyjournal.controller.NotificationService"
+            android:exported="false" />
+        <service
+            android:name="com.ndhunju.dailyjournal.controller.AutoBackupService"
             android:exported="false" />
 
         <activity android:name="com.ndhunju.dailyjournal.controller.HomeActivity" >
@@ -64,6 +68,9 @@
             android:name="com.ndhunju.dailyjournal.controller.party.PartyDetailActivity"
             android:label="@string/title_item_detail" >
         </activity>
+        <activity
+            android:name="com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity"
+            android:label="@string/str_preference" />
 
         <receiver android:name="com.ndhunju.dailyjournal.controller.AlarmReceiver" >
         </receiver>

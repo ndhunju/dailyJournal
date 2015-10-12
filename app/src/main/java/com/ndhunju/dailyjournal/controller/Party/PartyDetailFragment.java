@@ -1,10 +1,13 @@
 package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +25,7 @@ import com.ndhunju.dailyjournal.controller.journal.JournalActivity;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
+import com.ndhunju.dailyjournal.service.ReportGenerator;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -39,15 +43,15 @@ public class PartyDetailFragment extends Fragment {
     private static final int REQUEST_PARTY_INFO_CHGD = 135;
 
     //Variables
-    Party mParty;
-    double balance;
-    Services mServices;
+    private Party mParty;
+    private double balance;
+    private Services mServices;
 
     //View Variables
-    View footerView;
-    TextView balanceTV;
-    ListView ledgerListView;
-    LedgerAdapter ledgerAdapter;
+    private View footerView;
+    private TextView balanceTV;
+    private ListView ledgerListView;
+    private LedgerAdapter ledgerAdapter;
 
 
     /**
@@ -83,15 +87,14 @@ public class PartyDetailFragment extends Fragment {
         ledgerListView = (ListView)rootView.findViewById(R.id.activity_party_ll);
 
         balanceTV.setText(UtilsFormat.formatCurrency(balance, getActivity()));
-        balanceTV.setTextColor(balance > 0 ? getResources().getColor(R.color.red_light_pressed)
-                : getResources().getColor(R.color.green));
+        balanceTV.setSingleLine();
 
         ledgerAdapter = new LedgerAdapter(getActivity(), mServices.getJournals(mParty.getId()));
         ledgerListView.setAdapter(ledgerAdapter);
         ledgerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                createJournalIntent(id);
+                if(id>0) createJournalIntent(id);
             }
         });
 
@@ -120,15 +123,13 @@ public class PartyDetailFragment extends Fragment {
         TextView col3 = (TextView) footerRow.findViewById(R.id.ledger_row_col3);
         TextView col4 = (TextView) footerRow.findViewById(R.id.ledger_row_col4);
 
-        col1.setText("");
-        col2.setText(getString(R.string.str_total));
-        col3.setText(UtilsFormat.formatCurrency(party.getDebitTotal(), getActivity()));
-        col4.setText(UtilsFormat.formatCurrency(party.getCreditTotal(),getActivity() ));
-        col0.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col1.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col2.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col3.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col4.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
+        col1.setText(getString(R.string.str_total));
+        col2.setText("");
+        col3.setText(UtilsFormat.formatDecimal(party.getDebitTotal(), getActivity()));
+        col4.setText(UtilsFormat.formatDecimal(party.getCreditTotal(), getActivity()));
+        addDrawables(getActivity(), col0, col1, col2, col3, col4);
+        //add common attributes
+        addAttributes(TextUtils.TruncateAt.MARQUEE, col3, col4);
         return footerRow;
     }
 
@@ -145,8 +146,6 @@ public class PartyDetailFragment extends Fragment {
 
                 double balance = mParty.calculateBalances();
                 balanceTV.setText(UtilsFormat.formatCurrency(balance, getActivity()));
-                balanceTV.setTextColor(balance > 0 ? getResources().getColor(R.color.red_light_pressed)
-                        : getResources().getColor(R.color.green));
 
                 mParty = mServices.getParty(mParty.getId());
                 ledgerAdapter = new LedgerAdapter(getActivity(), mServices.getJournals(mParty.getId()));
@@ -216,7 +215,16 @@ public class PartyDetailFragment extends Fragment {
                 break;
 
             case R.id.menu_party_activity_share:
-                new ReportGeneratorAsync(getActivity()).execute(mParty.getId());
+                String[] options = ReportGeneratorAsync.getStrTypes();
+                new AlertDialog.Builder(getActivity()).setItems(options,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new ReportGeneratorAsync(getActivity(), ReportGeneratorAsync.Type.values()[i])
+                                        .execute(mParty.getId());
+                            }
+                        })
+                        .create().show();
                 break;
         }
 
@@ -279,5 +287,18 @@ public class PartyDetailFragment extends Fragment {
                 break;
         }
         return true;
+    }
+
+    public static void addAttributes(TextUtils.TruncateAt truncateAt, TextView... view){
+        for(TextView v : view){
+            v.setSingleLine();
+            v.setEllipsize(truncateAt);
+        }
+    }
+
+    private static void addDrawables(Context con, View... view){
+        for(View v : view){
+            v.setBackgroundDrawable(con.getResources().getDrawable(R.drawable.heading_shape));
+        }
     }
 }

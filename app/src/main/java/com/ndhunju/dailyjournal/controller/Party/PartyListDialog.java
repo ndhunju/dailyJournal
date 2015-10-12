@@ -18,8 +18,6 @@ import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
-import com.ndhunju.dailyjournal.controller.journal.JournalFragment;
-import com.ndhunju.dailyjournal.controller.journal.JournalFragmentNew;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
@@ -28,11 +26,11 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 public class PartyListDialog extends DialogFragment {
 
 	//Variables
-	ListView partyLV ;
-	EditText srchPartyET;
-	ArrayAdapter<Party> partyAdapter;
+	private ListView partyLV ;
+	private EditText srchPartyET;
+	private ArrayAdapter<Party> partyAdapter;
 
-	Services mServices;
+	private Services mServices;
 
     public static PartyListDialog newInstance(int requestCode){
         PartyListDialog pld = new PartyListDialog();
@@ -64,7 +62,7 @@ public class PartyListDialog extends DialogFragment {
 		
 		//Populate the list view with existing Parties
 		partyLV = (ListView)view.findViewById(R.id.fragment_party_list_party_list_lv);
-		partyAdapter = new ArrayAdapter<Party>(getActivity(), android.R.layout.simple_list_item_1, mServices.getParties());
+		partyAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mServices.getParties());
 		partyLV.setAdapter(partyAdapter);
 		partyLV.setOnItemClickListener(new OnItemClickListener() {
 
@@ -73,7 +71,7 @@ public class PartyListDialog extends DialogFragment {
 					int position, long id) {
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, partyAdapter.getItem(position).getId());
-				((JournalFragmentNew)getTargetFragment()).onDialogBtnClicked(i,
+				((OnDialogBtnClickedListener)getTargetFragment()).onDialogBtnClicked(i,
 					OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
 			}
 		}); 
@@ -89,7 +87,7 @@ public class PartyListDialog extends DialogFragment {
 
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, addedParty.getId());
-				((JournalFragmentNew)getTargetFragment()).onDialogBtnClicked(i,
+				((OnDialogBtnClickedListener)getTargetFragment()).onDialogBtnClicked(i,
 						OnDialogBtnClickedListener.BUTTON_POSITIVE, Activity.RESULT_OK,
 						getArguments().getInt(Constants.KEY_REQUEST_CODE));
 

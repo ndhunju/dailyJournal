@@ -1,34 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ndhunju.dailyjournal.HomeActivity" >
 
     <item
         android:id="@+id/menu_party_list"
-        android:orderInCategory="1"
-        android:title="@string/str_parties"
-        android:showAsAction="ifRoom|withText"
-        tools:ignore="AppCompatResource" />
-     <item
-        android:id="@+id/meu_journal_tools"
         android:orderInCategory="2"
-        android:title="@string/str_tools"
-         android:icon="@android:drawable/ic_menu_manage"
-        android:showAsAction="never"
+        android:title="@string/str_parties"
+        android:showAsAction="always|withText"
+        tools:ignore="AppCompatResource"
+        android:icon="@drawable/ic_group_black_48dp"/>
         />
     <item
         android:id="@+id/menu_journal_preference"
-        android:orderInCategory="3"
+        android:orderInCategory="1"
         android:title="@string/str_preference"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_settings_black_48dp"
         />
-    <item
-        android:id="@+id/meu_journal_erase"
-        android:orderInCategory="4"
-        android:title="@string/str_erase_all"
-        android:showAsAction="never"
-        />
-     
+
 </menu>
-<!-- app:showAsAction="ifRoom|withText" -->
 <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/menu/menu_home.xml -->

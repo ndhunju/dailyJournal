@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class AttachmentDAO implements GenericDAO<Attachment, Long> {
 
-    SQLiteOpenHelper mSqLiteOpenHelper;
+    private SQLiteOpenHelper mSqLiteOpenHelper;
 
     //Constructor
     public AttachmentDAO(SQLiteOpenHelper sqLiteOpenHelper){
@@ -50,7 +50,7 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
         Cursor c = db.query(true, AttachmentColumns.TABLE_NAME_ATTACHMENTS, null,
                             null, null, null, null, null, null);
 
-        List<Attachment> temp = new ArrayList<Attachment>();
+        List<Attachment> temp = new ArrayList<>();
         if(!c.moveToFirst())  return temp;
 
         do{
@@ -114,7 +114,7 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
      * @param c
      * @return
      */
-    public static Attachment fromCursor(Cursor c){
+    private static Attachment fromCursor(Cursor c){
         long id = c.getLong((c.getColumnIndexOrThrow(AttachmentColumns.ATTACHMENT_ID)));
         String name = c.getString(c.getColumnIndexOrThrow(AttachmentColumns.COL_ATTACHMENT_NAME));
         long journalId = c.getLong(c.getColumnIndexOrThrow(AttachmentColumns.COL_FK_JOURNAL_ID));
@@ -130,7 +130,7 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
      * @param attch
      * @return
      */
-    public static ContentValues toContentValues(Attachment attch){
+    private static ContentValues toContentValues(Attachment attch){
         ContentValues values = new ContentValues();
         //values.put(AttachmentColumns.ATTACHMENT_ID, attch.getId());
         values.put(AttachmentColumns.COL_ATTACHMENT_NAME, attch.getPath());

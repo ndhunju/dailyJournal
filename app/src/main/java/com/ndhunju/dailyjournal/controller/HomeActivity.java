@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.controller;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
+import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.journal.JournalActivity;
 
 public class HomeActivity extends FragmentActivity {
@@ -12,10 +13,6 @@ public class HomeActivity extends FragmentActivity {
 		super.onCreate(arg0);
 		
 		//TODO Add a Splash Screen as it might take long time for data to load
-
-		//Load defaults
-		Setup.loadDefault(HomeActivity.this);
-
 		//Immediately jump to JournalActivity for now
 		Intent newActIntent = new Intent(HomeActivity.this, JournalActivity.class);
 		startActivity(newActIntent);
@@ -24,8 +21,5 @@ public class HomeActivity extends FragmentActivity {
 		//this activity which will be blank white.
 		HomeActivity.this.finish();
 	}
-
-
-
 
 }

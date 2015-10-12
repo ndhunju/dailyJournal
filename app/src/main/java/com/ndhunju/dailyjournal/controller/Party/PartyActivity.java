@@ -38,12 +38,12 @@ public class PartyActivity extends FragmentActivity {
 
 
     //Variables
-    ImageButton partyPicIV;
-    Spinner typeSpinner;
-	Services mServices;
-	EditText phoneET;
-    EditText nameET;
-	Party mParty;
+    private ImageButton partyPicIV;
+    private Spinner typeSpinner;
+	private Services mServices;
+	private EditText phoneET;
+    private EditText nameET;
+	private Party mParty;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -90,8 +90,8 @@ public class PartyActivity extends FragmentActivity {
 		for(int i = 0; i < Type.values().length ; i++)
 			merchantTypes[i] = Type.values()[i].toString();
 
-		typeSpinner.setAdapter(new ArrayAdapter<String>
-        (this, android.R.layout.simple_list_item_1, merchantTypes));
+		typeSpinner.setAdapter(new ArrayAdapter<>
+                (this, android.R.layout.simple_list_item_1, merchantTypes));
 		typeSpinner.setSelection(mParty.getType().ordinal());
 		
 		Button okBtn = (Button)findViewById(R.id.activity_party_ok_btn);

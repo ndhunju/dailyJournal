@@ -17,14 +17,14 @@ import java.util.List;
  * This class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
-public class ImportContactsAsync extends AsyncTask<List<ImportContacts.Contact>, Integer, Boolean> {
+class ImportContactsAsync extends AsyncTask<List<ImportContacts.Contact>, Integer, Boolean> {
 
-    Callback mCallback;
-    Activity mActivity;
-    ProgressDialog pd;
+    private Callback mCallback;
+    private Activity mActivity;
+    private ProgressDialog pd;
 
     interface Callback{
-        public void onFinished();
+        void onFinished();
     }
 
     public ImportContactsAsync(Activity activity, Callback callback){

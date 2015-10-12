@@ -5,6 +5,11 @@
         <item>Attach Picture</item>
     </string-array>
 
+    <string-array name="options_export_print">
+        <item>All Parties</item>
+        <item>Select Parties</item>
+    </string-array>
+
 
     <string-array name="reminder_intervals">
         <item >Hourly</item>
@@ -14,7 +19,7 @@
     </string-array>
     <!--integer-arrary not supproted for entryValues-->
     <string-array name="reminder_intervals_val">
-        <item >10000</item>
+        <item >3600000</item>
         <item >86400000</item>
         <item >604800000</item>
         <item >2592000000</item>
@@ -31,21 +36,26 @@
 
     <string-array name="date_format_val">
         <item>MMM-d-yyyy</item>
-        <item>MM/d/yyyy</item>
-        <item>MM/d/yy</item>
-        <item>d-MMM-yyyy</item>
-        <item>d/MM/yyyy</item>
-        <item>d/MM/yy</item>
+        <item>MM/dd/yyyy</item>
+        <item>MM/dd/yy</item>
+        <item>dd-MMM-yyyy</item>
+        <item>dd/MM/yyyy</item>
+        <item>dd/MM/yy</item>
     </string-array>
 
     <string-array name="currency">
         <item>Dollar ($)</item>
-        <item>Rupee (Rs.)</item>
+        <item>Rupee (Rs)</item>
+        <item>Ringgit (MYR)</item>
+        <item>Taka (BDT)</item>
+
     </string-array>
 
     <string-array name="currency_val">
         <item>US</item>
         <item>IN</item>
+        <item>MY</item>
+        <item>BD</item>
     </string-array>
 
 

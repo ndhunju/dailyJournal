@@ -1,6 +1,5 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +21,7 @@ import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.DatePickerFragment;
-import com.ndhunju.dailyjournal.controller.MyPreferenceFragment;
+import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.importExport.EraseAllAsyncTask;
 import com.ndhunju.dailyjournal.controller.importExport.ImportExportActivity;
@@ -46,22 +45,25 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     //Constants
     private static final String TAG = JournalFragmentNew.class.getSimpleName();
     private static final int REQUEST_CODE_IMPORT_OLD_DATA = 183;
-    private static final int REQUEST_CODE_IMPORTED = 8653;
-    private static final int REQUEST_CHGED_DATE = 6656;
+    private static final int REQUEST_CODE_IMPORT_DATA = 254;
+    private static final int REQUEST_CODE_GENERAL = 564;
+    private static final int REQUEST_CHGED_DATE = 656;
     private static final int REQUEST_CHGD_PARTY = 456;
 
 
     //Declaring UI Widgets variable
-    PartyListDialog partylistdialog;
-    EditText amountEt, noteEt;
-    Button partyBtn, dateBtn;
-    TextView drCrTv, idTV;
+    private PartyListDialog partylistdialog;
+    private EditText amountEt;
+    private EditText noteEt;
+    private Button partyBtn;
+    private Button dateBtn;
+    private TextView drCrTv;
+    private TextView idTV;
 
     //Declaring variables
-    boolean dateChanged, journalChanged;
-    Journal tempJournal;
-    Services mServices;
-    Party mParty;
+    private Journal tempJournal;
+    private Services mServices;
+    private Party mParty;
 
     /**
      * Returns new instance of a JournalFragment Class based on passed arguments. Implements
@@ -90,7 +92,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //Switch to ImportExportActivity to import old data to new directory
-                    Intent importOldDataIntent = new Intent(getActivity(), ImportExportActivity.class);
+                    Intent importOldDataIntent = new Intent(getActivity(), MyPreferenceActivity.class);
                     importOldDataIntent.putExtra(Constants.KEY_IMPORT_OLD_DATA, true);
                     startActivityForResult(importOldDataIntent, REQUEST_CODE_IMPORT_OLD_DATA);
                 }
@@ -99,10 +101,10 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         }
 
         tempJournal = mServices.getNewJournal();
-        getActivity().setTitle(getString(R.string.title_activity_journal));
         setHasOptionsMenu(true);    //enable menu
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,7 +125,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 if (!s.toString().equals("")) {
                     try {
                         tempJournal.setAmount(UtilsFormat.parseCurrency(s.toString(), getActivity()));
-                        journalChanged = true;
                     } catch (Exception e) {
                         e.printStackTrace();
                         UtilsView.alert(getActivity(), getString(R.string.warning_format));
@@ -170,7 +171,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
 
             @Override
             public void onClick(View v) {
-                journalChanged = true;
                 tempJournal.setType(Journal.Type.Debit);
                 setTextDrCr(tempJournal.getType());
             }
@@ -181,7 +181,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
 
             @Override
             public void onClick(View v) {
-                journalChanged = true;
                 tempJournal.setType(Journal.Type.Credit);
                 setTextDrCr(tempJournal.getType());
             }
@@ -192,7 +191,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tempJournal.setNote(s.toString());
-                journalChanged = true;
             }
 
             @Override
@@ -210,12 +208,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             @Override
             public void onClick(View v) {
 
-                // if mParty is not selected warn user
-                if (tempJournal.getPartyId() == (Constants.NO_PARTY)) {
-                    UtilsView.alert(getActivity(), getString(R.string.warning_select_party));
-                    return;
-                }
-
                 //open ViewPagerActivity to view attachments
                 Intent i = new Intent(getActivity(), ViewPagerActivity.class);
                 i.putExtra(Constants.KEY_JOURNAL_ID, tempJournal.getId());
@@ -227,6 +219,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         saveJournalBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // if mParty is not selected warn user
                 if (mParty == null) {
                     UtilsView.alert(getActivity(), getString(R.string.warning_select_party));
@@ -257,22 +250,28 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(getString(R.string.title_activity_journal));
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         switch (requestCode) {
 
-            case REQUEST_CODE_IMPORTED: //Data were imported from backup file
-                //if old data were imported then null the Party. Otherwise sometimes newly added
-                //mParty which is erased after restore could be stored in mParty object
-                mParty = null;
-                break;
-
             case REQUEST_CODE_IMPORT_OLD_DATA: //Old Data were imported to new directory
                 UtilsView.showResult(getActivity(), resultCode);
                 Log.i(TAG, "Importing old data finished");
                 break;
+
+            case REQUEST_CODE_GENERAL:
+            case REQUEST_CODE_IMPORT_DATA:
+                mParty = null;
+                tempJournal = mServices.getNewJournal();
+                setValues(tempJournal, mParty);
 
         }
 
@@ -295,37 +294,14 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
 
         switch (id) {
             case R.id.menu_party_list:
-                startActivity(new Intent(getActivity(), PartyListActivity.class));
-                break;
-
-            case R.id.meu_journal_tools:
-                startActivityForResult(new Intent(getActivity(), ImportExportActivity.class), REQUEST_CODE_IMPORTED);
-                break;
-
-            case R.id.meu_journal_erase:
-                UtilsView.alert(getActivity(), getString(R.string.msg_erase_all), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        new EraseAllAsyncTask(getActivity()).execute();
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        return;
-                    }
-                });
-
+                startActivityForResult(new Intent(getActivity(), PartyListActivity.class)
+                , REQUEST_CODE_GENERAL);
                 break;
 
             case R.id.menu_journal_preference:
-                Fragment pf = new MyPreferenceFragment();
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.activity_home_journal_fl, pf)
-                        .addToBackStack(null)
-                        .commit();
+                Intent preferencesIntent = new Intent(getActivity(), MyPreferenceActivity.class);
+                startActivityForResult(preferencesIntent, REQUEST_CODE_GENERAL);
                 break;
-
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -334,7 +310,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     /**
      * Sets value of the UI Widgets based on passed parameters
      */
-    public void setValues(Journal tempJournal, Party party) {
+    private void setValues(Journal tempJournal, Party party) {
         idTV.setText(getString(R.string.str_id) + UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
         amountEt.setText(tempJournal.getAmount() == 0 ? "" : UtilsFormat.formatCurrency(tempJournal.getAmount(), getActivity()));
         dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
@@ -353,7 +329,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
      *
      * @param journalType
      */
-    public void setTextDrCr(Journal.Type journalType) {
+    private void setTextDrCr(Journal.Type journalType) {
         int red = getResources().getColor(R.color.red_light_pressed);
         int green = getResources().getColor(R.color.green);
 
@@ -366,13 +342,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             drCrTv.setTextColor(red);
             drCrTv.setText(getString(R.string.str_cr));
         }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setValues(tempJournal, mParty);
     }
 
 
@@ -393,7 +362,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
                 if (newDate != tempJournal.getDate()) {
                     //Set journalChanged to true is the date is changed. Journal needs to be reordered
-                    dateChanged = journalChanged = true;
                     tempJournal.setDate(newDate);
 
                 }

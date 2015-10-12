@@ -3,9 +3,18 @@
     <string name="key_pref_pincode_cb">preferencesPincodeCB</string>
     <string name="key_pref_pincode_val_et">preferencesPincodeValET</string>
     <string name="key_pref_pincode_time_et">preferencePincodeTimeET</string>
-    <string name="key_pref_reminder_backup_cb">keyPrefereceReminderBackup</string>
+    <string name="key_pref_auto_backup_cb">keyPrefereceAutoBackup</string>
     <string name="key_pref_date_format">prefenceDateFormatLP</string>
     <string name="key_pref_currency">preferenceCurrencyLP</string>
-    <string name="key_pref_reminder_interval_lp">preferencesReminderBackupIntervalLP</string>
+    <string name="key_pref_auto_backup_interval_lp">preferencesAutoBackupIntervalLP</string>
+    <string name="key_pref_share_ps">preferencesKeySharePS</string>
+    <string name="key_pref_rate_ps">preferenceKeyRateAppPS</string>
+    <string name="key_pref_backup_google_drive">preferenceKeyBackupGoogleDrive</string>
+    <string name="key_pref_restore_google_drive">preferenceKeyRestoreGoogleDrive</string>
+    <string name="key_pref_backup_sd">preferenceKeyBackupSD</string>
+    <string name="key_pref_restore_sd">preferenceKeyRestoreSD</string>
+    <string name="key_pref_restore_auto_backup">preferenceKeyRestoreAutoBackup</string>
+    <string name="key_pref_export_printable">preferenceKeyExportPrintables</string>
+    <string name="key_pref_erase_all">Erase All</string>
 
 </resources>

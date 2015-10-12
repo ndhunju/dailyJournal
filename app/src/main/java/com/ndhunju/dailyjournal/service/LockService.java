@@ -13,8 +13,8 @@ import com.ndhunju.dailyjournal.controller.lock.LockScreenActivity;
 public class LockService {
 
     //Variable
-    public static long passcodeActivatedTime;
-    static PreferenceService preferenceService;
+    private static long passcodeActivatedTime;
+    private static PreferenceService preferenceService;
 
     /**
      * Checks if the user has enabled the pass code. If yes, start
@@ -37,7 +37,7 @@ public class LockService {
      * if lock time has exceeded, it returns true
      * @return
      */
-    public static boolean isPasscodeActive(Context con){
+    private static boolean isPasscodeActive(Context con){
         preferenceService = PreferenceService.from(con);
         int lockTimeInMin = preferenceService.getLockTime();
         long difference = (System.currentTimeMillis()-passcodeActivatedTime);

@@ -25,11 +25,12 @@ public class ReportGenerator{
     private static final int TOTAL_SIZE = 15;
     private static final String FILE_EXT = ".txt";
     private static final String COL_SEPARATOR = "|";
+    private static final String GAP_CHAR = " " ;
 
     //variables
-    Party mParty;
-    Context mContext;
-    List<Journal> mJournals;
+    private Party mParty;
+    private Context mContext;
+    private List<Journal> mJournals;
 
     //Constructors
     public ReportGenerator(Context context, long partyId){
@@ -62,12 +63,13 @@ public class ReportGenerator{
     public String getReportHeader(){
         StringBuilder sb = new StringBuilder();
         String ad= String.format(getString(R.string.msg_generated_by), getString(R.string.app_name));
-        sb.append(ad + newLine());
-        sb.append(getString(R.string.str_party) + " : ");
+        sb.append(ad).append(newLine()).append(getString(R.string.link_app));
+        sb.append(newLine()).append(newLine());
+        sb.append(getString(R.string.str_party)).append(" : ");
         sb.append(mParty.getName());
         sb.append(newLine());
         sb.append(getString(R.string.str_balance));
-        sb.append(UtilsFormat.formatCurrency(mParty.getDebitTotal() - mParty.getCreditTotal(),mContext));
+        sb.append(UtilsFormat.formatCurrency(mParty.getDebitTotal() - mParty.getCreditTotal(), mContext));
         sb.append(newLine());
         return sb.toString();
     }
@@ -80,40 +82,73 @@ public class ReportGenerator{
         StringBuilder sb = new StringBuilder();
 
         /**Header Row **/
-        sb.append(addSpaces(R.string.str_no, 3) );
-        sb.append(addSpaces(R.string.str_date));
-        sb.append(addSpaces(R.string.str_dr));
-        sb.append(addSpaces(R.string.str_cr));
-        sb.append(addSpaces(R.string.str_balance));
-        sb.append("\n");
+        sb.append(addGap(R.string.str_no, 3));
+        sb.append(addGap(R.string.str_date));
+        sb.append(addGap(R.string.str_dr));
+        sb.append(addGap(R.string.str_cr));
+        sb.append(addGap(R.string.str_balance));
+
+        sb.append(newLine());
 
         /**Body Rows **/
         double balance = 0;
         int no = 1;
-        for(Journal journal: mJournals){
-            sb.append(addSpaces(String.valueOf(no++),3));
-            sb.append(addSpaces(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)));
-            if(journal.getType() == Journal.Type.Debit){
-                sb.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount(),mContext )));
-                sb.append(addSpaces(""));
+        for (Journal journal : mJournals) {
+            sb.append(addGap(String.valueOf(no++), 3));
+            sb.append(addGap(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)));
+            if (journal.getType() == Journal.Type.Debit) {
+                sb.append(addGapLeft(UtilsFormat.formatDecimal(journal.getAmount(), mContext)));
+                sb.append(addGapLeft(""));
                 balance += journal.getAmount();
-                sb.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
-            }else{
-                sb.append(addSpaces(""));
-                sb.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount(), mContext)));
+                sb.append(addGapLeft(UtilsFormat.formatDecimal(balance, mContext)));
+            } else {
+                sb.append(addGapLeft(""));
+                sb.append(addGapLeft(UtilsFormat.formatDecimal(journal.getAmount(), mContext)));
                 balance -= journal.getAmount();
-                sb.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
+                sb.append(addGapLeft(UtilsFormat.formatDecimal(balance, mContext)));
             }
+            sb.append(newLine());
         }
 
-        sb.append("\n");
 
         /**Footer Row **/
-        sb.append(addSpaces("", 3));
-        sb.append(addSpaces(UtilsFormat.formatDate(new Date(), mContext)));
-        sb.append(addSpaces(UtilsFormat.formatCurrency(mParty.getDebitTotal(), mContext)));
-        sb.append(addSpaces(UtilsFormat.formatCurrency(mParty.getCreditTotal(),mContext )));
-        sb.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
+        sb.append(addGap("", 3));
+        sb.append(addGap(R.string.str_total));
+        sb.append(addGapLeft(UtilsFormat.formatCurrency(mParty.getDebitTotal(), mContext)));
+        sb.append(addGapLeft(UtilsFormat.formatCurrency(mParty.getCreditTotal(), mContext)));
+        sb.append(addGapLeft(UtilsFormat.formatCurrency(balance, mContext)));
+
+        sb.append(newLine());
+
+
+        return sb.toString();
+    }
+
+    public String getSimpleReportBody(){
+        StringBuilder sb = new StringBuilder(newLine());
+        /**Body Rows **/
+        int no = 1;
+        for (Journal journal : mJournals) {
+            sb.append(String.valueOf(no++)).append(". ");
+            sb.append(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)).append("  ");
+            sb.append(UtilsFormat.formatCurrency(journal.getAmount(), mContext)).append(" ");
+            if (journal.getType() == Journal.Type.Debit) {
+                sb.append(getString(R.string.str_dr)).append(" ");
+            } else {
+                sb.append(getString(R.string.str_cr)).append(" ");
+            }
+            sb.append(newLine());
+        }
+
+        sb.append(newLine());
+        sb.append(getString(R.string.str_total)).append(" ");
+        sb.append(getString(R.string.str_dr)).append(" ");
+        sb.append(UtilsFormat.formatCurrency(mParty.getDebitTotal(), mContext));
+        sb.append(newLine());
+
+        sb.append(getString(R.string.str_total)).append(" ");
+        sb.append(getString(R.string.str_cr)).append(" ");
+        sb.append(UtilsFormat.formatCurrency(mParty.getCreditTotal(), mContext));
 
         return sb.toString();
     }
@@ -138,7 +173,7 @@ public class ReportGenerator{
             bw.append(ad);
 
             bw.append(newLine());
-            bw.append(getString(R.string.str_party) + " : ");
+            bw.append(getString(R.string.str_party)).append(" : ");
             bw.append(mParty.getName());
             bw.append(newLine());
             bw.append(getString(R.string.str_balance));
@@ -147,11 +182,11 @@ public class ReportGenerator{
             bw.append(newLine());
 
             /**Header Row **/
-            bw.append(addSpaces(R.string.str_no, 3));
-            bw.append(addSpaces(R.string.str_date));
-            bw.append(addSpaces(R.string.str_dr));
-            bw.append(addSpaces(R.string.str_cr));
-            bw.append(addSpaces(R.string.str_balance));
+            bw.append(addGap(R.string.str_no, 3));
+            bw.append(addGap(R.string.str_date));
+            bw.append(addGap(R.string.str_dr));
+            bw.append(addGap(R.string.str_cr));
+            bw.append(addGap(R.string.str_balance));
 
             bw.append(newLine());
 
@@ -159,29 +194,29 @@ public class ReportGenerator{
             double balance = 0;
             int no = 1;
             for (Journal journal : mJournals) {
-                bw.append(addSpaces(String.valueOf(no++), 3));
-                bw.append(addSpaces(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)));
+                bw.append(addGap(String.valueOf(no++), 3));
+                bw.append(addGap(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)));
                 if (journal.getType() == Journal.Type.Debit) {
-                    bw.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount(), mContext)));
-                    bw.append(addSpaces(""));
+                    bw.append(addGapLeft(UtilsFormat.formatDecimal(journal.getAmount(), mContext)));
+                    bw.append(addGapLeft(""));
                     balance += journal.getAmount();
-                    bw.append(addSpaces(UtilsFormat.formatCurrency(balance,mContext )));
+                    bw.append(addGapLeft(UtilsFormat.formatDecimal(balance, mContext)));
                 } else {
-                    bw.append(addSpaces(""));
-                    bw.append(addSpaces(UtilsFormat.formatCurrency(journal.getAmount(),mContext )));
+                    bw.append(addGapLeft(""));
+                    bw.append(addGapLeft(UtilsFormat.formatDecimal(journal.getAmount(), mContext)));
                     balance -= journal.getAmount();
-                    bw.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
+                    bw.append(addGapLeft(UtilsFormat.formatDecimal(balance, mContext)));
                 }
                 bw.append(newLine());
             }
 
 
             /**Footer Row **/
-            bw.append(addSpaces("", 3));
-            bw.append(addSpaces(R.string.str_total));
-            bw.append(addSpaces(UtilsFormat.formatCurrency(mParty.getDebitTotal(), mContext)));
-            bw.append(addSpaces(UtilsFormat.formatCurrency(mParty.getCreditTotal(),mContext )));
-            bw.append(addSpaces(UtilsFormat.formatCurrency(balance, mContext)));
+            bw.append(addGap("", 3));
+            bw.append(addGap(R.string.str_total));
+            bw.append(addGapLeft(UtilsFormat.formatCurrency(mParty.getDebitTotal(), mContext)));
+            bw.append(addGapLeft(UtilsFormat.formatCurrency(mParty.getCreditTotal(), mContext)));
+            bw.append(addGapLeft(UtilsFormat.formatCurrency(balance, mContext)));
 
             bw.append(newLine());
 
@@ -209,7 +244,7 @@ public class ReportGenerator{
         return storeReportFile(path);
     }
 
-    public static String newLine(){
+    private static String newLine(){
         return System.getProperty("line.separator");
     }
 
@@ -221,20 +256,24 @@ public class ReportGenerator{
     }
 
     //helper method to get string by resource id
-    public String getString(int resId){
+    private String getString(int resId){
         return mContext.getString(resId);
     }
 
-    public String addSpaces(int resId){
-        return addSpaces(getString(resId));
+    private String addGap(int resId){
+        return addGap(getString(resId));
     }
 
-    public String addSpaces(int resId, int spaces){
-        return addSpaces(getString(resId), spaces);
+    private String addGap(int resId, int spaces){
+        return addGap(getString(resId), spaces);
     }
 
-    public static String addSpaces(String str){
-        return addSpaces(str, TOTAL_SIZE);
+    private static String addGap(String str){
+        return addGap(str, TOTAL_SIZE);
+    }
+
+    private static String addGapLeft(String str){
+        return addGapLeft(str, TOTAL_SIZE);
     }
 
     /**
@@ -245,15 +284,28 @@ public class ReportGenerator{
      * @param spaces
      * @return
      */
-    public static String addSpaces(String str, int spaces){
+    private static String addGap(String str, int spaces){
         StringBuilder sb = new StringBuilder(str);
         int len = str.length();
         int add =0;
         if(spaces > len ) add = spaces - len;
 
         for(int i = add; i > 0; i--)
-            sb.append(" ");
+            sb.append(GAP_CHAR);
 
+        sb.append(COL_SEPARATOR);
+        return (sb.toString());
+    }
+
+    private static String addGapLeft(String str, int spaces){
+        StringBuilder sb = new StringBuilder();
+        int len = str.length();
+        int add =0;
+        if(spaces > len ) add = spaces - len;
+
+        for(int i = add; i > 0; i--)
+            sb.append(GAP_CHAR);
+        sb.append(str);
         sb.append(COL_SEPARATOR);
         return (sb.toString());
     }

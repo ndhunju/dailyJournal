@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 
 import java.io.BufferedOutputStream;
@@ -31,18 +30,19 @@ import java.util.UUID;
 public class UtilsFile {
 
 	//Folder Names that the App uses
-	public static final String HIDE_FOLDER = ".";
-	public static final String APP_CACHE_FOLDER_NAME ="Cache";
+	private static final String HIDE_FOLDER = ".";
+	private static final String APP_CACHE_FOLDER_NAME ="Cache";
 	public static final String APP_FOLDER_NAME = "DailyJournal";
-	public static final String ATTCH_FOLDER_NAME = "attachments";
+	private static final String ATTCH_FOLDER_NAME = "attachments";
+	private static final String AUTO_BACKUP_FOLDER_NAME = "backups";
 
 
 	//File Extension types
     public static final String ZIP_EXT = ".zip";
-	public static final String IMG_EXT = ".png";
+	private static final String IMG_EXT = ".png";
 	public static final String ZIP_EXT_OLD = ".dj";
 	public static final String BACK_FILE_TYPE = "application/zip";
-    public static final String TEMP_IMG_FILE_NAME = "temp" + IMG_EXT;
+    private static final String TEMP_IMG_FILE_NAME = "temp" + IMG_EXT;
 
 	//Variables
 	private static String appDir;
@@ -121,8 +121,9 @@ public class UtilsFile {
 	 * @param con
 	 * @return
 	 */
-	public static File getCacheDir(Context con){
-		return con.getDir(UtilsFile.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
+	public static String getCacheDir(Context con){
+		return con.getDir(UtilsFile.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE)
+				.getAbsolutePath();
 	}
 
     /**
@@ -144,7 +145,17 @@ public class UtilsFile {
 		return  success;
 	}
 
-	public static String getAppDir(){
+	public static String getAutoBackupDir(Context con){
+		return con.getDir(AUTO_BACKUP_FOLDER_NAME, Context.MODE_PRIVATE)
+				.getAbsolutePath();
+	}
+
+	public static File[] getAutoBackUpFiles(Context con){
+		File backupFolder = new File(getAutoBackupDir(con));
+		return backupFolder.listFiles();
+	}
+
+	private static String getAppDir(){
 		return appDir;
 	}
 
@@ -163,7 +174,7 @@ public class UtilsFile {
 		return path;
 	}
 
-    public static File getAttachmentFolder(File appFolder, boolean hide) {
+    private static File getAttachmentFolder(File appFolder, boolean hide) {
 		File attchFolder = new File(appFolder.getAbsolutePath(), hide ? HIDE_FOLDER + UtilsFile.ATTCH_FOLDER_NAME :
 			UtilsFile.ATTCH_FOLDER_NAME); //. makes it invisible
 		if (!attchFolder.exists())
@@ -172,7 +183,7 @@ public class UtilsFile {
 		return attchFolder;
 	}
 	
-	public static File getPartyFolder(File attchFolder, String partyName, boolean hide) {
+	private static File getPartyFolder(File attchFolder, String partyName, boolean hide) {
 		// Create a party folder
 		File partyFolder = new File(attchFolder.getAbsolutePath(), hide ? HIDE_FOLDER +  partyName :
 			partyName); //. makes it invisible
@@ -295,9 +306,7 @@ public class UtilsFile {
 			else if(!file.delete()) return false;
 			}
 
-		if(!directory.delete()) return false;
-
-		return true;
+		return directory.delete();
 	}
 
 	public static void copyInputStream( BufferedReader in, BufferedWriter out )throws IOException {
@@ -408,29 +417,24 @@ public class UtilsFile {
      * @param pic
      * @param c
      */
-    public static void storeImage(final Bitmap imageData, final File pic, final Context c) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					FileOutputStream fileOutputStream = new FileOutputStream(pic);
-					//Log.i("path", c.getFilesDir().getAbsolutePath());
-					BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
+	public static void storeImage(final Bitmap imageData, final File pic, final Context c) {
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream(pic);
+			//Log.i("path", c.getFilesDir().getAbsolutePath());
+			BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
 
-					// choose another format if PNG doesn't suit you
-					imageData.compress(Bitmap.CompressFormat.PNG, 100, bos);
-					bos.flush();
-					bos.close();
-					//to let know that a new file has been created so that it appears in the computer
-					MediaScannerConnection.scanFile(c, new String[]{pic.getAbsolutePath()}, null, null);
-					Log.i("store image" , pic.getName() + " was stored successfully.");
+			// choose another format if PNG doesn't suit you
+			imageData.compress(Bitmap.CompressFormat.PNG, 100, bos);
+			bos.flush();
+			bos.close();
+			//to let know that a new file has been created so that it appears in the computer
+			MediaScannerConnection.scanFile(c, new String[]{pic.getAbsolutePath()}, null, null);
+			Log.i("store image", pic.getName() + " was stored successfully.");
 
-				} catch (Exception e) {
-					Log.w("TAG", "Error saving image file: " + e.getMessage());
-					UtilsView.alert(c, "Error saving the file.");
-				}
-			}
-		}).start();
-    }
+		} catch (Exception e) {
+			Log.w("TAG", "Error saving image file: " + e.getMessage());
+			UtilsView.alert(c, "Error saving the file.");
+		}
+	}
 
 }

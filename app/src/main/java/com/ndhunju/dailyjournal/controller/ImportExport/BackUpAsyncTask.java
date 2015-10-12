@@ -20,10 +20,10 @@ import java.io.IOException;
  */
 public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
 
-    public static final String TAG = BackUpAsyncTask.class.getSimpleName();
+    private static final String TAG = BackUpAsyncTask.class.getSimpleName();
 
-    Activity mActivity;
-    ProgressDialog pd;
+    private Activity mActivity;
+    private ProgressDialog pd;
 
     public BackUpAsyncTask(Activity context) {
         mActivity = context;
@@ -44,9 +44,9 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... String) {
         String filePath = "";
         Services mServices = Services.getInstance(mActivity);
-        try { filePath = mServices.createBackUp(true, String[0]);}
+        try { filePath = mServices.createBackUp(String[0]);}
         catch (IOException e) { Log.w(TAG, "Error creating backup file: " + e.getMessage());}
-        finally { return filePath; }
+        return filePath;
 
     }
 
@@ -54,8 +54,8 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String filePath) {
         //End progress bar
         pd.cancel();
-        boolean success = filePath != ""  || filePath != null;
-        mActivity.setResult(success ? mActivity.RESULT_OK : Activity.RESULT_CANCELED);
+        boolean success = !filePath.equals("")  || filePath != null;
+        mActivity.setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
         String resultMsg =  success ?
                             String.format(mActivity.getString(R.string.msg_finished), mActivity.getString(R.string.str_backup))
                             : String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_backup));

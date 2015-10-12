@@ -66,7 +66,7 @@ public class PartyListFragment extends Fragment {
      * selections.
      */
     public interface Callbacks {
-        public void onItemSelected(String id);
+        void onItemSelected(String id);
     }
 
     /**
@@ -149,6 +149,7 @@ public class PartyListFragment extends Fragment {
         return rootView;
     }
 
+
     private ListView getListView(){
         return mPartyLV;
     }
@@ -217,7 +218,7 @@ public class PartyListFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(data == null) return;;
+        if(data == null) return;
 
         switch (requestCode){
             case REQUEST_PARTY_INFO_CHGD:

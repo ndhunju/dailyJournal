@@ -49,10 +49,18 @@
             android:text="@string/str_export_printable" />
 
         <Button
+            android:id="@+id/activity_import_export_restore_from_auto_backup_btn"
+            style="@style/Widget.Button_Normal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/str_restore_backup_from_auto" />
+
+        <Button
             android:id="@+id/activity_import_export_restore_json_from_sd_btn"
             style="@style/Widget.Button_Normal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
             android:text="@string/str_import_json_from_sd" />
+
     </LinearLayout>
 </ScrollView>

@@ -2,5 +2,6 @@
 <com.ndhunju.dailyjournal.viewPager.HackyViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/view_pager"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:background="@android:drawable/stat_sys_upload"/>
 <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/layout/activity_view_pager.xml -->

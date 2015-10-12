@@ -27,7 +27,7 @@ public class UtilsZip {
      */
     public static void zip(File directoryToZip, File finalZipFile) throws IOException {
         URI base = directoryToZip.toURI();
-        Deque<File> queue = new LinkedList<File>();
+        Deque<File> queue = new LinkedList<>();
         queue.push(directoryToZip);
         OutputStream out = new FileOutputStream(finalZipFile);
         Closeable res = out;

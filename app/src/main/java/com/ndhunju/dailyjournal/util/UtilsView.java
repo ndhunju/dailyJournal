@@ -52,13 +52,15 @@ public class UtilsView {
                 .create().show();
     }
 
-    public static void showResult(Activity activity, int resultCode){
+    public static boolean showResult(Activity activity, int resultCode){
         //If the result is not success, return
         if (resultCode != Activity.RESULT_OK){
             alert(activity, String.format(activity.getString(R.string.msg_failed),
                     activity.getString(R.string.str_save)));
-            return;
+            return false;
         }
+
+        return true;
     }
 
     public static ProgressDialog createProgressDialog(Activity mActivity, String msg){
@@ -70,4 +72,5 @@ public class UtilsView {
         pd.show();
         return pd;
     }
+
 }

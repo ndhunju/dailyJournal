@@ -63,8 +63,16 @@ public class FolderPickerDialogFragment extends DialogFragment{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //make sure the calling activity implements the listener
-        try {  mOnDialogBtnPressedListener = (OnDialogBtnClickedListener)activity;
+        //make sure the calling activity or fragment implements the listener
+        try {
+            if(activity instanceof OnDialogBtnClickedListener){
+                mOnDialogBtnPressedListener = (OnDialogBtnClickedListener)activity;
+            }
+            else if(getTargetFragment() instanceof  OnDialogBtnClickedListener){
+                mOnDialogBtnPressedListener = (OnDialogBtnClickedListener)getTargetFragment();
+            }else {
+                throw new ClassCastException();
+            }
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement " +
                     OnDialogBtnClickedListener.class.getSimpleName());
@@ -160,7 +168,7 @@ public class FolderPickerDialogFragment extends DialogFragment{
      * @param context
      * @return
      */
-    public ControlsLayout createDefaultControlLayout(Context context){
+    private ControlsLayout createDefaultControlLayout(Context context){
         ControlsLayout controlLayout = new ControlsLayout(context);
         controlLayout.setCurrentPath(mCurrentDir);
         controlLayout.setOnBackPressedListener(new View.OnClickListener() {
@@ -210,8 +218,7 @@ public class FolderPickerDialogFragment extends DialogFragment{
      */
     private boolean createSubDir(String newDir) {
         File newDirFile = new File(newDir);
-        if (!newDirFile.exists()) return newDirFile.mkdir();
-        return false;
+        return !newDirFile.mkdir();
     }
 
     /**
@@ -221,7 +228,7 @@ public class FolderPickerDialogFragment extends DialogFragment{
      * @return
      */
     private List<String> getSubDirectories(String dir) {
-        List<String> dirs = new ArrayList<String>();
+        List<String> dirs = new ArrayList<>();
 
         try {
             File dirFile = new File(dir);

@@ -20,11 +20,11 @@ import java.io.File;
  * this doesn't erase old data rather mergers it with the existing data
  * TODO Merging journals with duplicate id
  */
-public class ImportDataAsyncTask extends AsyncTask<String, Void, Boolean> {
+class ImportDataAsyncTask extends AsyncTask<String, Void, Boolean> {
 
     //Variables
-    Activity mActivity;
-    ProgressDialog pd;
+    private Activity mActivity;
+    private ProgressDialog pd;
 
     public ImportDataAsyncTask(Activity activity) {
         mActivity = activity;

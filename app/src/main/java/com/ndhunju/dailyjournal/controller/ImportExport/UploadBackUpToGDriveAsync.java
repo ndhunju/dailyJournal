@@ -29,13 +29,13 @@ import java.io.OutputStream;
  */
 public class UploadBackUpToGDriveAsync extends AsyncTask<Void,Void,Void> {
 
-    public static final String TAG = UploadBackUpToGDriveAsync.class.getSimpleName();
+    private static final String TAG = UploadBackUpToGDriveAsync.class.getSimpleName();
 
     //variables
-    GoogleApiClient mGoogleApiClient;
-    int mReturnRequestCode;
-    Activity mActivity;
-    ProgressDialog pd;
+    private GoogleApiClient mGoogleApiClient;
+    private int mReturnRequestCode;
+    private Activity mActivity;
+    private ProgressDialog pd;
 
     public UploadBackUpToGDriveAsync(Activity activity, GoogleApiClient googleApiClient, int requestCode){
         mGoogleApiClient = googleApiClient;
@@ -78,7 +78,7 @@ public class UploadBackUpToGDriveAsync extends AsyncTask<Void,Void,Void> {
                         try {
                             //Create a new full backup of data into local drive
                             Services s = Services.getInstance(mActivity);
-                            String filePath = s.createBackUp(false, null);
+                            String filePath = s.createBackUp(UtilsFile.getCacheDir(mActivity));
                             backUpfile = new File(filePath);
                             outputStream.write(UtilsFile.read(backUpfile));
 
@@ -104,8 +104,11 @@ public class UploadBackUpToGDriveAsync extends AsyncTask<Void,Void,Void> {
                             //Show a Google Drive Picker where user can select the folder to save backup file in
                             //It usu takes a while for Drive Picker to show up. So cancel gDrivePD at onActivityResult();
                             mActivity.startIntentSenderForResult(intentSender, mReturnRequestCode, null, 0, 0, 0);
+
                         } catch (IOException e1) {Log.i(TAG, "Unable to write file contents.");
                         } catch (IntentSender.SendIntentException e) {Log.i(TAG, "Failed to launch file chooser.");}
+
+                        pd.cancel();
                     }
                 });
         return null;
@@ -113,6 +116,7 @@ public class UploadBackUpToGDriveAsync extends AsyncTask<Void,Void,Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        pd.cancel();
+        //this is called before the all the progress in background is complemeted
+        //pd.cancel();
     }
 }

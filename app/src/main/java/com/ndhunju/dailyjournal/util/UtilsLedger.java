@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * This class has methods that can be used to create header, footer and row of a Ledger
  */
-public class UtilsLedger {
+class UtilsLedger {
 	
 	//Table layout constants
 	private static float LAYOUT_WT_SUM = 4.0f;

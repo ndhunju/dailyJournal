@@ -16,14 +16,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ID : "
+            android:text="@string/str_id"
             android:textSize="@dimen/text_size_medium" />
 
         <TextView
             android:id="@+id/activity_party_id_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="12345"
+            android:text="@string/str_id"
             android:textSize="@dimen/text_size_medium" />
     </LinearLayout>
 
@@ -45,7 +45,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_toRightOf="@id/activity_party_pic_iv">
+            android:layout_toRightOf="@id/activity_party_pic_iv"
+            android:layout_toEndOf="@id/activity_party_pic_iv">
 
             <EditText
                 android:id="@+id/activity_party_name_et"

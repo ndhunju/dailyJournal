@@ -24,6 +24,6 @@ public final class Constants {
     public static final String KEY_CHANGE_TYPE = "changeType";
 
 
-    public enum ChangeType{EDITED, DELETED};
+    public enum ChangeType{EDITED, DELETED}
 
 }

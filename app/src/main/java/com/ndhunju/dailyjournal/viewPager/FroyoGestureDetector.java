@@ -22,7 +22,7 @@ import android.view.ScaleGestureDetector;
 
 @TargetApi(8)
 public class FroyoGestureDetector extends EclairGestureDetector {
-	protected final ScaleGestureDetector mDetector;
+	private final ScaleGestureDetector mDetector;
 
 	public FroyoGestureDetector(Context context) {
 		super(context);

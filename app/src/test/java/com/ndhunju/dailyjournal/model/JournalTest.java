@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
  */
 public class JournalTest {
 
-    String jsonJournal;
+    private String jsonJournal;
 
     @BeforeClass
     public static void initializeSomethingReallyExpensive(){}

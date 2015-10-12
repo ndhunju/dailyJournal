@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/str_google_drive">
+        <Preference
+            android:icon="@drawable/ic_cloud_upload_black_24dp"
+            android:key="@string/key_pref_backup_google_drive"
+            android:title="@string/str_create_backup_in_google_drive" />
+        <Preference
+            android:icon="@drawable/ic_cloud_download_black_24dp"
+            android:key="@string/key_pref_restore_google_drive"
+            android:title="@string/str_restore_backup_from_google_drive" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/str_sd_card">
+        <Preference
+            android:icon="@drawable/ic_file_upload_black_24dp"
+            android:key="@string/key_pref_backup_sd"
+            android:title="@string/str_create_backup_in_sd" />
+        <Preference
+            android:icon="@drawable/ic_file_download_black_24dp"
+            android:key="@string/key_pref_restore_sd"
+            android:title="@string/str_restore_backup_from_sd" />
+        <Preference android:key="@string/key_pref_export_printable"
+            android:title="@string/str_export_printable"
+            android:icon="@drawable/ic_content_copy_black_24dp"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/str_auto_backup">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/key_pref_auto_backup_cb"
+            android:title="@string/str_enable_auto_backup" />
+        <ListPreference
+            android:defaultValue="604800000"
+            android:dependency="@string/key_pref_auto_backup_cb"
+            android:entries="@array/reminder_intervals"
+            android:entryValues="@array/reminder_intervals_val"
+            android:key="@string/key_pref_auto_backup_interval_lp"
+            android:title="@string/str_auto_backup_interval" />
+        <Preference android:key="@string/key_pref_restore_auto_backup"
+            android:title="@string/str_restore_backup_from_auto"
+            />
+    </PreferenceCategory>
+    <Preference android:title="@string/str_erase_all"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:key="@string/key_pref_erase_all"
+        />
+
+</PreferenceScreen>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="date_format" >MM/d/yy</string>
+    <string name="date_format" >MM/dd/yy</string>
     <bool name="note_col">false</bool>
+
+    <string name="link_app">https://goo.gl/08Jb14</string>
 </resources>

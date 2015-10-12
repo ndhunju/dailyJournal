@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.service;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaScannerConnection;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
@@ -51,12 +52,10 @@ public class Services {
     /**
      * Creates a backup file of existing data along with attachments.
      *
-     * @param inExtDir : true to create backup file in external storage. Backup file created
-     *                 in ext. storage can be accessed by computers through USB connection
      * @return : It retuns the absolute path of the backup file.
      * @throws IOException
      */
-    public String createBackUp(boolean inExtDir, String extDir) throws IOException {
+    public String createBackUp(@NonNull String dir) throws IOException {
         //1.Create JSON with latest data
         JsonConverter converter = JsonConverter.getInstance(mServices);
         converter.createJSONFile();
@@ -65,33 +64,23 @@ public class Services {
         //2.1 Get the app folder
         File directoryToZip = UtilsFile.getAppFolder(mContext);
 
-        //2.2 get App Folder that is not hidden. Backup file will be created here
-        File appFolder;
-        //if backup is to be created in sdcard
-        if (inExtDir) {
-        //if folder where backup should be created is provided
-            if (extDir != null)
-                appFolder = new File(extDir);
-            else //if folder is not provided, get default app folder
-                appFolder = UtilsFile.getAppFolder(false);
-        } else {
-        //if backup is to be created in internal storage
-        //usu if the backup file is for uploading to Google Drive
-            appFolder = UtilsFile.getCacheDir(mContext);
-        }
+        //2.2 get backup Folder. Backup file will be created here
+        File backupFolder = new File(dir);
+		//if the file doesn't exit choose default folder
+		if(!backupFolder.exists())  backupFolder = UtilsFile.getAppFolder(false);
 
 
         //2.3 create a zip file in not hidden app folder so that user can use it
         String fileName = UtilsFile.getZipFileName();
-        File zipFile = new File(appFolder.getAbsoluteFile(), fileName);
+        File zipFile = new File(backupFolder.getAbsoluteFile(), fileName);
         zipFile.createNewFile();
 
         //3 zip the directory file into zipFile
         UtilsZip.zip(directoryToZip, zipFile);
 
-        if (inExtDir) //let know that a new file has been created so that it appears in the computer
+        //let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(mContext,
-                    new String[]{appFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
+                    new String[]{backupFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
 
         Log.i("BackUp", "Backup file created");
 
@@ -116,15 +105,20 @@ public class Services {
 	public ArrayList<Party> getParties() {
 		ArrayList<Party> parties = (ArrayList<Party>)partyDAO.findAll();
 		if(parties != null) return parties;
-		return new ArrayList<Party>();
+		return new ArrayList<>();
 
 	}
 
 	public ArrayList<String> getPartyNames() {
 		//Get parties from the DAO
-		ArrayList<String> names = (ArrayList<String>)partyDAO.getNames();
-		return names;
+		return (ArrayList<String>)partyDAO.getNames();
 	}
+
+	public String[] getPartyNameAsArray(){
+		return partyDAO.getNamesAsArray();
+	}
+
+
 
 	/**
 	 * Adds passed party to the party list in its right alphabetical order
@@ -144,18 +138,21 @@ public class Services {
 
 	public boolean deleteParty(Party party){
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
-		db.beginTransaction();;
+		boolean success = false;
+		db.beginTransaction();
 		try{
 			deleteAllJournals(party.getId());
 			UtilsFile.deleteFile(party.getPicturePath());
 			partyDAO.delete(party.getId());
 			db.setTransactionSuccessful();
+			success = true;
 		}catch (Exception e){
 			e.printStackTrace();
+
 		}finally {
 			db.endTransaction();
 		}
-		return true;
+		return success;
 	}
 
 
@@ -171,17 +168,16 @@ public class Services {
 	 * @return
 	 */
 	public Journal getJournal(long journalId) {
-		Journal journal = journalDAO.find(journalId);
-		return journal;
+		return journalDAO.find(journalId);
 	}
 
     public Journal getNewJournal(){
         //get the last created new journal's id
         KeyValPersistence persistence = KeyValPersistence.from(mContext);
-        String rowId = persistence.get(String.valueOf(Constants.ID_NEW_JOURNAL));
+        long rowId = persistence.get(String.valueOf(Constants.ID_NEW_JOURNAL), 0);
         //get the journal from the table
         Journal newJournal = null;
-        if(rowId != null){newJournal= journalDAO.find(Long.parseLong(rowId));}
+        if(rowId != 0){newJournal= journalDAO.find(rowId);}
         //check if this journal has been associated with a party
         if(newJournal == null || (newJournal.getPartyId() != Constants.NO_PARTY)){
             //if the journal is null or has been associated with a party, create new
@@ -189,8 +185,7 @@ public class Services {
             long id = journalDAO.create(newJournal);
             newJournal.setId(id);
             //save the id of new journal
-            persistence.put(String.valueOf(Constants.ID_NEW_JOURNAL)
-                    , String.valueOf(id));
+            persistence.putLong(String.valueOf(Constants.ID_NEW_JOURNAL), id);
         }
         return newJournal;
     }
@@ -198,8 +193,8 @@ public class Services {
     public long getNewJournalId(){
         //get the last created new journal's id
         KeyValPersistence persistence = KeyValPersistence.from(mContext);
-        String rowId = persistence.get(String.valueOf(Constants.ID_NEW_JOURNAL));
-        return Long.parseLong(rowId);
+        long rowId = persistence.get(String.valueOf(Constants.ID_NEW_JOURNAL), 0);
+        return rowId;
     }
 
 
@@ -225,7 +220,7 @@ public class Services {
 	public ArrayList<Journal> getJournals(long partyId){
 		ArrayList<Journal> journals = (ArrayList<Journal>)journalDAO.findAll(partyId);
 		if(journals != null) return journals;
-		return new ArrayList<Journal>();
+		return new ArrayList<>();
 	}
 
 	public long addJournal(Journal journal){
@@ -283,7 +278,7 @@ public class Services {
 	 * @param journal
 	 * @param operation
 	 */
-	public int updatePartyAmount(Journal journal, String operation){
+	private int updatePartyAmount(Journal journal, String operation){
 		if(journal.getType() == Journal.Type.Debit){
 			return partyDAO.updateDr(journal.getPartyId(), journal.getAmount(), operation);
 		}else{
@@ -291,7 +286,7 @@ public class Services {
 		}
 	}
 
-	public boolean deleteAllJournals(long partyId){
+	private boolean deleteAllJournals(long partyId){
 		for(Journal j : journalDAO.findAll(partyId))
 			for(Attachment attch : attachmentDAO.findAll(j.getId()))
 				if(!deleteAttachment(attch))
@@ -407,11 +402,18 @@ public class Services {
 	}
 
 	public boolean truncateAllTables(){
+		//doesn't reset the table ids
 		partyDAO.truncateTable();
 		journalDAO.truncateTable();
 		attachmentDAO.truncateTable();
 		return true;
 	}
+
+    public boolean recreateDB(){
+        return mDbHelper.recreateDB();
+    }
+
+
 
 	/**
 	 * Deletes all parties, journals along with the attachments.
@@ -421,7 +423,7 @@ public class Services {
 	public boolean eraseAll(Context context){
 		boolean success = true;
 		try{
-			success &= truncateAllTables();
+			success &= recreateDB();
 			success &= KeyValPersistence.from(context).nukeAll(mContext);
 			success &= PreferenceService.from(context).nukeAll();
 			success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(context));

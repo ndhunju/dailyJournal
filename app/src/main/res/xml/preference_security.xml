@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/str_pincode">
+        <CheckBoxPreference
+            android:id="@+id/preference_pincode_cb"
+            android:defaultValue="false"
+            android:key="@string/key_pref_pincode_cb"
+            android:title="@string/str_enable" />
+
+        <EditTextPreference
+            android:id="@+id/preference_pincode_val_et"
+            android:defaultValue=""
+            android:dependency="@string/key_pref_pincode_cb"
+            android:inputType="number"
+            android:key="@string/key_pref_pincode_val_et"
+            android:maxLength="10"
+            android:summary="@string/sum_pincode_val"
+            android:title="@string/str_pincode" />
+
+        <EditTextPreference
+            android:id="@+id/preference_pincode_time_et"
+            android:defaultValue="3"
+            android:dependency="@string/key_pref_pincode_cb"
+            android:inputType="number"
+            android:key="@string/key_pref_pincode_time_et"
+            android:maxLength="2"
+            android:summary="@string/sum_lock_time"
+            android:title="@string/str_lock_time" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -5,12 +5,15 @@
         android:id="@+id/menu_party_list_activity_add"
         android:showAsAction="ifRoom|withText"
         android:title="@string/str_new"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@android:drawable/ic_input_add"
+        android:orderInCategory="1"
         />
 
     <item
         android:id="@+id/menu_party_list_activity_import"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_group_add_black_48dp"
+        android:orderInCategory="2"
         android:title="@string/str_import_party"
         />
 

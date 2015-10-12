@@ -15,7 +15,7 @@ import java.util.List;
 public class PartyDAO implements GenericDAO<Party, Long> {
 
 
-    SQLiteOpenHelper mSqLiteOpenHelper;
+    private SQLiteOpenHelper mSqLiteOpenHelper;
 
     public PartyDAO(SQLiteOpenHelper sqLiteOpenHelper){
         mSqLiteOpenHelper = sqLiteOpenHelper;
@@ -38,7 +38,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
     public Party find(Long id) {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, null,
-                   PartyColumns.PARTY_ID + "=" + id, null, null, null, null, null);
+                PartyColumns.PARTY_ID + "=" + id, null, null, null, null, null);
 
         if(!c.moveToFirst()) return null;
 
@@ -62,7 +62,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
      */
     public int updateDr(long id, double amount, String operation){
         return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_DR_AMT,
-                           amount, operation, PartyColumns.PARTY_ID, id);
+                amount, operation, PartyColumns.PARTY_ID, id);
     }
 
 
@@ -78,7 +78,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
                            amount, operation, PartyColumns.PARTY_ID, id);
     }
 
-    public int execUpdate(String table, String column, double amount, String operation, String pk, long val){
+    private int execUpdate(String table, String column, double amount, String operation, String pk, long val){
         String sql = "UPDATE " + table + " SET " + column + "=" + column + operation + " ? WHERE " + pk + "=?";
         SQLiteStatement sqlSt = mSqLiteOpenHelper.getWritableDatabase().compileStatement(sql);
         sqlSt.bindDouble(1, amount);
@@ -91,7 +91,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
     public Party find(String partyName){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, null, PartyColumns.COL_PARTY_NAME + "= ?",
-                            new String[]{partyName}, null, null, null);
+                new String[]{partyName}, null, null, null);
 
         if(!c.moveToFirst())   return null;
         return fromCursor(c);
@@ -101,9 +101,9 @@ public class PartyDAO implements GenericDAO<Party, Long> {
     public List<Party> findAll() {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(true, PartyColumns.TABLE_PARTY, null, null, null, null, null,
-                            PartyColumns.COL_PARTY_NAME, null);
+                PartyColumns.COL_PARTY_NAME, null);
 
-        List<Party> temp = new ArrayList<Party>();
+        List<Party> temp = new ArrayList<>();
         if(!c.moveToFirst()) return temp;
 
         do{
@@ -134,7 +134,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
     public List<String> getNames(){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, new String[]{PartyColumns.COL_PARTY_NAME},
-                            null, null, null, PartyColumns.COL_PARTY_NAME, null);
+                            null, null, null, null, PartyColumns.COL_PARTY_NAME);
 
         List<String> names = new ArrayList<>();
         if(!c.moveToFirst())return names;
@@ -142,6 +142,22 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         do{
             names.add(c.getString(c.getColumnIndex(PartyColumns.COL_PARTY_NAME)));
         }while(c.moveToNext());
+        c.close();
+        return names;
+    }
+
+    public String[] getNamesAsArray(){
+        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
+        Cursor c = db.query(PartyColumns.TABLE_PARTY, new String[]{PartyColumns.COL_PARTY_NAME},
+                null, null, null, null, PartyColumns.COL_PARTY_NAME);
+
+        String[] names = new String[c.getCount()];
+        if(!c.moveToFirst())return names;
+        int i = 0;
+        do{
+            names[i++]= (c.getString(c.getColumnIndex(PartyColumns.COL_PARTY_NAME)));
+        }while(c.moveToNext());
+        c.close();
         return names;
     }
 
@@ -161,7 +177,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
     }
 
-    public static ContentValues toContentValues(Party party){
+    private static ContentValues toContentValues(Party party){
         ContentValues values = new ContentValues();
         //values.put(PartyColumns.PARTY_ID, party.getId()); //will never change
         values.put(PartyColumns.COL_PARTY_NAME, party.getName());
@@ -173,7 +189,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return values;
     }
 
-    public static Party fromCursor(Cursor c){
+    private static Party fromCursor(Cursor c){
         long id = c.getLong(c.getColumnIndexOrThrow(PartyColumns.PARTY_ID));
         String name = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_NAME));
         String phone = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_PHONE));
