@@ -1,29 +1,26 @@
 package com.ndhunju.dailyjournal.service;
 
-/**
- * Created by dhunju on 9/24/2015.
- */
-public final class Constants {
+public interface Constants {
 
     //Constants
     public static final int NO_PARTY = -1;
-    public static final int ID_NEW_JOURNAL=-2;
-    public static final long ID_NEW_PARTY = -3;
+    int ID_NEW_JOURNAL=-2;
+    long ID_NEW_PARTY = -3;
 
     //Constant Keys usu used to get and put data in an Intent or Bundle
-    public static final String APP_PREFIX = "com.ndhunju.dailyJournal";
-    public static final String KEY_PARTY_NAME = APP_PREFIX + "partyName";
-    public static final String KEY_REQUEST_CODE = APP_PREFIX + "RequestCode";
-    public static final String KEY_JOURNAL_ID = APP_PREFIX + "journalId";
-    public static final String KEY_PARTY_ID = APP_PREFIX + "merchantId";
-    public static final String KEY_JOURNAL_CHGD = APP_PREFIX + "nameJournalChanged";
-    public static final String KEY_ATTACHMENTS = APP_PREFIX + "keyAttachments";
-    public static final String KEY_PARTY_INFO_CHGD = APP_PREFIX + "partyInfoChanged";
-    public static final String KEY_IMPORT_OLD_DATA = APP_PREFIX + "KeyImportedOLdData";
-    public static final String KEY_ATTACHMENTS_IS_CHGD = APP_PREFIX + "isAttachmentChanged";
-    public static final String KEY_CHANGE_TYPE = "changeType";
+    String APP_PREFIX = "com.ndhunju.dailyJournal"; //DON'T CHANGE THIS VAL
+    String KEY_PARTY_NAME = APP_PREFIX + "partyName";
+    String KEY_REQUEST_CODE = APP_PREFIX + "RequestCode";
+    String KEY_JOURNAL_ID = APP_PREFIX + "journalId";
+    String KEY_PARTY_ID = APP_PREFIX + "merchantId";
+    String KEY_JOURNAL_CHGD = APP_PREFIX + "nameJournalChanged";
+    String KEY_ATTACHMENTS = APP_PREFIX + "keyAttachments";
+    String KEY_PARTY_INFO_CHGD = APP_PREFIX + "partyInfoChanged";
+    String KEY_IMPORT_OLD_DATA = APP_PREFIX + "KeyImportedOLdData";
+    String KEY_ATTACHMENTS_IS_CHGD = APP_PREFIX + "isAttachmentChanged";
+    String KEY_CHANGE_TYPE = "changeType";
 
 
-    public enum ChangeType{EDITED, DELETED}
+    enum ChangeType{EDITED, DELETED}
 
 }

@@ -9,9 +9,6 @@ import com.ndhunju.dailyjournal.model.Attachment;
 
 import java.util.List;
 
-/**
- * Created by dhunju on 10/4/2015.
- */
 class AttachmentPagerAdapter extends PagerAdapter {
 
         private List<Attachment> mAttachments = null;

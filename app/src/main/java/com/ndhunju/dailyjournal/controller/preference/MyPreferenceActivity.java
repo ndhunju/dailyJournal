@@ -1,24 +1,17 @@
 package com.ndhunju.dailyjournal.controller.preference;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.importExport.TransferOldDataAsyncTask;
+import com.ndhunju.dailyjournal.controller.preference.backup.BackupPreferenceFragment;
+import com.ndhunju.dailyjournal.controller.preference.backup.TransferOldDataAsyncTask;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
 
@@ -27,17 +20,18 @@ import java.util.List;
 
 /**
  * Created by dhunju on 10/8/2015.
+ * This class reads Preference Header from .xml file
  */
 public class MyPreferenceActivity extends PreferenceActivity {
 
-    public static List<String> fragments = new ArrayList<>();
+    //Variables
     public static List<Header> headers = new ArrayList<>();
-
-    ListAdapter preferenceListAdapter;
+    private ListAdapter preferenceListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         if(savedInstanceState == null){
             preferenceListAdapter = new PreferenceListAdapter(headers, MyPreferenceActivity.this);
@@ -51,13 +45,15 @@ public class MyPreferenceActivity extends PreferenceActivity {
 
 
         if (headers.get(position).id == R.id.preference_header_rate) {
+            //user clicked on Rate App option
             final String DEFAULT_TARGET_URI = "market://details?id=%s";
             Intent appRateIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(String.format(DEFAULT_TARGET_URI, getActivity().getPackageName())));
+                    Uri.parse(String.format(DEFAULT_TARGET_URI, MyPreferenceActivity.this.getPackageName())));
             startActivityForResult(appRateIntent, 0);
         } else
 
         if (headers.get(position).id == R.id.preference_header_share){
+            //user clicked on Share option
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.msg_share_subject));
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.msg_share_body) + " "
@@ -67,6 +63,9 @@ public class MyPreferenceActivity extends PreferenceActivity {
         }else
 
         if(headers.get(position).id == R.id.preference_header_backup_frag){
+            //Backup option was clicked.
+            // BackupFragment is added manually because it performs operations like selecting backup
+            // file which entails going out to App and getting result back
             getFragmentManager().beginTransaction().replace(android.R.id.content,
                     new BackupPreferenceFragment(), BackupPreferenceFragment.TAG)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -74,6 +73,7 @@ public class MyPreferenceActivity extends PreferenceActivity {
                     .commit();
         }else
         {
+            //for rest use the default settings
             super.onListItemClick(l, v, position, id);
         }
 
@@ -82,28 +82,24 @@ public class MyPreferenceActivity extends PreferenceActivity {
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preference_headers, target);
-        fragments.clear();
         headers.clear();
         for (Header header : target) {
-            fragments.add(header.fragment);
             headers.add(header);
         }
     }
 
-
-    public Activity getActivity() {
-        return MyPreferenceActivity.this;
-    }
-
     @Override
     protected boolean isValidFragment(String fragmentName) {
-        return fragments.contains(fragmentName);
+        for(Header header : headers){
+            if(header.fragment.equals(fragmentName))
+                return true;
+        }
+        return false;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         //Update lock time
         LockService.updatePasscodeTime();
     }

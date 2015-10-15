@@ -6,12 +6,7 @@ import android.provider.BaseColumns;
  * This class defines the structure of the tables in the database
  * It also defines relevant data and common SQL statements
  */
-public final class DailyJournalContract {
-
-    // To prevent someone from accidentally instantiating the contract class,
-    // give it a private empty constructor.
-    private DailyJournalContract() {
-    }
+public abstract class DailyJournalContract {
 
     //Database Data types
     private static final String TEXT_TYPE = " TEXT ";
@@ -23,20 +18,21 @@ public final class DailyJournalContract {
 
     private static final String COMMA_SEP = " , ";
 
+
     /* Inner class that defines the table contents */
-    public static abstract class PartyColumns implements BaseColumns {
+    public interface PartyColumns extends BaseColumns {
 
         //Values for Merchant Table
-        public static final String TABLE_PARTY = "party";
-        public static final String PARTY_ID = "id";
-        public static final String COL_PARTY_NAME = "name";
-        public static final String COL_PARTY_PHONE = "phone";
-        public static final String COL_PARTY_TYPE = "type";
-        public static final String COL_PARTY_DR_AMT= "drAmt";
-        public static final String COL_PARTY_CR_AMT= "crAmt";
-        public static final String COL_PARTY_PICTURE = "picturePath";
+        String TABLE_PARTY = "party";
+        String PARTY_ID = "id";
+        String COL_PARTY_NAME = "name";
+        String COL_PARTY_PHONE = "phone";
+        String COL_PARTY_TYPE = "type";
+        String COL_PARTY_DR_AMT= "drAmt";
+        String COL_PARTY_CR_AMT= "crAmt";
+        String COL_PARTY_PICTURE = "picturePath";
 
-        public static final String SQL_CREATE_ENTRIES_PARTY =
+        String SQL_CREATE_ENTRIES_PARTY =
                 "CREATE TABLE " + TABLE_PARTY +
                         " (" +
                         PARTY_ID + INTEGER + " PRIMARY KEY AUTOINCREMENT," +
@@ -48,23 +44,23 @@ public final class DailyJournalContract {
                         COL_PARTY_PICTURE + TEXT_TYPE +
                         " )";
 
-        public static final String SQL_DROP_ENTRIES_PARTY =
+        String SQL_DROP_ENTRIES_PARTY =
                 "DROP TABLE " + TABLE_PARTY;
     }
 
-    public static abstract class JournalColumns implements BaseColumns {
+    public interface JournalColumns extends BaseColumns {
 
         //Values for Journal Table
-        public static final String TABLE_JOURNAL = "journal";
-        public static final String JOURNAL_ID = "id";
-        public static final String COL_JOURNAL_DATE = "date";
-        public static final String COL_JOURNAL_ADDED_DATE = "addedDate";
-        public static final String COL_JOURNAL_TYPE = "type";
-        public static final String COL_JOURNAL_AMOUNT = "amount";
-        public static final String COL_JOURNAL_NOTE = "note";
-        public static final String COL_PARTY_ID = "merchantId";
+        String TABLE_JOURNAL = "journal";
+        String JOURNAL_ID = "id";
+        String COL_JOURNAL_DATE = "date";
+        String COL_JOURNAL_ADDED_DATE = "addedDate";
+        String COL_JOURNAL_TYPE = "type";
+        String COL_JOURNAL_AMOUNT = "amount";
+        String COL_JOURNAL_NOTE = "note";
+        String COL_PARTY_ID = "merchantId";
 
-        public static final String SQL_CREATE_ENTRIES_JOURNALS =
+        String SQL_CREATE_ENTRIES_JOURNALS =
                 "CREATE TABLE " + TABLE_JOURNAL +
                         " ( " + JOURNAL_ID + INTEGER + " PRIMARY KEY AUTOINCREMENT, " +
                         COL_JOURNAL_NOTE + TEXT_TYPE + COMMA_SEP +
@@ -75,20 +71,20 @@ public final class DailyJournalContract {
                         COL_PARTY_ID + LONG +
                         " )";
 
-        public static final String SQL_DROP_ENTRIES_JOURNALS =
+        String SQL_DROP_ENTRIES_JOURNALS =
                 "DROP TABLE " + TABLE_JOURNAL;
 
     }
 
-    public static abstract class AttachmentColumns implements BaseColumns {
+    public interface AttachmentColumns extends BaseColumns {
 
         //Values for Attachment Table
-        public static final String TABLE_NAME_ATTACHMENTS = "attachment";
-        public static final String ATTACHMENT_ID = "id";
-        public static final String COL_ATTACHMENT_NAME = "fileName";
-        public static final String COL_FK_JOURNAL_ID = "journalId";
+        String TABLE_NAME_ATTACHMENTS = "attachment";
+        String ATTACHMENT_ID = "id";
+        String COL_ATTACHMENT_NAME = "fileName";
+        String COL_FK_JOURNAL_ID = "journalId";
 
-        public static final String SQL_CREATE_ENTRIES_ATTACHMENTS =
+        String SQL_CREATE_ENTRIES_ATTACHMENTS =
                 "CREATE TABLE " + TABLE_NAME_ATTACHMENTS +
                         " (" +
                         ATTACHMENT_ID + INTEGER + " PRIMARY KEY AUTOINCREMENT," +
@@ -96,7 +92,7 @@ public final class DailyJournalContract {
                         COL_FK_JOURNAL_ID + LONG +
                         " )";
 
-        public static final String SQL_DROP_ENTRIES_ATTACHMENTS =
+        String SQL_DROP_ENTRIES_ATTACHMENTS =
                 "DROP TABLE " + TABLE_NAME_ATTACHMENTS;
 
     }

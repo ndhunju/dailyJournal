@@ -15,7 +15,7 @@ public class Journal implements Serializable{
 	private String mNote;
 	private long  mPartyId;
 	private double mAmount;
-	private long mAddedDate; //Date when the journal was recorded
+	private long mCreatedDate; //Date when the journal was recorded
 
     //Class constructor
     public Journal(long partyId){
@@ -24,7 +24,7 @@ public class Journal implements Serializable{
         mType = Type.Debit;
         mPartyId = partyId;
         long time = Calendar.getInstance().getTimeInMillis();
-        mDate = mAddedDate = time;
+        mDate = mCreatedDate = time;
     }
 
 
@@ -64,8 +64,8 @@ public class Journal implements Serializable{
      * app rather than the date the actual Journal was made
      * @return
      */
-	public long getAddedDate() {
-		return mAddedDate;
+	public long getCreatedDate() {
+		return mCreatedDate;
 	}
 
     /**
@@ -74,8 +74,8 @@ public class Journal implements Serializable{
      * retrieved from the database or other form of backup data
      * @param date
      */
-	public void setAddedDate(long date){
-		mAddedDate = date;
+	public void setCreatedDate(long date){
+		mCreatedDate = date;
 	}
 
 	public Type getType() {
@@ -110,7 +110,7 @@ public class Journal implements Serializable{
 	public Journal clone(){
 		Journal tempJournal = new Journal(mPartyId, mDate, mId);
 		tempJournal.setPartyId(mPartyId);
-		tempJournal.setAddedDate(mAddedDate);
+		tempJournal.setCreatedDate(mCreatedDate);
 		tempJournal.setAmount(mAmount);
 		tempJournal.setType(mType);
 		tempJournal.setNote(mNote);
@@ -127,7 +127,7 @@ public class Journal implements Serializable{
 		mDate = journal.getDate();
 		mId = journal.getId();
 		mPartyId = journal.getPartyId();
-		mAddedDate = journal.getAddedDate();
+		mCreatedDate = journal.getCreatedDate();
 		mAmount = journal.getAmount();
 		mType = journal.getType();
 		mNote = journal.getNote();

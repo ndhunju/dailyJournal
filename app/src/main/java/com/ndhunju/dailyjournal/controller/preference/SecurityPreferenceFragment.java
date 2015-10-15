@@ -4,13 +4,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.test.TouchUtils;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
+/**
+ * Sub class of {@link PreferenceFragment} for handling Security Preferences
+ */
 public class SecurityPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     //Constants
@@ -36,17 +39,16 @@ public class SecurityPreferenceFragment extends PreferenceFragment implements Sh
         pincodeET = (EditTextPreference)findPreference(getString(R.string.key_pref_pincode_val_et));
         pincodeET.setDialogTitle(getString(R.string.sum_pincode_val));
 
+        pincodeEnableCB = (CheckBoxPreference)findPreference(getString(R.string.key_pref_pincode_cb));
+
         ((EditTextPreference)findPreference(getString(R.string.key_pref_pincode_time_et)))
                 .setDialogTitle(getString(R.string.str_minutes));
-
-        pincodeEnableCB = (CheckBoxPreference)findPreference(getString(R.string.key_pref_pincode_cb));
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getView().setBackgroundColor(getResources().getColor(android.R.color.white));
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -60,8 +62,11 @@ public class SecurityPreferenceFragment extends PreferenceFragment implements Sh
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         //Check if the changed preference is Reminder Checkbox or reminder interval preference
         if (key.equals(getString(R.string.key_pref_pincode_cb))) {
-            if (((CheckBoxPreference) findPreference(key)).isChecked())
+            if (((CheckBoxPreference) findPreference(key)).isChecked()){
+                //Alert user to enter the pind code
                 UtilsView.alert(getActivity(), getString(R.string.msg_please, getString(R.string.sum_pincode_val)));
+            }
+
         }
     }
 
@@ -71,7 +76,7 @@ public class SecurityPreferenceFragment extends PreferenceFragment implements Sh
     @Override
     public void onStop() {
         //disable the pincode lock if pincode is empty
-        if(pincodeET.getText().equals(PreferenceService.NO_PASSCODE_VAL))
+        if(pincodeET.getText().equals(PreferenceService.DEF_PASSCODE))
             pincodeEnableCB.setChecked(false);
         super.onStop();
     }

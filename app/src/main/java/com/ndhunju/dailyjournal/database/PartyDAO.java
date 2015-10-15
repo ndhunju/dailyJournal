@@ -12,14 +12,17 @@ import com.ndhunju.dailyjournal.model.Party;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is Data Access Object for Party
+ */
 public class PartyDAO implements GenericDAO<Party, Long> {
 
-
+    //Variables
     private SQLiteOpenHelper mSqLiteOpenHelper;
 
+    //Constructor
     public PartyDAO(SQLiteOpenHelper sqLiteOpenHelper){
         mSqLiteOpenHelper = sqLiteOpenHelper;
-
     }
 
     /**
@@ -41,8 +44,9 @@ public class PartyDAO implements GenericDAO<Party, Long> {
                 PartyColumns.PARTY_ID + "=" + id, null, null, null, null, null);
 
         if(!c.moveToFirst()) return null;
-
-        return fromCursor(c);
+        Party party = fromCursor(c);
+        c.close();
+        return party;
     }
 
     /**
@@ -86,15 +90,15 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return sqlSt.executeUpdateDelete();
     }
 
-
-
     public Party find(String partyName){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, null, PartyColumns.COL_PARTY_NAME + "= ?",
                 new String[]{partyName}, null, null, null);
 
         if(!c.moveToFirst())   return null;
-        return fromCursor(c);
+        Party party = fromCursor(c);
+        c.close();
+        return party;
     }
 
     @Override
@@ -105,11 +109,10 @@ public class PartyDAO implements GenericDAO<Party, Long> {
 
         List<Party> temp = new ArrayList<>();
         if(!c.moveToFirst()) return temp;
-
         do{
             temp.add(fromCursor(c));
         }while(c.moveToNext());
-
+        c.close();
         return temp;
     }
 
@@ -172,7 +175,6 @@ public class PartyDAO implements GenericDAO<Party, Long> {
 
 
     //Static methods
-
     public static long create(Party party, SQLiteDatabase db){
         return db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
     }

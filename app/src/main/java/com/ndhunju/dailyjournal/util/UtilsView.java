@@ -11,6 +11,7 @@ import com.ndhunju.dailyjournal.R;
 
 /**
  * Created by dhunju on 9/24/2015.
+ * Utility class for views
  */
 public class UtilsView {
 

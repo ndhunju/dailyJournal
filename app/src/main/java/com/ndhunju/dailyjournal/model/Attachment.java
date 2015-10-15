@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 /**
  * Created by dhunju on 9/18/2015.
+ * POJO for representing Attachments of a Journal
+ * Attachments are generally picture so far
  */
 public class Attachment implements Serializable{
 

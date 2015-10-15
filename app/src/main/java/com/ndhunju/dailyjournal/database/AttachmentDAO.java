@@ -31,6 +31,26 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
         return db.insert(AttachmentColumns.TABLE_NAME_ATTACHMENTS, null, toContentValues(attch));
     }
 
+    /**
+     * Bulk insertion can increase the performance of insertion.
+     * @param attachments
+     */
+    public void bulkInsert(List<Attachment> attachments){
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        db.beginTransaction();
+        try{
+            for(Attachment attachment : attachments){
+                db.insert(AttachmentColumns.TABLE_NAME_ATTACHMENTS, null, toContentValues(attachment));
+            }
+            db.setTransactionSuccessful();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+
+    }
+
 
     @Override
     public Attachment find(Long id) {
@@ -40,8 +60,9 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
                             selection, null, null, null, null, null);
 
         if(!c.moveToFirst()) return null;
-
-        return fromCursor(c);
+        Attachment attachment = fromCursor(c);
+        c.close();
+        return attachment ;
     }
 
     @Override
@@ -56,7 +77,7 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
         do{
             temp.add(fromCursor(c));
         }while(c.moveToNext());
-
+        c.close();
         return temp;
     }
 
@@ -71,6 +92,8 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
 
         do{ attchs.add(fromCursor(c));}
         while(c.moveToNext());
+
+        c.close();
         return attchs;
     }
 

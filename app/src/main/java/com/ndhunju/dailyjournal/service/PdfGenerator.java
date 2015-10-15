@@ -11,6 +11,7 @@ import java.io.OutputStream;
 
 /**
  * Created by dhunju on 9/27/2015.
+ * This class can be used to Generate PDF files
  */
 class PdfGenerator {
 

@@ -2,6 +2,8 @@ package com.ndhunju.dailyjournal.controller;
 
 import android.app.Application;
 
+import com.ndhunju.dailyjournal.service.Setup;
+
 /**
  * Created by dhunju on 10/7/2015.
  * Base class for those who need to maintain global application state. You can provide your own
@@ -21,4 +23,6 @@ public class DailyJournalApplication extends Application {
         //Load defaults setttings
         Setup.from(getBaseContext()).loadSettings();
     }
+
+
 }

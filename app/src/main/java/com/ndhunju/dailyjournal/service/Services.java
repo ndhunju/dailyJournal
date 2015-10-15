@@ -13,6 +13,7 @@ import com.ndhunju.dailyjournal.database.PartyDAO;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsZip;
 
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class Services {
 
-	//Declare variables
+	//Variables
 	private Context mContext;
 	private DbHelper mDbHelper;
 
@@ -32,6 +33,7 @@ public class Services {
 	private JournalDAO journalDAO;
 	private AttachmentDAO attachmentDAO;
 
+	//Static variable
 	private static Services mServices;
 
 	public static Services getInstance(Context con) {
@@ -40,10 +42,9 @@ public class Services {
 	}
 
 	//Constructor
-	private Services(Context con) {
-		mContext = con;
+	private Services(@NonNull Context context) {
+		mContext = context;
 		mDbHelper = new DbHelper(mContext);
-
 		partyDAO = new PartyDAO(mDbHelper);
 		journalDAO = new JournalDAO(mDbHelper);
 		attachmentDAO = new AttachmentDAO(mDbHelper);
@@ -51,13 +52,12 @@ public class Services {
 
     /**
      * Creates a backup file of existing data along with attachments.
-     *
-     * @return : It retuns the absolute path of the backup file.
+     * @return : absolute path of the backup file.
      * @throws IOException
      */
     public String createBackUp(@NonNull String dir) throws IOException {
         //1.Create JSON with latest data
-        JsonConverter converter = JsonConverter.getInstance(mServices);
+        JsonConverterString converter = JsonConverterString.getInstance(mContext);
         converter.createJSONFile();
 
         //2. Zip app folder  as all the attachments and json file are here
@@ -79,7 +79,7 @@ public class Services {
         UtilsZip.zip(directoryToZip, zipFile);
 
         //let know that a new file has been created so that it appears in the computer
-            MediaScannerConnection.scanFile(mContext,
+        MediaScannerConnection.scanFile(mContext,
                     new String[]{backupFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
 
         Log.i("BackUp", "Backup file created");
@@ -87,6 +87,10 @@ public class Services {
         return zipFile.getAbsolutePath();
     }
 
+    /**
+     * Return the reference for the {@link Context} this class holds
+     * @return
+     */
     public Context getContext(){
         return  mContext;
     }
@@ -118,16 +122,20 @@ public class Services {
 		return partyDAO.getNamesAsArray();
 	}
 
-
-
 	/**
-	 * Adds passed party to the party list in its right alphabetical order
+	 * Adds passed party to the database
 	 * @param party
 	 */
 	public long addParty(Party party) {
 		return partyDAO.create(party);
 	}
 
+    /**
+     * Adds party with passed name argument and returns a party
+     * object with its id in the database
+     * @param name
+     * @return
+     */
 	public Party addParty(String name){
 		Party party = new Party(name);
 		long partyId = addParty(party);
@@ -135,7 +143,12 @@ public class Services {
 		return party;
 	}
 
-
+    /**
+     * Deletes the party along with its Journals
+     * and attachments
+     * @param party
+     * @return
+     */
 	public boolean deleteParty(Party party){
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		boolean success = false;
@@ -148,13 +161,11 @@ public class Services {
 			success = true;
 		}catch (Exception e){
 			e.printStackTrace();
-
 		}finally {
 			db.endTransaction();
 		}
 		return success;
 	}
-
 
 	public boolean updateParty(Party party){
 		return (partyDAO.update(party) > 0);
@@ -171,10 +182,13 @@ public class Services {
 		return journalDAO.find(journalId);
 	}
 
+    /**
+     * Returns an instance of new journal which doesn't belong to any party
+     * @return
+     */
     public Journal getNewJournal(){
         //get the last created new journal's id
-        KeyValPersistence persistence = KeyValPersistence.from(mContext);
-        long rowId = persistence.get(String.valueOf(Constants.ID_NEW_JOURNAL), 0);
+        long rowId = getNewJournalId();
         //get the journal from the table
         Journal newJournal = null;
         if(rowId != 0){newJournal= journalDAO.find(rowId);}
@@ -184,12 +198,16 @@ public class Services {
             newJournal = new Journal(Constants.NO_PARTY);
             long id = journalDAO.create(newJournal);
             newJournal.setId(id);
-            //save the id of new journal
-            persistence.putLong(String.valueOf(Constants.ID_NEW_JOURNAL), id);
+            //save the id of new journal.
+            setNewJournalId(id);
         }
         return newJournal;
     }
 
+    /**
+     * Returns Id for the new Journal
+     * @return
+     */
     public long getNewJournalId(){
         //get the last created new journal's id
         KeyValPersistence persistence = KeyValPersistence.from(mContext);
@@ -197,12 +215,49 @@ public class Services {
         return rowId;
     }
 
-
-    public void deleteNewJournal(Journal newJournal){
-        journalDAO.delete(newJournal);
+    /**
+     * Stores the id of the new journal
+     * @param id
+     */
+    public void setNewJournalId(long id){
+        //get the last created new journal's id
+        KeyValPersistence persistence = KeyValPersistence.from(mContext);
+        persistence.putLong(String.valueOf(Constants.ID_NEW_JOURNAL), id);
     }
 
-    public void addNewJournal(Journal newJournal){
+    /**
+     * Deletes newly created Journal that is not associated with any party.
+     * To delete a journal that belongs to a party use {@link #deleteJournal(Journal}
+     * @param newJournal
+     */
+    public boolean deleteNewJournal(Journal newJournal){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.beginTransaction();
+        boolean success =false;
+        try{
+            //delete the relevant attachments
+            for(Attachment attch : attachmentDAO.findAll(newJournal.getId()))
+                deleteAttachment(attch);
+            //delete the journal
+            journalDAO.delete(newJournal);
+            db.setTransactionSuccessful();
+            success = true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+
+        return  success;
+    }
+
+    /**
+     * Updates new journal and makes necessary changes to Party table like modify the
+     * balance. This method should be used only with the Journal that is not associated
+     * any Party in the table
+     * @param newJournal
+     */
+    public void updateNewJournal(Journal newJournal){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         db.beginTransaction();
         try{
@@ -223,6 +278,11 @@ public class Services {
 		return new ArrayList<>();
 	}
 
+    /**
+     * Adds Journal that is associated with a Party
+     * @param journal
+     * @return
+     */
 	public long addJournal(Journal journal){
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		db.beginTransaction();
@@ -241,6 +301,11 @@ public class Services {
         return id;
 	}
 
+    /**
+     * Deletes the journal from the table along with associated Attachments
+     * @param journal
+     * @return
+     */
 	public boolean deleteJournal(Journal journal){
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		db.beginTransaction();
@@ -249,13 +314,11 @@ public class Services {
 			//delete the relevant attachments
 			for(Attachment attch : attachmentDAO.findAll(journal.getId()))
 				deleteAttachment(attch);
-
 			//delete the journal
 			journalDAO.delete(journal);
-
 			//subtract from the Dr/Cr column in party table
-			if(!(updatePartyAmount(journal, "-") > 0)) throw new Exception("No rows updated");
-
+			if(!(updatePartyAmount(journal, "-") > 0))
+                throw new Exception("No rows updated");
 			db.setTransactionSuccessful();
 			success = true;
 		}catch (Exception e){
@@ -274,18 +337,24 @@ public class Services {
 	}
 
 	/**
-	 * Helper method
-	 * @param journal
-	 * @param operation
+	 * Helper method that updates the debit or credit column
+     * of a party based on journal type
+	 * @param updatedJournal : journal that has been updated
+	 * @param operation : + or - ; + performs similar to x += x;
 	 */
-	private int updatePartyAmount(Journal journal, String operation){
-		if(journal.getType() == Journal.Type.Debit){
-			return partyDAO.updateDr(journal.getPartyId(), journal.getAmount(), operation);
+	private int updatePartyAmount(Journal updatedJournal, String operation){
+		if(updatedJournal.getType() == Journal.Type.Debit){
+			return partyDAO.updateDr(updatedJournal.getPartyId(), updatedJournal.getAmount(), operation);
 		}else{
-			return partyDAO.updateCr(journal.getPartyId(), journal.getAmount(), operation);
+			return partyDAO.updateCr(updatedJournal.getPartyId(), updatedJournal.getAmount(), operation);
 		}
 	}
 
+    /**
+     * Deletes all the journal of passed party
+     * @param partyId
+     * @return
+     */
 	private boolean deleteAllJournals(long partyId){
 		for(Journal j : journalDAO.findAll(partyId))
 			for(Attachment attch : attachmentDAO.findAll(j.getId()))
@@ -295,43 +364,48 @@ public class Services {
 		return true;
 	}
 
-	public boolean updateJournal(Journal journal){
-		//possible changes in journal
-		/* 1. Amount Change => if(type == dr) drAmt -= amount : crAmt -= amount
-		 * 2. Date change => just change the date in journal row
-		 * 3. Type (Dr/Cr) change =>  if(type == dr) drAmt -= amount & crAmt += amount
-		 * 4. Combination of above things
-		 * For most effecient way you can handle cases separately
-		 * but for now we will just delete old journal and add changed one
-		 * as a new journal
-		 */
-		SQLiteDatabase db = mDbHelper.getWritableDatabase();
-		db.beginTransaction();
-		boolean success =false;
-		try{
-			//make changes to party
-			//when the journal type is changed, the logic fails. So,
-			//1. get old journal from database and use it to update the party table
-			Journal oldJournal = journalDAO.find(journal.getId());
-			//subtract from the Dr/Cr column in party table
-			if(!(updatePartyAmount(oldJournal, "-") > 0)) throw new Exception("No rows updated");
+    /**
+     * Updates the journal and associated party table
+     */
+    public boolean updateJournal(Journal journal) {
+        /*
+        * Possible changes in the journal,
+     * 1. Amount Change => if(type == dr) drAmt -= amount : crAmt -= amount
+     * 2. Date change => just change the date in journal row
+     * 3. Type (Dr/Cr) change =>  if(type == dr) drAmt -= amount & crAmt += amount
+     * 4. Combination of above things
+     * For most effecient way you can handle cases separately
+     * but for now we will just delete old journal and add changed one
+     * as a new journal
+         */
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.beginTransaction();
+        boolean success = false;
+        try {
+            //make changes to party
+            //when the journal type is changed, the logic fails. So,
+            //1. get old journal from database and use it to update the party table
+            Journal oldJournal = journalDAO.find(journal.getId());
+            //subtract from the Dr/Cr column in party table
+            if (!(updatePartyAmount(oldJournal, "-") > 0))
+                throw new Exception("No rows updated");
 
-			//update the party table with new values of the journal
-			updatePartyAmount(journal, "+");
+            //update the party table with new values of the journal
+            updatePartyAmount(journal, "+");
 
             //update the journal
             journalDAO.update(journal);
 
-			db.setTransactionSuccessful();
-			success = true;
-		}catch (Exception e){
-			e.printStackTrace();
-		}finally {
-			db.endTransaction();
-		}
+            db.setTransactionSuccessful();
+            success = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
 
-		return  success;
-	}
+        return success;
+    }
 
 	/********************ATTACHMENT SERVICES ************************/
 
@@ -355,6 +429,10 @@ public class Services {
 		attachmentDAO.create(attachment);
 	}
 
+    public void addAttachments(List<Attachment> attachments){
+        attachmentDAO.bulkInsert(attachments);
+    }
+
 	/**
 	 * Deletes the attachment from physical storage as
 	 * well as from the table. Use {@link #deleteAttachment(Attachment)}
@@ -372,6 +450,12 @@ public class Services {
 		return true;
 	}
 
+    /**
+     * Deletes the attachment from physical storage as
+     * well as from the table. Use {@link #deleteAttachment(Attachment)}
+     * if you have the attachment object.
+     * @return
+     */
 	public boolean deleteAttachment(Attachment attch){
 		if(!UtilsFile.deleteFile(attch.getPath()))
 			return false;
@@ -401,6 +485,11 @@ public class Services {
 		return mDbHelper.dropAllTables();
 	}
 
+    /**
+     * Deletes all the rows in the tables but not the schema. It
+     * doesn't reset any autoincrement columns
+     * @return
+     */
 	public boolean truncateAllTables(){
 		//doesn't reset the table ids
 		partyDAO.truncateTable();
@@ -409,8 +498,13 @@ public class Services {
 		return true;
 	}
 
+    /**
+     * Deletes all the table and recreates them
+     * @return
+     */
     public boolean recreateDB(){
-        return mDbHelper.recreateDB();
+        return mDbHelper.dropAllTables() &&
+        mDbHelper.createDB();
     }
 
 
@@ -424,8 +518,8 @@ public class Services {
 		boolean success = true;
 		try{
 			success &= recreateDB();
-			success &= KeyValPersistence.from(context).nukeAll(mContext);
-			success &= PreferenceService.from(context).nukeAll();
+			success &= KeyValPersistence.from(context).clear(mContext);
+			success &= PreferenceService.from(context).clear();
 			success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(context));
 		}catch (Exception e){
 			e.printStackTrace();

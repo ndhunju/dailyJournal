@@ -6,6 +6,5 @@
     <string name="warning_select_party">Please select the party!</string>
     <string name="warning_cant_change_party">You can not change the party.</string>
     <string name="warning_overpaid_msg">You have overpaid %1$s by %2$s %3$.2f</string>
-    <string name="warning_ext_mismatch">The extension of the backup file is incorrect</string>
     <string name="warning_restore">Restoring to Old Backup File will erase all new Entries</string>
 </resources>

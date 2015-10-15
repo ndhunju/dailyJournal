@@ -24,9 +24,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-        <service android:name=".controller.NotificationService"
+        <service android:name=".controller.service.NotificationService"
             android:exported="false"/>
-        <service android:name=".controller.AutoBackupService"
+        <service android:name=".controller.service.AutoBackupService"
             android:exported="false"/>
 
         <activity android:name=".controller.HomeActivity">
@@ -47,8 +47,6 @@
                   android:windowSoftInputMode="stateHidden"/>
 
         <!-- https://developers.google.com/drive/android/java-client -->
-        <activity android:name=".controller.importExport.ImportExportActivity"
-                  android:label="@string/title_activity_import_export"/>
         <activity android:name=".controller.lock.LockScreenActivity"
                   android:label="@string/title_activity_lock_screen"/>
         <activity android:name=".controller.party.PartyListActivity"

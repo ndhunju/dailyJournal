@@ -15,13 +15,10 @@ public class DbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "DailyJournal.db";
-    
-    private Context mContext;
 
+    //Constructor
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        mContext =  context;
-        //onCreate(getWritableDatabase());
     }
     
     //this method is create only if no database has been created before
@@ -62,9 +59,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 db.execSQL(UtilsDb.getDropTableSt(AttachmentColumnsOld.TABLE_NAME_ATTACHMENTS, prefix));
 
                 db.setTransactionSuccessful();
+                Log.i(DATABASE_NAME, "Finished transferring data from version " + oldVersion + " to " + newVersion);
             }catch (RuntimeException ex){
                 ex.printStackTrace();
-
             }finally {
                 db.endTransaction();
             }
@@ -77,16 +74,13 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
-    
-    public boolean recreateDB(){
+
+    /**
+     * Creates tables in the database
+     * @return
+     */
+    public boolean createDB(){
     	SQLiteDatabase db = getWritableDatabase();
-    	try{db.execSQL(PartyColumns.SQL_DROP_ENTRIES_PARTY);
-		}catch(Exception e){e.printStackTrace(); return false;}
-		try{db.execSQL(JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
-		}catch (Exception e) {e.printStackTrace();return false;}
-		try{db.execSQL(AttachmentColumns.SQL_DROP_ENTRIES_ATTACHMENTS);
-		}catch (Exception e) {e.printStackTrace();return false;}
-		
 		db.execSQL(PartyColumns.SQL_CREATE_ENTRIES_PARTY);
         db.execSQL(JournalColumns.SQL_CREATE_ENTRIES_JOURNALS);
         db.execSQL(AttachmentColumns.SQL_CREATE_ENTRIES_ATTACHMENTS);

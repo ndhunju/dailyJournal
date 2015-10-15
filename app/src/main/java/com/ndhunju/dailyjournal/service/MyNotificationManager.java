@@ -14,14 +14,16 @@ import com.ndhunju.dailyjournal.controller.HomeActivity;
 
 /**
  * Created by dhunju on 10/2/2015.
+ * This class
  */
 public class MyNotificationManager {
 
     private static final String TAG = MyNotificationManager.class.getSimpleName();
 
-    private NotificationManager notificationManager;
+    //Variables
+    private NotificationManager mNotificationManager;
     private Context mContext;
-    private int numNotif;
+    private int mNumNotif;
 
     private static MyNotificationManager myNotificationManager;
 
@@ -32,14 +34,14 @@ public class MyNotificationManager {
     }
 
     private MyNotificationManager(Context context) {
-        notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         mContext = context;
-        numNotif = 0;
+        mNumNotif = 0;
     }
 
     private Notification create(String title, String msg, PendingIntent pendingIntent) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext)
-                .setNumber(++numNotif)
+                .setNumber(++mNumNotif)
                 .setSmallIcon(R.drawable.ic_ganesh_book_16px)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_ganesh_book_small))
                 .setContentTitle(title)
@@ -51,17 +53,9 @@ public class MyNotificationManager {
 
     }
 
-    private NotificationCompat.Builder getBuilder(String title, String msg){
-        return new NotificationCompat.Builder(mContext)
-                .setSmallIcon(R.drawable.ic_ganesh_book_16px)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_ganesh_book_small))
-                .setContentTitle(title)
-                .setContentText(msg);
-    }
-
     public Notification create(int titleResId, int msgResId, PendingIntent pendingIntent) {
         return new NotificationCompat.Builder(mContext)
-                .setNumber(++numNotif)
+                .setNumber(++mNumNotif)
                 .setSmallIcon(R.drawable.ic_ganesh_book_16px)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_ganesh_book_small))
                 .setContentTitle(mContext.getString(titleResId))
@@ -72,6 +66,21 @@ public class MyNotificationManager {
     }
 
     /**
+     * This methods returns an instance of {@link android.support.v4.app.NotificationCompat.Builder}
+     * so that you can add additional options to the builder before creating {@link NotificationCompat}
+     * @param title
+     * @param msg
+     * @return
+     */
+    private NotificationCompat.Builder getBuilder(String title, String msg){
+        return new NotificationCompat.Builder(mContext)
+                .setSmallIcon(R.drawable.ic_ganesh_book_16px)
+                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_ganesh_book_small))
+                .setContentTitle(title)
+                .setContentText(msg);
+    }
+
+    /**
      * Helper method to create reminder for backing up the data
      * @param interval
      * @return
@@ -79,13 +88,18 @@ public class MyNotificationManager {
     public Notification createBackupCreatedNotif(String interval){
         Intent intent = new Intent(mContext, HomeActivity.class);
         PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, 0);
-        return create(mContext.getString(R.string.app_name) + "-" +
-                        mContext.getString(R.string.str_backup)
-                , mContext.getString(R.string.msg_finished, interval
+        return create(mContext.getString(R.string.app_name)
+                        + "-" +mContext.getString(R.string.str_backup)
+                        , mContext.getString(R.string.msg_finished, interval
                         + " "+ mContext.getString(R.string.str_backup)),
-                notifPI);
+                        notifPI);
     }
 
+    /**
+     * Helper method that returns a {@link Notification} to display in notification
+     * bar while the backup is being created
+     * @return
+     */
     public Notification createBackingUpNotif(){
         Intent intent = new Intent(mContext, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -96,7 +110,7 @@ public class MyNotificationManager {
         NotificationCompat.Builder builder = MyNotificationManager.from(mContext)
                 .getBuilder(mContext.getString(R.string.str_auto_backup),
                         mContext.getString(R.string.msg_creating,
-                                mContext.getString(R.string.str_backup)))
+                        mContext.getString(R.string.str_backup)))
                 .setProgress(100, 20, true)
                 .setOngoing(true)
                 .setContentIntent(pendingIntent);
@@ -104,11 +118,11 @@ public class MyNotificationManager {
     }
 
     public void notify(Notification notification, int id) {
-        notificationManager.notify(TAG, id, notification);
+        mNotificationManager.notify(TAG, id, notification);
     }
 
     public void cancel(int id){
-        notificationManager.cancel(TAG, id);
+        mNotificationManager.cancel(TAG, id);
     }
 
     public void nukeAll() {

@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
-import com.ndhunju.dailyjournal.controller.DatePickerFragment;
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
 import com.ndhunju.dailyjournal.database.DailyJournalContract.*;
 import com.ndhunju.dailyjournal.database.DailyJournalContractOld.*;
@@ -16,15 +15,16 @@ import com.ndhunju.dailyjournal.model.Party;
 
 /**
  * Created by dhunju on 9/26/2015.
+ * This class transfers data from old database to new database
  */
 public class DBTransferService {
 
-    private static DBTransferService mServiceOld;
+    private static DBTransferService mTransferService;
     private SQLiteDatabase mDb;
 
     public static DBTransferService getInstance(SQLiteDatabase db){
-        if(mServiceOld == null) mServiceOld = new DBTransferService(db);
-        return mServiceOld;
+        if(mTransferService == null) mTransferService = new DBTransferService(db);
+        return mTransferService;
     }
 
     private DBTransferService(SQLiteDatabase db){
@@ -93,7 +93,7 @@ public class DBTransferService {
             String attachmentHashCode = c.getString(c.getColumnIndexOrThrow(JournalColumnsOld.COL_JOURNAL_ATTACHMENTS));
 
             journal.setDate(date);
-            journal.setAddedDate(addedDate);
+            journal.setCreatedDate(addedDate);
             journal.setType(type);
             journal.setAmount(amount);
             journal.setNote(note);

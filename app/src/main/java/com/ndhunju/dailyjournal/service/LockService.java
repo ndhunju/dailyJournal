@@ -9,8 +9,12 @@ import com.ndhunju.dailyjournal.controller.lock.LockScreenActivity;
 
 /**
  * Created by dhunju on 10/2/2015.
+ * This class provides service for Locking the app with pincode.
+ * This class could adopt Singleton design but just to try the
+ * other way all variables and methods are made static
  */
 public class LockService {
+
 
     //Variable
     private static long passcodeActivatedTime;
@@ -39,7 +43,7 @@ public class LockService {
      */
     private static boolean isPasscodeActive(Context con){
         preferenceService = PreferenceService.from(con);
-        int lockTimeInMin = preferenceService.getLockTime();
+        int lockTimeInMin = getLockTime(con);
         long difference = (System.currentTimeMillis()-passcodeActivatedTime);
         updatePasscodeTime();
         return difference  < lockTimeInMin*60*1000;
@@ -50,5 +54,16 @@ public class LockService {
      */
     public static void updatePasscodeTime(){
         passcodeActivatedTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Returns the lock time in minute that the user has set
+     * @param con
+     * @return
+     */
+    public static int getLockTime(Context con){
+        preferenceService = PreferenceService.from(con);
+        return preferenceService.getVal(R.string.key_pref_pincode_time_et,
+                PreferenceService.DEF_LOCK_TIME);
     }
 }

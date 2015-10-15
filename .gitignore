@@ -90,3 +90,4 @@ local.properties
 .idea
 .gradle
 build/
+.idea/workspace.xml

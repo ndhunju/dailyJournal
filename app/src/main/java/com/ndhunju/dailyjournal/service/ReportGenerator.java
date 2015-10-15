@@ -22,10 +22,10 @@ import java.util.List;
  */
 public class ReportGenerator{
 
-    private static final int TOTAL_SIZE = 15;
+    private static final int TOTAL_SIZE = 15;           //abstract size for a column
     private static final String FILE_EXT = ".txt";
-    private static final String COL_SEPARATOR = "|";
-    private static final String GAP_CHAR = " " ;
+    private static final String COL_SEPARATOR = "|";    //column divider
+    private static final String GAP_CHAR = " " ;        //similar to padding concept
 
     //variables
     private Party mParty;

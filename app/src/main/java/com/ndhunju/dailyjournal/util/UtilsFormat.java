@@ -12,9 +12,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by dhunju on 9/24/2015.
- */
 public class UtilsFormat {
 
     public static final String TAG = UtilsFormat.class.getSimpleName();

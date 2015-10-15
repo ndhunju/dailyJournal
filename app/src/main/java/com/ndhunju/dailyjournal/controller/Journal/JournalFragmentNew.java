@@ -20,11 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.DatePickerFragment;
+import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
-import com.ndhunju.dailyjournal.controller.importExport.EraseAllAsyncTask;
-import com.ndhunju.dailyjournal.controller.importExport.ImportExportActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -54,10 +52,10 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     //Declaring UI Widgets variable
     private PartyListDialog partylistdialog;
     private EditText amountEt;
+    private TextView drCrTv;
     private EditText noteEt;
     private Button partyBtn;
     private Button dateBtn;
-    private TextView drCrTv;
     private TextView idTV;
 
     //Declaring variables
@@ -91,7 +89,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             UtilsView.alert(getActivity(), getString(R.string.msg_move_old_data), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //Switch to ImportExportActivity to import old data to new directory
+                    //Switch to MyPreferenceActivity to import old data to new directory
                     Intent importOldDataIntent = new Intent(getActivity(), MyPreferenceActivity.class);
                     importOldDataIntent.putExtra(Constants.KEY_IMPORT_OLD_DATA, true);
                     startActivityForResult(importOldDataIntent, REQUEST_CODE_IMPORT_OLD_DATA);
@@ -226,7 +224,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                     return;
                 }
 
-                mServices.addNewJournal(tempJournal);
+                mServices.updateNewJournal(tempJournal);
                 //Save selected values so that user doesn't have to selected them again
                 long selectedDate = tempJournal.getDate();
                 long selectedPartyId = tempJournal.getPartyId();
@@ -365,9 +363,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                     tempJournal.setDate(newDate);
 
                 }
-
                 dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
-                Log.d("Selected Date", String.valueOf(tempJournal.getDate()));
                 break;
 
         }

@@ -25,7 +25,7 @@ public class LockScreenActivity extends Activity {
         final String savedPassCode = getSharedPreferences(
                 PreferenceService.DEF_NAME_SHARED_PREFERENCE, Activity.MODE_PRIVATE)
                 .getString(getString(R.string.key_pref_pincode_val_et),
-                        PreferenceService.NO_PASSCODE_VAL);
+                        PreferenceService.DEF_PASSCODE);
 
         //wire up
         final TextView passcodeTV = (TextView)findViewById(R.id.activity_lock_screen_passcodeTV);
@@ -59,7 +59,7 @@ public class LockScreenActivity extends Activity {
                     }else{
                         //if the user clicks Enter with wrong pass code,
                         //Clear text and make PassCodeTextView red
-                        passcodeET.setText(PreferenceService.NO_PASSCODE_VAL);
+                        passcodeET.setText(PreferenceService.DEF_PASSCODE);
                         passcodeTV.setTextColor(getResources().getColor(R.color.red_light_pressed));
                     }
                 }

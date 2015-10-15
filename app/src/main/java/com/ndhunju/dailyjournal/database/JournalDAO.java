@@ -36,8 +36,9 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
                 JournalColumns.JOURNAL_ID + "=" + aLong, null, null, null, null, null);
 
         if(c == null || !c.moveToFirst()) return null;
-
-        return fromCursor(c);
+        Journal journal = fromCursor(c);
+        c.close();
+        return journal;
     }
 
     @Override
@@ -45,12 +46,10 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null, null, null, null, null, null, null);
         List<Journal> temp = new ArrayList<>();
-
         if(!c.moveToFirst()) return temp;
-
         do{temp.add(fromCursor(c));
         }while(c.moveToNext());
-
+        c.close();
         return temp;
     }
 
@@ -63,12 +62,12 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
                             JournalColumns.COL_JOURNAL_DATE, null);
 
         List<Journal> temp = new ArrayList<>();
-
         if(!c.moveToFirst()) return temp;
 
         do{temp.add(fromCursor(c));
         }while(c.moveToNext());
 
+        c.close();
         return temp;
     }
 
@@ -112,7 +111,7 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         values.put(JournalColumns.COL_JOURNAL_DATE, journal.getDate());
         values.put(JournalColumns.COL_JOURNAL_NOTE, journal.getNote());
         values.put(JournalColumns.COL_JOURNAL_TYPE, journal.getType().toString());
-        values.put(JournalColumns.COL_JOURNAL_ADDED_DATE, journal.getAddedDate());
+        values.put(JournalColumns.COL_JOURNAL_ADDED_DATE, journal.getCreatedDate());
         values.put(JournalColumns.COL_PARTY_ID, journal.getPartyId());
         return values;
     }
@@ -127,7 +126,7 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         long partyId = c.getLong(c.getColumnIndex(JournalColumns.COL_PARTY_ID));
 
         Journal journal = new Journal(partyId, date, id);
-        journal.setAddedDate(addedDate);
+        journal.setCreatedDate(addedDate);
         journal.setAmount(amount);
         journal.setType(type);
         journal.setNote(note);

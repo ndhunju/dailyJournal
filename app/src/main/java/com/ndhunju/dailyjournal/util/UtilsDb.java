@@ -2,6 +2,7 @@ package com.ndhunju.dailyjournal.util;
 
 /**
  * Created by dhunju on 9/26/2015.
+ * Utility class
  */
 public class UtilsDb {
 

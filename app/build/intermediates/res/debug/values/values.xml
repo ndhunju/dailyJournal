@@ -280,7 +280,6 @@
     <!-- From: file:/C:/Users/dhunju/workspace_opensource/dailyJournal/app/src/main/res/values/warnings.xml -->
     <eat-comment/>
     <string name="warning_cant_change_party">You can not change the party.</string>
-    <string name="warning_ext_mismatch">The extension of the backup file is incorrect</string>
     <string name="warning_format">The format is incorrect</string>
     <string name="warning_no_attch">No attachment found</string>
     <string name="warning_overpaid_msg">You have overpaid %1$s by %2$s %3$.2f</string>
