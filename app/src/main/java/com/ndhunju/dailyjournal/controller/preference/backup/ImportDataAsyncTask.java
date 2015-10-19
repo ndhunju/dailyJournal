@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
-import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.util.UtilsZip;

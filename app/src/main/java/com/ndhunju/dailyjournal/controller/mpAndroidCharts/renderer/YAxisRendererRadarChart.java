@@ -4,11 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.PointF;
 
-import com.github.mikephil.charting.charts.RadarChart;
-import com.github.mikephil.charting.components.LimitLine;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.RadarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.LimitLine;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.util.List;
 

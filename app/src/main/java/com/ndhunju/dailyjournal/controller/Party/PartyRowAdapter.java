@@ -19,7 +19,6 @@ import java.util.ArrayList;
  */
 class PartyRowAdapter extends ArrayAdapter<Party> {
 
-    private Party currentParty;
 
     public PartyRowAdapter(Context context, ArrayList<Party> parties){
         super(context, R.layout.party_row, parties);
@@ -47,7 +46,7 @@ class PartyRowAdapter extends ArrayAdapter<Party> {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        currentParty  =  getItem(position);
+        Party currentParty  =  getItem(position);
         holder.displayName.setText(currentParty.getName());
         holder.imageView.setImageDrawable(currentParty.getPicturePath().equals("")?
                 getContext().getResources().getDrawable(R.drawable.party_default_pic):

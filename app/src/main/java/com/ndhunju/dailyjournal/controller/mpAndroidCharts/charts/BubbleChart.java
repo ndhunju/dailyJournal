@@ -4,10 +4,10 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.github.mikephil.charting.data.BubbleData;
-import com.github.mikephil.charting.data.BubbleDataSet;
-import com.github.mikephil.charting.interfaces.BubbleDataProvider;
-import com.github.mikephil.charting.renderer.BubbleChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BubbleData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BubbleDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BubbleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.BubbleChartRenderer;
 
 /**
  * The BubbleChart. Draws bubbles. Bubble chart implementation: Copyright 2015

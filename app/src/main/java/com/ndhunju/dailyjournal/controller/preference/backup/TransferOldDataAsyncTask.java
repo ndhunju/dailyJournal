@@ -9,9 +9,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.json.JsonConverterString;
-import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
+import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.util.UtilsZip;
@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 
 /**
  * Created by dhunju on 9/24/2015.

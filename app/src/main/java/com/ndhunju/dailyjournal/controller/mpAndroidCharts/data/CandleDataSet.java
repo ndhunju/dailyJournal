@@ -3,8 +3,8 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.data;
 
 import android.graphics.Paint;
 
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ColorTemplate;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,17 +5,15 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.highlight.BarHighlighter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.BarDataProvider;
-import com.github.mikephil.charting.renderer.BarChartRenderer;
-import com.github.mikephil.charting.renderer.XAxisRendererBarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis.AxisDependency;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarEntry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.BarHighlighter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BarDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.BarChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.XAxisRendererBarChart;
 
 /**
  * Chart that draws bars.

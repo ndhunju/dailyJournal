@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.test.mock.MockContext;
 
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
+import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import org.junit.AfterClass;

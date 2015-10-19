@@ -9,38 +9,72 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5sp"
-        android:orientation="horizontal" >
+        android:layout_marginBottom="5dp"
+        android:background="@color/grey_mild">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/activity_party_circle_iv"
+            android:layout_width="@dimen/party_pic_width"
+            android:layout_height="@dimen/party_pic_width"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="left"
+            android:layout_margin="5dp"
+            android:background="@color/grey"
+            android:src="@drawable/party_default_pic" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/str_balance"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_xlarge" >
-        </TextView>
-        <TextView
-            android:id="@+id/activity_party_balance_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_xlarge" >
-        </TextView>
-    </LinearLayout>
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/activity_party_circle_iv"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/activity_party_name_tv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/str_party"
+                android:textSize="@dimen/text_size_xlarge"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/activity_party_balance_tv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:scrollHorizontally="true"
+                android:text="@string/str_00.00"
+                android:textSize="@dimen/text_size_xlarge" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:background="@color/blue"
+        />
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:id="@+id/activity_party_header_tr"
+        android:layout_marginTop="5dp">
         <TextView
-            android:text="@string/str_no"
+            android:text="@string/str_num"
             android:layout_height="wrap_content"
             android:layout_width="55dp"
             android:gravity="center"
-            android:background="@drawable/heading_shape"
+            android:background="@drawable/cell_header_shape"
             android:padding="5dp"
             android:textSize="@dimen/text_size_medium"
             />
@@ -50,7 +84,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="@dimen/text_size_medium"
-            android:background="@drawable/heading_shape"
+            android:background="@drawable/cell_header_shape"
             android:padding="5dp"
             />
         <TextView
@@ -59,24 +93,26 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="5dp"
-            android:background="@drawable/heading_shape"
+            android:background="@drawable/cell_header_shape"
             android:textSize="@dimen/text_size_medium"
             />
         <TextView
             android:layout_height="wrap_content"
+            android:id="@+id/activity_party_col_header_dr"
             android:layout_weight="1"
             android:text="@string/str_dr"
             android:padding="5dp"
             android:gravity="center"
-            android:background="@drawable/heading_shape"
+            android:background="@drawable/cell_header_shape"
             android:textSize="@dimen/text_size_medium"/>
         <TextView
             android:layout_height="wrap_content"
+            android:id="@+id/activity_party_col_header_cr"
             android:layout_weight="1"
             android:text="@string/str_cr"
             android:gravity="center"
             android:padding="5dp"
-            android:background="@drawable/heading_shape"
+            android:background="@drawable/cell_header_shape"
             android:textSize="@dimen/text_size_medium"/>
     </TableRow>
 

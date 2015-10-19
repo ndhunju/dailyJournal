@@ -1,6 +1,6 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces;
 
-import com.github.mikephil.charting.data.BarData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarData;
 
 public interface BarDataProvider extends BarLineScatterCandleBubbleDataProvider {
 

@@ -1,13 +1,13 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
-import android.os.Bundle;
-import android.app.Fragment;
 import android.app.Activity;
+import android.app.Fragment;
+import android.os.Bundle;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.AppRater;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Constants;
+import com.ndhunju.dailyjournal.service.LockService;
 
 public class JournalActivity extends Activity {
 

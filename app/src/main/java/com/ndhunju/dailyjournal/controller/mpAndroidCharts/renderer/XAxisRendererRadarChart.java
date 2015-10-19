@@ -4,10 +4,10 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 
-import com.github.mikephil.charting.charts.RadarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.RadarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.XAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 public class XAxisRendererRadarChart extends XAxisRenderer {
 

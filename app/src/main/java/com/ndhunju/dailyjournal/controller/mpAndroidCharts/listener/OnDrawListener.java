@@ -1,7 +1,7 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.listener;
 
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.DataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
 
 /**
  * Listener for callbacks when drawing on the chart.

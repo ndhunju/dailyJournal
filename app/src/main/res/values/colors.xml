@@ -13,5 +13,18 @@
     <color name="yellow_pressed">#CCA83D</color>
     <color name="red_light_pressed">#DD3639</color>
 
-    <color name="black_overlay">#66000000</color>
+    <color name="text_title">#4F4F4F</color>
+
+    <color name="red_dark">#660000</color>
+    <color name="purple_dark">#5B2B51</color>
+    <color name="blue_dark">#45619D</color>
+
+    <color name="red_medium">#EA494A</color>
+    <color name="green_medium">#12A88B</color>
+    <color name="blue_medium">#89D5FF</color>
+    <color name="grey_medium">#66000000</color>
+
+    <color name="blue_mild">#EEF9FF</color>
+    <color name="grey_mild">#EAE8E8</color>
+
 </resources>

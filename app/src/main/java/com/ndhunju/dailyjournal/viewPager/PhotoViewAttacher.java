@@ -37,8 +37,6 @@ import android.widget.ImageView.ScaleType;
 
 import java.lang.ref.WeakReference;
 
-
-
 import static android.view.MotionEvent.ACTION_CANCEL;
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_UP;

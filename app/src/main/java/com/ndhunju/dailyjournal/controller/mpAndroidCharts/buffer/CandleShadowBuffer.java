@@ -1,7 +1,7 @@
 
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.buffer;
 
-import com.github.mikephil.charting.data.CandleEntry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CandleEntry;
 
 import java.util.List;
 

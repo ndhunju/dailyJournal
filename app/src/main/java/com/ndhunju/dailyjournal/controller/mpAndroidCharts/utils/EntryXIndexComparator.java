@@ -1,6 +1,6 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils;
 
-import com.github.mikephil.charting.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
 
 import java.util.Comparator;
 

@@ -2,9 +2,7 @@ package com.ndhunju.dailyjournal.controller.preference;
 
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

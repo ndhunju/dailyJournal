@@ -1,13 +1,12 @@
 package com.ndhunju.dailyjournal.controller.party;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
-
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Constants;
+import com.ndhunju.dailyjournal.service.LockService;
 
 /**
  * An activity representing a list of Parties. This activity

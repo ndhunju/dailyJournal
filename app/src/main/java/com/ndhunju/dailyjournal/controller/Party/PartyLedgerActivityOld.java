@@ -120,13 +120,14 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 		if (resultCode != Activity.RESULT_OK)
 			return;
 
+		double balance;
 		switch (requestCode) {
             case REQUEST_JOURNAL_CHGD:
 
                 if(!data.getBooleanExtra(Constants.KEY_JOURNAL_CHGD, false))
                     return;
 
-                double balance = mParty.calculateBalances();
+                balance = mParty.calculateBalances();
                 balanceTV.setText(UtilsFormat.formatCurrency(balance,getActivity() ));
                 balanceTV.setTextColor(balance > 0 ? getResources().getColor(R.color.red_light_pressed)
                                                  : getResources().getColor(R.color.green));
@@ -142,28 +143,32 @@ public class PartyLedgerActivityOld extends FragmentActivity {
                 if(!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false))
                     return;
 
-                Constants.ChangeType type = (Constants.ChangeType) data.getSerializableExtra(Constants.KEY_CHANGE_TYPE);
+                //if party information and journal was not changed, do nothing
+				if (!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false)
+						&& !data.getBooleanExtra(Constants.KEY_JOURNAL_CHGD, false)){
+					return;
+				}
 
-                Intent intent = new Intent();
-                intent.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
+				//relay it to the previous activity as well
+				data.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
+				getActivity().setResult(Activity.RESULT_OK, data);
 
-                switch (type){
-                    case EDITED:
-                        //Party information was changed, update the title
-                        setTitle(data.getStringExtra(Constants.KEY_PARTY_NAME));
-                        intent.putExtra(Constants.KEY_CHANGE_TYPE, Constants.ChangeType.EDITED);
-                        setResult(Activity.RESULT_OK, intent); //relay it to the parent activity
-                        break;
-                    case DELETED:
-                        //close this activity and relay the deletion to parent activity
-                        intent.putExtra(Constants.KEY_CHANGE_TYPE, Constants.ChangeType.DELETED );
-                        setResult(Activity.RESULT_OK, intent);
-                        finish();
-                        break;
+				//Party information or journal was changed, refresh the view
+				mParty = mServices.getParty(mParty.getId());
+				//Check if the party was deleted
+				if(mParty == null){
+					getActivity().finish();
+				}else{
+					balance = mParty.calculateBalances();
+					balanceTV.setText(UtilsFormat.formatCurrency(balance,getActivity() ));
+					balanceTV.setTextColor(balance > 0 ? getResources().getColor(R.color.red_light_pressed)
+							: getResources().getColor(R.color.green));
 
-                }
+					ledgerAdapter = new LedgerRowAdapter(getBaseContext(), mServices.getJournals(mParty.getId()));
+					ledgerListView.setAdapter(ledgerAdapter);
+				}
 
-                break;
+				break;
 		}
 	}
 

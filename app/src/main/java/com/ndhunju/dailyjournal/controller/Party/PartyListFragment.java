@@ -26,6 +26,7 @@ import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.util.ArrayList;
@@ -96,9 +97,9 @@ public class PartyListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_party_list_old, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_party_list, container, false);
 
-        getActivity().setTitle(getString(R.string.str_parties));
+        getActivity().setTitle(UtilsFormat.getPartyFromPref(getActivity()));
         //Wire up widgets
         srchPartyET = (EditText)rootView.findViewById(R.id.fragment_party_list_search_et);
         srchPartyET.addTextChangedListener(new TextWatcher() {
@@ -222,8 +223,9 @@ public class PartyListFragment extends Fragment {
 
         switch (requestCode){
             case REQUEST_PARTY_INFO_CHGD:
-                if(!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false))
+                if(!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false)){
                     return;
+                }
                 refreshList();
                 break;
         }
@@ -284,7 +286,7 @@ public class PartyListFragment extends Fragment {
 
 
     public void refreshList(){
-        mPartyAdapter = new PartyAdapter(getActivity(), mServices.getParties());
+        mPartyAdapter = new PartyCardAdapter(getActivity(), mServices.getParties());
         mPartyLV.setAdapter(mPartyAdapter);
         mPartyLV.setSelection(0);
     }

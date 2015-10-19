@@ -1,8 +1,8 @@
 
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer;
 
-import com.github.mikephil.charting.interfaces.BarLineScatterCandleBubbleDataProvider;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BarLineScatterCandleBubbleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 /**
  * Abstract baseclass of all Renderers.

@@ -1,7 +1,7 @@
 
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.buffer;
 
-import com.github.mikephil.charting.data.BarEntry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarEntry;
 
 import java.util.List;
 

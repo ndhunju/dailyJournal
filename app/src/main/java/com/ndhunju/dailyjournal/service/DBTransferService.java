@@ -5,8 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
-import com.ndhunju.dailyjournal.database.DailyJournalContract.*;
-import com.ndhunju.dailyjournal.database.DailyJournalContractOld.*;
+import com.ndhunju.dailyjournal.database.DailyJournalContract.PartyColumns;
+import com.ndhunju.dailyjournal.database.DailyJournalContractOld.AttachmentColumnsOld;
+import com.ndhunju.dailyjournal.database.DailyJournalContractOld.JournalColumnsOld;
+import com.ndhunju.dailyjournal.database.DailyJournalContractOld.PartyColumnsOld;
 import com.ndhunju.dailyjournal.database.JournalDAO;
 import com.ndhunju.dailyjournal.database.PartyDAO;
 import com.ndhunju.dailyjournal.model.Attachment;

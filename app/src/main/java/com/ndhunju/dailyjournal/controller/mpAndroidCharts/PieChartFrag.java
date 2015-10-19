@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.EasingFunction;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.PieChart;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.Legend;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
@@ -23,10 +24,12 @@ import com.ndhunju.dailyjournal.service.Analytics;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class PieChartFrag extends ChartFragment {
 
     private static final String ARG_CHART_TYPE = "type";
+    public static final int LIMIT_ITEM_CHART = 5;
 
     public static Fragment newInstance(Journal.Type type) {
         Fragment pieChartFrag = new PieChartFrag();
@@ -45,29 +48,32 @@ public class PieChartFrag extends ChartFragment {
         Journal.Type type = (Journal.Type)getArguments().getSerializable(ARG_CHART_TYPE);
 
         mChart = (PieChart) v.findViewById(R.id.pieChart1);
-        mChart.setDescription("");
-
 
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf");
-
-        mChart.setCenterTextTypeface(tf);
-        mChart.setCenterText(generateCenterText(getString(R.string.str_top),
-                type == Journal.Type.Credit ? UtilsFormat.getCrFromPref(getActivity())
-                                            : UtilsFormat.getDrFromPref(getActivity())));
-        mChart.setCenterTextSize(10f);
-        mChart.setCenterTextTypeface(tf);
-
-        // radius of the center hole in percent of maximum radius
-        mChart.setHoleRadius(45f);
         mChart.setTransparentCircleRadius(50f);
+        mChart.setCenterTextTypeface(tf);
+        mChart.setCenterTextSize(10f);
+        mChart.setHoleRadius(45f);
+        mChart.setDescription("");
 
-        Legend l = mChart.getLegend();
-        l.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
+        StringBuilder dscrptn = new StringBuilder(UtilsFormat.getPartyFromPref(getActivity()));
+        dscrptn.append(" ");
+        dscrptn.append(type == Journal.Type.Debit ? getString(R.string.chart_dscrptn_you_owe) :
+                getString(R.string.chart_dscrptn_owe_you));
+
 
         Analytics analytics = Analytics.from(getActivity());
-        Analytics.PartyData partyData = analytics.getTopPartiesByBalance(type, 5);
+        Analytics.PartyData partyData = analytics.getTopPartiesByBalance(type, LIMIT_ITEM_CHART);
 
-        mChart.setData(generatePieData(partyData.names, partyData.balances, partyData.balanceSum ));
+        if(partyData == null){ mChart.setNoDataText(getString(R.string.str_no) + " " + getString(R.string.str_data));}
+        else{
+            mChart.setCenterText(generateCenterText(getString(R.string.str_top) + " " +
+                    partyData.balances.length , dscrptn.toString()));
+            mChart.setData(generatePieData(partyData.names, partyData.balances, partyData.balanceSum));
+        }
+
+        //animate teh chart
+        mChart.animateXY(1500, 1500);
 
         return v;
     }

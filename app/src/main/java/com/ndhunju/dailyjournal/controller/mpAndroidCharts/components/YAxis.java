@@ -2,10 +2,10 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.components;
 
 import android.graphics.Paint;
 
-import com.github.mikephil.charting.formatter.DefaultValueFormatter;
-import com.github.mikephil.charting.formatter.DefaultYAxisValueFormatter;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.formatter.YAxisValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.DefaultValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.DefaultYAxisValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.YAxisValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 /**
  * Class representing the y-axis labels settings and its entries. Only use the setter methods to modify it. Do not

@@ -1,10 +1,10 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight;
 
-import com.github.mikephil.charting.data.ChartData;
-import com.github.mikephil.charting.data.CombinedData;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.interfaces.BarLineScatterCandleBubbleDataProvider;
-import com.github.mikephil.charting.utils.SelectionDetail;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.ChartData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CombinedData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.DataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BarLineScatterCandleBubbleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.SelectionDetail;
 
 import java.util.ArrayList;
 import java.util.List;

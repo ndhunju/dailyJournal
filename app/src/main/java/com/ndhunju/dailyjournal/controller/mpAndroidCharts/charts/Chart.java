@@ -25,26 +25,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.animation.EasingFunction;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.MarkerView;
-import com.github.mikephil.charting.data.ChartData;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.highlight.ChartHighlighter;
-import com.github.mikephil.charting.interfaces.ChartInterface;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.renderer.DataRenderer;
-import com.github.mikephil.charting.renderer.LegendRenderer;
-import com.github.mikephil.charting.formatter.DefaultValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.ChartAnimator;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.Easing;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.EasingFunction;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.Legend;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.MarkerView;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.ChartData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.DataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.DefaultValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.ValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.ChartHighlighter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.ChartInterface;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.listener.ChartTouchListener;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.listener.OnChartGestureListener;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.listener.OnChartValueSelectedListener;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.DataRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.LegendRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -212,6 +212,8 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
         super(context, attrs, defStyle);
         init();
     }
+
+
 
     /**
      * initialize all paints and stuff

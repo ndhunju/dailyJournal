@@ -4,19 +4,18 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.buffer.CandleBodyBuffer;
-import com.github.mikephil.charting.buffer.CandleShadowBuffer;
-import com.github.mikephil.charting.data.CandleData;
-import com.github.mikephil.charting.data.CandleDataSet;
-import com.github.mikephil.charting.data.CandleEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.interfaces.CandleDataProvider;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.ChartAnimator;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.buffer.CandleBodyBuffer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.buffer.CandleShadowBuffer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CandleData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CandleDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CandleEntry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.CandleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ColorTemplate;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Transformer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.util.List;
 

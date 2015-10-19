@@ -1,16 +1,13 @@
 package com.ndhunju.dailyjournal.controller.fragment;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.LinearLayout;
@@ -18,6 +15,9 @@ import android.widget.LinearLayout;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.service.Constants;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class DatePickerFragment extends DialogFragment {
 	

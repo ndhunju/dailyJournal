@@ -25,13 +25,21 @@ import java.util.List;
 public class MyPreferenceActivity extends PreferenceActivity {
 
     //Variables
-    public static List<Header> headers = new ArrayList<>();
+    public static List<Header> headers = new ArrayList<>();;
     private ListAdapter preferenceListAdapter;
+
+    @Override
+    public void onBuildHeaders(List<Header> target) {
+        loadHeadersFromResource(R.xml.preference_headers, target);
+        headers.clear();
+        for (Header header : target) {
+            headers.add(header);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         if(savedInstanceState == null){
             preferenceListAdapter = new PreferenceListAdapter(headers, MyPreferenceActivity.this);
@@ -80,18 +88,9 @@ public class MyPreferenceActivity extends PreferenceActivity {
     }
 
     @Override
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.preference_headers, target);
-        headers.clear();
-        for (Header header : target) {
-            headers.add(header);
-        }
-    }
-
-    @Override
     protected boolean isValidFragment(String fragmentName) {
         for(Header header : headers){
-            if(header.fragment.equals(fragmentName))
+            if(fragmentName.equals(header.fragment))
                 return true;
         }
         return false;

@@ -20,11 +20,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
-import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
+import com.ndhunju.dailyjournal.controller.DashboardActivity;
 import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
+import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
+import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
@@ -57,6 +58,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     private Button partyBtn;
     private Button dateBtn;
     private TextView idTV;
+    Button drBtn, crBtn;
 
     //Declaring variables
     private Journal tempJournal;
@@ -140,7 +142,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         });
 
         dateBtn = (Button) v.findViewById(R.id.activity_home_date_btn);
-        dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
         dateBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,8 +152,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             }
         });
 
-        partyBtn = (Button) v.findViewById(R.id.fragment_home_merchant_btn);
-        partyBtn.setText(mParty == null ? getString(R.string.str_select_party) : mParty.getName());
+        partyBtn = (Button) v.findViewById(R.id.fragment_home_party_btn);
         partyBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -164,7 +164,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             }
         });
 
-        Button drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
+        drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
         drBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -174,7 +174,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             }
         });
 
-        Button crBtn = (Button) v.findViewById(R.id.fragment_home_credit_btn);
+        crBtn = (Button) v.findViewById(R.id.fragment_home_credit_btn);
         crBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -251,7 +251,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(getString(R.string.title_activity_journal));
+        getActivity().setTitle(UtilsFormat.getJournalFromPref(getActivity()));
     }
 
 
@@ -280,6 +280,9 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear(); //When the app crashes, old menu items remain creating duplicates
         inflater.inflate(R.menu.menu_home, menu);
+        //Set party menu from Preference
+        MenuItem partyMenu = menu.findItem(R.id.menu_main_party_list);
+        partyMenu.setTitle(UtilsFormat.getPartyFromPref(getActivity()));
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -291,14 +294,19 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.menu_party_list:
+            case R.id.menu_main_party_list:
                 startActivityForResult(new Intent(getActivity(), PartyListActivity.class)
                 , REQUEST_CODE_GENERAL);
                 break;
 
-            case R.id.menu_journal_preference:
+            case R.id.menu_main_preference:
                 Intent preferencesIntent = new Intent(getActivity(), MyPreferenceActivity.class);
                 startActivityForResult(preferencesIntent, REQUEST_CODE_GENERAL);
+                break;
+
+            case R.id.menu_main_dashboard:
+                Intent dashboardIntent = new Intent(getActivity(), DashboardActivity.class);
+                startActivity(dashboardIntent);
                 break;
         }
 
@@ -309,12 +317,16 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
      * Sets value of the UI Widgets based on passed parameters
      */
     private void setValues(Journal tempJournal, Party party) {
-        idTV.setText(getString(R.string.str_id) + UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
-        amountEt.setText(tempJournal.getAmount() == 0 ? "" : UtilsFormat.formatCurrency(tempJournal.getAmount(), getActivity()));
-        dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
-        partyBtn.setText(party == null ? getString(R.string.str_select_party) : party.getName());
-        noteEt.setText(tempJournal.getNote());
         setTextDrCr(tempJournal.getType());
+        noteEt.setText(tempJournal.getNote());
+        drBtn.setText(UtilsFormat.getDrFromPref(getActivity()));
+        crBtn.setText(UtilsFormat.getCrFromPref(getActivity()));
+        dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
+        amountEt.setText(tempJournal.getAmount() == 0 ? "" : UtilsFormat.formatCurrency(tempJournal.getAmount(), getActivity()));
+        idTV.setText(getString(R.string.str_id) + UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
+        partyBtn.setText(mParty == null ? getString(R.string.str_select) + " " + UtilsFormat.getPartyFromPref(getActivity())
+                : mParty.getName());
+
         mParty = party;
 
 

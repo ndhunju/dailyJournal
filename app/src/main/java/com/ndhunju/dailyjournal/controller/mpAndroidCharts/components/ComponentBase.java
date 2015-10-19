@@ -4,7 +4,7 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.components;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 /**
  * This class encapsulates everything both Axis, Legend and LimitLines have in common.

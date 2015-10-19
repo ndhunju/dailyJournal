@@ -1,8 +1,7 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter;
 
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.LineDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.LineDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.LineDataProvider;
 
 /**
  * Interface for providing a custom logic to where the filling line of a LineDataSet

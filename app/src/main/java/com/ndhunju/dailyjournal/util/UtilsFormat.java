@@ -95,6 +95,26 @@ public class UtilsFormat {
         return doubleCurrency;
     }
 
+    public static String getDrFromPref(Context context){
+        PreferenceService ps = PreferenceService.from(context);
+        return ps.getVal(R.string.key_pref_dr_choice, context.getString(R.string.str_received_by));
+    }
+
+    public static String getCrFromPref(Context context){
+        PreferenceService ps = PreferenceService.from(context);
+        return ps.getVal(R.string.key_pref_cr_choice, context.getString(R.string.str_given_by));
+    }
+
+    public static String getJournalFromPref(Context context){
+        PreferenceService ps = PreferenceService.from(context);
+        return ps.getVal(R.string.key_pref_journal_choice, context.getString(R.string.str_journal));
+    }
+
+    public static String getPartyFromPref(Context context){
+        PreferenceService ps = PreferenceService.from(context);
+        return ps.getVal(R.string.key_pref_party_choice, context.getString(R.string.str_party));
+    }
+
     /**
      * Returns String representation of an int Id.
      * Eg. 1 = "00000001"
@@ -109,5 +129,7 @@ public class UtilsFormat {
             zeros += "0";
         return zeros + nextId;
     }
+
+
 
 }

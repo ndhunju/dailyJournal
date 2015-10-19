@@ -12,15 +12,15 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.components.Legend.LegendPosition;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.ChartData;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.listener.PieRadarChartTouchListener;
-import com.github.mikephil.charting.utils.SelectionDetail;
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.Easing;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.Legend.LegendPosition;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.XAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.ChartData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.DataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.listener.PieRadarChartTouchListener;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.SelectionDetail;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

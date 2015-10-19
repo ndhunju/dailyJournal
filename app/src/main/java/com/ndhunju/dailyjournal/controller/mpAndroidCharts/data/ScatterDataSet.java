@@ -3,8 +3,8 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.data;
 
 import android.graphics.Path;
 
-import com.github.mikephil.charting.charts.ScatterChart.ScatterShape;
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.ScatterChart.ScatterShape;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

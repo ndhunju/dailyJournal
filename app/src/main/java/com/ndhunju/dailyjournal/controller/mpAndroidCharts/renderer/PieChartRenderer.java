@@ -13,18 +13,17 @@ import android.text.Layout;
 import android.text.SpannableString;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
 
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.ChartAnimator;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.LineChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.PieChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.PieData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.PieDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.ValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.util.List;
 

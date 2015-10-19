@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.util.Log;
 
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

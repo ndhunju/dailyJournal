@@ -82,7 +82,7 @@ public class ReportGenerator{
         StringBuilder sb = new StringBuilder();
 
         /**Header Row **/
-        sb.append(addGap(R.string.str_no, 3));
+        sb.append(addGap(R.string.str_num, 3));
         sb.append(addGap(R.string.str_date));
         sb.append(addGap(R.string.str_dr));
         sb.append(addGap(R.string.str_cr));
@@ -182,7 +182,7 @@ public class ReportGenerator{
             bw.append(newLine());
 
             /**Header Row **/
-            bw.append(addGap(R.string.str_no, 3));
+            bw.append(addGap(R.string.str_num, 3));
             bw.append(addGap(R.string.str_date));
             bw.append(addGap(R.string.str_dr));
             bw.append(addGap(R.string.str_cr));

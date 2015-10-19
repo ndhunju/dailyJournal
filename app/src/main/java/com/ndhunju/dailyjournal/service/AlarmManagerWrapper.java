@@ -1,10 +1,10 @@
 package com.ndhunju.dailyjournal.service;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+
+import java.util.Calendar;
 
 /**
  * This is a Wrapper class for {@link AlarmManager}

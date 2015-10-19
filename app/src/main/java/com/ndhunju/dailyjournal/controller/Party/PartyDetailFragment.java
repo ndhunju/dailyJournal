@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.ContextMenu;
@@ -16,6 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -25,10 +29,12 @@ import com.ndhunju.dailyjournal.controller.journal.JournalActivity;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.ReportGenerator;
+import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -39,26 +45,30 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 public class PartyDetailFragment extends Fragment {
 
     //Constants
-    private static final int REQUEST_JOURNAL_CHGD = 5457;
+    private static final int REQUEST_JOURNAL__CHGD = 156;
     private static final int REQUEST_PARTY_INFO_CHGD = 135;
 
     //Variables
     private Party mParty;
-    private double balance;
     private Services mServices;
 
     //View Variables
     private View footerView;
+    private TextView nameTV;
+    private ImageView picIV;
+    private TableRow headerRow;
     private TextView balanceTV;
     private ListView ledgerListView;
-    private LedgerAdapter ledgerAdapter;
+    private ArrayAdapter ledgerAdapter;
+
 
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PartyDetailFragment() {}
+    public PartyDetailFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,8 +81,7 @@ public class PartyDetailFragment extends Fragment {
             mParty = mServices.getParty(partyId);
 
             //if party in not found
-            if(mParty == null) mParty = new Party(getString(R.string.str_parties));
-            balance = mParty.calculateBalances();
+            if (mParty == null) mParty = new Party(getString(R.string.str_party));
             setHasOptionsMenu(true);
         }
     }
@@ -83,27 +92,92 @@ public class PartyDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_party_detail, container, false);
 
         //Wire up the widgets/view
+        picIV = (ImageView) rootView.findViewById(R.id.activity_party_circle_iv);
+        nameTV = (TextView) rootView.findViewById(R.id.activity_party_name_tv);
+        ledgerListView = (ListView) rootView.findViewById(R.id.activity_party_ll);
         balanceTV = (TextView) rootView.findViewById(R.id.activity_party_balance_tv);
-        ledgerListView = (ListView)rootView.findViewById(R.id.activity_party_ll);
+        headerRow = (TableRow)rootView.findViewById(R.id.activity_party_header_tr);
 
-        balanceTV.setText(UtilsFormat.formatCurrency(balance, getActivity()));
+        ((TextView)rootView.findViewById(R.id.activity_party_col_header_dr))
+                .setText(getString(R.string.str_dr));
+
+        ((TextView)rootView.findViewById(R.id.activity_party_col_header_cr))
+                .setText(getString(R.string.str_cr));
+
+
         balanceTV.setSingleLine();
 
-        ledgerAdapter = new LedgerAdapter(getActivity(), mServices.getJournals(mParty.getId()));
+        setPartyViews(mParty);
+        setLedgerListViews(mServices.getJournals(mParty.getId()));
+        setFooterView(mParty);
+
+        return rootView;
+    }
+
+    private void setPartyViews(Party party){
+        picIV.setImageDrawable(party.getPicturePath().equals("") ?
+                getActivity().getResources().getDrawable(R.drawable.party_default_pic) :
+                Drawable.createFromPath(party.getPicturePath()));
+
+        nameTV.setText(party.getName());
+
+        balanceTV.setText(UtilsFormat.formatCurrency(party.calculateBalances(), getActivity()));
+        balanceTV.setTextColor(getResources().getColor(party.calculateBalances() < 0 ? R.color.red_medium : R.color.green_medium));
+
+        getActivity().setTitle(mParty.getName());
+    }
+
+    private void setLedgerListViews(ArrayList<Journal> journals) {
+
+        PreferenceService ps  = PreferenceService.from(getActivity());
+        int pos = ps.getVal(R.string.key_pref_ledger_view, 0);
+
+        switch (pos){
+
+            case 0: //Card View
+                ledgerAdapter = new LedgerCardAdapter(getActivity(), journals);
+                headerRow.setVisibility(View.GONE);
+                break;
+            case 1: //Classic View
+
+                ledgerAdapter = new LedgerRowAdapter(getActivity(),journals);
+                headerRow.setVisibility(View.VISIBLE);
+                break;
+        }
+
         ledgerListView.setAdapter(ledgerAdapter);
         ledgerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                if(id>0) createJournalIntent(id);
+                if (id > 0) createJournalIntent(id);
             }
         });
 
         ledgerListView.setOnCreateContextMenuListener(this);
-        footerView = getFooterRow(mParty, inflater);
-        ledgerListView.addFooterView(footerView);
-        getActivity().setTitle(mParty.getName());
 
-        return rootView;
+    }
+
+    private void setFooterView(Party party){
+
+        //remove the old view
+        if(footerView != null) ledgerListView.removeFooterView(footerView);
+
+        //get the type of view user has selected
+        PreferenceService ps  = PreferenceService.from(getActivity());
+        int pos = ps.getVal(R.string.key_pref_ledger_view, 0);
+
+
+        switch (pos){
+
+            case 0: //Card View
+                footerView = getFooterCard(party);
+                break;
+            case 1: //Classic View
+                footerView = getFooterRow(party);
+                break;
+        }
+
+        ledgerListView.addFooterView(footerView);
     }
 
     private void createJournalIntent(long id) {
@@ -111,12 +185,12 @@ public class PartyDetailFragment extends Fragment {
         Intent intent = new Intent(getActivity(), JournalActivity.class);
         intent.putExtra(Constants.KEY_JOURNAL_ID, id);
         intent.putExtra(Constants.KEY_PARTY_ID, mParty.getId());
-        startActivityForResult(intent, REQUEST_JOURNAL_CHGD);
+        startActivityForResult(intent, REQUEST_JOURNAL__CHGD);
     }
 
     //Add Totals in the footer row
-    private TableRow getFooterRow(Party party, LayoutInflater layoutInflater) {
-        TableRow footerRow = (TableRow)layoutInflater.inflate(R.layout.ledger_row, null);
+    private TableRow getFooterRow(Party party) {
+        TableRow footerRow = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.ledger_row, null);
         TextView col0 = (TextView) footerRow.findViewById(R.id.ledger_row_col0);
         TextView col1 = (TextView) footerRow.findViewById(R.id.ledger_row_col1);
         TextView col2 = (TextView) footerRow.findViewById(R.id.ledger_row_col2);
@@ -133,65 +207,72 @@ public class PartyDetailFragment extends Fragment {
         return footerRow;
     }
 
+    private View getFooterCard(Party party) {
+        FrameLayout footerRow = (FrameLayout) getActivity().getLayoutInflater().inflate(R.layout.ledger_card_footer, null);
+        TextView totalCr = (TextView) footerRow.findViewById(R.id.ledger_card_footer_cr_total);
+        totalCr.setTextColor(getResources().getColor(R.color.red_medium));
+        TextView totalDr = (TextView) footerRow.findViewById(R.id.ledger_card_footer_dr_total);
+        totalDr.setTextColor(getResources().getColor(R.color.green_medium));
+
+        totalCr.setText(UtilsFormat.formatCurrency(party.getCreditTotal(), getActivity()) + getString(R.string.str_cr));
+        totalDr.setText(UtilsFormat.formatCurrency(party.getDebitTotal(), getActivity()) + getString(R.string.str_cr));
+        addAttributes(TextUtils.TruncateAt.MARQUEE, totalCr, totalDr);
+        return footerRow;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (resultCode != Activity.RESULT_OK)
             return;
 
+        boolean twoPane = getActivity() instanceof PartyListActivity;
+
+
         switch (requestCode) {
-            case REQUEST_JOURNAL_CHGD:
-
-                if(!data.getBooleanExtra(Constants.KEY_JOURNAL_CHGD, false))
-                    return;
-
-                double balance = mParty.calculateBalances();
-                balanceTV.setText(UtilsFormat.formatCurrency(balance, getActivity()));
-
-                mParty = mServices.getParty(mParty.getId());
-                ledgerAdapter = new LedgerAdapter(getActivity(), mServices.getJournals(mParty.getId()));
-                ledgerListView.setAdapter(ledgerAdapter);
-                ledgerListView.removeFooterView(footerView);
-                ledgerListView.addFooterView(footerView= getFooterRow(mParty, getActivity().getLayoutInflater()));
-                balanceTV.setText(UtilsFormat.formatCurrency(mParty.calculateBalances(), getActivity()));
-
-                //Alert the user if balance is negative
-                break;
 
             case REQUEST_PARTY_INFO_CHGD:
+            case REQUEST_JOURNAL__CHGD:
 
-                if(!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false))
+                //if party information and journal was not changed, do nothing
+                if (!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false)
+                        && !data.getBooleanExtra(Constants.KEY_JOURNAL_CHGD, false)){
                     return;
+                }
 
-                Constants.ChangeType type = (Constants.ChangeType) data.getSerializableExtra(Constants.KEY_CHANGE_TYPE);
+                //Party information or journal was changed, get the latest
+                mParty = mServices.getParty(mParty.getId());
+                if(mParty != null) {
+                    setPartyViews(mParty);
+                    setLedgerListViews(mServices.getJournals(mParty.getId()));
+                    setFooterView(mParty);
+                }
 
-                Intent intent = new Intent();
-                intent.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
-
-                boolean twoPane = false;
                 //If {@link PartyDetailFragment} in embedded in {@link PartyListActivity} notify
                 //{@link PartyListFragment} about the change
-                if(twoPane = getActivity() instanceof PartyListActivity){
-                    ((PartyListFragment)getActivity().getFragmentManager()
+                if (twoPane) {
+                    ((PartyListFragment) getActivity().getFragmentManager()
                             .findFragmentById(R.id.item_list))
                             .refreshList();
+
+                    //Check if the party was deleted. mParty should be null
+                    if (mParty == null){
+                        mParty = new Party("");
+                        setPartyViews(mParty);
+                        setLedgerListViews(new ArrayList<Journal>());
+                        setFooterView(mParty);
+                    }
+                }else {
+
+                    //relay it to the previous activity as well
+                    data.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
+                    getActivity().setResult(Activity.RESULT_OK, data);
+
+                    //Check if the party was deleted. mParty should be null
+                    if (mParty == null)  getActivity().finish();
+                    break;
                 }
 
-                switch (type){
-                    case EDITED:
-                        //Party information was changed, update the title
-                        getActivity().setTitle(data.getStringExtra(Constants.KEY_PARTY_NAME));
-                        intent.putExtra(Constants.KEY_CHANGE_TYPE, Constants.ChangeType.EDITED);
-                        getActivity().setResult(Activity.RESULT_OK, intent); //relay it to the parent activity
-                        break;
-                    case DELETED:
-                        if(twoPane) return;
-                        intent.putExtra(Constants.KEY_CHANGE_TYPE, Constants.ChangeType.DELETED);
-                        getActivity().setResult(Activity.RESULT_OK, intent);
-                        getActivity().finish();
-                        break;
-                }
-
-                break;
         }
 
 
@@ -206,10 +287,10 @@ public class PartyDetailFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_party_activity_info:
                 //Create intent to pass current mParty id to PartyActivity
-                Intent i = new Intent(getActivity(),PartyActivity.class);
+                Intent i = new Intent(getActivity(), PartyActivity.class);
                 i.putExtra(Constants.KEY_PARTY_ID, mParty.getId());
                 startActivityForResult(i, REQUEST_PARTY_INFO_CHGD);
                 break;
@@ -248,23 +329,23 @@ public class PartyDetailFragment extends Fragment {
 
 
         //Get the list item position
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        ListView lv = (ListView)info.targetView.getParent();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        ListView lv = (ListView) info.targetView.getParent();
 
         final Journal journal;
         Object obj = lv.getAdapter().getItem(info.position);
         //obj could be an instance of Party or Journal
-        if(!(obj instanceof Journal)) {
+        if (!(obj instanceof Journal)) {
             //return false so that other fragment can handle it
             return false;
         }
 
-        journal = (Journal)obj;
+        journal = (Journal) obj;
 
         //get the id of select journal
         long journalId = info.id;
 
-        switch (id){
+        switch (id) {
             case PartyListActivity.CONTEXT_MENU_EDIT:
                 createJournalIntent(journalId);
                 break;
@@ -279,6 +360,12 @@ public class PartyDetailFragment extends Fragment {
                         //remove same journal from the adapter as well rather than reloading
                         ledgerAdapter.remove(journal);
                         ledgerAdapter.notifyDataSetChanged();
+                        //get updates copy of Party and update the views
+                        mParty = mServices.getParty(mParty.getId());
+                        setPartyViews(mParty);
+                        //update the list view as well
+                        setFooterView(mParty);
+
                         String msg = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
                         UtilsView.toast(getActivity(), msg);
                     }
@@ -289,16 +376,16 @@ public class PartyDetailFragment extends Fragment {
         return true;
     }
 
-    public static void addAttributes(TextUtils.TruncateAt truncateAt, TextView... view){
-        for(TextView v : view){
+    public static void addAttributes(TextUtils.TruncateAt truncateAt, TextView... view) {
+        for (TextView v : view) {
             v.setSingleLine();
             v.setEllipsize(truncateAt);
         }
     }
 
-    private static void addDrawables(Context con, View... view){
-        for(View v : view){
-            v.setBackgroundDrawable(con.getResources().getDrawable(R.drawable.heading_shape));
+    private static void addDrawables(Context con, View... view) {
+        for (View v : view) {
+            v.setBackgroundDrawable(con.getResources().getDrawable(R.drawable.cell_header_shape));
         }
     }
 }

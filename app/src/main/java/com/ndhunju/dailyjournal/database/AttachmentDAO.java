@@ -5,9 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ndhunju.dailyjournal.model.Attachment;
-
 import com.ndhunju.dailyjournal.database.DailyJournalContract.AttachmentColumns;
+import com.ndhunju.dailyjournal.model.Attachment;
 
 import java.util.ArrayList;
 import java.util.List;

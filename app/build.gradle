@@ -24,7 +24,9 @@ android {
         // you can add the snippet below to your build.gradle to change this behavior:
         unitTests.returnDefaultValues = true
     }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 }
+
 
 
 
@@ -44,4 +46,5 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.android.support:support-v4:22.2.0'
     compile 'com.google.android.gms:play-services-drive:7.5.0'
+    compile 'com.android.support:support-v13:22.2.0'
 }

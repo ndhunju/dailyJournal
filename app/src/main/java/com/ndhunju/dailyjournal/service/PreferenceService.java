@@ -77,10 +77,6 @@ public class PreferenceService {
         return getSharedPreference().getString(key, defaultVal);
     }
 
-    public boolean getVal(String key, boolean defaultVal){
-        return getSharedPreference().getBoolean(key, defaultVal);
-    }
-
     public String getVal(int resKeyId, String defaultVal){
         return getSharedPreference().getString(getKey(resKeyId), defaultVal);
     }
@@ -98,6 +94,7 @@ public class PreferenceService {
         return Long.parseLong(getSharedPreference().getString(getKey(resKeyId),
                 String.valueOf(defaultVal)));
     }
+
 
     public boolean clear(){
         return getSharedPreference().edit().clear().commit();

@@ -1,13 +1,13 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight;
 
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.DataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BarLineScatterCandleBubbleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.SelectionDetail;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.interfaces.BarLineScatterCandleBubbleDataProvider;
-import com.github.mikephil.charting.utils.SelectionDetail;
-import com.github.mikephil.charting.utils.Utils;
 
 /**
  * Created by Philipp Jahoda on 21/07/15.

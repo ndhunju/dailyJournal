@@ -4,20 +4,20 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BubbleData;
-import com.github.mikephil.charting.data.BubbleDataSet;
-import com.github.mikephil.charting.data.CandleData;
-import com.github.mikephil.charting.data.CombinedData;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.ScatterData;
-import com.github.mikephil.charting.highlight.CombinedHighlighter;
-import com.github.mikephil.charting.interfaces.BarDataProvider;
-import com.github.mikephil.charting.interfaces.BubbleDataProvider;
-import com.github.mikephil.charting.interfaces.CandleDataProvider;
-import com.github.mikephil.charting.interfaces.LineDataProvider;
-import com.github.mikephil.charting.interfaces.ScatterDataProvider;
-import com.github.mikephil.charting.renderer.CombinedChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BubbleData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BubbleDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CandleData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CombinedData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.LineData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.ScatterData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.CombinedHighlighter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BarDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BubbleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.CandleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.LineDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.ScatterDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.CombinedChartRenderer;
 
 /**
  * This chart class allows the combination of lines, bars, scatter and candle

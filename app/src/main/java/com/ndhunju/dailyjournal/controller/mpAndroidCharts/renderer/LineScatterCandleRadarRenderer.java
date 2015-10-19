@@ -3,9 +3,9 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer;
 import android.graphics.Canvas;
 import android.graphics.Path;
 
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.data.LineScatterCandleRadarDataSet;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.ChartAnimator;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.LineScatterCandleRadarDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 /**
  * Created by Philipp Jahoda on 11/07/15.

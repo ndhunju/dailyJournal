@@ -4,9 +4,9 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.data;
 import android.graphics.Typeface;
 import android.util.Log;
 
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis.AxisDependency;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.ValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
 
 import java.util.ArrayList;
 import java.util.Arrays;

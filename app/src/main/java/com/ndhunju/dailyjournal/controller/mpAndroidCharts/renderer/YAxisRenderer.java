@@ -6,14 +6,14 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Path;
 
-import com.github.mikephil.charting.components.LimitLine;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
-import com.github.mikephil.charting.utils.PointD;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.LimitLine;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis.AxisDependency;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis.YAxisLabelPosition;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.PointD;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Transformer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.util.List;
 

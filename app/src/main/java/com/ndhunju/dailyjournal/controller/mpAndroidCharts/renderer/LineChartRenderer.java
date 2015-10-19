@@ -7,17 +7,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.buffer.CircleBuffer;
-import com.github.mikephil.charting.buffer.LineBuffer;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.LineDataProvider;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.ChartAnimator;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.buffer.CircleBuffer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.buffer.LineBuffer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.LineChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.LineData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.LineDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.LineDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Transformer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.util.List;
 

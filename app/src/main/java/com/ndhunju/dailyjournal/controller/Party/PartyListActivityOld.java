@@ -18,10 +18,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
+import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Services;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class PartyListActivityOld extends FragmentActivity {
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 
-		setContentView(R.layout.fragment_party_list_old);
+		setContentView(R.layout.fragment_party_list);
 		setTitle(getString(R.string.title_activity_party));
 		
 		mServices = Services.getInstance(PartyListActivityOld.this);

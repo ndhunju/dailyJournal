@@ -5,9 +5,9 @@ import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.RectF;
 
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.CandleEntry;
-import com.github.mikephil.charting.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CandleEntry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
 
 import java.util.List;
 

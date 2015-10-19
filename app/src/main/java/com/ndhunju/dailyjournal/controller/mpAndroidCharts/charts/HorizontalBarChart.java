@@ -7,19 +7,19 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.github.mikephil.charting.components.Legend.LegendPosition;
-import com.github.mikephil.charting.components.XAxis.XAxisPosition;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.highlight.HorizontalBarHighlighter;
-import com.github.mikephil.charting.renderer.HorizontalBarChartRenderer;
-import com.github.mikephil.charting.renderer.XAxisRendererHorizontalBarChart;
-import com.github.mikephil.charting.renderer.YAxisRendererHorizontalBarChart;
-import com.github.mikephil.charting.utils.TransformerHorizontalBarChart;
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.Legend.LegendPosition;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.XAxis.XAxisPosition;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis.AxisDependency;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarEntry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.HorizontalBarHighlighter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.HorizontalBarChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.XAxisRendererHorizontalBarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.YAxisRendererHorizontalBarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.TransformerHorizontalBarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 /**
  * BarChart with horizontal bar orientation. In this implementation, x- and y-axis are switched, meaning the YAxis class

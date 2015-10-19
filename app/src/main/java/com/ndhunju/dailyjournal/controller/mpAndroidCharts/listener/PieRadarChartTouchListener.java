@@ -7,12 +7,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.charts.PieRadarChartBase;
-import com.github.mikephil.charting.charts.RadarChart;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.utils.SelectionDetail;
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.PieChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.PieRadarChartBase;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.RadarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.SelectionDetail;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

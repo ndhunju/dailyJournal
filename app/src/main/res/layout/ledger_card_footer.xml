@@ -7,82 +7,49 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/blue_faint"
+        android:background="@color/blue_medium"
         android:padding="@dimen/activity_horizontal_margin">
 
 
-        <LinearLayout
-            android:id="@+id/ledger_card_attch_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/ledger_card_attch_no_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_00.00" />
-
-            <ImageView
-                android:id="@+id/ledger_card_attch_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_margin="1dp"
-                android:contentDescription="@string/str_attachment"
-                android:src="@drawable/ic_attachment_black_32dp" />
-        </LinearLayout>
-
 
         <LinearLayout
-            android:id="@+id/ledger_card_drcr_ll"
+            android:id="@+id/ledger_card_footer_drcr_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/ledger_card_amount_tv"
+                android:id="@+id/ledger_card_footer_dr_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/str_00.00"
+                android:text="25.36"
+                android:layout_gravity="right"
                 android:textSize="@dimen/text_size_medium" />
 
             <TextView
-                android:id="@+id/ledger_card_drcr_tv"
+                android:id="@+id/ledger_card_footer_cr_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/str_dr"
+                android:text="152.36"
+                android:layout_gravity="right"
                 android:textSize="@dimen/text_size_medium" />
         </LinearLayout>
 
 
             <TextView
-                android:id="@+id/ledger_card_date_tv"
+                android:id="@+id/ledger_card_footer_balance_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@id/ledger_card_drcr_ll"
-                android:layout_toRightOf="@id/ledger_card_attch_ll"
-                android:textSize="@dimen/text_size_medium"
-                android:text="@string/str_date" />
-
-            <TextView
-                android:id="@+id/ledger_card_note_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/ledger_card_date_tv"
-                android:layout_toLeftOf="@id/ledger_card_drcr_ll"
-                android:layout_toRightOf="@id/ledger_card_attch_ll"
-                android:textStyle="italic"
-                android:layout_marginTop="5dp"
-                android:text="@string/str_note" />
-
+                android:textSize="@dimen/text_size_large"
+                android:textAllCaps="true"
+                android:text="@string/str_balance" />
 
     </RelativeLayout>
 </FrameLayout>

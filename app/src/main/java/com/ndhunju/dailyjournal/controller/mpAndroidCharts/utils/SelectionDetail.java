@@ -1,6 +1,6 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils;
 
-import com.github.mikephil.charting.data.DataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.DataSet;
 
 /**
  * Class that encapsulates information of a value that has been

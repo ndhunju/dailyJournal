@@ -1,9 +1,9 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter;
 
 
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.LineDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.LineData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.LineDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.LineDataProvider;
 
 /**
  * Default formatter that calculates the position of the filled line.

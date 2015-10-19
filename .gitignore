@@ -91,3 +91,8 @@ local.properties
 .gradle
 build/
 .idea/workspace.xml
+
+android-support-v7-appcompat
+app/build.gradle
+app/build.gradle
+appcompat_v7

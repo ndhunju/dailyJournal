@@ -3,8 +3,8 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.jobs;
 
 import android.view.View;
 
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Transformer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 /**
  * Runnable that is used for viewport modifications since they cannot be

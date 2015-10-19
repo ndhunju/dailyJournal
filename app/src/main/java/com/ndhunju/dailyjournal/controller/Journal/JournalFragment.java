@@ -1,10 +1,10 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,8 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
+import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
@@ -46,6 +46,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	private Button dateBtn;
 	private TextView drCrTv;
 	private TextView idTV;
+	Button drBtn, crBtn;
 
 	//Declaring variables
 	private boolean journalChanged;
@@ -93,31 +94,32 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		View v = inflater.inflate(R.layout.fragment_journal, new LinearLayout(getActivity()));
 
 		idTV = (TextView) v.findViewById(R.id.fragment_journal_id);
-		idTV.setText(UtilsFormat.getStringId(mJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
-
 		drCrTv = (TextView) v.findViewById(R.id.fragment_journal_dr_cr_tv);
 
 		amountEt = (EditText) v.findViewById(R.id.fragment_home_amount_et);
 		amountEt.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if( !s.toString().equals("")){
-					try{
-						mJournal.setAmount( UtilsFormat.parseCurrency(s.toString(), getActivity()));
+				if (!s.toString().equals("")) {
+					try {
+						mJournal.setAmount(UtilsFormat.parseCurrency(s.toString(), getActivity()));
 						journalChanged = true;
-					}catch(Exception e){
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				  }
 				}
+			}
+
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
 			@Override
-			public void afterTextChanged(Editable s) {}
+			public void afterTextChanged(Editable s) {
+			}
 		});
 
 		dateBtn = (Button) v.findViewById(R.id.activity_home_date_btn);
-		dateBtn.setText(UtilsFormat.formatDate(new Date(mJournal.getDate()), getActivity())) ;
 		dateBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -128,8 +130,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 			}
 		});
 
-		partyBtn = (Button) v.findViewById(R.id.fragment_home_merchant_btn);
-		partyBtn.setText(mParty == null ? getString(R.string.str_select_party) : mParty.getName());
+		partyBtn = (Button) v.findViewById(R.id.fragment_home_party_btn);
 		partyBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -137,7 +138,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 			}
 		});
 
-		Button drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
+		drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
 		drBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -147,7 +148,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 			}
 		});
 
-		Button crBtn = (Button) v.findViewById(R.id.fragment_home_credit_btn);
+		crBtn = (Button) v.findViewById(R.id.fragment_home_credit_btn);
 		crBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -253,12 +254,15 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	 * Sets value of the UI Widgets based on passed parameters
 	 */
 	private void setValues(Journal tempJournal, Party party) {
-		idTV.setText(getString(R.string.str_id) + UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
-		amountEt.setText(tempJournal.getAmount() == 0 ? "" :UtilsFormat.formatCurrency(tempJournal.getAmount(),getActivity() ));
+		setTextDrCr(tempJournal.getType());
+		noteEt.setText(tempJournal.getNote());
+		drBtn.setText(UtilsFormat.getDrFromPref(getActivity()));
+		crBtn.setText(UtilsFormat.getCrFromPref(getActivity()));
 		dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
-        partyBtn.setText(party == null ? getString(R.string.str_select_party) : party.getName());
-        noteEt.setText(tempJournal.getNote());
-        setTextDrCr(tempJournal.getType());
+		amountEt.setText(tempJournal.getAmount() == 0 ? "" : UtilsFormat.formatCurrency(tempJournal.getAmount(), getActivity()));
+		idTV.setText(getString(R.string.str_id) + UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
+		partyBtn.setText(mParty.getName());
+
 		mParty = party;
 	}
 

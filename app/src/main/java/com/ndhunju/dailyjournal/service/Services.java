@@ -20,6 +20,7 @@ import com.ndhunju.dailyjournal.util.UtilsZip;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Services {
@@ -94,7 +95,6 @@ public class Services {
     public Context getContext(){
         return  mContext;
     }
-
 
 	/********************PARTY SERVICES ************************/
 

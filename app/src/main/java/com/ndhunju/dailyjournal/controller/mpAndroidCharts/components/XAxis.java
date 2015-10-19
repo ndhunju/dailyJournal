@@ -1,8 +1,8 @@
 
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.components;
 
-import com.github.mikephil.charting.formatter.DefaultXAxisValueFormatter;
-import com.github.mikephil.charting.formatter.XAxisValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.DefaultXAxisValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.XAxisValueFormatter;
 
 import java.util.ArrayList;
 import java.util.List;

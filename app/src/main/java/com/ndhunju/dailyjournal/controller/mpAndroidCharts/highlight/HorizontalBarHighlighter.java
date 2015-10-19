@@ -1,8 +1,8 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight;
 
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.interfaces.BarDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BarDataProvider;
 
 /**
  * Created by Philipp Jahoda on 22/07/15.

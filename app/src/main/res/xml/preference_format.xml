@@ -15,5 +15,39 @@
             android:key="@string/key_pref_currency"
             android:title="@string/str_currency"
             android:icon="@drawable/ic_attach_money_black_24dp"/>
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/ledger_view"
+            android:entryValues="@array/ledger_view_val"
+            android:key="@string/key_pref_ledger_view"
+            android:title="@string/str_ledger_view"
+            android:icon="@drawable/ic_view_compact_black_24dp"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/str_word_choice">
+        <ListPreference
+            android:defaultValue="@string/str_received_by"
+            android:entries="@array/dr_choice"
+            android:entryValues="@array/dr_choice_val"
+            android:key="@string/key_pref_dr_choice"
+            android:title="@string/str_debit"/>
+        <ListPreference
+            android:defaultValue="@string/str_given_by"
+            android:entries="@array/cr_choice"
+            android:entryValues="@array/cr_choice_val"
+            android:key="@string/key_pref_cr_choice"
+            android:title="@string/str_credit"/>
+        <ListPreference
+            android:defaultValue="@string/str_journal"
+            android:entries="@array/journal_choice"
+            android:entryValues="@array/journal_choice_val"
+            android:key="@string/key_pref_journal_choice"
+            android:title="@string/str_journal"/>
+        <ListPreference
+            android:defaultValue="@string/str_party"
+            android:entries="@array/party_choice"
+            android:entryValues="@array/party_choice_val"
+            android:key="@string/key_pref_party_choice"
+            android:title="@string/str_party"/>
+
     </PreferenceCategory>
 </PreferenceScreen>

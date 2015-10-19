@@ -11,8 +11,8 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.LockService;
+import com.ndhunju.dailyjournal.service.PreferenceService;
 
 public class LockScreenActivity extends Activity {
 

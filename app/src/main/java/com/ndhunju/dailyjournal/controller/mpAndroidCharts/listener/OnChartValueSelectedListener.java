@@ -1,7 +1,7 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.listener;
 
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
 
 /**
  * Listener for callbacks when selecting values inside the chart by

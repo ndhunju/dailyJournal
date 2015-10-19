@@ -1,29 +1,20 @@
 package com.ndhunju.dailyjournal.service.json;
 
 import android.content.Context;
-import android.util.JsonReader;
-import android.util.JsonToken;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
-import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 
 /**

@@ -4,7 +4,7 @@
     >
     <TextView
         android:id="@+id/ledger_row_col0"
-        android:text="@string/str_no"
+        android:text="@string/str_num"
         android:layout_height="wrap_content"
         android:layout_width="40dp"
         android:background="@drawable/cell_shape"

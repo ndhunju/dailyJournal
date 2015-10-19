@@ -2,8 +2,6 @@ package com.ndhunju.dailyjournal.model;
 
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
-import static org.hamcrest.CoreMatchers.*;
-
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,7 +11,8 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by dhunju

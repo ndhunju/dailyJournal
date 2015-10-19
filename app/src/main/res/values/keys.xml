@@ -16,5 +16,10 @@
     <string name="key_pref_restore_auto_backup">preferenceKeyRestoreAutoBackup</string>
     <string name="key_pref_export_printable">preferenceKeyExportPrintables</string>
     <string name="key_pref_erase_all">Erase All</string>
+    <string name="key_pref_ledger_view">preferenceLedgerViewFormatLP</string>
+    <string name="key_pref_dr_choice">preferenceDebitChoiceLP</string>
+    <string name="key_pref_cr_choice">preferenceCrChoiceLP</string>
+    <string name="key_pref_journal_choice">preferenceJournalChoiceLP</string>
+    <string name="key_pref_party_choice">preferencePartyChoiceLP</string>
 
 </resources>

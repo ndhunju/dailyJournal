@@ -4,9 +4,9 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.interfaces.LineDataProvider;
-import com.github.mikephil.charting.renderer.LineChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.LineData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.LineDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.LineChartRenderer;
 
 /**
  * Chart that draws lines, surfaces, circles, ...

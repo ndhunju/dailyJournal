@@ -32,12 +32,13 @@
         android:layout_height="wrap_content">
 
 
-        <ImageButton
+        <ImageView
             android:id="@+id/activity_party_pic_iv"
             android:layout_width="@dimen/party_pic_width"
             android:layout_height="@dimen/party_pic_width"
             android:layout_margin="5dp"
-            android:background="@drawable/party_default_pic"
+            android:src="@drawable/party_default_pic"
+            android:background="@color/grey"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:contentDescription="@string/str_party" />

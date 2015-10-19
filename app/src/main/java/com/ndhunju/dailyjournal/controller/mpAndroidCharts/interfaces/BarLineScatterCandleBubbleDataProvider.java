@@ -1,8 +1,8 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces;
 
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.data.BarLineScatterCandleBubbleData;
-import com.github.mikephil.charting.utils.Transformer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis.AxisDependency;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarLineScatterCandleBubbleData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Transformer;
 
 public interface BarLineScatterCandleBubbleDataProvider extends ChartInterface {
 

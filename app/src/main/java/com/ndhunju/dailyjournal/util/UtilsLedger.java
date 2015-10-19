@@ -38,7 +38,7 @@ class UtilsLedger {
 
 		TextView dateTV = new TextView(activity);
 		dateTV.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		dateTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		dateTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_header_shape));
 		dateTV.setPadding(PADDING, PADDING, PADDING, PADDING);
 		dateTV.setGravity(Gravity.CENTER);
 		dateTV.setText(activity.getString(R.string.str_date));
@@ -48,7 +48,7 @@ class UtilsLedger {
 
 		TextView noteTV = new TextView(activity);
 		noteTV.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		noteTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		noteTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_header_shape));
 		Point size = new Point();
 		activity.getWindowManager().getDefaultDisplay().getSize(size);
 		noteTV.setMaxWidth(size.x);
@@ -61,7 +61,7 @@ class UtilsLedger {
 
 		TextView drTV = new TextView(activity);
 		drTV.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		drTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		drTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_header_shape));
 		drTV.setPadding(PADDING, PADDING, PADDING, PADDING);
 		drTV.setGravity(Gravity.CENTER);
 		drTV.setTextSize(TEXT_SIZE);
@@ -71,7 +71,7 @@ class UtilsLedger {
 		
 		TextView crTV = new TextView(activity);
 		crTV.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		crTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		crTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_header_shape));
 		crTV.setPadding(PADDING, PADDING, PADDING, PADDING);
 		crTV.setGravity(Gravity.CENTER);
 		crTV.setTextSize(TEXT_SIZE);
@@ -96,7 +96,7 @@ class UtilsLedger {
 
 		TextView dateTV = new TextView(activity);
 		dateTV.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		dateTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		dateTV.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_header_shape));
 		dateTV.setPadding(PADDING, PADDING, PADDING, PADDING);
 		dateTV.setGravity(Gravity.CENTER);
 		dateTV.setTextSize(TEXT_SIZE);
@@ -106,7 +106,7 @@ class UtilsLedger {
 
 		TextView totalTv = new TextView(activity);
 		totalTv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		totalTv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		totalTv.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_header_shape));
 		totalTv.setPadding(PADDING, PADDING, PADDING, PADDING);
 		totalTv.setGravity(Gravity.CENTER);
 		totalTv.setText(activity.getString(R.string.str_total));
@@ -116,7 +116,7 @@ class UtilsLedger {
 
 		TextView debitTotal = new TextView(activity);
 		debitTotal.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		debitTotal.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		debitTotal.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_header_shape));
 		debitTotal.setPadding(PADDING, PADDING, PADDING, PADDING);
 		debitTotal.setGravity(Gravity.END);
 		debitTotal.setTextSize(TEXT_SIZE);
@@ -126,7 +126,7 @@ class UtilsLedger {
 
 		TextView creditTotal = new TextView(activity);
 		creditTotal.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, COL_WT));
-		creditTotal.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.heading_shape));
+		creditTotal.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.cell_header_shape));
 		creditTotal.setPadding(PADDING, PADDING, PADDING, PADDING);
 		creditTotal.setGravity(Gravity.END);
 		creditTotal.setTextSize(TEXT_SIZE);

@@ -1,6 +1,6 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter;
 
-import com.github.mikephil.charting.components.YAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis;
 
 import java.text.DecimalFormat;
 

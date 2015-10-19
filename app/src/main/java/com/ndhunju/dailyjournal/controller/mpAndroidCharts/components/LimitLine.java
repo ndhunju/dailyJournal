@@ -4,9 +4,8 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.components;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 /**
  * The limit line is an additional feature for all Line-, Bar- and

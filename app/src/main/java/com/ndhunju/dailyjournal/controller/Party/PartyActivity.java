@@ -15,15 +15,15 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.model.Party.Type;
 import com.ndhunju.dailyjournal.service.Constants;
+import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
@@ -38,7 +38,7 @@ public class PartyActivity extends FragmentActivity {
 
 
     //Variables
-    private ImageButton partyPicIV;
+    private ImageView partyPicIV;
     private Spinner typeSpinner;
 	private Services mServices;
 	private EditText phoneET;
@@ -65,9 +65,10 @@ public class PartyActivity extends FragmentActivity {
 		TextView idTV = (TextView)findViewById(R.id.activity_party_id_tv);
 		idTV.setText(UtilsFormat.getStringId(mParty.getId(), UtilsFormat.NUM_OF_DIGITS));
 
-        partyPicIV = (ImageButton)findViewById(R.id.activity_party_pic_iv);
-        Drawable image = Drawable.createFromPath(mParty.getPicturePath());
-        if(image != null) partyPicIV.setBackgroundDrawable(image);
+        partyPicIV = (ImageView)findViewById(R.id.activity_party_pic_iv);
+        partyPicIV.setImageDrawable(mParty.getPicturePath().equals("") ?
+                getResources().getDrawable(R.drawable.party_default_pic) :
+                Drawable.createFromPath(mParty.getPicturePath()));
 
         partyPicIV.setOnClickListener(new OnClickListener() {
             @Override
@@ -112,7 +113,6 @@ public class PartyActivity extends FragmentActivity {
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
 				i.putExtra(Constants.KEY_PARTY_NAME, mParty.getName());
-                i.putExtra(Constants.KEY_CHANGE_TYPE, Constants.ChangeType.EDITED);
 				setResult(Activity.RESULT_OK, i);
 				PartyActivity.this.finish();
 			}
@@ -130,7 +130,6 @@ public class PartyActivity extends FragmentActivity {
                                 UtilsView.toast(PartyActivity.this, getString(R.string.msg_deleted, mParty.getName()));
                                 Intent intent = new Intent();
                                 intent.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
-                                intent.putExtra(Constants.KEY_CHANGE_TYPE, Constants.ChangeType.DELETED);
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
                             }

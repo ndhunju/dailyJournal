@@ -1,3 +1,12 @@
+Daily Journal (7)
+
+	-New features added as request by users,
+		- User can see the balance of Parties in the list
+		- Improved UI for better User Experience
+		- Improved Ledger View ( shows number of attachment, date, notes, amount)
+		- Users can switch to Classic view from Preference>Format>Ledger View
+		- Charts/Graphs!
+
 Daily Journal (6.7)
 
     - In the preference, now you can

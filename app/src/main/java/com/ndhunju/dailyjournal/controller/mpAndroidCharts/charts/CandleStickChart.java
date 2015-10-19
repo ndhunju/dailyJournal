@@ -4,9 +4,9 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.github.mikephil.charting.data.CandleData;
-import com.github.mikephil.charting.interfaces.CandleDataProvider;
-import com.github.mikephil.charting.renderer.CandleStickChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.CandleData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.CandleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.CandleStickChartRenderer;
 
 /**
  * Financial chart type that draws candle-sticks (OHCL chart).

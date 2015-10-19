@@ -1,7 +1,16 @@
-Daily Journal
+# Daily Journal
 
-Mission Statement: To provide small businesses (that cannot afford accounting software) a means to manage their transactions in the easiest way possible. 
+### Mission Statement: To provide small businesses (that cannot afford accounting software) a means to manage their transactions in the easiest way possible. 
 
+<table>
+  <tr>
+    <th>App Icons</th>
+  </tr>
+  <tr>
+    <td><img src="screenshots+graphics\v7\ic_app512.png"></br>
+	<img src="screenshots+graphics\3.1\logo_dj.png" >
+  </tr>
+</table>
 
 Description: This is an accounting app that allows user (usually with minimum accounting knowledge) to record daily Journal transactions in the easiest way possible. It has following features,
 

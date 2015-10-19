@@ -1,16 +1,16 @@
 package com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.graphics.Canvas;
 
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.charts.CombinedChart.DrawOrder;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.BarLineScatterCandleBubbleDataProvider;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.ChartAnimator;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.CombinedChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.CombinedChart.DrawOrder;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BarLineScatterCandleBubbleDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Renderer class that is responsible for rendering multiple different data-types.

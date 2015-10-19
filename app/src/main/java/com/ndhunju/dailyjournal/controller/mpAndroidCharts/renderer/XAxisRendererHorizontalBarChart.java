@@ -6,14 +6,14 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Path;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.LimitLine;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.XAxis.XAxisPosition;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.BarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.LimitLine;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.XAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.XAxis.XAxisPosition;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Transformer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.util.List;
 

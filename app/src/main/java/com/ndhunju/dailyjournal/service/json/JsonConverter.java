@@ -3,21 +3,12 @@ package com.ndhunju.dailyjournal.service.json;
 import android.content.Context;
 import android.util.Log;
 
-import com.ndhunju.dailyjournal.model.Attachment;
-import com.ndhunju.dailyjournal.model.Journal;
-import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by dhunju on 10/15/2015.

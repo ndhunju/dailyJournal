@@ -1,9 +1,9 @@
 package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -43,7 +43,7 @@ public class PartyListDialog extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.fragment_party_list_old, container);
+		View view = inflater.inflate(R.layout.fragment_party_list, container);
 		mServices = Services.getInstance(getActivity());
 
 		//Wire up widgets
@@ -62,7 +62,7 @@ public class PartyListDialog extends DialogFragment {
 		
 		//Populate the list view with existing Parties
 		partyLV = (ListView)view.findViewById(R.id.fragment_party_list_party_list_lv);
-		partyAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mServices.getParties());
+		partyAdapter = new PartyCardAdapter(getActivity(), mServices.getParties());
 		partyLV.setAdapter(partyAdapter);
 		partyLV.setOnItemClickListener(new OnItemClickListener() {
 

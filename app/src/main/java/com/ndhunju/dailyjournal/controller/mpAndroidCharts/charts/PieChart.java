@@ -12,13 +12,13 @@ import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.util.AttributeSet;
 
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.renderer.PieChartRenderer;
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.DataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.PieData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.PieDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.PieChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 import java.util.List;
 
@@ -86,6 +86,7 @@ public class PieChart extends PieRadarChartBase<PieData> {
      */
     private boolean mDrawCenterText = true;
 
+
     private float mCenterTextRadiusPercent = 1.f;
 
     public PieChart(Context context) {
@@ -107,6 +108,7 @@ public class PieChart extends PieRadarChartBase<PieData> {
         mRenderer = new PieChartRenderer(this, mAnimator, mViewPortHandler);
     }
 
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -123,7 +125,8 @@ public class PieChart extends PieRadarChartBase<PieData> {
 
         mRenderer.drawValues(canvas);
 
-        mLegendRenderer.renderLegend(canvas);
+        //TODO dynamically hide legend instead
+        //mLegendRenderer.renderLegend(canvas);
 
         drawDescription(canvas);
 

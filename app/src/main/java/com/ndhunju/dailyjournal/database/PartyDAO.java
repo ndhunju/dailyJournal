@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
 import com.ndhunju.dailyjournal.database.DailyJournalContract.PartyColumns;
+import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 
 import java.util.ArrayList;
@@ -116,11 +117,40 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return temp;
     }
 
+    /**
+     *  Returns the array[limit] with largest Credit or Debit balance among {@link Party}
+     * @param type : type of jounal
+     * @param limit : limit size
+     * @return
+     */
+    public Party[] findTopDrCrAmt(Journal.Type type, int limit){
+        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
+
+        String orderBy = type == Journal.Type.Credit ? PartyColumns.COL_PARTY_CR_AMT
+                : PartyColumns.COL_PARTY_DR_AMT;
+        Cursor c = db.query(true, PartyColumns.TABLE_PARTY, null, null, null, null, null, orderBy
+                + " DESC", String.valueOf(limit));
+
+        Party[] temp = new Party[limit];
+        if(!c.moveToFirst()) return temp;
+
+        int index = 0;
+        do{
+            temp[index++] = fromCursor(c);
+        }while(c.moveToNext());
+
+        c.close();
+
+        return temp;
+
+
+    }
+
     @Override
     public long update(Party party) {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         return db.update(PartyColumns.TABLE_PARTY, toContentValues(party),
-                         PartyColumns.PARTY_ID +"="+party.getId(), null);
+                PartyColumns.PARTY_ID + "=" + party.getId(), null);
     }
 
     @Override

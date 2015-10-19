@@ -4,17 +4,17 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer;
 import android.graphics.Canvas;
 import android.graphics.Paint.Align;
 
-import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.buffer.BarBuffer;
-import com.github.mikephil.charting.buffer.HorizontalBarBuffer;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.BarDataProvider;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.ChartAnimator;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.buffer.BarBuffer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.buffer.HorizontalBarBuffer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarEntry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.formatter.ValueFormatter;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.BarDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Transformer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.util.List;
 

@@ -4,9 +4,9 @@ package com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.github.mikephil.charting.data.ScatterData;
-import com.github.mikephil.charting.interfaces.ScatterDataProvider;
-import com.github.mikephil.charting.renderer.ScatterChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.ScatterData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.interfaces.ScatterDataProvider;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.ScatterChartRenderer;
 
 /**
  * The ScatterChart. Draws dots, triangles, squares and custom shapes into the

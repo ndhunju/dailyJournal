@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-      <!--  <com.github.mikephil.charting.charts.BarChart
+    <com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.BarChart
         android:id="@+id/barChart1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" /> -->
+        android:layout_height="wrap_content" />
     
 
 </FrameLayout>

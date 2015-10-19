@@ -18,9 +18,6 @@ public interface Constants {
     String KEY_PARTY_INFO_CHGD = APP_PREFIX + "partyInfoChanged";
     String KEY_IMPORT_OLD_DATA = APP_PREFIX + "KeyImportedOLdData";
     String KEY_ATTACHMENTS_IS_CHGD = APP_PREFIX + "isAttachmentChanged";
-    String KEY_CHANGE_TYPE = "changeType";
 
-
-    enum ChangeType{EDITED, DELETED}
 
 }

@@ -14,7 +14,7 @@
         android:showAsAction="ifRoom|withText"
         android:icon="@drawable/ic_group_add_black_48dp"
         android:orderInCategory="2"
-        android:title="@string/str_import_party"
+        android:title="@string/str_import"
         />
 
 

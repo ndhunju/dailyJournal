@@ -6,16 +6,16 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.ChartData;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.FSize;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.Legend;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.BarDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.ChartData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.DataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.PieDataSet;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ColorTemplate;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.FSize;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;

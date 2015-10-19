@@ -8,16 +8,16 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.RadarData;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.renderer.RadarChartRenderer;
-import com.github.mikephil.charting.renderer.XAxisRendererRadarChart;
-import com.github.mikephil.charting.renderer.YAxisRendererRadarChart;
-import com.github.mikephil.charting.utils.Utils;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.XAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.YAxis.AxisDependency;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.RadarData;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.highlight.Highlight;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.RadarChartRenderer;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.XAxisRendererRadarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.renderer.YAxisRendererRadarChart;
+import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.Utils;
 
 /**
  * Implementation of the RadarChart, a "spidernet"-like chart. It works best
