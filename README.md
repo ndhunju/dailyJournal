@@ -1,14 +1,16 @@
 # Daily Journal
 
-### Mission Statement: To provide small businesses (that cannot afford accounting software) a means to manage their transactions in the easiest way possible. 
+</br><img src="graphics\v7\feature_graphic.png" width="60%"></br>
+
+Mission Statement: To provide small businesses (that cannot afford accounting software) a means to manage their transactions in the easiest way possible. 
 
 <table>
   <tr>
     <th>App Icons</th>
   </tr>
   <tr>
-    <td><img src="screenshots+graphics\v7\ic_app512.png"></br>
-	<img src="screenshots+graphics\3.1\logo_dj.png" >
+    <td><img src="app\src\main\res\drawable\ic_app.png" width="70%" ></td>
+	<td><img src="app\src\main\res\drawable-mcc404\ic_app.png" width="30%"></td>
   </tr>
 </table>
 
@@ -22,19 +24,19 @@ Description: This is an accounting app that allows user (usually with minimum ac
 - Backup to Google Drive
 
 
-Requirements
+## Requirements
 ============
 - Android 4.0+
 
-How to Install
+## How to Install
 ==============
 Stable release is available from the Google Play Store Marketplace.
 https://play.google.com/store/apps/details?id=com.ndhunju.dailyjournal  
 
-Usage
+## Usage
 =====
 Video => https://www.youtube.com/watch?v=28umcOy2OQk
 
-Uninstall
+## Uninstall
 =========
 On your phone under Settings -> Applications -> Manage applications-> Daily Journal -> Uninstall
