@@ -1,6 +1,6 @@
 # Daily Journal
 
-</br><img src="graphics/v7/feature_graphic.png" width="40%"></br>
+</br><img src="graphics/v7/feature_graphic.png" width="80%"></br>
 
 Mission Statement: To provide small businesses (that cannot afford accounting software) a means to manage their transactions in the easiest way possible. 
 
