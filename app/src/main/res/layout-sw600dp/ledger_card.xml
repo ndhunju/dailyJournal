@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_faint"
+        android:padding="@dimen/activity_horizontal_margin"
+        >
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ledger_card_attch_ll"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ledger_card_attch_no_tv"
+                android:text="@string/str_00.00"/>
+            <ImageView
+                android:id="@+id/ledger_card_attch_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="left"
+                android:layout_margin="1dp"
+                android:src="@drawable/ic_attachment_black_32dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/ledger_card_drcr_ll"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_00.00"
+                android:textSize="@dimen/text_size_medium"
+                android:id="@+id/ledger_card_amount_tv"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ledger_card_drcr_tv"
+                android:textSize="@dimen/text_size_medium"
+                android:text="@string/str_dr"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/ledger_card_attch_ll"
+            android:layout_toLeftOf="@id/ledger_card_drcr_ll"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ledger_card_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/str_date"
+                />
+
+            <TextView
+                android:id="@+id/ledger_card_note_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/str_note"
+                 />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>

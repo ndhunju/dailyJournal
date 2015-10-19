@@ -16,11 +16,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.controller.journal.JournalActivity;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
+import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -39,7 +39,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 	private Party mParty;
 	private TextView balanceTV;
 	private ListView ledgerListView;
-	private LedgerAdapter ledgerAdapter;
+	private LedgerRowAdapter ledgerAdapter;
 
 	private Services mServices;
 
@@ -65,7 +65,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 		balanceTV.setTextColor(balance > 0 ? getResources().getColor(R.color.red_light_pressed)
                                            : getResources().getColor(R.color.green));
 
-		ledgerAdapter = new LedgerAdapter(getBaseContext(), mServices.getJournals(mPartyId));
+		ledgerAdapter = new LedgerRowAdapter(getBaseContext(), mServices.getJournals(mPartyId));
 		ledgerListView.setAdapter(ledgerAdapter);
 		ledgerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -107,11 +107,11 @@ public class PartyLedgerActivityOld extends FragmentActivity {
         col2.setText(getString(R.string.str_total));
         col3.setText(UtilsFormat.formatCurrency(party.getDebitTotal(),getActivity() ));
         col4.setText(UtilsFormat.formatCurrency(party.getCreditTotal(), getActivity()));
-        col0.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col1.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col2.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col3.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
-        col4.setBackgroundDrawable(getResources().getDrawable(R.drawable.heading_shape));
+        col0.setBackgroundDrawable(getResources().getDrawable(R.drawable.cell_header_shape));
+        col1.setBackgroundDrawable(getResources().getDrawable(R.drawable.cell_header_shape));
+        col2.setBackgroundDrawable(getResources().getDrawable(R.drawable.cell_header_shape));
+        col3.setBackgroundDrawable(getResources().getDrawable(R.drawable.cell_header_shape));
+        col4.setBackgroundDrawable(getResources().getDrawable(R.drawable.cell_header_shape));
         return footerRow;
     }
 
@@ -131,7 +131,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
                 balanceTV.setTextColor(balance > 0 ? getResources().getColor(R.color.red_light_pressed)
                                                  : getResources().getColor(R.color.green));
 
-                ledgerAdapter = new LedgerAdapter(getBaseContext(), mServices.getJournals(mParty.getId()));
+                ledgerAdapter = new LedgerRowAdapter(getBaseContext(), mServices.getJournals(mParty.getId()));
                 ledgerListView.setAdapter(ledgerAdapter);
 
                 //Alert the user if balance is negative
