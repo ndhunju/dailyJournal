@@ -1,5 +1,5 @@
 # Daily Journal
-
+<a>https://goo.gl/vPGa66</a>
 </br><img src="graphics/v7/feature_graphic.png" width="80%"></br>
 
 Mission Statement: To provide small businesses (that cannot afford accounting software) a means to manage their transactions in the easiest way possible. 
@@ -35,7 +35,7 @@ https://play.google.com/store/apps/details?id=com.ndhunju.dailyjournal
 
 ## Usage
 
-Video => https://www.youtube.com/watch?v=28umcOy2OQk
+Video => https://youtu.be/KmSDRaaTjJE
 
 ## Uninstall
 
