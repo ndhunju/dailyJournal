@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.controller.party;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -62,7 +63,7 @@ public class PartyListDialog extends DialogFragment {
 		
 		//Populate the list view with existing Parties
 		partyLV = (ListView)view.findViewById(R.id.fragment_party_list_party_list_lv);
-		partyAdapter = new PartyCardAdapter(getActivity(), mServices.getParties());
+        partyAdapter = new PartyCardAdapter(getActivity(), mServices.getParties());
 		partyLV.setAdapter(partyAdapter);
 		partyLV.setOnItemClickListener(new OnItemClickListener() {
 

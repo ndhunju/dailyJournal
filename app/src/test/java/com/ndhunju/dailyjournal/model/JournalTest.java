@@ -1,5 +1,12 @@
 package com.ndhunju.dailyjournal.model;
 
+import android.test.ActivityTestCase;
+
+import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.service.json.JsonConverter;
+import com.ndhunju.dailyjournal.service.json.JsonConverterStream;
+import com.ndhunju.dailyjournal.service.json.JsonConverterString;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -19,9 +26,10 @@ import static org.junit.Assert.assertThat;
 /**
  * Created by dhunju on 7/30/2015.
  */
-public class JournalTest {
+public class JournalTest extends ActivityTestCase{
 
     private String jsonJournal;
+    private Services services;
 
     @BeforeClass
     public static void initializeSomethingReallyExpensive(){}
@@ -41,6 +49,8 @@ public class JournalTest {
                 "mNote:checks no 56778," +
                 "attachments:[\"\\/data\\/data\\/com.ndhunju.dailyjournal\\/app_DailyJournal\\/.attachments\\/.Bill Gates\\/2-2-0.png\"]" +
                 "}";
+
+        services = Services.getInstance(getActivity());
     }
 
     @After
@@ -51,17 +61,16 @@ public class JournalTest {
         //Arrange
         boolean newId = false;
 
+
         //Act
-        Journal testJournal = Journal.fromJSON(new JSONObject(jsonJournal), newId);
+        Journal testJournal = JsonConverterString.getInstance(getActivity()).getJournal(new JSONObject(jsonJournal));
 
         //Assert
-        assertThat("Journal Id didn't match", testJournal.getId(), equalTo(2));
+        assertThat("Journal Id didn't match", testJournal.getId(), equalTo(2l));
         assertThat("Journal date didn't match", testJournal.getDate(), equalTo(1424312194476l));
         assertThat("Journal type didn't match", testJournal.getType(), equalTo(Journal.Type.Debit));
         assertThat("Journal amount didn't match", testJournal.getAmount(), equalTo(2500.25));
         assertThat("Journal note didn't match", testJournal.getNote(), equalTo("checks no 56778"));
-        assertThat("Journal attachment path didn't match", testJournal.getAttachmentPaths().get(0),
-                equalTo("/data/data/com.ndhunju.dailyjournal/app_DailyJournal/.attachments/.Bill Gates/2-2-0.png"));
     }
 
     @Test
@@ -70,7 +79,7 @@ public class JournalTest {
         boolean newId = true;
 
         //Act
-        Journal testJournal = Journal.fromJSON(new JSONObject(jsonJournal), newId);
+        Journal testJournal = JsonConverterString.getInstance(getActivity()).getJournal(new JSONObject(jsonJournal));
 
         //Assert
         assertNotEquals(testJournal.getId(), equalTo(2));
@@ -81,11 +90,13 @@ public class JournalTest {
         //Arrange
         File testFile = new File("testFile.jpg");
         testFile.createNewFile();
-        Journal testJournal = new Journal(0);
-        testJournal.addAttachmentPaths(testFile.getAbsolutePath());
+        Attachment attachment = new Attachment(0);
+        attachment.setPath(testFile.getAbsolutePath());
+        services.addAttachment(attachment);
+
 
         //Act
-        testJournal.deleteAttachment(testFile.getAbsolutePath());
+        services.deleteAttachment(attachment);
 
         //Assert
         assertFalse("Attachment file not deleted.", testFile.exists());

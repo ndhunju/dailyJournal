@@ -1,5 +1,11 @@
 package com.ndhunju.dailyjournal.model;
 
+import android.test.ActivityTestCase;
+
+import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.service.json.JsonConverter;
+import com.ndhunju.dailyjournal.service.json.JsonConverterString;
+
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,10 +24,11 @@ import static org.junit.Assert.fail;
 /**
  * Created by dhunju
  */
-public class PartyTest {
+public class PartyTest extends ActivityTestCase{
 
     private Party testParty;
     private String jsonParty;
+    private Services services;
 
     @BeforeClass
     public static void initializeSomethingReallyExpensive(){}
@@ -43,6 +50,8 @@ public class PartyTest {
                 "mNote:checks no 56778," +
                 "attachments:[address]}" +
                 "]}";
+
+        services = Services.getInstance(getActivity());
     }
 
     @After
@@ -55,10 +64,10 @@ public class PartyTest {
     public void addingOnlyCreditJournalsGivesNegativeBalance() throws Exception {
         //Arrange
         for(int i = 0 ; i < 10; i++){
-            Journal j = new Journal(1213234+i, i);
+            Journal j = new Journal(1213234);
             j.setAmount(i);
             j.setType(Journal.Type.Credit);
-            testParty.addJournal(j);
+            services.addJournal(j);
         }
 
         //Act
@@ -73,10 +82,10 @@ public class PartyTest {
         //Arrange
         Party testParty = new Party("", 0);
         for(int i = 0 ; i < 10; i++){
-            Journal j = new Journal(1213234+i, i);
+            Journal j = new Journal((1213234l+i));
             j.setAmount(7);
-            j.setType(i%2 == 0 ? Journal.Type.Credit : Journal.Type.Debit);
-            testParty.addJournal(j);
+            j.setType(i % 2 == 0 ? Journal.Type.Credit : Journal.Type.Debit);
+            services.addJournal(j);
         }
 
         //Act
@@ -89,16 +98,17 @@ public class PartyTest {
     @Test
     public void journalsAreAddedInDateOrder() {
         //Arrange
+        long partyId = 1l;
         for(int i = 0 ; i < 10; i++){
             long date = 1424312194476l;
             date = i%2 == 0 ?  date + i : date-i;
-            Journal j = new Journal(date, i);
-            testParty.addJournal(j);
+            Journal j = new Journal(partyId, date, i);
+            services.addJournal(j);
         }
 
         //Act
-        long previousJournalDate = testParty.getJournals().get(0).getDate() ;
-        for(Journal J : testParty.getJournals()){
+        long previousJournalDate = services.getJournals(partyId).get(0).getDate() ;
+        for(Journal J : services.getJournals(partyId)){
             if(J.getDate() < previousJournalDate)
                 fail("Journals in the list are not in the order of date : "
                         + previousJournalDate + " is not smaller than " + J.getDate());
@@ -111,36 +121,25 @@ public class PartyTest {
         //Arrange
 
         //Act
-        testParty = Party.fromJSON(new JSONObject(jsonParty), false);
+        testParty = JsonConverterString.getInstance(getActivity()).getParty(new JSONObject(jsonParty));
 
         assertTrue(testParty.getId() == 2);
 
     }
 
     @Test
-    public void passingTrueToNewIdIgnoresIdInJSONStr() throws Exception {
-        //Act
-        boolean newId = true;
-        testParty = Party.fromJSON(new JSONObject(jsonParty), newId);
-
-        //Assert
-        assertFalse(testParty.getId() == 2);
-    }
-
-    @Test
     public void deletingJournalShouldDeleteAllAttachments(){
         //Arrange
         Journal j1 = new Journal(0);
-        j1.addAttachmentPaths("path1");
-        j1.addAttachmentPaths("path2");
+        services.addAttachment(new Attachment(j1.getId()));
+        services.addAttachment(new Attachment(j1.getId()));
 
-        testParty.addJournal(j1);
 
         //Act
-        testParty.deleteJournal(j1.getId());
+        services.deleteJournal(j1);
 
         //Assert
-        assertThat(j1.getAttachmentPaths().size(), equalTo(0));
+        assertThat(services.getAttachments(j1.getId()).size(), equalTo(0));
     }
 
     @Test
@@ -148,16 +147,16 @@ public class PartyTest {
         //Arrange
         Party testParty = new Party("", 0);
         for(int i = 0 ; i < 10; i++){
-            Journal j = new Journal(1213234+i, i);
+            Journal j = new Journal(1213234l);
             j.setAmount(7);
             //Odds are Debit, Evens are Credit
             j.setType(i%2 == 0 ? Journal.Type.Credit : Journal.Type.Debit);
-            testParty.addJournal(j);
+            services.addJournal(j);
         }
 
         double testDebitTotal = testParty.getDebitTotal();
         double testCreditTotal = testParty.getCreditTotal();
-        Journal testJournal = testParty.getJournals().get(0);
+        Journal testJournal = services.getJournal(testParty.getId());
 
         //Act
         testJournal.setType(Journal.Type.Debit);

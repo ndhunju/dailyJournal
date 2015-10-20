@@ -84,7 +84,7 @@ public final class JsonConverterString extends JsonConverter{
      * journals and attachments belongs to the party
      * @return
      */
-    protected JSONObject toJSON(Party party){
+    public JSONObject toJSON(Party party){
         JSONObject json = new JSONObject();
         try{
             json.put(KEY_ID, party.getId());
@@ -110,7 +110,7 @@ public final class JsonConverterString extends JsonConverter{
         return json;
     }
 
-    protected JSONObject toJSON(Journal journal){
+    public JSONObject toJSON(Journal journal){
         JSONObject j = new JSONObject();
         try{
             j.put(KEY_ID,  journal.getId());
@@ -136,7 +136,7 @@ public final class JsonConverterString extends JsonConverter{
         return j;
     }
 
-    protected JSONObject toJSON(Attachment attachment){
+    public JSONObject toJSON(Attachment attachment){
         JSONObject jsonObject = new JSONObject();
         try{
             jsonObject.put(KEY_ID, attachment.getId());
@@ -153,7 +153,7 @@ public final class JsonConverterString extends JsonConverter{
      * @param json
      * @return
      */
-    protected Party getParty(JSONObject json){
+    public Party getParty(JSONObject json){
 
         try {
             int id = json.getInt(KEY_ID);
@@ -188,7 +188,7 @@ public final class JsonConverterString extends JsonConverter{
      * @param json
      * @return
      */
-    protected Journal getJournal(JSONObject json){
+    public Journal getJournal(JSONObject json){
         try {
             int id = json.getInt(KEY_ID);
             long date = json.getLong(KEY_DATE);
@@ -216,7 +216,7 @@ public final class JsonConverterString extends JsonConverter{
 
     }
 
-    protected Attachment getAttachment(JSONObject jsonObject){
+    public Attachment getAttachment(JSONObject jsonObject){
         Attachment attachment = null;
         try {
             int id = jsonObject.getInt(KEY_ID);

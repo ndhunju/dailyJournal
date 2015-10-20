@@ -39,8 +39,9 @@ public class ServicesTest {
     @Before
     public void setUp(){
         //Create Mock Objects
-        KeyValPersistence.setSharedPreference(mock(SharedPreferences.class));
         testServices = Services.getInstance(new MockContext());
+        KeyValPersistence.from(testServices.getContext())
+        .setSharedPreference(mock(SharedPreferences.class));
     }
 
     @Test
@@ -50,8 +51,8 @@ public class ServicesTest {
         when(pm.getBoolean(Constants.KEY_IMPORT_OLD_DATA, false)).thenReturn(false);
 
         //Act
-        KeyValPersistence.setSharedPreference(pm);
-        boolean testValue = KeyValPersistence.isOldDataImported();
+        KeyValPersistence.from(testServices.getContext()).setSharedPreference(pm);
+        boolean testValue = KeyValPersistence.isOldDataImported(testServices.getContext());
 
         //Assert
         assertFalse(testValue);
@@ -88,7 +89,7 @@ public class ServicesTest {
         testServices.addParty(testParty);
 
         //Act
-        testServices.deleteParty(testParty.getId());
+        testServices.deleteParty(testParty);
 
         //Assert
         assertThat(testServices.getJournals(testParty.getId()).size(), equalTo(0));
@@ -103,11 +104,11 @@ public class ServicesTest {
         testServices.addParty(testParty);
 
         //Create Mock Object for Context
-        Context context = mock(Context.class);
+        Context context = testServices.getContext();
         File appFolder = new File(UtilsFile.APP_FOLDER_NAME);
         when(context.getDir(UtilsFile.APP_FOLDER_NAME, Context.MODE_PRIVATE)).thenReturn(appFolder);
 
-        File testAttchmnt = UtilsFile.createImageFile(context, testJournal, testParty);
+        File testAttchmnt = UtilsFile.createImageFile(context);
         Attachment testAttch = new Attachment(testJournal.getId());
         testAttch.setPath(testAttchmnt.getAbsolutePath());
         testServices.addAttachment(testAttch);

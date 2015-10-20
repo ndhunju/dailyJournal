@@ -1,5 +1,7 @@
 package com.ndhunju.dailyjournal.model;
 
+import android.test.mock.MockContext;
+
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import org.junit.AfterClass;
@@ -56,7 +58,7 @@ public class UtilsFileTest {
 
     @Test(expected = NumberFormatException.class)
     public void incorrectCurrencyFormatThrowsNumberFormatEx(){
-        UtilsFormat.parseCurrency("$%l");
+        UtilsFormat.parseCurrency("$%l", new MockContext());
     }
 
 }

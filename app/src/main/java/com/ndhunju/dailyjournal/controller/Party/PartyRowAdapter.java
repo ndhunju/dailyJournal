@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.ArrayList;
 
@@ -48,8 +49,8 @@ class PartyRowAdapter extends ArrayAdapter<Party> {
 
         Party currentParty  =  getItem(position);
         holder.displayName.setText(currentParty.getName());
-        holder.imageView.setImageDrawable(currentParty.getPicturePath().equals("")?
-                getContext().getResources().getDrawable(R.drawable.party_default_pic):
+        holder.imageView.setImageDrawable(currentParty.getPicturePath().equals("") ?
+                getContext().getResources().getDrawable(R.drawable.party_default_pic) :
                 Drawable.createFromPath(currentParty.getPicturePath()));
 
         return convertView;

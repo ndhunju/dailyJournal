@@ -37,9 +37,6 @@ public class PartyCardAdapter extends ArrayAdapter<Party> {
         if(convertView == null){
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.party_card, null);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(50,50,50,50);
-            convertView.setLayoutParams(lp);
             viewHolder.picImageView = (ImageView)convertView.findViewById(R.id.party_card_circle_iv);
             viewHolder.partyNameTV = (TextView)convertView.findViewById(R.id.party_card_party_name_tv);
             viewHolder.balanceTV = (TextView)convertView.findViewById(R.id.party_card_party_balance_tv);

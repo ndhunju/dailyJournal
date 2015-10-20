@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -56,7 +57,7 @@ public class PartyListFragment extends Fragment {
     private ListView mPartyLV;
     private Services mServices;
     private EditText srchPartyET;
-    private ArrayAdapter<Party> mPartyAdapter;
+    private ArrayAdapter mPartyAdapter;
 
 //      The current activated item position. Only used on tablets
     private int mActivatedPosition = ListView.INVALID_POSITION;
@@ -121,7 +122,6 @@ public class PartyListFragment extends Fragment {
 
 
         mPartyLV = (ListView)rootView.findViewById(R.id.fragment_party_list_party_list_lv);
-        mPartyLV.setAdapter(mPartyAdapter);
         mPartyLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -285,7 +285,7 @@ public class PartyListFragment extends Fragment {
     }
 
 
-    public void refreshList(){
+    public void refreshList() {
         mPartyAdapter = new PartyCardAdapter(getActivity(), mServices.getParties());
         mPartyLV.setAdapter(mPartyAdapter);
         mPartyLV.setSelection(0);
