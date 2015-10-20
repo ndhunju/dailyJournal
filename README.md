@@ -1,5 +1,5 @@
 # Daily Journal
-<a>https://goo.gl/vPGa66</a>
+Link <a>https://goo.gl/vPGa66</a>
 </br><img src="graphics/v7/feature_graphic.png" width="80%"></br>
 
 Mission Statement: To provide small businesses (that cannot afford accounting software) a means to manage their transactions in the easiest way possible. 
@@ -31,6 +31,7 @@ Description: This is an accounting app that allows user (usually with minimum ac
 ## How to Install
 
 Stable release is available from the Google Play Store Marketplace.
+
 https://play.google.com/store/apps/details?id=com.ndhunju.dailyjournal  
 
 ## Usage
