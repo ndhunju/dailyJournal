@@ -16,28 +16,39 @@ Mission Statement: To provide small businesses (that cannot afford accounting so
 
 Description: This is an accounting app that allows user (usually with minimum accounting knowledge) to record daily Journal transactions in the easiest way possible. It has following features,
 
-- Journal Entry
-- Auto Ledger Entry
-- Add Party (Debtors/Creditors)
-- Attachments for Journal
-- Backup as a Zip file
-- Backup to Google Drive
+
+* Journal Entry
+* Automatic Ledger Entry
+* Attachments
+* Add Party (Debtors/Creditors)
+* Backups
+..*Google Drive
+..*SD card / local storage
+..* Choose interval for automatic backup
+* Chose Format,
+..* Currency
+..* Date
+..* Ledger View
+..* Word Choice
+* Import Party from your Contact List
+* Export Ledgers in text format
+* Share Ledger/Statement via Email, Bluetooth...
 
 
-## Requirements
+###Requirements
 
 - Android 4.0+
 
-## How to Install
+### How to Install
 
 Stable release is available from the Google Play Store Marketplace.
 
 https://play.google.com/store/apps/details?id=com.ndhunju.dailyjournal  
 
-## Usage
+### Usage
 
 Video => https://youtu.be/KmSDRaaTjJE
 
-## Uninstall
+### Uninstall
 
 On your phone under Settings -> Applications -> Manage applications-> Daily Journal -> Uninstall
