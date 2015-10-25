@@ -1,19 +1,32 @@
+//applies the Android plugin for Gradle to this build. This adds Android-specific build tasks
+// to the top-level build tasks and makes the android {...} element available to specify
+// Android-specific build options.
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    // Always use a build tools version whose major revision number is higher or equal to that of
+    // your compilation target and target SDK.
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
+        // The values in defaultConfig override those in the manifest file.
         applicationId "com.ndhunju.dailyjournal"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
+        //By default, the build system defines two build types: debug and release
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+        debug {
+            debuggable true
         }
     }
 
@@ -22,30 +35,53 @@ android {
         // test your code and do not depend on any particular behaviour of the Android platform
         // (that you have not explicitly mocked e.g. using Mockito). If that proves problematic,
         // you can add the snippet below to your build.gradle to change this behavior:
-        unitTests.returnDefaultValues = true
+        //unitTests.returnDefaultValues = true
     }
-    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
+            java.srcDirs = ['src/main/java', 'src/androidTest/java']
+        }
+        //instrumentTest.setRoot('androidTest')
+    }
 }
 
-
-
-
-
+//The dependencies element is outside and after the android element. This element declares the
+// dependencies for this module. The build system adds all the compile dependencies to the
+// compilation classpath and includes them in the final package.
 dependencies {
-
+    // Remote binary dependency
     //compile 'com.android.support:appcompat-v7:22.2.0'
-    compile "com.android.support:appcompat-v7:22.0.+"
+    compile "com.android.support:appcompat-v7:23.0.+"
+    compile "com.android.support:support-annotations:23.0.+"
+
+    compile 'com.android.support:support-v4:23.0.+'
+    compile 'com.android.support:support-v4:23.0.+'
+    compile 'com.google.android.gms:play-services-drive:7.5.0'
+    compile 'com.android.support:support-v13:23.0.+'
+
+    // Local binary dependency
+    //Even though android provides json library, it bring error while using it for JUnit testing
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
     //http://tools.android.com/tech-docs/unit-testing-support
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.9.5'
+    compile 'junit:junit:4.12'
+    compile 'org.mockito:mockito-core:1.9.5'
 
-    //Even though android provides json library, it bring error while using it for JUnit testing
-    //Any code that makes a call to Android provided library it gives error
-    compile files('libs/org.json.jar')
+    compile 'com.android.support.test:runner:0.4'
+    // Set this dependency to use JUnit 4 rules
+    compile 'com.android.support.test:rules:0.4'
+    // Set this dependency to build and run Espresso tests
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    'com.android.support.test.espresso:espresso-core:2.2.1'
+    // Set this dependency to build and run UI Automator tests
+    //androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.google.android.gms:play-services-drive:7.5.0'
-    compile 'com.android.support:support-v13:22.2.0'
+    //In order for the Android Plug-in for Gradle to correctly build and run your instrumented
+    // unit tests, you must specify the following libraries in the build.gradle file of your
+    // Android app module:
+    // Set this dependency if you want to use Hamcrest matching
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    'org.hamcrest:hamcrest-library:1.1'
+
 }

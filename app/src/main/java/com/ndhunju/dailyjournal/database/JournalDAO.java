@@ -15,7 +15,7 @@ import java.util.List;
  * Created by dhunju on 9/18/2015.
  * Data Access Object for {@link Journal}
  */
-public class JournalDAO implements GenericDAO<Journal, Long> {
+public class JournalDAO implements IJournalDAO {
 
     private SQLiteOpenHelper mSqLiteOpenHelper;
 
@@ -53,6 +53,7 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         return temp;
     }
 
+    @Override
     public List<Journal> findAll(long partyId){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
 
@@ -89,12 +90,14 @@ public class JournalDAO implements GenericDAO<Journal, Long> {
         delete(journal.getId());
     }
 
+    @Override
     public void deleteAll(long partyId){
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         db.delete(JournalColumns.TABLE_JOURNAL,
                 DailyJournalContract.PartyColumns.PARTY_ID + "=" + partyId, null);
     }
 
+    @Override
     public int truncateTable(){
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         return db.delete(JournalColumns.TABLE_JOURNAL, null,null);

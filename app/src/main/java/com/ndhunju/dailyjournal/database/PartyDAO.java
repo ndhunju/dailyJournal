@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * This class is Data Access Object for Party
  */
-public class PartyDAO implements GenericDAO<Party, Long> {
+public class PartyDAO implements IPartyDAO {
 
     //Variables
     private SQLiteOpenHelper mSqLiteOpenHelper;
@@ -65,6 +65,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
      * @param operation
      * @return
      */
+    @Override
     public int updateDr(long id, double amount, String operation){
         return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_DR_AMT,
                 amount, operation, PartyColumns.PARTY_ID, id);
@@ -78,6 +79,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
      * @param operation
      * @return
      */
+    @Override
     public int updateCr(long id, double amount, String operation){
         return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_CR_AMT,
                            amount, operation, PartyColumns.PARTY_ID, id);
@@ -91,6 +93,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return sqlSt.executeUpdateDelete();
     }
 
+    @Override
     public Party find(String partyName){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, null, PartyColumns.COL_PARTY_NAME + "= ?",
@@ -123,6 +126,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
      * @param limit : limit size
      * @return
      */
+    @Override
     public Party[] findTopDrCrAmt(Journal.Type type, int limit){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
 
@@ -164,6 +168,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         delete(party.getId());
     }
 
+    @Override
     public List<String> getNames(){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, new String[]{PartyColumns.COL_PARTY_NAME},
@@ -179,6 +184,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
         return names;
     }
 
+    @Override
     public String[] getNamesAsArray(){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, new String[]{PartyColumns.COL_PARTY_NAME},
@@ -198,6 +204,7 @@ public class PartyDAO implements GenericDAO<Party, Long> {
      * Deletes all the entry from the table but keeps the schema
      * @return
      */
+    @Override
     public int truncateTable(){
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         return db.delete(PartyColumns.TABLE_PARTY, null,null);

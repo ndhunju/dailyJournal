@@ -121,7 +121,7 @@ public class OldJsonConverter {
      * @param json
      * @return
      */
-    public Journal getJournal(JSONObject json, long partyId) {
+    public static Journal getJournal(JSONObject json, long partyId) {
         try {
             int id = json.getInt("id");
             long date = json.getLong("date");
@@ -154,7 +154,7 @@ public class OldJsonConverter {
      * @param json
      * @return
      */
-    public Party getParty(JSONObject json) {
+    public static Party getParty(JSONObject json) {
 
         try {
             int id = json.getInt("id");

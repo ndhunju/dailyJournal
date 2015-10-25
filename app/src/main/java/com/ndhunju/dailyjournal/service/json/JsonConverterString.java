@@ -153,7 +153,7 @@ public final class JsonConverterString extends JsonConverter{
      * @param json
      * @return
      */
-    public Party getParty(JSONObject json){
+    public static Party getParty(JSONObject json){
 
         try {
             int id = json.getInt(KEY_ID);
@@ -188,7 +188,7 @@ public final class JsonConverterString extends JsonConverter{
      * @param json
      * @return
      */
-    public Journal getJournal(JSONObject json){
+    public static Journal getJournal(JSONObject json){
         try {
             int id = json.getInt(KEY_ID);
             long date = json.getLong(KEY_DATE);
@@ -216,7 +216,7 @@ public final class JsonConverterString extends JsonConverter{
 
     }
 
-    public Attachment getAttachment(JSONObject jsonObject){
+    public static Attachment getAttachment(JSONObject jsonObject){
         Attachment attachment = null;
         try {
             int id = jsonObject.getInt(KEY_ID);

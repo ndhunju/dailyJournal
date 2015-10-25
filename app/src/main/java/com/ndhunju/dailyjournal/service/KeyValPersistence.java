@@ -91,6 +91,11 @@ public class KeyValPersistence{
                 .getBoolean(KEY_OLD_DATA_IMPORTED, false);
     }
 
+    public static boolean isOldDataImported(SharedPreferences sharedPreferences){
+        //old versions have value saved in default preference file
+        return sharedPreferences.getBoolean(KEY_OLD_DATA_IMPORTED, false);
+    }
+
     public static void oldDataImportAttempted(boolean imported, Context context){
         //old versions have value saved in default preference file
         PreferenceManager.getDefaultSharedPreferences(context)

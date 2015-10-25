@@ -10,6 +10,7 @@ import com.ndhunju.dailyjournal.service.PreferenceService;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.IllegalFormatException;
 import java.util.Locale;
 
 public class UtilsFormat {
@@ -41,8 +42,12 @@ public class UtilsFormat {
         return DateFormat.format(getDateFormatFromPref(context), date).toString();
     }
 
-    public static String formatDate(Date date, String format) {
-        return DateFormat.format(format, date).toString();
+    public static String formatDate(Date date, String format){
+        try{
+            return DateFormat.format(format, date).toString();
+        }catch (Exception ex){
+            throw new IllegalArgumentException("Make sure format is correct");
+        }
     }
 
     /**
