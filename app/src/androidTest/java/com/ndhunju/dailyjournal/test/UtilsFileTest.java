@@ -1,5 +1,8 @@
-package com.ndhunju.dailyjournal;
+package com.ndhunju.dailyjournal.test;
 
+import android.app.Instrumentation;
+import android.support.test.runner.AndroidJUnit4;
+import android.test.InstrumentationTestCase;
 import android.test.mock.MockContext;
 
 import com.ndhunju.dailyjournal.util.UtilsFormat;
@@ -10,14 +13,16 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 
+import java.text.NumberFormat;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-
-public class UtilsFileTest {
+@RunWith(AndroidJUnit4.class)
+public class UtilsFileTest extends InstrumentationTestCase{
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -55,7 +60,7 @@ public class UtilsFileTest {
 
     @Test(expected = NumberFormatException.class)
     public void incorrectCurrencyFormatThrowsNumberFormatEx(){
-        UtilsFormat.parseCurrency("$%l", new MockContext());
+        UtilsFormat.parseCurrency("$%l", (NumberFormat)null);
     }
 
 }

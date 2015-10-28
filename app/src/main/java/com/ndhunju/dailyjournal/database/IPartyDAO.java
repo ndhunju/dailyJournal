@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by dhunju on 10/21/2015.
  */
-public interface IPartyDAO extends GenericDAO<Party, Long>{
+public interface IPartyDAO extends IGenericDAO<Party, Long> {
 
     int updateDr(long id, double amount, String operation);
 

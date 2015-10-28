@@ -96,4 +96,12 @@ public class DatePickerFragment extends DialogFragment {
 			.create();
 	}
 
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if(!(activity instanceof OnDialogBtnClickedListener)) {
+			throw new RuntimeException("The calling activity, " + activity.getComponentName() + " must implement the " +
+					"interface " + OnDialogBtnClickedListener.class.getSimpleName());
+		}
+	}
 }

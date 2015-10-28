@@ -78,7 +78,7 @@ public class KeyValPersistence{
      * Erases all stored SharedPreferences
      * @return true is successful
      */
-    public boolean clear(Context context){
+    public boolean clear(){
         return  mPreference.edit().clear().commit();
     }
 

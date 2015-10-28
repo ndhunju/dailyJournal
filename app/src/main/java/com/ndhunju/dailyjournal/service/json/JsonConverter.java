@@ -20,19 +20,13 @@ public abstract class JsonConverter implements JsonKeys{
     private static final String TAG = JsonConverter.class.getSimpleName();
 
     //Variables
-    protected Context mContext;
     protected Services mServices;
 
 
     protected JsonConverter(Context context){
-        mContext = context;
         mServices = Services.getInstance(context);
     }
 
-
-    protected Context getContext(){
-        return mContext;
-    }
 
     /**
      * This method with read the passed json file and stores the data

@@ -7,7 +7,7 @@ import java.util.List;
  * Created by dhunju on 9/18/2015.
  * DAO define generic CRUD operation
  */
-interface GenericDAO<T, ID extends Serializable> {
+interface IGenericDAO<T, ID extends Serializable> {
 
     //CRUD
     long create(T t);

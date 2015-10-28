@@ -1,8 +1,9 @@
-package com.ndhunju.dailyjournal;
+package com.ndhunju.dailyjournal.test;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.AndroidTestCase;
+import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.ndhunju.dailyjournal.controller.HomeActivity;
@@ -62,10 +63,6 @@ public class ServicesTest extends AndroidTestCase {
     @Rule
     public ActivityTestRule<HomeActivity> mActivityRule = new ActivityTestRule<>(HomeActivity.class);
 
-    @BeforeClass
-    public static void testinitializeSomethingReallyExpensive() {
-    }
-
     @Override
     public void setUp() {
     }
@@ -73,7 +70,7 @@ public class ServicesTest extends AndroidTestCase {
     @Before
     public void createService() {
         services = Services.getInstance(mActivityRule.getActivity());
-        services.eraseAll(mActivityRule.getActivity());
+        services.eraseAll();
     }
 
     @After
@@ -105,7 +102,7 @@ public class ServicesTest extends AndroidTestCase {
     }
 
     @Test
-    public void testaddingEqualNumOfDrCrJournalWithSameAmtGivesZeroBalance() {
+    public void testAddingEqualNumOfDrCrJournalWithSameAmtGivesZeroBalance() {
         //Arrange
         Party testParty = new Party("Party", 0);
         long newId = services.addParty(testParty);

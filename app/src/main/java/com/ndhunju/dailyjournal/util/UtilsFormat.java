@@ -84,9 +84,14 @@ public class UtilsFormat {
 
     public static double parseCurrency(String currency, Context context) throws NumberFormatException {
         NumberFormat nf = NumberFormat.getCurrencyInstance(getLocaleFromPref(context));
+        return parseCurrency(currency, nf);
+    }
+
+    public static double parseCurrency(String currency, NumberFormat numberFormat) throws NumberFormatException{
+        if(numberFormat == null)numberFormat = NumberFormat.getCurrencyInstance();
         double doubleCurrency = 0;
         try {
-            doubleCurrency = nf.parse(currency).doubleValue();
+            doubleCurrency = numberFormat.parse(currency).doubleValue();
         } catch (ParseException pe) {
             //try parsing it for regular double string
             try {

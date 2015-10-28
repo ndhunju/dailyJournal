@@ -15,7 +15,7 @@ import java.util.List;
  * Created by dhunju on 9/18/2015.
  * This is a Data Access Object for {@link Attachment}
  */
-public class AttachmentDAO implements GenericDAO<Attachment, Long> {
+public class AttachmentDAO implements IAttachmentDAO {
 
     private SQLiteOpenHelper mSqLiteOpenHelper;
 
@@ -34,6 +34,7 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
      * Bulk insertion can increase the performance of insertion.
      * @param attachments
      */
+    @Override
     public void bulkInsert(List<Attachment> attachments){
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         db.beginTransaction();
@@ -80,6 +81,7 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
         return temp;
     }
 
+    @Override
     public List<Attachment> findAll(long journalId){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         String selection = AttachmentColumns.COL_FK_JOURNAL_ID + "=" + journalId;
@@ -115,12 +117,14 @@ public class AttachmentDAO implements GenericDAO<Attachment, Long> {
        delete(attch.getId());
     }
 
+    @Override
     public int deleteAll(long journalId){
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         return db.delete(AttachmentColumns.TABLE_NAME_ATTACHMENTS,
                 AttachmentColumns.COL_FK_JOURNAL_ID + "=" + journalId, null);
     }
 
+    @Override
     public int truncateTable(){
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         return db.delete(AttachmentColumns.TABLE_NAME_ATTACHMENTS, null,null);

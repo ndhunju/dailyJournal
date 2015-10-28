@@ -2,7 +2,6 @@ package com.ndhunju.dailyjournal.controller.preference.backup;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 
@@ -13,7 +12,7 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 /**
  * Created by dhunju on 9/24/2015.
  * * This class is a child class of {@link AsyncTask} that erases
- * all data by calling {@link Services#eraseAll(Context)}. This
+ * all data by calling {@link Services#eraseAll()}. This
  * class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
@@ -39,7 +38,7 @@ public class EraseAllAsyncTask extends AsyncTask<Void,Integer,Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         Services services = Services.getInstance(mActivity);
-        return services.eraseAll(mActivity);
+        return services.eraseAll();
     }
 
     @Override

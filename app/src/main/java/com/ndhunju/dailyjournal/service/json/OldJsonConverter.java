@@ -125,10 +125,18 @@ public class OldJsonConverter {
         try {
             int id = json.getInt("id");
             long date = json.getLong("date");
-            long added_date = json.getLong("added_date");
+            long added_date;
+
+            //there have been two variation for added date. <b>Don't change key name unless you die</b>
+            try{added_date = json.getLong("added_date");
+            }catch (JSONException ex){added_date = json.getLong("addedDate");}
+
             Journal.Type type = Journal.Type.valueOf(json.getString("type"));
             double amount = json.getDouble("amount");
-            String note = json.getString("mNote");
+
+            String note;
+            try{note = json.getString("mNote");}
+            catch (JSONException ex){note = json.getString("note");}
 
 
             Journal newJournal = new Journal(partyId);

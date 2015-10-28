@@ -2,12 +2,17 @@ package com.ndhunju.dailyjournal.service;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.media.MediaScannerConnection;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
+import com.ndhunju.dailyjournal.database.DailyJournalContract;
 import com.ndhunju.dailyjournal.database.DbHelper;
+import com.ndhunju.dailyjournal.database.IAttachmentDAO;
+import com.ndhunju.dailyjournal.database.IJournalDAO;
+import com.ndhunju.dailyjournal.database.IPartyDAO;
 import com.ndhunju.dailyjournal.database.JournalDAO;
 import com.ndhunju.dailyjournal.database.PartyDAO;
 import com.ndhunju.dailyjournal.model.Attachment;
@@ -20,7 +25,6 @@ import com.ndhunju.dailyjournal.util.UtilsZip;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -28,12 +32,12 @@ public class Services {
 
 	//Variables
 	private Context mContext;
-	private DbHelper mDbHelper;
+	private SQLiteOpenHelper mSqLiteOpenHelper;
 
 	//DAOs
-	private PartyDAO partyDAO;
-	private JournalDAO journalDAO;
-	private AttachmentDAO attachmentDAO;
+	private IPartyDAO partyDAO;
+	private IJournalDAO journalDAO;
+	private IAttachmentDAO attachmentDAO;
 
 	//Static variable
 	private static Services mServices;
@@ -43,14 +47,29 @@ public class Services {
 		return mServices;
 	}
 
+	public static Services getInstance(Context con, SQLiteOpenHelper sqLiteOpenHelper) {
+		if (mServices == null)	mServices = new Services(con, sqLiteOpenHelper);
+		return mServices;
+	}
+
 	//Constructor
 	private Services(@NonNull Context context) {
 		mContext = context;
-		mDbHelper = new DbHelper(mContext);
-		partyDAO = new PartyDAO(mDbHelper);
-		journalDAO = new JournalDAO(mDbHelper);
-		attachmentDAO = new AttachmentDAO(mDbHelper);
+		mSqLiteOpenHelper = new DbHelper(mContext);
+		partyDAO = new PartyDAO(mSqLiteOpenHelper);
+		journalDAO = new JournalDAO(mSqLiteOpenHelper);
+		attachmentDAO = new AttachmentDAO(mSqLiteOpenHelper);
 	}
+
+    private Services(Context context, SQLiteOpenHelper sqLiteOpenHelper){
+        mContext = context;
+        mSqLiteOpenHelper = sqLiteOpenHelper;
+        partyDAO = new PartyDAO(mSqLiteOpenHelper);
+        journalDAO = new JournalDAO(mSqLiteOpenHelper);
+        attachmentDAO = new AttachmentDAO(mSqLiteOpenHelper);
+
+
+    }
 
     /**
      * Creates a backup file of existing data along with attachments.
@@ -151,7 +170,7 @@ public class Services {
      * @return
      */
 	public boolean deleteParty(Party party){
-		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
 		boolean success = false;
 		db.beginTransaction();
 		try{
@@ -232,7 +251,7 @@ public class Services {
      * @param newJournal
      */
     public boolean deleteNewJournal(Journal newJournal){
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         db.beginTransaction();
         boolean success =false;
         try{
@@ -259,7 +278,7 @@ public class Services {
      * @param newJournal
      */
     public void updateNewJournal(Journal newJournal){
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         db.beginTransaction();
         try{
             journalDAO.update(newJournal);
@@ -279,13 +298,17 @@ public class Services {
 		return new ArrayList<>();
 	}
 
+	public ArrayList<Journal> getJournals(){
+		return (ArrayList<Journal>)journalDAO.findAll();
+	}
+
     /**
      * Adds Journal that is associated with a Party
      * @param journal
      * @return
      */
 	public long addJournal(Journal journal){
-		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
 		db.beginTransaction();
         long id = Constants.ID_NEW_JOURNAL;
 		try{
@@ -308,7 +331,7 @@ public class Services {
      * @return
      */
 	public boolean deleteJournal(Journal journal){
-		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
 		db.beginTransaction();
 		boolean success =false;
 		try{
@@ -379,7 +402,7 @@ public class Services {
      * but for now we will just delete old journal and add changed one
      * as a new journal
          */
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         db.beginTransaction();
         boolean success = false;
         try {
@@ -477,15 +500,6 @@ public class Services {
 
 
 	/********************DELETION FUNCTIONS ************************/
-	/**
-	 * Clears all parties. <b>Note: </b> It doesn't delete corresponding files/attachments
-	 * from app folder. For that, {@link #eraseAll(Context)} should be called
-	 * @return
-	 */
-	public boolean dropAllTables(){
-		return mDbHelper.dropAllTables();
-	}
-
     /**
      * Deletes all the rows in the tables but not the schema. It
      * doesn't reset any autoincrement columns
@@ -504,24 +518,54 @@ public class Services {
      * @return
      */
     public boolean recreateDB(){
-        return mDbHelper.dropAllTables() &&
-        mDbHelper.createDB();
+        return dropAllTables() &&
+        createDB();
     }
 
 
+    /**
+     * Creates tables in the database
+     * @return
+     */
+    public boolean createDB(){
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        db.execSQL(DailyJournalContract.PartyColumns.SQL_CREATE_ENTRIES_PARTY);
+        db.execSQL(DailyJournalContract.JournalColumns.SQL_CREATE_ENTRIES_JOURNALS);
+        db.execSQL(DailyJournalContract.AttachmentColumns.SQL_CREATE_ENTRIES_ATTACHMENTS);
+        return true;
+    }
+
+    /**
+     * Clears all parties. <b>Note: </b> It doesn't delete corresponding files/attachments
+     * from app folder. For that, {@link #eraseAll()} should be called
+     * @return
+     */
+    public boolean dropAllTables(){
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        try{
+            db.execSQL(DailyJournalContract.AttachmentColumns.SQL_DROP_ENTRIES_ATTACHMENTS);
+            db.execSQL(DailyJournalContract.JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
+            db.execSQL(DailyJournalContract.PartyColumns.SQL_DROP_ENTRIES_PARTY);
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 
 	/**
-	 * Deletes all parties, journals along with the attachments.
-	 * @param context
+	 * Deletes all parties, journals along with the attachments from the storage as well as
+     * from the database. However, it recreates the DB schema
 	 * @return
 	 */
-	public boolean eraseAll(Context context){
+	public boolean eraseAll(){
 		boolean success = true;
 		try{
 			success &= recreateDB();
-			success &= KeyValPersistence.from(context).clear(mContext);
-			success &= PreferenceService.from(context).clear();
-			success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(context));
+			success &= KeyValPersistence.from(mContext).clear();
+			success &= PreferenceService.from(mContext).clear();
+			success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(mContext));
 		}catch (Exception e){
 			e.printStackTrace();
 		}

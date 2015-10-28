@@ -33,7 +33,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(PartyColumns.SQL_CREATE_ENTRIES_PARTY);
         db.execSQL(JournalColumns.SQL_CREATE_ENTRIES_JOURNALS);
         db.execSQL(AttachmentColumns.SQL_CREATE_ENTRIES_ATTACHMENTS);
-        
     }
 
     @Override
@@ -78,33 +77,6 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
-
-    /**
-     * Creates tables in the database
-     * @return
-     */
-    public boolean createDB(){
-    	SQLiteDatabase db = getWritableDatabase();
-		db.execSQL(PartyColumns.SQL_CREATE_ENTRIES_PARTY);
-        db.execSQL(JournalColumns.SQL_CREATE_ENTRIES_JOURNALS);
-        db.execSQL(AttachmentColumns.SQL_CREATE_ENTRIES_ATTACHMENTS);
-        return true;
-    }
-
-    public boolean dropAllTables(){
-        SQLiteDatabase db = getWritableDatabase();
-        try{
-            db.execSQL(AttachmentColumns.SQL_DROP_ENTRIES_ATTACHMENTS);
-            db.execSQL(JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
-            db.execSQL(PartyColumns.SQL_DROP_ENTRIES_PARTY);
-        }catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
 
 
 }
