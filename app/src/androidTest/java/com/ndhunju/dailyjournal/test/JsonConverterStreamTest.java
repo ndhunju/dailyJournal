@@ -1,7 +1,6 @@
 package com.ndhunju.dailyjournal.test;
 
 import android.content.Context;
-import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 
 import com.ndhunju.dailyjournal.model.Journal;
@@ -10,17 +9,11 @@ import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.service.json.JsonConverter;
 import com.ndhunju.dailyjournal.service.json.JsonConverterStream;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
-import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsZip;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 /**

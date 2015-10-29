@@ -12,29 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.mpAndroidCharts.animation.EasingFunction;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.charts.PieChart;
-import com.ndhunju.dailyjournal.controller.mpAndroidCharts.components.Legend;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.Entry;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.PieData;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.data.PieDataSet;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.utils.ColorTemplate;
-import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.service.Analytics;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class PieChartFrag extends ChartFragment {
 
     private static final String ARG_CHART_TYPE = "type";
     public static final int LIMIT_ITEM_CHART = 5;
 
-    public static Fragment newInstance(Journal.Type type) {
+    public static Fragment newInstance(int type) {
         Fragment pieChartFrag = new PieChartFrag();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CHART_TYPE,type );
+        args.putSerializable(ARG_CHART_TYPE, type );
         pieChartFrag.setArguments(args);
         return pieChartFrag;
     }
@@ -45,7 +41,7 @@ public class PieChartFrag extends ChartFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.frag_simple_pie, container, false);
 
-        Journal.Type type = (Journal.Type)getArguments().getSerializable(ARG_CHART_TYPE);
+        int type = getArguments().getInt(ARG_CHART_TYPE);
 
         mChart = (PieChart) v.findViewById(R.id.pieChart1);
 
@@ -58,8 +54,8 @@ public class PieChartFrag extends ChartFragment {
 
         StringBuilder dscrptn = new StringBuilder(UtilsFormat.getPartyFromPref(getActivity()));
         dscrptn.append(" ");
-        dscrptn.append(type == Journal.Type.Debit ? getString(R.string.chart_dscrptn_you_owe) :
-                getString(R.string.chart_dscrptn_owe_you));
+        dscrptn.append(type == Analytics.TOP_POS_BAL ? getString(R.string.chart_dscrptn_owe_you) :
+                getString(R.string.chart_dscrptn_you_owe));
 
 
         Analytics analytics = Analytics.from(getActivity());

@@ -42,7 +42,7 @@ public class PartyDetailActivity extends Activity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(Constants.KEY_PARTY_ID,getIntent().getStringExtra(Constants.KEY_PARTY_ID));
+            arguments.putString(Constants.KEY_PARTY_ID, getIntent().getStringExtra(Constants.KEY_PARTY_ID));
             PartyDetailFragment fragment = new PartyDetailFragment();
             fragment.setArguments(arguments);
 

@@ -3,12 +3,9 @@ package com.ndhunju.dailyjournal.test;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.AndroidTestCase;
-import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import com.ndhunju.dailyjournal.controller.HomeActivity;
-import com.ndhunju.dailyjournal.model.Attachment;
-import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Analytics;
 import com.ndhunju.dailyjournal.service.Services;
@@ -17,11 +14,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.Calendar;
-import java.util.Date;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by dhunju on 10/27/2015.
@@ -43,7 +35,7 @@ public class AnalyticsTest extends AndroidTestCase{
         analytics = Analytics.from(services.getContext());
 
         services.eraseAll();
-        fillDatabase(services);
+        UtilsTest.fillDatabase(services);
 
     }
 
@@ -54,12 +46,12 @@ public class AnalyticsTest extends AndroidTestCase{
     public void testGetTopDrCrOnly() throws Exception {
         //Arrange
         int limit = 5;
-        double[] expectedTopCrAmtOfParties = { 455.0, 355.0,255.0,155.0,55.0};
-        double[] expectedTopDrAmtOfParties = { 640.0, 620.0, 600.0, 580.0,560.0};
+        double[] expectedTopCrAmtOfParties = {317.0,303.0,285.0,213.0,212.0};
+        double[] expectedTopDrAmtOfParties = {238.0,226.0,214.0,202.0,186.0};
 
         //Act
-        Party[] crParties = analytics.getTopDrCrOnly(Party.Type.Creditors, limit);
-        Party[] drParties = analytics.getTopDrCrOnly(Party.Type.Debtors, limit);
+        Party[] crParties = analytics.getTopDrCrOnly(Analytics.TOP_CR_BAL, limit);
+        Party[] drParties = analytics.getTopDrCrOnly(Analytics.TOP_DR_BAL, limit);
 
         //Assert
         for(int pos= 0 ; pos < limit ; pos++){
@@ -72,50 +64,23 @@ public class AnalyticsTest extends AndroidTestCase{
     public void testGetTopPartiesByBalance() throws Exception {
         //Arrange
         int limit = 5;
-        double[] expectedTopNegativeBalOfParties = { -455.0, -355.0, -255.0,-155.0,-55.0};
-        double[] expectedTopPositiveBalOfParties = { 640.0, 620.0 , 600.0, 580.0,560.0};
+        double[] expectedTopNegativeBalOfParties = { -155.0,-99.0,-65.0,-59.0,-3.0};
+        double[] expectedTopPositiveBalOfParties = { 169.0 ,93.0 ,91.0 ,37.0 ,13.0};
+        String[] expectedTopNegativeBalPartyNames = {"Test Party8","Test Party7","Test Party9","Test Party5","Test Party4"};
+        String[] expectedTopPositiveBalPartyNames = {"Test Party0","Test Party1","Test Party3","Test Party2","Test Party6" };
 
         //Act
-        Analytics.PartyData crPartyData = analytics.getTopPartiesByBalance(Journal.Type.Credit, limit);
-        Analytics.PartyData drPartyData = analytics.getTopPartiesByBalance(Journal.Type.Debit, limit);
+        Analytics.PartyData crPartyData = analytics.getTopPartiesByBalance(Analytics.TOP_NEG_BAL, limit);
+        Analytics.PartyData drPartyData = analytics.getTopPartiesByBalance(Analytics.TOP_POS_BAL, limit);
 
         //Assert
         for(int pos= 0 ; pos < limit ; pos++){
-            assertEquals("", expectedTopNegativeBalOfParties[pos], crPartyData.parties[pos].calculateBalances());
-            assertEquals("", expectedTopPositiveBalOfParties[pos], drPartyData.parties[pos].calculateBalances());
+            assertEquals("Negative balance mismatch", expectedTopNegativeBalOfParties[pos], crPartyData.parties[pos].calculateBalances());
+            assertEquals("Positive balance mismatch", expectedTopPositiveBalOfParties[pos], drPartyData.parties[pos].calculateBalances());
+            assertEquals("Party Name for Negative balance mismatch", expectedTopNegativeBalPartyNames[pos], crPartyData.parties[pos].getName());
+            assertEquals("Party Name for Positive balance mismatch", expectedTopPositiveBalPartyNames[pos], drPartyData.parties[pos].getName());
         }
     }
 
 
-    /**
-     * Helper method to fill database with arbitrary data
-     */
-    public void fillDatabase(Services services){
-
-        //Initialize instances here to reuse the objects
-        Attachment newAttachment = new Attachment(0);
-        Party newParty = new Party("test Party ");
-        Journal newJournal = new Journal(0);
-
-        long newPartyId;
-        long newJournalId;
-
-
-        for(int i = 0; i < 10; i++){
-            newParty.setName("test Party " + i);
-            newPartyId = services.addParty(newParty);
-            for(int j=0; j < 10; j++){
-                newJournal.setPartyId(newPartyId);
-                newJournal.setAmount((i&1) == 1 ? 10 + i + (j*10) : 10 + (i*5) - j);
-                newJournal.setDate(Calendar.getInstance().getTimeInMillis() + i + j);
-                newJournal.setType(((i & 1) == 1 ? (  Journal.Type.Debit): Journal.Type.Credit));
-                newJournalId = services.addJournal(newJournal);
-                for(int z = 0; z < 2; z++){
-                    newAttachment.setJournalId(newJournalId);
-                    newAttachment.setPath(i + j + z + "");
-                    services.addAttachment(newAttachment);
-                }
-            }
-        }
-    }
 }

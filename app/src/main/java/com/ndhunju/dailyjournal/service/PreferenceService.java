@@ -13,7 +13,7 @@ import com.ndhunju.dailyjournal.util.UtilsDate;
 
 /**
  * Created by dhunju on 10/4/2015.
- * Service class for storing and retrieving user preferences
+ * Service class for storing and retrieving user preferences stored on xml file
  */
 public class PreferenceService {
 
@@ -69,20 +69,26 @@ public class PreferenceService {
 
     /**
      * Helper method that returns the selected value for a preference
-     * @param key : key for the preference
-     * @param defaultVal
+     * @param resKeyId :  resource id for key for the preference
+     * @param defaultVal : value to return if key's value doesn't exist
      * @return
      */
-    public String getVal(String key, String defaultVal){
-        return getSharedPreference().getString(key, defaultVal);
-    }
-
     public String getVal(int resKeyId, String defaultVal){
         return getSharedPreference().getString(getKey(resKeyId), defaultVal);
     }
 
+    /**
+     * Returns boolean value saved in the xml preference file. Default value eg false
+     * are saved as String type. This method can be used to retrieve such values as
+     * well
+     * @param resKeyId
+     * @param defaultVal
+     * @return
+     */
     public boolean getVal(int resKeyId, boolean defaultVal){
-        return getSharedPreference().getBoolean(getKey(resKeyId), defaultVal);
+        //By default, values saved in xml file are of String type. So need to parse the value
+        return Boolean.parseBoolean(getSharedPreference().getString(getKey(resKeyId),
+                String.valueOf(defaultVal)));
     }
 
     public int getVal(int resKeyId, int defaultVal){

@@ -117,7 +117,7 @@
     </TableRow>
 
     <ListView
-        android:id="@+id/activity_party_ll"
+        android:id="@+id/activity_party_lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </ListView>

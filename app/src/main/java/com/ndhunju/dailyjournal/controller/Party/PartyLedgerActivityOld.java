@@ -53,7 +53,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 
         //Wire up the widgets/view
 		balanceTV = (TextView) findViewById(R.id.activity_party_balance_tv);
-		ledgerListView = (ListView)findViewById(R.id.activity_party_ll);
+		ledgerListView = (ListView)findViewById(R.id.activity_party_lv);
 
 		mServices = Services.getInstance(PartyLedgerActivityOld.this);
 

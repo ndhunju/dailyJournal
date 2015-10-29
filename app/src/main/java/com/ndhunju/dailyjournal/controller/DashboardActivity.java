@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.PieChartFrag;
 import com.ndhunju.dailyjournal.model.Journal;
+import com.ndhunju.dailyjournal.service.Analytics;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.Locale;
@@ -132,10 +133,10 @@ public class DashboardActivity extends Activity implements ActionBar.TabListener
 
             switch (position){
                 case 0:
-                    return PieChartFrag.newInstance(Journal.Type.Credit);
+                    return PieChartFrag.newInstance(Analytics.TOP_NEG_BAL);
                 case 1:
                 default:
-                    return PieChartFrag.newInstance(Journal.Type.Debit);
+                    return PieChartFrag.newInstance(Analytics.TOP_POS_BAL);
 
             }
         }

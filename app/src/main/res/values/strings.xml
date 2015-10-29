@@ -102,8 +102,8 @@
     <string name="str_credit">Credit</string>
     <string name="str_transaction">Transaction</string>
     <string name="str_account">Account</string>
-    <string name="chart_dscrptn_you_owe">that owe you</string>
-    <string name="chart_dscrptn_owe_you">that you owe</string>
+    <string name="chart_dscrptn_owe_you">that owe you</string>
+    <string name="chart_dscrptn_you_owe">that you owe</string>
     <string name="str_no">No</string>
     <string name="str_search">Search</string>
 

@@ -15,6 +15,12 @@ import java.util.Collections;
  */
 public class Analytics {
 
+    //Constants
+    public static int TOP_DR_BAL = 0;
+    public static int TOP_CR_BAL = 1;
+    public static int TOP_POS_BAL = 2;
+    public static int TOP_NEG_BAL = 3;
+
     //Variables
     private Services mServices;
     private static Analytics analytics;
@@ -34,20 +40,18 @@ public class Analytics {
      * For, Highest Negative(Credit) or Positive(Debit) balance use
      * {@link #getTopPartiesByBalance(Journal.Type, int)}
      * @param type : Highest Credit or Debit
-     * @param limit : Limit the list
+     * @param size : Limit the list
      * @return
      */
-    public Party[] getTopDrCrOnly(Party.Type type, int limit){
+    public Party[] getTopDrCrOnly(int type, int size){
 
-        Party[] topParties = new Party[limit];
+        Party[] topParties = new Party[size];
         ArrayList<Party> parties = mServices.getParties();
 
-        if(type == Party.Type.Debtors)
-        {
-            sortTopDebtors(parties, limit);}
-        else { sortTopCreditors(parties, limit);}
+        size = sortTopDebtors(parties, size, type);
+        if(size == 0) return null;
 
-        for(int i = 0; i < limit; i++){
+        for(int i = 0; i < size; i++){
             topParties[i] = parties.get(i);
         }
 
@@ -63,17 +67,12 @@ public class Analytics {
      * @param size : size of the list
      * @return
      */
-    public PartyData getTopPartiesByBalance(Journal.Type type, int size){
+    public PartyData getTopPartiesByBalance(int type, int size){
 
         ArrayList<Party> parties = mServices.getParties();
 
-        //when no parties are added
-        if(parties == null || parties.size() == 0) return null;
-        if(parties.size() < size) size = parties.size();
-
-        if(type == Journal.Type.Debit)
-        {size = sortTopDebtors(parties, size);}
-        else {size = sortTopCreditors(parties, size);}
+        size = sortTopDebtors(parties, size, type);
+        if(size == 0) return null;
 
         PartyData partyData = new PartyData(size);
 
@@ -96,17 +95,19 @@ public class Analytics {
      * @param values : array to sort
      * @param k : position
      */
-    public int sortTopDebtors(ArrayList<Party> values, int k){
+    public int sortTopDebtors(ArrayList<Party> values, int k, int type){
+        //when values null or of size 0
+        if(values == null || values.size() == 0) return 0;
         //id the the size of values is smaller than k, k = size
         if(values.size() < k) k = values.size();
         int newSize = 0;
         for(int i = 0; i < k; i++){
             int maxIndex = i;
-            double maxVal = values.get(i).calculateBalances();
+            double maxVal = getVal(values.get(i), type);
             for(int j = i+1; j < values.size(); j++){
-                if(values.get(j).calculateBalances() > maxVal){
+                if(getVal(values.get(j), type) > maxVal){
                     maxIndex = j;
-                    maxVal = values.get(j).calculateBalances();
+                    maxVal = getVal(values.get(j), type);
                 }
             }
 
@@ -118,6 +119,16 @@ public class Analytics {
         }
         return newSize;
     }
+
+    public double getVal(Party party, int type){
+        if(type == TOP_POS_BAL) return party.calculateBalances();
+        else if(type == TOP_NEG_BAL) return -party.calculateBalances();
+        else if(type == TOP_CR_BAL) return party.getCreditTotal();
+        else if(type == TOP_DR_BAL) return party.getDebitTotal();
+        return -1;
+    }
+
+
 
     /**
      * Sorts passed Party ArrayList such that Party with the highest

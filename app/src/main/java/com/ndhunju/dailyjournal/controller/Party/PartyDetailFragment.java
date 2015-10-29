@@ -76,7 +76,12 @@ public class PartyDetailFragment extends Fragment {
 
         if (getArguments().containsKey(Constants.KEY_PARTY_ID)) {
             // Load the content specified by the fragment argument
-            long partyId = Long.parseLong(getArguments().getString(Constants.KEY_PARTY_ID));
+            long partyId = 0;
+
+            //don't remember why i choose string instead of long
+            try{partyId = Long.parseLong(getArguments().getString(Constants.KEY_PARTY_ID));}
+            catch (NumberFormatException ex){ex.printStackTrace();}
+
             mServices = Services.getInstance(getActivity());
             mParty = mServices.getParty(partyId);
 
@@ -94,7 +99,7 @@ public class PartyDetailFragment extends Fragment {
         //Wire up the widgets/view
         picIV = (ImageView) rootView.findViewById(R.id.activity_party_circle_iv);
         nameTV = (TextView) rootView.findViewById(R.id.activity_party_name_tv);
-        ledgerListView = (ListView) rootView.findViewById(R.id.activity_party_ll);
+        ledgerListView = (ListView) rootView.findViewById(R.id.activity_party_lv);
         balanceTV = (TextView) rootView.findViewById(R.id.activity_party_balance_tv);
         headerRow = (TableRow)rootView.findViewById(R.id.activity_party_header_tr);
 

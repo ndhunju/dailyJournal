@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.List;
+
 /**
  * Created by dhunju on 10/4/2015.
  * This class can be used to permanently store Key Value pair.
@@ -49,6 +51,14 @@ public class KeyValPersistence{
         return mPreference.getLong(key, defLongVal);
     }
 
+    public boolean get(String key, boolean defBoolVal){
+        return mPreference.getBoolean(key, defBoolVal);
+    }
+
+    public int get(String key, int defIntVal){
+        return mPreference.getInt(key, defIntVal);
+    }
+
     public String get(int keyResId, String defVal){
         return get(mContext.getString(keyResId), defVal);
     }
@@ -68,6 +78,14 @@ public class KeyValPersistence{
 
     public void putLong(String key, long val){
         mPreference.edit().putLong(key, val).apply();
+    }
+
+    public void putInt(String key, int val){
+        mPreference.edit().putInt(key, val).apply();
+    }
+
+    public void putBoolean(String key, boolean val){
+        mPreference.edit().putBoolean(key, val).apply();
     }
 
     public void putLong(int keyResId, long value){
