@@ -25,7 +25,7 @@
         </TextView>
 
         <TextView
-            android:id="@+id/activity_party_balance_tv"
+            android:id="@+id/fragment_party_detail_balance_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_xlarge" >

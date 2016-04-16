@@ -5,6 +5,9 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
+import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -44,7 +47,8 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	private EditText noteEt;
     private Button partyBtn;
 	private Button dateBtn;
-	private TextView drCrTv;
+	private TextView drTv;
+    private TextView crTv;
 	private TextView idTV;
 	Button drBtn, crBtn;
 
@@ -93,31 +97,36 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		//Wire Views and Widgets
 		View v = inflater.inflate(R.layout.fragment_journal, new LinearLayout(getActivity()));
 
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.app_name);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
 		idTV = (TextView) v.findViewById(R.id.fragment_journal_id);
-		drCrTv = (TextView) v.findViewById(R.id.fragment_journal_dr_cr_tv);
+		drTv = (TextView) v.findViewById(R.id.fragment_journal_dr_tv);
+        crTv = (TextView) v.findViewById(R.id.fragment_journal_cr_tv);
 
 		amountEt = (EditText) v.findViewById(R.id.fragment_home_amount_et);
 		amountEt.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (!s.toString().equals("")) {
-					try {
-						mJournal.setAmount(UtilsFormat.parseCurrency(s.toString(), getActivity()));
-						journalChanged = true;
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().equals("")) {
+                    try {
+                        mJournal.setAmount(UtilsFormat.parseCurrency(s.toString(), getActivity()));
+                        journalChanged = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
 		dateBtn = (Button) v.findViewById(R.id.activity_home_date_btn);
 		dateBtn.setOnClickListener(new OnClickListener() {
@@ -144,19 +153,21 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 			public void onClick(View v) {
 				journalChanged = true;
 				mJournal.setType(Journal.Type.Debit);
+                UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
                 setTextDrCr(mJournal.getType());
 			}
 		});
 
 		crBtn = (Button) v.findViewById(R.id.fragment_home_credit_btn);
 		crBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				journalChanged = true;
-				mJournal.setType(Journal.Type.Credit);
+            @Override
+            public void onClick(View v) {
+                journalChanged = true;
+                mJournal.setType(Journal.Type.Credit);
+                UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
                 setTextDrCr(mJournal.getType());
-			}
-		});
+            }
+        });
 
 		noteEt = (EditText) v.findViewById(R.id.fragment_home_note_et);
 		noteEt.addTextChangedListener(new TextWatcher() {
@@ -178,14 +189,14 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		Button attachBtn = (Button) v.findViewById(R.id.fragment_home_attach_btn);
 		attachBtn.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 //open ViewPagerActivity to view attachments
                 Intent i = new Intent(getActivity(), ViewPagerActivity.class);
                 i.putExtra(Constants.KEY_JOURNAL_ID, mJournal.getId());
                 startActivity(i);
-			}
-		});
+            }
+        });
 
 		Button saveJournalBtn = (Button) v.findViewById(R.id.fragment_home_save_btn);
 		saveJournalBtn.setOnClickListener(new OnClickListener() {
@@ -211,6 +222,9 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
             }
         });
+
+		((FloatingActionButton)v.findViewById(R.id.fragment_home_mic_btn))
+				.setVisibility(View.INVISIBLE);
 
         //Refresh values in UI
 		setValues(mJournal, mParty);
@@ -267,7 +281,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	}
 
     /**
-     * Sets the value and color of {@link #drCrTv} and {@link #amountEt} based on passed
+     * Sets the value and color of {@link #drTv} and {@link #amountEt} based on passed
      * Journal Type
      * @param journalType
      */
@@ -277,12 +291,16 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
         if (journalType.equals(Journal.Type.Debit)) {
 			amountEt.setTextColor(green);
-			drCrTv.setTextColor(green);
-			drCrTv.setText(getString(R.string.str_dr));
+            //drTv.setTextColor(green);
+            //drTv.setText(getString(R.string.str_dr));
+            drTv.setVisibility(View.VISIBLE);
+            crTv.setVisibility(View.INVISIBLE);
         } else {
-			amountEt.setTextColor(red);
-			drCrTv.setTextColor(red);
-			drCrTv.setText(getString(R.string.str_cr));
+            amountEt.setTextColor(red);
+            //drTv.setTextColor(red);
+            //drTv.setText(getString(R.string.str_cr));
+            drTv.setVisibility(View.INVISIBLE);
+            crTv.setVisibility(View.VISIBLE);
         }
     }
 

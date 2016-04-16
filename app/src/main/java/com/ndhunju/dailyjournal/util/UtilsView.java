@@ -5,6 +5,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.LayoutRes;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ndhunju.dailyjournal.R;
@@ -72,6 +77,21 @@ public class UtilsView {
         pd.setCanceledOnTouchOutside(false);
         pd.show();
         return pd;
+    }
+
+    public static void performTransition(int viewGroupId, Activity activity){
+
+        if(Utils.isLollipop()) {
+            //For example, the framework does not support animating changes to ListView
+            // objects, so you should not try to animate them during a transition.
+            Transition transition = TransitionInflater.from(activity)
+                    .inflateTransition(R.transition.transition_fade_set);
+            transition.setDuration(500);
+            // Start recording changes to the view hierarchy
+            TransitionManager.beginDelayedTransition((ViewGroup) activity
+                    .findViewById(viewGroupId), transition);
+
+        }
     }
 
 }

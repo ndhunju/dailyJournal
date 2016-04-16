@@ -43,7 +43,7 @@ class PartyRowAdapter extends ArrayAdapter<Party> {
             //tag the view with the holder instance for later lookup
             convertView.setTag(holder);
         }else{
-            //since the convertView is not null, get the holder instance
+            //since the convertView is not null, getInt the holder instance
             holder = (ViewHolder)convertView.getTag();
         }
 

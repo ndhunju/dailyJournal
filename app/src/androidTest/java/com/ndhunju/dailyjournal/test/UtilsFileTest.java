@@ -4,6 +4,7 @@ import android.app.Instrumentation;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 import android.test.mock.MockContext;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
@@ -49,6 +50,7 @@ public class UtilsFileTest extends InstrumentationTestCase{
         assertThat(testStrId, equalTo("0000000008"));
     }
 
+    @SmallTest
     public void passingIncorrectFormatForDateThrowsNullPointerException(){
         //Arrange
         String dateFormat = "illegalFormat";

@@ -14,9 +14,16 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <!--OLD<style name="AppTheme" parent="AppBaseTheme">-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:theme">@android:style/Theme.DeviceDefault.Light</item>
+        <!--<item name="morphButtonStyle">@style/Widget.MorphButton</item>-->
+        <!--<item name="android:windowBackground">@color/colorBackground</item>-->
+    </style>
+
+    <style name="ActionBarStyle">
+        <item name="android:background">@color/blue_700</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
 
     <style name="Widget.Button_Neutral" parent="android:Widget">
@@ -71,6 +78,5 @@
     <style name="Underline">
         <item name="android:background">@drawable/buttom_border</item>
     </style>
-
 
 </resources>

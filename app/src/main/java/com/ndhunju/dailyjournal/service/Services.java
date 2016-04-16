@@ -25,6 +25,8 @@ import com.ndhunju.dailyjournal.util.UtilsZip;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -33,6 +35,9 @@ public class Services {
 	//Variables
 	private Context mContext;
 	private SQLiteOpenHelper mSqLiteOpenHelper;
+
+    //Cache
+    private HashMap<Long, Party> mParties;
 
 	//DAOs
 	private IPartyDAO partyDAO;
@@ -221,6 +226,10 @@ public class Services {
             //save the id of new journal.
             setNewJournalId(id);
         }
+
+        //update the date to Todays
+        newJournal.setDate(Calendar.getInstance().getTimeInMillis());
+
         return newJournal;
     }
 
@@ -231,7 +240,7 @@ public class Services {
     public long getNewJournalId(){
         //get the last created new journal's id
         KeyValPersistence persistence = KeyValPersistence.from(mContext);
-        long rowId = persistence.get(String.valueOf(Constants.ID_NEW_JOURNAL), 0);
+        long rowId = persistence.getLong(String.valueOf(Constants.ID_NEW_JOURNAL), 0);
         return rowId;
     }
 

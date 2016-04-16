@@ -4,6 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import com.ndhunju.dailyjournal.controller.HomeActivity;
 import com.ndhunju.dailyjournal.model.Attachment;
@@ -41,7 +42,6 @@ import static org.junit.Assert.assertThat;
  * junit.framework.TestSuite} from all tests and run them.
  */
 @RunWith(AndroidJUnit4.class)
-@LargeTest
 public class ServicesTest extends AndroidTestCase {
 
     public Services services;
@@ -55,7 +55,7 @@ public class ServicesTest extends AndroidTestCase {
      * any of your setup code in the {@link Before @Before} method.
      * <p/>
      * {@link ActivityTestRule} will create and launch of the activity for you and also expose
-     * the activity under test. To get a reference to the activity you can use
+     * the activity under test. To getInt a reference to the activity you can use
      * the {@link ActivityTestRule#getActivity()} method.
      */
     @Rule
@@ -80,6 +80,7 @@ public class ServicesTest extends AndroidTestCase {
     }
 
     @Test
+    @SmallTest
     public void addingOnlyCreditJournalsGivesNegativeBalance() throws Exception {
         //Arrange
         Party testParty = new Party("Party", 0);
@@ -92,7 +93,7 @@ public class ServicesTest extends AndroidTestCase {
         }
 
         //Act
-        //get fresh copy of party
+        //getInt fresh copy of party
         double testBalance = services.getParty(newId).calculateBalances();
 
         //Assert
@@ -100,6 +101,7 @@ public class ServicesTest extends AndroidTestCase {
     }
 
     @Test
+    @SmallTest
     public void testAddingEqualNumOfDrCrJournalWithSameAmtGivesZeroBalance() {
         //Arrange
         Party testParty = new Party("Party", 0);
@@ -119,6 +121,7 @@ public class ServicesTest extends AndroidTestCase {
     }
 
     @Test
+    @SmallTest
     public void journalsAreAddedInDateOrder() {
         //Arrange
         //Add a test party
@@ -143,6 +146,7 @@ public class ServicesTest extends AndroidTestCase {
     }
 
     @Test
+    @SmallTest
     public void correctlyParsesOldPartyJSONStr() throws Exception {
         //Arrange
         String jsonParty = "{" +
@@ -168,6 +172,7 @@ public class ServicesTest extends AndroidTestCase {
     }
 
     @Test
+    @SmallTest
     public void deletingJournalShouldDeleteAllAttachments() {
         //Arrange
         Journal j1 = new Journal(0);
@@ -190,6 +195,7 @@ public class ServicesTest extends AndroidTestCase {
     }
 
     @Test
+    @SmallTest
     public void changingTypeOfJournalIsReflectedInPartyTotal() {
         //Arrange
         long newPartyId = services.addParty(new Party("testParty"));
@@ -251,6 +257,7 @@ public class ServicesTest extends AndroidTestCase {
     }
 
     @Test
+    @SmallTest
     public void deletingAttchShouldDeleteFile() throws IOException {
         //Arrange
         File testFile = UtilsFile.createImageFile(services.getContext());

@@ -1,13 +1,11 @@
 package com.ndhunju.dailyjournal.test;
 
-import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
 
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Created by dhunju on 10/28/2015.
@@ -24,6 +22,7 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         keyValPersistence.clear();
     }
 
+    @SmallTest
     public void testPutStringCorrectlyInsertsAndRetrievesVal() throws Exception {
         //arrange
         String val = "value";
@@ -36,6 +35,7 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         assertEquals(val, keyValPersistence.get(key, def));
     }
 
+    @SmallTest
     public void testPutLongCorrectlyInsertsAndRetrievesVal() throws Exception {
         //arrange
         long val = 7l;
@@ -45,9 +45,10 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         keyValPersistence.putLong(key, val);
 
         //assert
-        assertEquals(val, keyValPersistence.get(key, def));
+        assertEquals(val, keyValPersistence.getLong(key, def));
     }
 
+    @SmallTest
     public void testPutIntCorrectlyInsertsAndRetrievesVal() throws Exception {
         //arrange
         int val = 7;
@@ -57,9 +58,10 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         keyValPersistence.putInt(key, val);
 
         //assert
-        assertEquals(val, keyValPersistence.get(key, def));
+        assertEquals(val, keyValPersistence.getInt(key, def));
     }
 
+    @SmallTest
     public void testPutBooleanCorrectlyInsertsAndRetrievesVal() throws Exception {
         //arrange
         boolean val = true;
@@ -69,7 +71,7 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         keyValPersistence.putBoolean(key, val);
 
         //assert
-        assertTrue("Boolean value mismatch", keyValPersistence.get(key, def));
+        assertTrue("Boolean value mismatch", keyValPersistence.getBoolean(key, def));
     }
 
 }

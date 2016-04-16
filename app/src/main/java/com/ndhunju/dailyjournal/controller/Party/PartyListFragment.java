@@ -7,8 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
+import android.transition.TransitionSet;
+import android.transition.Visibility;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +36,7 @@ import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
@@ -68,7 +78,7 @@ public class PartyListFragment extends Fragment {
      * selections.
      */
     public interface Callbacks {
-        void onItemSelected(String id);
+        void onItemSelected(String id, View view);
     }
 
     /**
@@ -77,7 +87,7 @@ public class PartyListFragment extends Fragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(String id, View view) {
         }
     };
 
@@ -94,18 +104,20 @@ public class PartyListFragment extends Fragment {
         mServices = Services.getInstance(getActivity());
 
         setHasOptionsMenu(true);
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_party_list, container, false);
 
-        getActivity().setTitle(UtilsFormat.getPartyFromPref(getActivity()));
         //Wire up widgets
         srchPartyET = (EditText)rootView.findViewById(R.id.fragment_party_list_search_et);
         srchPartyET.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
                 //filter the list below
                 mPartyAdapter.getFilter().filter(s);
             }
@@ -127,7 +139,7 @@ public class PartyListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
-                mCallbacks.onItemSelected(String.valueOf(id));
+                mCallbacks.onItemSelected(String.valueOf(id), view);
             }
         });
         mPartyLV.setOnCreateContextMenuListener(this);
@@ -146,6 +158,17 @@ public class PartyListFragment extends Fragment {
                 mPartyAdapter.notifyDataSetChanged();
             }
         });
+
+        FloatingActionButton newPartyFAB = (FloatingActionButton)rootView.findViewById(R.id.fragment_party_list_fab);
+        newPartyFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newPartyIntent = new Intent(getActivity(), PartyActivity.class);
+                startActivityForResult(newPartyIntent, REQUEST_PARTY_INFO_CHGD);
+            }
+        });
+
+
 
         return rootView;
     }
@@ -324,7 +347,7 @@ public class PartyListFragment extends Fragment {
 
         party = (Party)obj;
 
-        //get the id of select journal
+        //getInt the id of select journal
         long journalId = info.id;
 
         switch (id){

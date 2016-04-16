@@ -6,9 +6,13 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnticipateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -97,11 +102,11 @@ public class PartyDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_party_detail, container, false);
 
         //Wire up the widgets/view
-        picIV = (ImageView) rootView.findViewById(R.id.activity_party_circle_iv);
-        nameTV = (TextView) rootView.findViewById(R.id.activity_party_name_tv);
+        picIV = (ImageView) rootView.findViewById(R.id.fragment_party_detail_circle_iv);
+        nameTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_name_tv);
         ledgerListView = (ListView) rootView.findViewById(R.id.activity_party_lv);
-        balanceTV = (TextView) rootView.findViewById(R.id.activity_party_balance_tv);
-        headerRow = (TableRow)rootView.findViewById(R.id.activity_party_header_tr);
+        balanceTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_balance_tv);
+        headerRow = (TableRow)rootView.findViewById(R.id.fragment_party_detail_header_tr);
 
         ((TextView)rootView.findViewById(R.id.activity_party_col_header_dr))
                 .setText(getString(R.string.str_dr));
@@ -119,10 +124,33 @@ public class PartyDetailFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Animate the list view
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        ledgerListView.setTranslationY(metrics.heightPixels);
+        AnticipateInterpolator interpolator = new AnticipateInterpolator();
+        ledgerListView.animate().setInterpolator(interpolator)
+                .setDuration(1000)
+                .setStartDelay(5)
+                .translationYBy(-metrics.heightPixels)
+                .start();
+        //getView().anim
+    }
+
     private void setPartyViews(Party party){
-        picIV.setImageDrawable(party.getPicturePath().equals("") ?
-                getActivity().getResources().getDrawable(R.drawable.party_default_pic) :
-                Drawable.createFromPath(party.getPicturePath()));
+
+        //make the image circular
+        RoundedBitmapDrawable bitmapDrawable = mParty.getPicturePath().equals("")?
+                RoundedBitmapDrawableFactory.create(getResources(),
+                        BitmapFactory.decodeResource(getResources(), R.drawable.party_default_pic))
+                : RoundedBitmapDrawableFactory.create(getResources(),
+                mParty.getPicturePath());
+
+        bitmapDrawable.setCircular(true);
+        picIV.setImageDrawable(bitmapDrawable);
 
         nameTV.setText(party.getName());
 
@@ -167,7 +195,7 @@ public class PartyDetailFragment extends Fragment {
         //remove the old view
         if(footerView != null) ledgerListView.removeFooterView(footerView);
 
-        //get the type of view user has selected
+        //getInt the type of view user has selected
         PreferenceService ps  = PreferenceService.from(getActivity());
         int pos = ps.getVal(R.string.key_pref_ledger_view, 0);
 
@@ -245,7 +273,7 @@ public class PartyDetailFragment extends Fragment {
                     return;
                 }
 
-                //Party information or journal was changed, get the latest
+                //Party information or journal was changed, getInt the latest
                 mParty = mServices.getParty(mParty.getId());
                 if(mParty != null) {
                     setPartyViews(mParty);
@@ -347,7 +375,7 @@ public class PartyDetailFragment extends Fragment {
 
         journal = (Journal) obj;
 
-        //get the id of select journal
+        //getInt the id of select journal
         long journalId = info.id;
 
         switch (id) {
@@ -365,7 +393,7 @@ public class PartyDetailFragment extends Fragment {
                         //remove same journal from the adapter as well rather than reloading
                         ledgerAdapter.remove(journal);
                         ledgerAdapter.notifyDataSetChanged();
-                        //get updates copy of Party and update the views
+                        //getInt updates copy of Party and update the views
                         mParty = mServices.getParty(mParty.getId());
                         setPartyViews(mParty);
                         //update the list view as well

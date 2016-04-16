@@ -9,4 +9,14 @@
         <!-- API 14 theme customizations can go here. -->
     </style>
 
+    <!-- Application theme. -->
+    <!--OLD<style name="AppTheme" parent="AppBaseTheme">-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <!--<item name="morphButtonStyle">@style/Widget.MorphButton</item>-->
+        <!--<item name="android:windowBackground">@color/colorBackground</item>-->
+        <!-- Set AppCompat’s actionBarStyle -->
+        <item name="actionBarStyle">@style/ActionBarStyle</item>
+    </style>
+
 </resources>

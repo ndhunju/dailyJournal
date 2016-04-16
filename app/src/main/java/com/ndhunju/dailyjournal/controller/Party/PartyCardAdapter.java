@@ -1,7 +1,10 @@
 package com.ndhunju.dailyjournal.controller.party;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,22 +37,31 @@ public class PartyCardAdapter extends ArrayAdapter<Party> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        if(convertView == null){
+        if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.party_card, null);
-            viewHolder.picImageView = (ImageView)convertView.findViewById(R.id.party_card_circle_iv);
-            viewHolder.partyNameTV = (TextView)convertView.findViewById(R.id.party_card_party_name_tv);
-            viewHolder.balanceTV = (TextView)convertView.findViewById(R.id.party_card_party_balance_tv);
+            viewHolder.picImageView = (ImageView) convertView.findViewById(R.id.party_card_circle_iv);
+            viewHolder.partyNameTV = (TextView) convertView.findViewById(R.id.party_card_party_name_tv);
+            viewHolder.balanceTV = (TextView) convertView.findViewById(R.id.party_card_party_balance_tv);
 
             convertView.setTag(viewHolder);
-        }else{
-            viewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         Party currentParty = getItem(position);
-        viewHolder.picImageView.setImageDrawable(currentParty.getPicturePath().equals("")?
-                getContext().getResources().getDrawable(R.drawable.party_default_pic):
-                Drawable.createFromPath(currentParty.getPicturePath()));
+
+
+        //make the image circular
+        RoundedBitmapDrawable bitmapDrawable = currentParty.getPicturePath().equals("")?
+                RoundedBitmapDrawableFactory.create(getContext().getResources(),
+                BitmapFactory.decodeResource(getContext().getResources(), R.drawable.party_default_pic))
+                : RoundedBitmapDrawableFactory.create(getContext().getResources(),
+                currentParty.getPicturePath());
+
+        bitmapDrawable.setCircular(true);
+        viewHolder.picImageView.setImageDrawable(bitmapDrawable);
+
         viewHolder.partyNameTV.setText(currentParty.getName());
 
         double balance = currentParty.calculateBalances();
@@ -59,7 +71,7 @@ public class PartyCardAdapter extends ArrayAdapter<Party> {
         return convertView;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
 
         ImageView picImageView;
         TextView partyNameTV;

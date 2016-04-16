@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.util.UtilsZip;
 
@@ -37,7 +40,7 @@ import java.io.IOException;
  *
  * Julia Zudikova
  */
-public class ViewPagerActivity extends FragmentActivity {
+public class ViewPagerActivity extends AppCompatActivity {
 
 	private static final String TAG = ViewPagerActivity.class.getSimpleName();
 	private static final int REQUEST_TAKE_PHOTO= 2646;
@@ -56,7 +59,6 @@ public class ViewPagerActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_pager);
 		mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
-		setContentView(mViewPager);
 
 		journalId = getIntent().getLongExtra(Constants.KEY_JOURNAL_ID, Constants.ID_NEW_JOURNAL);
 		mServices = Services.getInstance(ViewPagerActivity.this);
@@ -66,6 +68,12 @@ public class ViewPagerActivity extends FragmentActivity {
 		if (savedInstanceState != null) {
 			boolean isLocked = savedInstanceState.getBoolean(ISLOCKED_ARG,false);
 			((HackyViewPager) mViewPager).setLocked(isLocked);
+		}
+
+		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+		if(toolbar != null) {
+			toolbar.setTitle(UtilsFormat.getPartyFromPref(this));
+			setSupportActionBar(toolbar);
 		}
 	}
 
@@ -207,10 +215,10 @@ public class ViewPagerActivity extends FragmentActivity {
 		int drawableResId;
 		if(isLocked){
 			title = getString(R.string.str_lock);
-			drawableResId = R.drawable.ic_lock_black_48dp;
+			drawableResId =  R.drawable.ic_lock_black_vector;
 		}else{
 			title = getString(R.string.str_unlock);
-			drawableResId = R.drawable.ic_lock_open_black_48dp;
+			drawableResId = R.drawable.ic_lock_open_black_vector;
 		}
 		if (menuLockItem != null) {
 			menuLockItem.setTitle(title);

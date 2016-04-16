@@ -1,9 +1,14 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,7 +26,6 @@ import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.DashboardActivity;
-import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
@@ -30,14 +34,17 @@ import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
+import com.ndhunju.dailyjournal.service.ParseText;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.viewPager.ViewPagerActivity;
+import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedListener {
 
@@ -48,12 +55,14 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     private static final int REQUEST_CODE_GENERAL = 564;
     private static final int REQUEST_CHGED_DATE = 656;
     private static final int REQUEST_CHGD_PARTY = 456;
+    private static final int REQUEST_CODE_SPEECH = 898;
 
 
     //Declaring UI Widgets variable
     private PartyListDialog partylistdialog;
     private EditText amountEt;
-    private TextView drCrTv;
+    private TextView drTv;
+    private TextView crTv;
     private EditText noteEt;
     private Button partyBtn;
     private Button dateBtn;
@@ -113,10 +122,13 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         //Wire Views and Widgets
         View v = inflater.inflate(R.layout.fragment_journal, new LinearLayout(getActivity()));
 
+
+
         idTV = (TextView) v.findViewById(R.id.fragment_journal_id);
         idTV.setText(UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
 
-        drCrTv = (TextView) v.findViewById(R.id.fragment_journal_dr_cr_tv);
+        drTv = (TextView) v.findViewById(R.id.fragment_journal_dr_tv);
+        crTv = (TextView) v.findViewById(R.id.fragment_journal_cr_tv);
 
         amountEt = (EditText) v.findViewById(R.id.fragment_home_amount_et);
         amountEt.addTextChangedListener(new TextWatcher() {
@@ -170,6 +182,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             @Override
             public void onClick(View v) {
                 tempJournal.setType(Journal.Type.Debit);
+                UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
                 setTextDrCr(tempJournal.getType());
             }
         });
@@ -180,6 +193,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             @Override
             public void onClick(View v) {
                 tempJournal.setType(Journal.Type.Credit);
+                UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
                 setTextDrCr(tempJournal.getType());
             }
         });
@@ -242,6 +256,36 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             }
         });
 
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.app_name);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        /*ImageView settingImageView = (ImageView) v.findViewById(R.id.fragment_home_settings_btn);
+        final Drawable drawable = getActivity().getResources().getDrawable(R.drawable.avd_setting_rotate);
+        settingImageView.setImageDrawable(drawable);
+        settingImageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (drawable instanceof Animatable) {
+                    ((Animatable) drawable).start();
+                }
+            }
+        });*/
+
+        ((FloatingActionButton)v.findViewById(R.id.fragment_home_mic_btn))
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Create an intent that can start the Speech Recognizer activity
+                        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                        // Start the activity, the intent will be populated with the speech text
+                        startActivityForResult(intent, REQUEST_CODE_SPEECH);
+                    }
+                });
+
+
         //Refresh values in UI
         setValues(tempJournal, mParty);
 
@@ -258,6 +302,9 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        if(resultCode != Activity.RESULT_OK)
+            return;
+
         switch (requestCode) {
 
             case REQUEST_CODE_IMPORT_OLD_DATA: //Old Data were imported to new directory
@@ -271,7 +318,14 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 tempJournal = mServices.getNewJournal();
                 setValues(tempJournal, mParty);
 
+            case REQUEST_CODE_SPEECH:
+                List<String> results  = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                tempJournal = ParseText.from(getActivity()).extractJournal(results);
+                setValues(tempJournal, mServices.getParty(tempJournal.getPartyId()));
+                noteEt.setText(tempJournal.getNote() + "\n\r" + results.get(0));
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -324,8 +378,8 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
         amountEt.setText(tempJournal.getAmount() == 0 ? "" : UtilsFormat.formatCurrency(tempJournal.getAmount(), getActivity()));
         idTV.setText(getString(R.string.str_id) + UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
-        partyBtn.setText(mParty == null ? getString(R.string.str_select) + " " + UtilsFormat.getPartyFromPref(getActivity())
-                : mParty.getName());
+        partyBtn.setText(party == null ? getString(R.string.str_select) + " " + UtilsFormat.getPartyFromPref(getActivity())
+                : party.getName());
 
         mParty = party;
 
@@ -334,7 +388,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     }
 
     /**
-     * Sets the value and color of {@link #drCrTv} and {@link #amountEt} based on passed
+     * Sets the value and color of {@link #drTv} and {@link #amountEt} based on passed
      * Journal Type
      *
      * @param journalType
@@ -343,14 +397,19 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         int red = getResources().getColor(R.color.red_light_pressed);
         int green = getResources().getColor(R.color.green);
 
+
         if (journalType.equals(Journal.Type.Debit)) {
             amountEt.setTextColor(green);
-            drCrTv.setTextColor(green);
-            drCrTv.setText(getString(R.string.str_dr));
+            //drTv.setTextColor(green);
+            //drTv.setText(getString(R.string.str_dr));
+            drTv.setVisibility(View.VISIBLE);
+            crTv.setVisibility(View.INVISIBLE);
         } else {
             amountEt.setTextColor(red);
-            drCrTv.setTextColor(red);
-            drCrTv.setText(getString(R.string.str_cr));
+            //drTv.setTextColor(red);
+            //drTv.setText(getString(R.string.str_cr));
+            drTv.setVisibility(View.INVISIBLE);
+            crTv.setVisibility(View.VISIBLE);
         }
     }
 
@@ -361,6 +420,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         switch (requestCode) {
 
             case REQUEST_CHGD_PARTY: //A Party is selected
+                if(data == null) return;
                 long partyId = data.getLongExtra(Constants.KEY_PARTY_ID, 0);
                 mParty = mServices.getParty(partyId);
                 partyBtn.setText(mParty.getName());
@@ -369,11 +429,11 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 break;
 
             case REQUEST_CHGED_DATE: //A Date is selected
+                if(data == null) return;
                 long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
                 if (newDate != tempJournal.getDate()) {
                     //Set journalChanged to true is the date is changed. Journal needs to be reordered
                     tempJournal.setDate(newDate);
-
                 }
                 dateBtn.setText(UtilsFormat.formatDate(new Date(tempJournal.getDate()), getActivity()));
                 break;
@@ -381,5 +441,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         }
 
     }
+
 
 }

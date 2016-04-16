@@ -5,8 +5,12 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ViewAsserts;
+import android.test.suitebuilder.annotation.LargeTest;
+import android.test.suitebuilder.annotation.MediumTest;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,23 +22,24 @@ import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 
-import org.junit.Test;
-
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.action.ViewActions.click;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 /**
- * Created by dhunju on 10/28/2015.
- * test
+ * Functional test across multiple Activities. Tests {@link PartyDetailActivity},  {@link PartyActivity}
+ * and {@link JournalActivity}.
  */
 public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<PartyDetailActivity> {
 
-    Services services;
-    long testPartyId;
+    public static final int TIME_OUT = 5000;
+
     private PartyDetailActivity mPartyDetailActivity;
     private Instrumentation mInstrumentation;
+    Services services;
+    long testPartyId;
 
     public PartyDetailActivityTest() {
         super(PartyDetailActivity.class);
@@ -50,7 +55,7 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         //fill with new data
         UtilsTest.fillDatabase(services);
 
-        //get existing party id
+        //getInt existing party id
         testPartyId = services.getParties().get(0).getId();
 
         //pass mock {@link Intent} to the activity before calling getActivity()
@@ -58,6 +63,7 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         sendIntent.putExtra(Constants.KEY_PARTY_ID, String.valueOf(testPartyId));
         setActivityIntent(sendIntent);
 
+        setActivityInitialTouchMode(true);
         mPartyDetailActivity = getActivity();
         mInstrumentation = getInstrumentation();
     }
@@ -67,6 +73,15 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         super.tearDown();
     }
 
+    /**
+     * Tests the preconditions of this test fixture.
+     */
+    @MediumTest
+    public void testPreconditions() {
+        assertNotNull("mPartyDetailActivity is null", mPartyDetailActivity);
+    }
+
+    @MediumTest
     public void testActionBarButtonsExists() {
         View mainActivityDecorView = mPartyDetailActivity.getWindow().getDecorView();
         ViewAsserts.assertOnScreen(mainActivityDecorView, mPartyDetailActivity.findViewById(R.id.menu_party_activity_info));
@@ -77,9 +92,10 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
      * Test when Click Option Menu Information, goes to {@Link PartyActivity}PartyActivity, users changes the name,
      * press backs button, activity result passed to previous activity, new name is reflected in the {@link PartyDetailActivity}
      */
+    @LargeTest
     public void testChangingNameInPartyActivityIsReflected() {
 
-        String NEW_NAME = "NIKESH DHUNJU";
+        final String NEW_NAME = "NIKESH DHUNJU";
 
         //click on the option menu
         getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
@@ -93,21 +109,38 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         returnIntent.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
         Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
-        // Create an ActivityMonitor that catch PartyActivity and returns mock ActivityResult:
+        // Create an ActivityMonitor to monitor the interaction between the PartyDetailActivity and
+        //PartyActivity and to return mock ActivityResult:
         Instrumentation.ActivityMonitor activityMonitor = mInstrumentation.addMonitor(PartyActivity.class.getName(), activityResult, false);
 
-        // Wait for the ActivityMonitor to be hit, Instrumentation will then return the mock ActivityResult:
-        PartyActivity partyActivity = (PartyActivity) mInstrumentation.waitForMonitorWithTimeout(activityMonitor, 1000);
+        //Wait until all events from the MainHandler's queue are processed
+        getInstrumentation().waitForIdleSync();
 
-        //Change party credential
-        Party testParty = services.getParty(testPartyId);
-        testParty.setName(NEW_NAME);
-        services.updateParty(testParty);
+        // Wait for the ActivityMonitor to be launched, Instrumentation will then return the mock ActivityResult, getInt a reference to it
+        final PartyActivity partyActivity = (PartyActivity) mInstrumentation.waitForMonitorWithTimeout(activityMonitor, TIME_OUT);
 
-        partyActivity.finish();
+        //Verify that PartyActivity was started
+        assertNotNull("partyActivity is null", partyActivity);
+        //doesn't work
+        //assertTrue("Monitor for partyActivity has not been called", activityMonitor.getHits() > 0);
+        assertEquals("Activity is of wrong type", PartyActivity.class, partyActivity.getClass());
+
+        mInstrumentation.runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                ((TextView) partyActivity.findViewById(R.id.activity_party_name_et)).setText(NEW_NAME);
+                ((Button) partyActivity.findViewById(R.id.activity_party_ok_btn)).performClick();
+            }
+        });
+
+        //wait for changes to occur
+        mInstrumentation.waitForIdleSync();
 
         //Check that the name is updated
-        ((TextView) mPartyDetailActivity.findViewById(R.id.activity_party_name_tv)).getText().equals(NEW_NAME);
+        assertEquals(((TextView) mPartyDetailActivity.findViewById(R.id.fragment_party_detail_name_tv)).getText(), (NEW_NAME));
+
+        //Unregister monitor for PartyActivity
+        getInstrumentation().removeMonitor(activityMonitor);
 
 
     }
@@ -116,27 +149,27 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
      * Tests that when a journal is changed in {@Link JournalActivity}, it is reflected in
      * {@Link PartyDetailActivity}
      */
+    @LargeTest
     public void testChangingJournalAmtInJournalActivityIsReflected(){
 
         final int position = 0;
-        double NEW_AMT = 2000;
-        String NEW_NOTES = "notes";
+        final double NEW_AMT = 2000;
+        final String NEW_NOTES = "notes";
 
        final long testJournalId;
 
         // Simulate a button click that start ChildActivity for result:
         final ListView journalLV = (ListView) mPartyDetailActivity.findViewById(R.id.activity_party_lv);
 
-        //wait for UI to load
-        try {Thread.sleep(2000);}
-        catch (InterruptedException e)
-        {e.printStackTrace();}
+        //Wait until all events from the MainHandler's queue are processed
+        getInstrumentation().waitForIdleSync();
 
         testJournalId = journalLV.getItemIdAtPosition(position);
+        //Perform Click should be done on UI thread
         mInstrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                journalLV.performItemClick(journalLV.getAdapter().getView(0, null, null), position, testJournalId );
+                journalLV.performItemClick(journalLV.getAdapter().getView(0, null, null), position, testJournalId);
             }
         });
 
@@ -145,27 +178,43 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
        returnIntent.putExtra(Constants.KEY_JOURNAL_CHGD, true);
        Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
+
        // Create an ActivityMonitor that catch ChildActivity and return mock ActivityResult:
        Instrumentation.ActivityMonitor activityMonitor = mInstrumentation.addMonitor(JournalActivity.class.getName(), activityResult, false);
 
-
         // Wait for the ActivityMonitor to be hit, Instrumentation will then return the mock ActivityResult:
-        JournalActivity journalActivity = (JournalActivity)mInstrumentation.waitForMonitorWithTimeout(activityMonitor, 1000);
+        final JournalActivity journalActivity = (JournalActivity)mInstrumentation.waitForMonitorWithTimeout(activityMonitor, TIME_OUT);
 
-       //change journal information
+        //wait for change in UI
+        mInstrumentation.waitForIdleSync();
+
+        //Verify that PartyActivity was started
+        assertNotNull("journalActivity is null", journalActivity);
+        //assertTrue("Monitor for journalActivity has not been called", activityMonitor.getHits() > 0);
+        assertEquals("Activity is of wrong type", JournalActivity.class, journalActivity.getClass());
+
+       //save journal information to test later
         Journal testJournal= services.getJournal(testJournalId);
         Party testParty = services.getParty(testJournal.getPartyId());
         double oldAmt = testJournal.getAmount();
-        testJournal.setAmount(NEW_AMT);
-        testJournal.setNote(NEW_NOTES);
-        services.updateJournal(testJournal);
+        double expectedNewBal = testParty.calculateBalances() - oldAmt + NEW_AMT;
 
+        mInstrumentation.runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                ((EditText)journalActivity.findViewById(R.id.fragment_home_amount_et)).setText(String.valueOf(NEW_AMT));
+                ((EditText)journalActivity.findViewById(R.id.fragment_home_note_et)).setText(NEW_NOTES);
+                journalActivity.findViewById(R.id.fragment_home_save_btn).performClick();
+            }
+        });
 
-        journalActivity.finish();
+        mInstrumentation.waitForIdleSync();
 
-        //Check that the balance is updated
-        double newBal = testParty.calculateBalances() - oldAmt + NEW_AMT;
-        ((TextView) mPartyDetailActivity.findViewById(R.id.activity_party_balance_tv)).getText().equals(String.valueOf(newBal));
+        assertEquals(UtilsFormat.formatCurrency(expectedNewBal, mInstrumentation.getTargetContext()),
+                ((TextView) mPartyDetailActivity.findViewById(R.id.fragment_party_detail_balance_tv)).getText());
+
+        //Unregister monitor for JournalActivity
+        getInstrumentation().removeMonitor(activityMonitor);
 
     }
 }

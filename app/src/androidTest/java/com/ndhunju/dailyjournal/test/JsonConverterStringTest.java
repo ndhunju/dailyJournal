@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.test;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -54,6 +55,7 @@ public class JsonConverterStringTest extends InstrumentationTestCase{
      * Must have test prefix to run with JUnit3
      * @throws Exception
      */
+    @LargeTest
     public void testReadFromJSON() throws Exception {
         //Arrange
         String jsonFileName = "dailyJournal-9-25-2015-13-16-53.json";
@@ -93,7 +95,7 @@ public class JsonConverterStringTest extends InstrumentationTestCase{
 
     }
 
-    @Test
+    @LargeTest
     public void testWriteToJSON() throws Exception {
         //Arrange
         String outputJsonFile = "testOutputFile.json";

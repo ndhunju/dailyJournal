@@ -228,11 +228,11 @@ public class AppRater {
             return null; // do not show anything
         }
 
-        long launch_count = prefs.getLong(mPreference_launchCount, 0); // get launch counter
+        long launch_count = prefs.getLong(mPreference_launchCount, 0); // getInt launch counter
         launch_count++; // increase number of launches by one
         editor.putLong(mPreference_launchCount, launch_count); // write new counter back to preference
 
-        long firstLaunchTime = prefs.getLong(mPreference_firstLaunch, 0); // get date of first launch
+        long firstLaunchTime = prefs.getLong(mPreference_firstLaunch, 0); // getInt date of first launch
         if (firstLaunchTime == 0) { // if not set yet
             firstLaunchTime = System.currentTimeMillis(); // set to current time
             editor.putLong(mPreference_firstLaunch, firstLaunchTime);

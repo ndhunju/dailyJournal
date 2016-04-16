@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ActionBarStyle">
+        <item name="android:background">@color/red_900</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+    </style>
+</resources>

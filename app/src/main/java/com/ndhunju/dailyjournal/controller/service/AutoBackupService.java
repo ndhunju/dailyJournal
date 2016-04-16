@@ -34,12 +34,14 @@ public class AutoBackupService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Service started to create backup");
+        //Service object by default runs on Main Thread
         Thread backupThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     //get notification to let user know that backup is being created
                     MyNotificationManager notifMgr = MyNotificationManager.from(getBaseContext());
+                    //make it unstoppable until the task is completed
                     startForeground(1, notifMgr.createBackingUpNotif());
                     Services.getInstance(getBaseContext())
                             .createBackUp(UtilsFile.getAutoBackupDir(getBaseContext()));
@@ -56,8 +58,6 @@ public class AutoBackupService extends Service {
                     notifMgr.notify(notifMgr.createBackupCreatedNotif(selectedEntry), 1);
 
                     Log.i(TAG, "backup finished");
-
-
                     stopSelf();
                 } catch (Exception e) {
                     Log.i(TAG, "backup failed");

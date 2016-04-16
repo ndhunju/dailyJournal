@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.service.AutoBackupService;
 import com.ndhunju.dailyjournal.util.UtilsDate;
+
+import java.text.ParseException;
 
 /**
  * Created by dhunju on 10/4/2015.
@@ -30,13 +34,13 @@ public class PreferenceService {
     private static PreferenceService mPreferenceService;
     private Context context;
 
-    public static PreferenceService from(Context context){
+    public static PreferenceService from(@NonNull Context context){
         if(mPreferenceService == null)
             mPreferenceService = new PreferenceService(context);
         return mPreferenceService;
     }
 
-    private PreferenceService(Context context){
+    private PreferenceService(@NonNull Context context){
         this.context = context;
         loadSharedPreference();
 
@@ -63,7 +67,7 @@ public class PreferenceService {
      * @param resKeyId : resource id for the key
      * @return
      */
-    private String getKey(int resKeyId){
+    private String getKey(@StringRes int resKeyId){
         return context.getString(resKeyId);
     }
 
@@ -73,7 +77,7 @@ public class PreferenceService {
      * @param defaultVal : value to return if key's value doesn't exist
      * @return
      */
-    public String getVal(int resKeyId, String defaultVal){
+    public String getVal(@StringRes int resKeyId, String defaultVal){
         return getSharedPreference().getString(getKey(resKeyId), defaultVal);
     }
 
@@ -85,18 +89,26 @@ public class PreferenceService {
      * @param defaultVal
      * @return
      */
-    public boolean getVal(int resKeyId, boolean defaultVal){
-        //By default, values saved in xml file are of String type. So need to parse the value
-        return Boolean.parseBoolean(getSharedPreference().getString(getKey(resKeyId),
-                String.valueOf(defaultVal)));
+    public boolean getVal(@StringRes int resKeyId, boolean defaultVal){
+
+        boolean val;
+        try{
+            //By default, values saved in xml file are of String type. So need to parse the value
+            val = Boolean.parseBoolean(getSharedPreference().getString(getKey(resKeyId),
+                    String.valueOf(defaultVal)));
+        } catch (Exception ex){
+            val = getSharedPreference().getBoolean(getKey(resKeyId), defaultVal);
+        }
+
+        return val;
     }
 
-    public int getVal(int resKeyId, int defaultVal){
+    public int getVal(@StringRes int resKeyId, int defaultVal){
         return Integer.parseInt(getSharedPreference().getString(getKey(resKeyId),
                 String.valueOf(defaultVal)));
     }
 
-    public long getVal(int resKeyId, long defaultVal){
+    public long getVal(@StringRes int resKeyId, long defaultVal){
         return Long.parseLong(getSharedPreference().getString(getKey(resKeyId),
                 String.valueOf(defaultVal)));
     }

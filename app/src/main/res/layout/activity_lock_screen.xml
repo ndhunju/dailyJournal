@@ -2,32 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="15dp"
     android:background="@android:color/background_light"
-    >
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="15dp">
+
     <ImageView
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginBottom="15dp"
-        android:src="@drawable/ic_lock"/>
+        android:src="@drawable/ic_lock" />
+
     <TextView
+        android:id="@+id/activity_lock_screen_passcodeTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/str_pincode"
-        android:textAllCaps="true"
         android:layout_marginBottom="15dp"
-        android:id="@+id/activity_lock_screen_passcodeTV"
-        />
+        android:text="@string/str_pincode"
+        android:textAllCaps="true" />
+
     <EditText
+        android:id="@+id/activity_lock_screen_passcodeET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="7"
         android:inputType="numberPassword"
         android:maxLength="7"
-        android:textColor="@android:color/black"
-        android:id="@+id/activity_lock_screen_passcodeET">
+        android:textColor="@android:color/black">
+
         <requestFocus />
     </EditText>
 </LinearLayout>
+

@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
+import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
@@ -94,6 +95,8 @@ public class PartyListDialog extends DialogFragment {
 
             }
 		});
+
+		((FloatingActionButton)view.findViewById(R.id.fragment_party_list_fab)).setVisibility(View.INVISIBLE);
 
 
 		return view;

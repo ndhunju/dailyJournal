@@ -28,7 +28,7 @@ public class Setup {
 
     public void loadSettings(){
         //check if app is running the first time
-        if(mKeyVal.get(KEY_APP_START_TOTAL, 0) <= 0){
+        if(mKeyVal.getLong(KEY_APP_START_TOTAL, 0) <= 0){
             onAppStartFirstTime();}
 
         incrementAppStartTimes();
@@ -39,7 +39,7 @@ public class Setup {
     }
 
     private void incrementAppStartTimes(){
-        mKeyVal.putLong(KEY_APP_START_TOTAL, mKeyVal.get(KEY_APP_START_TOTAL, 0) + 1);
+        mKeyVal.putLong(KEY_APP_START_TOTAL, mKeyVal.getLong(KEY_APP_START_TOTAL, 0) + 1);
     }
 
     private void setUpBackUpReminder(){

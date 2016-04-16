@@ -42,8 +42,10 @@ public class MyNotificationManager {
     private Notification create(String title, String msg, PendingIntent pendingIntent) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext)
                 .setNumber(++mNumNotif)
-                .setSmallIcon(R.drawable.ic_ganesh_book_16px)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_ganesh_book_small))
+                .setSmallIcon(R.drawable.ic_notif_small)
+                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.
+
+                        ic_notif_large))
                 .setContentTitle(title)
                 .setContentText(msg)
                 .setContentIntent(pendingIntent)
@@ -56,8 +58,8 @@ public class MyNotificationManager {
     public Notification create(int titleResId, int msgResId, PendingIntent pendingIntent) {
         return new NotificationCompat.Builder(mContext)
                 .setNumber(++mNumNotif)
-                .setSmallIcon(R.drawable.ic_ganesh_book_16px)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_ganesh_book_small))
+                .setSmallIcon(R.drawable.ic_notif_small)
+                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
                 .setContentTitle(mContext.getString(titleResId))
                 .setContentText(mContext.getString(msgResId))
                 .setContentIntent(pendingIntent)
@@ -74,8 +76,8 @@ public class MyNotificationManager {
      */
     private NotificationCompat.Builder getBuilder(String title, String msg){
         return new NotificationCompat.Builder(mContext)
-                .setSmallIcon(R.drawable.ic_ganesh_book_16px)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_ganesh_book_small))
+                .setSmallIcon(R.drawable.ic_notif_small)
+                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
                 .setContentTitle(title)
                 .setContentText(msg);
     }

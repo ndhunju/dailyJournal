@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -19,15 +22,13 @@ import com.ndhunju.dailyjournal.service.LockService;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link PartyDetailFragment}.
  */
-public class PartyDetailActivity extends Activity {
+public class PartyDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_party_detail);
 
-        // Show the Up button in the action bar.
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -50,6 +51,14 @@ public class PartyDetailActivity extends Activity {
                     .add(R.id.item_detail_container, fragment)
                     .commit();
         }
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle(UtilsFormat.getPartyFromPref(this));
+        setSupportActionBar(toolbar);
+
+        // Show the Up button in the action bar.
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

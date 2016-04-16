@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_party_list_activity_add"
-        android:showAsAction="ifRoom|withText"
+        app:showAsAction="ifRoom|withText"
         android:title="@string/str_new"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_add_24dp"
         android:orderInCategory="1"
         />
 
     <item
         android:id="@+id/menu_party_list_activity_import"
-        android:showAsAction="ifRoom|withText"
+        app:showAsAction="ifRoom|withText"
         android:icon="@drawable/ic_group_add_black_48dp"
         android:orderInCategory="2"
         android:title="@string/str_import"

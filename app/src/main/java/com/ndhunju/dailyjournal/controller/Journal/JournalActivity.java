@@ -3,13 +3,15 @@ package com.ndhunju.dailyjournal.controller.journal;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.AppRater;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
 
-public class JournalActivity extends Activity {
+public class JournalActivity extends AppCompatActivity {
 
 	private static final String TAG_JOURNAL_FRAG = "journalFragment";
 

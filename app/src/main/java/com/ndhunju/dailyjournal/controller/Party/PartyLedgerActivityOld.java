@@ -52,7 +52,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 		long mPartyId = getIntent().getLongExtra(Constants.KEY_PARTY_ID, 0);
 
         //Wire up the widgets/view
-		balanceTV = (TextView) findViewById(R.id.activity_party_balance_tv);
+		balanceTV = (TextView) findViewById(R.id.fragment_party_detail_balance_tv);
 		ledgerListView = (ListView)findViewById(R.id.activity_party_lv);
 
 		mServices = Services.getInstance(PartyLedgerActivityOld.this);
@@ -227,7 +227,7 @@ public class PartyLedgerActivityOld extends FragmentActivity {
 		ListView lv = (ListView)info.targetView.getParent();
 		final Journal journal = (Journal)lv.getAdapter().getItem(info.position);
 
-		//get the id of select journal
+		//getInt the id of select journal
 		long journalId = info.id;
 
 		switch (id){

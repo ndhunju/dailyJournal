@@ -13,8 +13,8 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.LinearLayout;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.folderPicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.service.Constants;
+import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +25,7 @@ public class DatePickerFragment extends DialogFragment {
 	public static final String EXTRA_CAL = "com.ndhunju.dailyJournal.datePickerFragment.extraCal";
 	
 	private static Calendar mCal;
+	private OnDialogBtnClickedListener listener;
 	
 	public static DatePickerFragment newInstance(Date d, int requestCode){
 
@@ -33,7 +34,7 @@ public class DatePickerFragment extends DialogFragment {
 		Bundle args = new Bundle();
 		args.putInt(Constants.KEY_REQUEST_CODE, requestCode);
 		dateFragment.setArguments(args);
-		mCal = Calendar.getInstance();			//Create a calendar to get the year, month, and day
+		mCal = Calendar.getInstance();			//Create a calendar to getInt the year, month, and day
 		mCal.setTime(d);
 
 		return dateFragment;
@@ -45,8 +46,8 @@ public class DatePickerFragment extends DialogFragment {
 		int year = mCal.get(Calendar.YEAR);
 		int month = mCal.get(Calendar.MONTH);
 		int day = mCal.get(Calendar.DAY_OF_MONTH);
-		//int hour = mCal.get(Calendar.HOUR_OF_DAY);
-		//int min = mCal.get(Calendar.MINUTE);
+		//int hour = mCal.getInt(Calendar.HOUR_OF_DAY);
+		//int min = mCal.getInt(Calendar.MINUTE);
 		
 		LinearLayout v = (LinearLayout) getActivity().getLayoutInflater()
 				.inflate(R.layout.dialog_date_picker, new LinearLayout(getActivity()));
@@ -87,9 +88,10 @@ public class DatePickerFragment extends DialogFragment {
 					Intent i = new Intent();
 					i.putExtra(EXTRA_CAL, mCal);
 					//So far, DatePickerFragment is called from JournalFragment only
-					((OnDialogBtnClickedListener)getTargetFragment())
-							.onDialogBtnClicked(i, OnDialogBtnClickedListener.BUTTON_POSITIVE,
-									Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
+					if(listener != null) {
+						listener.onDialogBtnClicked(i, OnDialogBtnClickedListener.BUTTON_POSITIVE,
+								Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
+					}
 				}
 			})
 			.setView(v)
@@ -99,8 +101,12 @@ public class DatePickerFragment extends DialogFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if(!(activity instanceof OnDialogBtnClickedListener)) {
-			throw new RuntimeException("The calling activity, " + activity.getComponentName() + " must implement the " +
+		if(getTargetFragment() instanceof OnDialogBtnClickedListener){
+			listener = (OnDialogBtnClickedListener)getTargetFragment();
+		}else if(activity instanceof OnDialogBtnClickedListener){
+			listener = (OnDialogBtnClickedListener)activity;
+		}else{
+			throw new RuntimeException("The calling activity, " + activity.getComponentName() + " or Target fragment must implement the " +
 					"interface " + OnDialogBtnClickedListener.class.getSimpleName());
 		}
 	}

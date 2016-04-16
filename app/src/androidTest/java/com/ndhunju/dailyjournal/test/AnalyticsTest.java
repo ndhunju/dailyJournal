@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
  * Created by dhunju on 10/27/2015.
  */
 @RunWith(AndroidJUnit4.class)
-@MediumTest
 public class AnalyticsTest extends AndroidTestCase{
 
     public Analytics analytics;
@@ -41,8 +40,8 @@ public class AnalyticsTest extends AndroidTestCase{
 
 
 
-
     @Test
+    @MediumTest
     public void testGetTopDrCrOnly() throws Exception {
         //Arrange
         int limit = 5;
@@ -61,6 +60,7 @@ public class AnalyticsTest extends AndroidTestCase{
     }
 
     @Test
+    @MediumTest
     public void testGetTopPartiesByBalance() throws Exception {
         //Arrange
         int limit = 5;

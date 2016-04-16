@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -22,7 +25,7 @@ import java.util.List;
  * Created by dhunju on 10/8/2015.
  * This class reads Preference Header from .xml file
  */
-public class MyPreferenceActivity extends PreferenceActivity {
+public class MyPreferenceActivity extends AppCompatPreferenceActivity {
 
     //Variables
     public static List<Header> headers = new ArrayList<>();;
@@ -35,6 +38,16 @@ public class MyPreferenceActivity extends PreferenceActivity {
         for (Header header : target) {
             headers.add(header);
         }
+
+        setContentView(R.layout.activity_preference);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar bar = getSupportActionBar();
+        bar.setHomeButtonEnabled(true);
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setDisplayShowTitleEnabled(true);
+        bar.setTitle(getString(R.string.str_preference));
     }
 
     @Override
@@ -130,5 +143,15 @@ public class MyPreferenceActivity extends PreferenceActivity {
                         .onActivityResult(requestCode, resultCode, data);
                 break;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

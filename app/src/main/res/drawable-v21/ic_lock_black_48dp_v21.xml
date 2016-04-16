@@ -1,0 +1,16 @@
+<vector  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="144dp"
+    android:width="144dp"
+    android:viewportHeight="@integer/viewport_height"
+    android:viewportWidth="@integer/viewport_width"
+    >
+    <group
+        android:name="@string/groupLockUnlock"
+        android:pivotX="@integer/viewport_center_x"
+        android:pivotY="@integer/viewport_center_y">
+
+        <path android:fillColor="#000000" android:pathData="@string/path_lock"/>
+        <path android:fillColor="#ffffff" android:fillAlpha="0.9" android:pathData="M71.9,42.13C74.42,30.94 85.53,22.52 97.01,23.23C108.63,23.46 119.12,32.99 120.52,44.52C121.11,50.99 120.66,57.5 120.8,63.99C104.26,64.01 87.72,64.01 71.18,63.99C71.48,56.71 70.5,49.32 71.9,42.13Z"/>
+        <path android:fillColor="#ffffff" android:fillAlpha="0.9" android:pathData="M93.34,104.22C101.97,102.51 110.99,109.25 111.87,117.99C113.24,126.81 105.91,135.62 97.02,135.97C88.46,136.73 80.3,129.49 80.02,120.91C79.4,113.02 85.51,105.37 93.34,104.22Z"/>
+    </group>
+</vector>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        Base application theme for API 11+. This theme completely replaces
+        AppBaseTheme from res/values/styles.xml on API 21+ devices.
+    -->
+    <style name="AppBaseTheme" parent="@android:style/Theme.DeviceDefault.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+
+    </style>
+
+    <!-- Application theme. -->
+    <!--OLD<style name="AppTheme" parent="AppBaseTheme">-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <!-- Set AppCompat’s actionBarStyle -->
+        <item name="actionBarStyle">@style/ActionBarStyle</item>
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <!--<item name="morphButtonStyle">@style/Widget.MorphButton</item>-->
+        <!--<item name="android:windowBackground">@color/colorBackground</item>-->
+        <item name="android:colorPrimary">@color/blue_500</item>
+        <item name="android:colorPrimaryDark">@color/blue_700</item>
+        <item name="colorPrimary">@color/blue_500</item>
+        <item name="colorPrimaryDark">@color/blue_700</item>
+    </style>
+
+    <style name="ActionBarStyle">
+        <item name="android:elevation">4dp</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+    </style>
+
+</resources>

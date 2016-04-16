@@ -4,12 +4,19 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -31,7 +38,7 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.io.File;
 
-public class PartyActivity extends FragmentActivity {
+public class PartyActivity extends AppCompatActivity {
 
     private static final String TAG = PartyActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE = 123;
@@ -66,9 +73,15 @@ public class PartyActivity extends FragmentActivity {
 		idTV.setText(UtilsFormat.getStringId(mParty.getId(), UtilsFormat.NUM_OF_DIGITS));
 
         partyPicIV = (ImageView)findViewById(R.id.activity_party_pic_iv);
-        partyPicIV.setImageDrawable(mParty.getPicturePath().equals("") ?
-                getResources().getDrawable(R.drawable.party_default_pic) :
-                Drawable.createFromPath(mParty.getPicturePath()));
+        //make the image circular
+        RoundedBitmapDrawable bitmapDrawable = mParty.getPicturePath().equals("")?
+                RoundedBitmapDrawableFactory.create(getResources(),
+                        BitmapFactory.decodeResource(getResources(), R.drawable.party_default_pic))
+                : RoundedBitmapDrawableFactory.create(getResources(),
+                mParty.getPicturePath());
+
+        bitmapDrawable.setCircular(true);
+        partyPicIV.setImageDrawable(bitmapDrawable);
 
         partyPicIV.setOnClickListener(new OnClickListener() {
             @Override
@@ -87,12 +100,12 @@ public class PartyActivity extends FragmentActivity {
 		
 		typeSpinner = (Spinner)findViewById(R.id.activity_party_type_spinner);
 
-		String[] merchantTypes = new String[Type.values().length];
+		String[] partyTypes = new String[Type.values().length];
 		for(int i = 0; i < Type.values().length ; i++)
-			merchantTypes[i] = Type.values()[i].toString();
+			partyTypes[i] = Type.values()[i].toString();
 
 		typeSpinner.setAdapter(new ArrayAdapter<>
-                (this, android.R.layout.simple_list_item_1, merchantTypes));
+                (this, android.R.layout.simple_list_item_1, partyTypes));
 		typeSpinner.setSelection(mParty.getType().ordinal());
 		
 		Button okBtn = (Button)findViewById(R.id.activity_party_ok_btn);
@@ -137,6 +150,14 @@ public class PartyActivity extends FragmentActivity {
 
             }
         });
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle(UtilsFormat.getPartyFromPref(this));
+        setSupportActionBar(toolbar);
+
+        // Show the Up button in the action bar.
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
     @Override
@@ -179,4 +200,14 @@ public class PartyActivity extends FragmentActivity {
 		LockService.checkPassCode(PartyActivity.this);
 		super.onResume();
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

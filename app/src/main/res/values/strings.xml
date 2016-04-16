@@ -107,5 +107,7 @@
     <string name="str_no">No</string>
     <string name="str_search">Search</string>
 
+    <string name="trans_party_img">transPartyImg</string>
+
 </resources>
 
