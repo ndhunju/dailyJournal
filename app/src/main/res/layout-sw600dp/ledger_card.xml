@@ -31,7 +31,7 @@
                 android:id="@+id/ledger_card_attch_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:layout_margin="1dp"
                 android:src="@drawable/ic_attachment_black_32dp" />
         </LinearLayout>
@@ -65,6 +65,8 @@
             android:layout_centerInParent="true"
             android:layout_toRightOf="@id/ledger_card_attch_ll"
             android:layout_toLeftOf="@id/ledger_card_drcr_ll"
+            android:layout_toEndOf="@id/ledger_card_attch_ll"
+            android:layout_toStartOf="@id/ledger_card_drcr_ll"
             android:orientation="horizontal">
 
             <TextView

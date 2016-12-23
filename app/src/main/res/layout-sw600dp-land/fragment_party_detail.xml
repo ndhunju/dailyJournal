@@ -117,10 +117,9 @@
             android:textSize="@dimen/text_size_medium"/>
     </TableRow>
 
-    <ListView
-        android:id="@+id/activity_party_lv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/activity_party_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -1,11 +1,12 @@
 package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,9 +29,9 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 public class PartyListDialog extends DialogFragment {
 
 	//Variables
-	private ListView partyLV ;
+	private RecyclerView partyLV ;
 	private EditText srchPartyET;
-	private ArrayAdapter<Party> partyAdapter;
+	private PartyCardAdapter partyAdapter;
 
 	private Services mServices;
 
@@ -53,7 +54,7 @@ public class PartyListDialog extends DialogFragment {
 		srchPartyET.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				partyAdapter.getFilter().filter(s); //filter the list below
+				partyAdapter.filter(s); //filter the list below
 			}
 
 			@Override
@@ -61,22 +62,21 @@ public class PartyListDialog extends DialogFragment {
 			@Override
 			public void afterTextChanged(Editable s) {}
 		});
-		
+
 		//Populate the list view with existing Parties
-		partyLV = (ListView)view.findViewById(R.id.fragment_party_list_party_list_lv);
+		partyLV = (RecyclerView) view.findViewById(R.id.fragment_party_list_party_list);
+		partyLV.setLayoutManager(new LinearLayoutManager(getContext()));
         partyAdapter = new PartyCardAdapter(getActivity(), mServices.getParties());
 		partyLV.setAdapter(partyAdapter);
-		partyLV.setOnItemClickListener(new OnItemClickListener() {
-
+		partyAdapter.setOnItemClickListener(new PartyCardAdapter.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(View view, int position, long id) {
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, partyAdapter.getItem(position).getId());
 				((OnDialogBtnClickedListener)getTargetFragment()).onDialogBtnClicked(i,
-					OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
+						OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
 			}
-		}); 
+		});
 
         //When user clicks on Add Party Button, add the mParty to the list and return its ID
 		view.findViewById(R.id.fragment_party_list_add_party_btn).setOnClickListener(new OnClickListener() {

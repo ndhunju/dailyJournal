@@ -36,19 +36,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.journal.JournalActivity"
+            android:name=".controller.journal.JournalNewActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity
+       <!-- <activity
             android:name=".controller.party.PartyListActivityOld"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".controller.party.PartyLedgerActivityOld"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden" />-->
         <activity
             android:name=".controller.party.PartyActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".viewPager.ViewPagerActivity"
+            android:name=".viewPager.AttachmentViewPagerActivity"
             android:windowSoftInputMode="stateHidden" />
 
         <!-- https://developers.google.com/drive/android/java-client -->
@@ -71,9 +71,21 @@
         </receiver>
 
         <activity
-            android:name=".controller.DashboardActivity"
+            android:name=".controller.ChartsActivity"
             android:label="@string/title_activity_charts" >
         </activity>
+
+        <activity android:name=".controller.JournalActivity"
+            android:label="@string/title_activity_journal"/>
+
+        <activity android:name=".controller.backup.BackupActivity"
+            android:label="@string/str_backup"/>
+
+        <activity android:name=".controller.SpannedLedgerListActivity"
+            android:label="@string/str_journal"/>
+
+        <activity android:name=".controller.SearchNotesActivity"/>
+
     </application>
 
 </manifest>

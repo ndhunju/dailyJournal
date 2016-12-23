@@ -50,7 +50,7 @@
     <string name="str_journal">Journal</string>
     <string name="str_minutes">minutes</string>
     <string name="str_pincode">Pincode</string>
-    <string name="str_balance">Balance :</string>
+    <string name="str_balance">Balance</string>
     <string name="str_finished">finished</string>
     <string name="str_erase_all">Erase All</string>
     <string name="str_lock_time">Lock Time</string>
@@ -108,6 +108,51 @@
     <string name="str_search">Search</string>
 
     <string name="trans_party_img">transPartyImg</string>
+
+    <!-- noun. this is one the items shown in side navigation menu -->
+    <string name="nav_item_journals">Journals</string>
+    <!-- noun. this is one the items shown in side navigation menu -->
+    <string name="nav_item_settings">Settings</string>
+    <!-- noun. this is one the items shown in side navigation menu -->
+    <string name="nav_item_tools">Tools</string>
+    <!-- noun. this is one the items shown in side navigation menu -->
+    <string name="nav_item_party">Parties</string>
+    <!-- noun. this is one the items shown in side navigation menu -->
+    <string name="nav_item_charts">Charts</string>
+    <!-- noun. this is one the items shown in side navigation menu -->
+    <string name="nav_item_share">Share</string>
+
+    <!--Noun. Title of activity when navigation bar is opened -->
+    <string name="nav_menu">Menu</string>
+
+    <!-- text field. section header -->
+    <string name="activity_home_balance_card_title">Your Balance</string>
+    <!-- noun. alternate word for debit -->
+    <string name="user_alt_dr_format">Received</string>
+    <!-- noun. alternate word for credit -->
+    <string name="user_alt_cr_format">Given</string>
+
+    <!-- text field inside a card view-->
+    <string name="activity_home_find_journal_by_date">Find Journal by Date</string>
+    <!-- text field inside a card view-->
+    <string name="activity_home_search_journal_notes">Search Journal Notes</string>
+    <!-- noun. text field inside a card view-->
+    <string name="activity_home_backup">Backup</string>
+    <!-- noun. text field inside a card view-->
+    <string name="activity_home_charts">Charts</string>
+
+    <!-- text inside a button -->
+    <string name="spanned_ledger_start_date">Start Date</string>
+    <!-- text inside a button -->
+    <string name="spanned_ledger_end_date">End Date</string>
+    <!-- text inside a button -->
+    <string name="spanned_ledger_find">Find Journals</string>
+
+    <!-- text inside a button -->
+    <string name="activity_search_notes_search">Search Notes</string>
+
+    <!-- text inside a button. Clinking on this erases only journals -->
+    <string name="activity_backup_erase_journals">Erase Journals Only</string>
 
 </resources>
 

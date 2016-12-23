@@ -1,5 +1,7 @@
 package com.ndhunju.dailyjournal.service;
 
+import com.ndhunju.dailyjournal.controller.journal.JournalFragment;
+
 public interface Constants {
 
     //Constants
@@ -15,9 +17,10 @@ public interface Constants {
     String KEY_PARTY_ID = APP_PREFIX + "merchantId";
     String KEY_JOURNAL_CHGD = APP_PREFIX + "nameJournalChanged";
     String KEY_ATTACHMENTS = APP_PREFIX + "keyAttachments";
-    String KEY_PARTY_INFO_CHGD = APP_PREFIX + "partyInfoChanged";
     String KEY_IMPORT_OLD_DATA = APP_PREFIX + "KeyImportedOLdData";
     String KEY_ATTACHMENTS_IS_CHGD = APP_PREFIX + "isAttachmentChanged";
+    String KEY_JOURNAL_POS = APP_PREFIX + "journalPosition";
 
 
+    String KEY_POS = APP_PREFIX + "position";
 }

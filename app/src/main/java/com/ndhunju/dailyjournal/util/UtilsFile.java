@@ -174,7 +174,7 @@ public class UtilsFile {
 		return path;
 	}
 
-    private static File getAttachmentFolder(File appFolder, boolean hide) {
+    public static File getAttachmentFolder(File appFolder, boolean hide) {
 		File attchFolder = new File(appFolder.getAbsolutePath(), hide ? HIDE_FOLDER + UtilsFile.ATTCH_FOLDER_NAME :
 			UtilsFile.ATTCH_FOLDER_NAME); //. makes it invisible
 		if (!attchFolder.exists())

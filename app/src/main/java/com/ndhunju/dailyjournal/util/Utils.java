@@ -7,7 +7,7 @@ import android.os.Build;
  */
 public class Utils {
 
-    public static boolean isLollipop(){
-        return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
+    public static boolean isKitKat(){
+        return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT);
     }
 }

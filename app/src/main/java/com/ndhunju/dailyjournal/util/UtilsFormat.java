@@ -115,6 +115,19 @@ public class UtilsFormat {
         return ps.getVal(R.string.key_pref_cr_choice, context.getString(R.string.str_given_by));
     }
 
+    public static String getUserDrFromPref(Context context) {
+        if (getCrFromPref(context).equals(context.getString(R.string.str_given_by)))
+            return context.getString(R.string.user_alt_cr_format);
+        return context.getString(R.string.str_credit);
+
+    }
+
+    public static String getUserCrFromPref(Context context) {
+        if (getDrFromPref(context).equals(context.getString(R.string.str_received_by)))
+            return context.getString(R.string.user_alt_dr_format);
+        return context.getString(R.string.str_debit);
+    }
+
     public static String getJournalFromPref(Context context){
         PreferenceService ps = PreferenceService.from(context);
         return ps.getVal(R.string.key_pref_journal_choice, context.getString(R.string.str_journal));

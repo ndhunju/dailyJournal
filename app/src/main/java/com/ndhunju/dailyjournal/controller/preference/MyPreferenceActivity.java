@@ -1,10 +1,8 @@
 package com.ndhunju.dailyjournal.controller.preference;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -13,8 +11,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.preference.backup.BackupPreferenceFragment;
-import com.ndhunju.dailyjournal.controller.preference.backup.TransferOldDataAsyncTask;
+import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment;
+import com.ndhunju.dailyjournal.controller.backup.TransferOldDataAsyncTask;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
 
@@ -28,7 +26,7 @@ import java.util.List;
 public class MyPreferenceActivity extends AppCompatPreferenceActivity {
 
     //Variables
-    public static List<Header> headers = new ArrayList<>();;
+    public static List<Header> headers = new ArrayList<>();
     private ListAdapter preferenceListAdapter;
 
     @Override
@@ -73,26 +71,6 @@ public class MyPreferenceActivity extends AppCompatPreferenceActivity {
             startActivityForResult(appRateIntent, 0);
         } else
 
-        if (headers.get(position).id == R.id.preference_header_share){
-            //user clicked on Share option
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.msg_share_subject));
-            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.msg_share_body) + " "
-                    + getString(R.string.link_app));
-            shareIntent.setType("text/plain");
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.str_choose)));
-        }else
-
-        if(headers.get(position).id == R.id.preference_header_backup_frag){
-            //Backup option was clicked.
-            // BackupFragment is added manually because it performs operations like selecting backup
-            // file which entails going out to App and getting result back
-            getFragmentManager().beginTransaction().replace(android.R.id.content,
-                    new BackupPreferenceFragment(), BackupPreferenceFragment.TAG)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .addToBackStack(BackupPreferenceFragment.TAG)
-                    .commit();
-        }else
         {
             //for rest use the default settings
             super.onListItemClick(l, v, position, id);

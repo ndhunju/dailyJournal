@@ -7,4 +7,6 @@
     <string name="warning_cant_change_party">You can not change the party.</string>
     <string name="warning_overpaid_msg">You have overpaid %1$s by %2$s %3$.2f</string>
     <string name="warning_restore">Restoring to Old Backup File will erase all new Entries</string>
+    <!-- text field inside a dialog. This is shown when user tries to change the date of existing Journal -->
+    <string name="warning_cant_change_date">Changing date is not supported. Please delete this journal and add new journal with correct date.</string>
 </resources>

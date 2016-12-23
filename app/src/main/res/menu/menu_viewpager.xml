@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/viewpager_menu_lock"
@@ -11,9 +12,9 @@
     <item
         android:id="@+id/viewpager_new_picture"
         app:showAsAction="ifRoom|withText"
-        android:icon="@drawable/ic_add_to_photos_black_48dp"
+        android:icon="@drawable/ic_add_to_photos"
         android:title="@string/str_add"
-         />
+                 />
 
     <item
         android:id="@+id/viewpager_delete_picture"

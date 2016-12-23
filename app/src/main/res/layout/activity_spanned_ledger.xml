@@ -1,0 +1,106 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/toolbar"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        card_view:cardCornerRadius="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/activity_home_dr_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/spanned_ledger_start_date"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                <Button
+                    android:id="@+id/activity_spanned_ledger_start_date_btn"
+                    style="@style/Widget.Button_Normal"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_weight="2"
+                    android:drawableLeft="@drawable/ic_today_black_24dp"
+                    android:ems="10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/activity_home_cr_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/spanned_ledger_end_date"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                <Button
+                    android:id="@+id/activity_spanned_ledger_end_date_btn"
+                    style="@style/Widget.Button_Normal"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_weight="2"
+                    android:drawableLeft="@drawable/ic_today_black_24dp"
+                    android:ems="10" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/activity_spanned_ledger_find"
+                style="@style/Widget.Button_Positive"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:ems="10"
+                android:text="@string/spanned_ledger_find"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:background="@color/blue"
+        android:layout_margin="6dp"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_spanned_ledger_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="6dp"/>
+
+
+</LinearLayout>

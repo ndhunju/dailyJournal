@@ -87,6 +87,7 @@ public class ReportGenerator{
         sb.append(addGap(R.string.str_dr));
         sb.append(addGap(R.string.str_cr));
         sb.append(addGap(R.string.str_balance));
+        sb.append(addGap(getString(R.string.str_note)));
 
         sb.append(newLine());
 
@@ -107,6 +108,7 @@ public class ReportGenerator{
                 balance -= journal.getAmount();
                 sb.append(addGapLeft(UtilsFormat.formatDecimal(balance, mContext)));
             }
+            sb.append(journal.getNote());
             sb.append(newLine());
         }
 
@@ -137,6 +139,7 @@ public class ReportGenerator{
             } else {
                 sb.append(getString(R.string.str_cr)).append(" ");
             }
+            sb.append(getString(R.string.str_note)).append(": ").append(journal.getNote());
             sb.append(newLine());
         }
 

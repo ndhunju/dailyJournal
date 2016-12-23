@@ -1,14 +1,12 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,9 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.DashboardActivity;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
-import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -39,7 +35,7 @@ import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.dailyjournal.viewPager.ViewPagerActivity;
+import com.ndhunju.dailyjournal.viewPager.AttachmentViewPagerActivity;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.Calendar;
@@ -49,7 +45,7 @@ import java.util.List;
 public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedListener {
 
     //Constants
-    private static final String TAG = JournalFragmentNew.class.getSimpleName();
+    public static final String TAG = JournalFragmentNew.class.getSimpleName();
     private static final int REQUEST_CODE_IMPORT_OLD_DATA = 183;
     private static final int REQUEST_CODE_IMPORT_DATA = 254;
     private static final int REQUEST_CODE_GENERAL = 564;
@@ -118,11 +114,8 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         //Wire Views and Widgets
         View v = inflater.inflate(R.layout.fragment_journal, new LinearLayout(getActivity()));
-
-
 
         idTV = (TextView) v.findViewById(R.id.fragment_journal_id);
         idTV.setText(UtilsFormat.getStringId(tempJournal.getId(), UtilsFormat.NUM_OF_DIGITS));
@@ -159,7 +152,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             public void onClick(View v) {
                 DatePickerFragment dpf = DatePickerFragment.newInstance(new Date(tempJournal.getDate()), REQUEST_CHGED_DATE);
                 dpf.setTargetFragment(JournalFragmentNew.this, REQUEST_CHGED_DATE);
-                dpf.show(getActivity().getFragmentManager(), DatePickerFragment.TAG);
+                dpf.show(getActivity().getSupportFragmentManager(), DatePickerFragment.TAG);
                 //the result is delivered to OnDialoguePressedOk()
             }
         });
@@ -171,7 +164,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             public void onClick(View v) {
                 partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
                 partylistdialog.setTargetFragment(JournalFragmentNew.this, REQUEST_CHGD_PARTY);
-                partylistdialog.show(getActivity().getFragmentManager(), Constants.KEY_PARTY_ID);
+                partylistdialog.show(getActivity().getSupportFragmentManager(), Constants.KEY_PARTY_ID);
                 //the result is delivered to OnDialoguePressedOk()
             }
         });
@@ -220,8 +213,8 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             @Override
             public void onClick(View v) {
 
-                //open ViewPagerActivity to view attachments
-                Intent i = new Intent(getActivity(), ViewPagerActivity.class);
+                //open AttachmentViewPagerActivity to view attachments
+                Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
                 i.putExtra(Constants.KEY_JOURNAL_ID, tempJournal.getId());
                 startActivity(i);
             }
@@ -255,10 +248,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                         getString(R.string.str_journal)));
             }
         });
-
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.app_name);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         /*ImageView settingImageView = (ImageView) v.findViewById(R.id.fragment_home_settings_btn);
         final Drawable drawable = getActivity().getResources().getDrawable(R.drawable.avd_setting_rotate);
@@ -302,7 +291,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(resultCode != Activity.RESULT_OK)
+        if(resultCode != AppCompatActivity.RESULT_OK)
             return;
 
         switch (requestCode) {
@@ -317,12 +306,14 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 mParty = null;
                 tempJournal = mServices.getNewJournal();
                 setValues(tempJournal, mParty);
+                break;
 
             case REQUEST_CODE_SPEECH:
                 List<String> results  = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 tempJournal = ParseText.from(getActivity()).extractJournal(results);
                 setValues(tempJournal, mServices.getParty(tempJournal.getPartyId()));
                 noteEt.setText(tempJournal.getNote() + "\n\r" + results.get(0));
+                break;
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -334,9 +325,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear(); //When the app crashes, old menu items remain creating duplicates
         inflater.inflate(R.menu.menu_home, menu);
-        //Set party menu from Preference
-        MenuItem partyMenu = menu.findItem(R.id.menu_main_party_list);
-        partyMenu.setTitle(UtilsFormat.getPartyFromPref(getActivity()));
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -348,20 +336,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.menu_main_party_list:
-                startActivityForResult(new Intent(getActivity(), PartyListActivity.class)
-                , REQUEST_CODE_GENERAL);
-                break;
 
-            case R.id.menu_main_preference:
-                Intent preferencesIntent = new Intent(getActivity(), MyPreferenceActivity.class);
-                startActivityForResult(preferencesIntent, REQUEST_CODE_GENERAL);
-                break;
-
-            case R.id.menu_main_dashboard:
-                Intent dashboardIntent = new Intent(getActivity(), DashboardActivity.class);
-                startActivity(dashboardIntent);
-                break;
         }
 
         return super.onOptionsItemSelected(item);

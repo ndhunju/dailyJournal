@@ -3,26 +3,5 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.ndhunju.dailyjournal.HomeActivity">
 
-    <item
-        android:id="@+id/menu_main_party_list"
-        android:icon="@drawable/ic_group_black_48dp"
-        android:orderInCategory="3"
-        app:showAsAction="always"
-        android:title="@string/str_party"
-        tools:ignore="AppCompatResource" />
-    <item
-        android:id="@+id/menu_main_preference"
-        android:icon="@drawable/ic_settings_black_vector"
-        android:orderInCategory="2"
-        app:showAsAction="ifRoom"
-        android:title="@string/str_preference" />
-    <item
-        android:id="@+id/menu_main_dashboard"
-        android:orderInCategory="1"
-        android:title="@string/str_dashboard"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_dashboard_black_48dp"
-        />
-
 
 </menu>

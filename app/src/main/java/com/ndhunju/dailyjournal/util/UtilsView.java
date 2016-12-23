@@ -1,18 +1,29 @@
 package com.ndhunju.dailyjournal.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.LayoutRes;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
+import android.util.TypedValue;
+import android.view.Menu;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.party.PartyListFragment;
 
 /**
  * Created by dhunju on 9/24/2015.
@@ -79,9 +90,10 @@ public class UtilsView {
         return pd;
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static void performTransition(int viewGroupId, Activity activity){
 
-        if(Utils.isLollipop()) {
+        if(Utils.isKitKat()) {
             //For example, the framework does not support animating changes to ListView
             // objects, so you should not try to animate them during a transition.
             Transition transition = TransitionInflater.from(activity)
@@ -92,6 +104,21 @@ public class UtilsView {
                     .findViewById(viewGroupId), transition);
 
         }
+    }
+
+    public static void setMenuIconTint(Menu menu, @ColorInt int tint) {
+        int i = 0;
+        Drawable icon;
+        while (i > menu.size()) {
+            icon = DrawableCompat.wrap(menu.getItem(i).getIcon());
+            DrawableCompat.setTint(icon, tint);
+            menu.getItem(i).setIcon(icon);
+        }
+
+    }
+
+    public static int dpToPx(Context context, int px) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, context.getResources().getDisplayMetrics());
     }
 
 }

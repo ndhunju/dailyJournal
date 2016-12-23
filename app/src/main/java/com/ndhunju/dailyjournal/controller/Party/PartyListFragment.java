@@ -1,23 +1,17 @@
 package com.ndhunju.dailyjournal.controller.party;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.Fade;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
-import android.transition.TransitionManager;
-import android.transition.TransitionSet;
-import android.transition.Visibility;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,18 +20,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.database.PartyDAO;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.util.Utils;
-import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.util.ArrayList;
@@ -52,7 +44,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class PartyListFragment extends Fragment {
+public class PartyListFragment extends Fragment implements PartyDAO.Observer, PartyCardAdapter.OnItemClickListener{
 
     //The serialization (saved instance state) Bundle key representing the
     //activated item position. Only used on tablets.
@@ -64,13 +56,20 @@ public class PartyListFragment extends Fragment {
     private Callbacks mCallbacks = sDummyCallbacks;
 
     //List view
-    private ListView mPartyLV;
+    private RecyclerView mPartyLV;
     private Services mServices;
     private EditText srchPartyET;
-    private ArrayAdapter mPartyAdapter;
+    private PartyCardAdapter mPartyAdapter;
 
 //      The current activated item position. Only used on tablets
     private int mActivatedPosition = ListView.INVALID_POSITION;
+
+    @Override
+    public void onItemClick(View view, int position, long id) {
+        // Notify the active callbacks interface (the activity, if the
+        // fragment is attached to one) that an item has been selected.
+        mCallbacks.onItemSelected(String.valueOf(id), view, position);
+    }
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -78,7 +77,7 @@ public class PartyListFragment extends Fragment {
      * selections.
      */
     public interface Callbacks {
-        void onItemSelected(String id, View view);
+        void onItemSelected(String id, View view, int position);
     }
 
     /**
@@ -87,7 +86,7 @@ public class PartyListFragment extends Fragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id, View view) {
+        public void onItemSelected(String id, View view, int position) {
         }
     };
 
@@ -119,7 +118,7 @@ public class PartyListFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 //filter the list below
-                mPartyAdapter.getFilter().filter(s);
+                mPartyAdapter.filter(s);
             }
 
             @Override
@@ -133,18 +132,14 @@ public class PartyListFragment extends Fragment {
 
 
 
-        mPartyLV = (ListView)rootView.findViewById(R.id.fragment_party_list_party_list_lv);
-        mPartyLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                // Notify the active callbacks interface (the activity, if the
-                // fragment is attached to one) that an item has been selected.
-                mCallbacks.onItemSelected(String.valueOf(id), view);
-            }
-        });
+        mPartyLV = (RecyclerView) rootView.findViewById(R.id.fragment_party_list_party_list);
+        mPartyLV.setLayoutManager(new LinearLayoutManager(getContext()));
         mPartyLV.setOnCreateContextMenuListener(this);
 
-        refreshList();
+        mPartyAdapter = new PartyCardAdapter(getActivity(), mServices.getParties());
+        mPartyLV.setAdapter(mPartyAdapter);
+        mPartyAdapter.setOnItemClickListener(this);
+        mPartyAdapter.setActivatedItemPos(0);
 
         //When user clicks on Add Party button, create a Party and pass the ID to previous activity
         ((Button)rootView.findViewById(R.id.fragment_party_list_add_party_btn)).setOnClickListener(new View.OnClickListener() {
@@ -154,8 +149,7 @@ public class PartyListFragment extends Fragment {
                 String name = srchPartyET.getText().toString();
                 Party newParty = mServices.addParty(name);
                 UtilsView.toast(getActivity(), name + " saved.");
-                mPartyAdapter.add(newParty);
-                mPartyAdapter.notifyDataSetChanged();
+                mPartyAdapter.dataSetChanged();
             }
         });
 
@@ -168,13 +162,13 @@ public class PartyListFragment extends Fragment {
             }
         });
 
-
+        mServices.registerPartyObserver(mPartyAdapter);
 
         return rootView;
     }
 
 
-    private ListView getListView(){
+    private RecyclerView getListView(){
         return mPartyLV;
     }
 
@@ -188,16 +182,16 @@ public class PartyListFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
         // Activities containing this fragment must implement its callbacks.
-        if (!(activity instanceof Callbacks)) {
+        if (!(context instanceof Callbacks)) {
             throw new IllegalStateException("Activity must implement fragment's callbacks.");
         }
 
-        mCallbacks = (Callbacks) activity;
+        mCallbacks = (Callbacks) context;
     }
 
     @Override
@@ -217,46 +211,15 @@ public class PartyListFragment extends Fragment {
         }
     }
 
-    /**
-     * Turns on activate-on-click mode. When this mode is on, list items will be
-     * given the 'activated' state when touched.
-     */
-    public void setActivateOnItemClick(boolean activateOnItemClick) {
-        // When setting CHOICE_MODE_SINGLE, ListView will automatically
-        // give items the 'activated' state when touched.
-        getListView().setChoiceMode(activateOnItemClick
-                ? ListView.CHOICE_MODE_SINGLE
-                : ListView.CHOICE_MODE_NONE);
-    }
-
     private void setActivatedPosition(int position) {
-        if (position == ListView.INVALID_POSITION) {
-            getListView().setItemChecked(mActivatedPosition, false);
-        } else {
-            getListView().setItemChecked(position, true);
-        }
-
+        mPartyAdapter.setActivatedItemPos(position);
         mActivatedPosition = position;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(data == null) return;
-
-        switch (requestCode){
-            case REQUEST_PARTY_INFO_CHGD:
-                if(!data.getBooleanExtra(Constants.KEY_PARTY_INFO_CHGD, false)){
-                    return;
-                }
-                refreshList();
-                break;
-        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_party_list_activity, menu);
+        UtilsView.setMenuIconTint(menu, ContextCompat.getColor(getContext(), R.color.icon_tint));
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -265,10 +228,6 @@ public class PartyListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()){
-            case R.id.menu_party_list_activity_add:
-                Intent newPartyIntent = new Intent(getActivity(), PartyActivity.class);
-                startActivityForResult(newPartyIntent, REQUEST_PARTY_INFO_CHGD);
-                break;
 
             case R.id.menu_party_list_activity_import:
                 final List<ImportContacts.Contact> contacts = ImportContacts.getContacts(getActivity());
@@ -290,13 +249,7 @@ public class PartyListFragment extends Fragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                new ImportContactsAsync(getActivity(), new ImportContactsAsync.Callback(){
-
-                                    @Override
-                                    public void onFinished() {
-                                        refreshList();
-                                    }
-                                }).execute(importContacts);
+                                new ImportContactsAsync(getActivity()).execute(importContacts);
                             }
                         });
                 AlertDialog selectContactsAD = builder.create();
@@ -307,14 +260,7 @@ public class PartyListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void refreshList() {
-        mPartyAdapter = new PartyCardAdapter(getActivity(), mServices.getParties());
-        mPartyLV.setAdapter(mPartyAdapter);
-        mPartyLV.setSelection(0);
-    }
-
-    public ArrayAdapter getArrayAdapter(){
+    public RecyclerView.Adapter getArrayAdapter(){
         return mPartyAdapter;
     }
 
@@ -363,9 +309,6 @@ public class PartyListFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mServices.deleteParty(party);
-                        //remove same journal from the adapter as well rather than reloading
-                        mPartyAdapter.remove(party);
-                        mPartyAdapter.notifyDataSetChanged();
                         String msg = String.format(getString(R.string.msg_deleted), party.getName());
                         UtilsView.toast(getActivity(), msg);
                     }
@@ -374,5 +317,26 @@ public class PartyListFragment extends Fragment {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onPartyAdded(Party party) {
+
+    }
+
+    @Override
+    public void onPartyChanged(Party party) {
+
+    }
+
+    @Override
+    public void onPartyDeleted(Party party) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        mServices.unregisterPartyObserver(mPartyAdapter);
+        super.onDestroy();
     }
 }

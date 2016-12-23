@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
-    <header
-        android:icon="@drawable/ic_save_black_48dp"
-        android:title="@string/str_backup"
-        android:id="@+id/preference_header_backup_frag"
-        />
     <header android:fragment="com.ndhunju.dailyjournal.controller.preference.FormatPreferenceFragment"
         android:title="@string/str_format"
         android:icon="@drawable/ic_label_outline_black_48dp"
@@ -21,10 +16,5 @@
         <!-- key/value pairs can be included as arguments for the fragment. -->
         <extra android:name="someKey" android:value="someHeaderValue" />
     </header>
-    <header
-        android:id="@+id/preference_header_share"
-        android:icon="@drawable/ic_share_black_48dp"
-        android:title="@string/str_share"
-        />
 
 </preference-headers>

@@ -1,13 +1,13 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -32,7 +32,7 @@ import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.dailyjournal.viewPager.ViewPagerActivity;
+import com.ndhunju.dailyjournal.viewPager.AttachmentViewPagerActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +43,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	private static final String TAG = JournalFragment.class.getSimpleName();
     private static final int REQUEST_CHGED_DATE = 6656;
 
-    private EditText amountEt;
+	private EditText amountEt;
 	private EditText noteEt;
     private Button partyBtn;
 	private Button dateBtn;
@@ -65,10 +65,11 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	 * @param partyId
 	 * @return
 	 */
-	public static Fragment newInstance(long journalId, long partyId) {
+	public static Fragment newInstance(long journalId, long partyId, int pos) {
 		Bundle args = new Bundle();
 		args.putLong(Constants.KEY_JOURNAL_ID, journalId);
 		args.putLong(Constants.KEY_PARTY_ID, partyId);
+		args.putInt(Constants.KEY_POS, pos);
 		JournalFragment newJF = new JournalFragment();
 		newJF.setArguments(args);
 		return newJF;
@@ -82,12 +83,20 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		mServices = Services.getInstance(getActivity());
 		long journalId = getArguments().getLong(Constants.KEY_JOURNAL_ID);
         long partyId = getArguments().getLong(Constants.KEY_PARTY_ID);
+		int position = getArguments().getInt(Constants.KEY_POS);
 
         mJournal = mServices.getJournal(journalId);
         mParty = mServices.getParty(partyId);
         mJournal = mServices.getJournal(journalId);
+		mJournal.setTag(position);
         getActivity().setTitle(mParty.getName());
         setHasOptionsMenu(true);
+		ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+
+		if (actionBar != null ) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setDefaultDisplayHomeAsUpEnabled(true);
+		}
 
 	}
 
@@ -96,10 +105,6 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
 		//Wire Views and Widgets
 		View v = inflater.inflate(R.layout.fragment_journal, new LinearLayout(getActivity()));
-
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.app_name);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
 		idTV = (TextView) v.findViewById(R.id.fragment_journal_id);
 		drTv = (TextView) v.findViewById(R.id.fragment_journal_dr_tv);
@@ -134,7 +139,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 			public void onClick(View v) {
 				DatePickerFragment dpf = DatePickerFragment.newInstance(new Date(mJournal.getDate()), REQUEST_CHGED_DATE);
 				dpf.setTargetFragment(JournalFragment.this, REQUEST_CHGED_DATE);
-				dpf.show(getActivity().getFragmentManager(), DatePickerFragment.TAG);
+				dpf.show(getActivity().getSupportFragmentManager(), DatePickerFragment.TAG);
 				//the result is delivered to OnDialoguePressedOk()
 			}
 		});
@@ -191,8 +196,8 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
             @Override
             public void onClick(View v) {
-                //open ViewPagerActivity to view attachments
-                Intent i = new Intent(getActivity(), ViewPagerActivity.class);
+                //open AttachmentViewPagerActivity to view attachments
+                Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
                 i.putExtra(Constants.KEY_JOURNAL_ID, mJournal.getId());
                 startActivity(i);
             }
@@ -210,7 +215,7 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 						mServices.updateJournal(mJournal);
 						mJournal = null;
 					}
-					getActivity().setResult(Activity.RESULT_OK, i);
+					getActivity().setResult(AppCompatActivity.RESULT_OK, i);
 					getActivity().finish(); //Finish the Activity once user is done changing
 
 					UtilsView.toast(getActivity(), String.format(getString(R.string.msg_saved),
@@ -254,11 +259,14 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 						UtilsView.toast(getActivity(), msg);
 						Intent intent = new Intent();
 						intent.putExtra(Constants.KEY_JOURNAL_CHGD, true);
-						getActivity().setResult(Activity.RESULT_OK, intent);
+						getActivity().setResult(AppCompatActivity.RESULT_OK, intent);
 						getActivity().finish();
 					}
 				}, null);
 				break;
+			case android.R.id.home:
+				getActivity().onBackPressed();
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -286,8 +294,8 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
      * @param journalType
      */
 	private void setTextDrCr(Journal.Type journalType){
-		int red = getResources().getColor(R.color.red_light_pressed);
-		int green = getResources().getColor(R.color.green);
+		int red   = ContextCompat.getColor(getActivity(), R.color.red_light_pressed);
+		int green = ContextCompat.getColor(getActivity(), R.color.green);
 
         if (journalType.equals(Journal.Type.Debit)) {
 			amountEt.setTextColor(green);

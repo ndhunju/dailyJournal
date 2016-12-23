@@ -28,10 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
             android:text="@string/str_add"/>
-        <ListView
-            android:id="@+id/fragment_party_list_party_list_lv"
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_party_list_party_list"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            />
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

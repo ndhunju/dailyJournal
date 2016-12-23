@@ -67,7 +67,7 @@ dependencies {
     // Remote binary dependency
     //compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:appcompat-v7:23.0.+'
-    compile 'com.android.support:support-annotations:23.0.+'
+    compile 'com.android.support:support-annotations:23.0.1'
     compile 'com.android.support:support-v4:23.0.+'
     compile 'com.google.android.gms:play-services-drive:7.5.0'
     compile 'com.android.support:support-v13:23.0.+'
@@ -92,7 +92,8 @@ dependencies {
     // Set this dependency if you want to use Hamcrest matching
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     'org.hamcrest:hamcrest-library:1.1'
-
+    compile 'com.android.support:cardview-v7:23.0.+'
+    compile 'com.android.support:recyclerview-v7:23.0.+'
     //compile 'com.wnafee:vector-compat:1.0.5'
     compile project(':folderpicker')
 }

@@ -8,11 +8,11 @@
         app:showAsAction="ifRoom|withText"
         android:title="@string/str_information"
         android:icon="@drawable/ic_report_black_48dp"
-        tools:ignore="AppCompatResource"/>
+        />
     <item
         android:id="@+id/menu_party_activity_share"
         app:showAsAction="ifRoom|withText"
         android:title="@string/str_share"
         android:icon="@drawable/ic_share_black_48dp"
-        tools:ignore="AppCompatResource"/>
+        />
 </menu>

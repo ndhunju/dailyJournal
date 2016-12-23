@@ -1,39 +1,35 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.JournalPagerFragment;
+import com.ndhunju.dailyjournal.controller.NavDrawerActivity;
 import com.ndhunju.dailyjournal.controller.fragment.AppRater;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
 
-public class JournalActivity extends AppCompatActivity {
-
-	private static final String TAG_JOURNAL_FRAG = "journalFragment";
+public class JournalNewActivity extends NavDrawerActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
 
 		//Get Journal and Party ID if passed through Intent
 		long journalId = getIntent().getLongExtra(Constants.KEY_JOURNAL_ID, Constants.ID_NEW_JOURNAL);
-		long partyId = getIntent().getLongExtra(Constants.KEY_PARTY_ID, Constants.NO_PARTY);
+		//long partyId = getIntent().getLongExtra(Constants.KEY_PARTY_ID, Constants.NO_PARTY);
+        //long currentJournalPos = getIntent().getIntExtra(Constants.KEY_JOURNAL_POS, 0);
 
 		// find the retained fragment on activity restarts
 		if(savedInstanceState == null){
-			Fragment journalFrag;
 			if(journalId != Constants.ID_NEW_JOURNAL){
-				 journalFrag = JournalFragment.newInstance(journalId, partyId);
+				JournalPagerFragment journalPagerFragment = new JournalPagerFragment();
+				journalPagerFragment.setArguments(getIntent().getExtras());
+				getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, journalPagerFragment, JournalPagerFragment.TAG).commit();
 			}else{
-				journalFrag = JournalFragmentNew.newInstance();
+				getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
+						JournalFragmentNew.newInstance(), JournalFragmentNew.TAG).commit();
 			}
-			getFragmentManager().beginTransaction().replace(R.id.activity_home_journal_fl,
-					journalFrag, TAG_JOURNAL_FRAG).commit();
 		}
 	}
 
@@ -44,7 +40,7 @@ public class JournalActivity extends AppCompatActivity {
 		askUserToRate();
 
 		//check pass code
-		LockService.checkPassCode(JournalActivity.this);
+		LockService.checkPassCode(JournalNewActivity.this);
 	}
 
 	@Override
@@ -55,7 +51,7 @@ public class JournalActivity extends AppCompatActivity {
 
 	private void askUserToRate(){
 		//ask users to rate the app
-		AppRater rater = new AppRater(JournalActivity.this);
+		AppRater rater = new AppRater(JournalNewActivity.this);
 		rater.setLaunchesBeforePrompt(20);
 		rater.setPhrases(R.string.msg_rate_title, R.string.msg_rate_body, R.string.str_rate,
 				R.string.str_later, R.string.str_no_thanks);

@@ -41,7 +41,7 @@ public class ChartsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_charts);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         mViewPager = (ViewPager) findViewById(R.id.activity_dashboard_pager);
@@ -52,7 +52,6 @@ public class ChartsActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.activity_dashboard_tab_layout);
 
-        toolbar.setTitle(UtilsFormat.getPartyFromPref(this));
         setSupportActionBar(toolbar);
 
         // Set up the ViewPager with the sections adapter.
@@ -83,8 +82,6 @@ public class ChartsActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         switch (id){
-            case R.id.action_settings:
-                    return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -129,9 +126,9 @@ public class ChartsActivity extends AppCompatActivity {
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return UtilsFormat.getCrFromPref(ChartsActivity.this).toUpperCase(l);
+                    return getString(R.string.str_given_by);
                 case 1:
-                    return UtilsFormat.getDrFromPref(ChartsActivity.this).toUpperCase(l);
+                    return getString(R.string.str_received_by);
             }
             return null;
         }

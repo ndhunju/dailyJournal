@@ -19,17 +19,11 @@ import java.util.List;
  */
 class ImportContactsAsync extends AsyncTask<List<ImportContacts.Contact>, Integer, Boolean> {
 
-    private Callback mCallback;
     private Activity mActivity;
     private ProgressDialog pd;
 
-    interface Callback{
-        void onFinished();
-    }
-
-    public ImportContactsAsync(Activity activity, Callback callback){
+    public ImportContactsAsync(Activity activity){
         mActivity = activity;
-        mCallback = callback;
     }
 
     @Override
@@ -49,6 +43,5 @@ class ImportContactsAsync extends AsyncTask<List<ImportContacts.Contact>, Intege
         pd.cancel();
         String msg = mActivity.getString(R.string.msg_finished, "");
         UtilsView.alert(mActivity, msg);
-        if(mCallback != null) mCallback.onFinished();
     }
 }

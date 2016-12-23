@@ -14,7 +14,7 @@
             android:entryValues="@array/currency_val"
             android:key="@string/key_pref_currency"
             android:title="@string/str_currency"
-            android:icon="@drawable/ic_attach_money_black_24dp"/>
+            android:icon="@drawable/ic_currency"/>
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/ledger_view"

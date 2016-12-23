@@ -201,6 +201,20 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                         return true;
                     }
                 });
+
+        findPreference(getString(R.string.key_pref_erase_journals))
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        UtilsView.alert(getActivity(), getString(R.string.msg_erase_journals), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new EraseJournalsAsyncTask(getActivity()).execute();
+                            }
+                        }, null);
+                        return true;
+                    }
+                });
     }
 
     @Override
