@@ -52,6 +52,7 @@ public class IconTextAdapter extends ArrayAdapter<String> {
         return this;
     }
 
+    /** @param tint : pass -1 to not to apply tint on the icon */
     public IconTextAdapter setIconTint(@ColorInt int tint) {
         this.tint = tint;
         return this;
@@ -65,7 +66,7 @@ public class IconTextAdapter extends ArrayAdapter<String> {
 
         textView.setText(getItem(position));
         drawable = getItemIcon(position);
-        DrawableCompat.setTint(DrawableCompat.wrap(drawable), tint);
+        if (tint != -1) DrawableCompat.setTint(DrawableCompat.wrap(drawable), tint);
         imageView.setImageDrawable(drawable);
 
         return convertView;

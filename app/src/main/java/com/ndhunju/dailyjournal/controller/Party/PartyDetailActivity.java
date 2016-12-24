@@ -44,10 +44,11 @@ public class PartyDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putString(Constants.KEY_PARTY_ID, getIntent().getStringExtra(Constants.KEY_PARTY_ID));
+            arguments.putInt(Constants.KEY_POS, getIntent().getIntExtra(Constants.KEY_POS, -1));
             PartyDetailFragment fragment = new PartyDetailFragment();
             fragment.setArguments(arguments);
 
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, fragment)
                     .commit();
         }

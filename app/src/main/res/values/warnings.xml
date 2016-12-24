@@ -9,4 +9,6 @@
     <string name="warning_restore">Restoring to Old Backup File will erase all new Entries</string>
     <!-- text field inside a dialog. This is shown when user tries to change the date of existing Journal -->
     <string name="warning_cant_change_date">Changing date is not supported. Please delete this journal and add new journal with correct date.</string>
+    <!-- text field inside a dialog. Shown when party user selected doesn't exist anymore-->
+    <string name="warning_party_not_found">Selected Party not found. Please select a Party again.</string>
 </resources>

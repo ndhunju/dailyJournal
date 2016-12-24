@@ -65,7 +65,8 @@ public class PartyActivity extends AppCompatActivity {
 		if(partyId == Constants.ID_NEW_PARTY)
         {mParty = new Party(getString(R.string.str_new), Constants.ID_NEW_PARTY);}
 		else{mParty = mServices.getParty(partyId);}
-		
+
+        mParty.setTag(getIntent().getIntExtra(Constants.KEY_POS, -1));
 		setTitle(mParty.getName());
 
 		//Wire up widgets
@@ -122,12 +123,7 @@ public class PartyActivity extends AppCompatActivity {
 				else
 					mServices.updateParty(mParty);
 
-                //Let the previous activity know that party information was changed
-				Intent i = new Intent();
-				i.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
-				i.putExtra(Constants.KEY_PARTY_NAME, mParty.getName());
-				setResult(Activity.RESULT_OK, i);
-				PartyActivity.this.finish();
+				finish();
 			}
 		});
 
@@ -141,9 +137,6 @@ public class PartyActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 mServices.deleteParty(mParty);
                                 UtilsView.toast(PartyActivity.this, getString(R.string.msg_deleted, mParty.getName()));
-                                Intent intent = new Intent();
-                                intent.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
-                                setResult(Activity.RESULT_OK, intent);
                                 finish();
                             }
                         }, null);

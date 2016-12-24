@@ -76,6 +76,11 @@ public class PartyListDialog extends DialogFragment {
 				((OnDialogBtnClickedListener)getTargetFragment()).onDialogBtnClicked(i,
 						OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
 			}
+
+			@Override
+			public void onContextItemClick(View view, int position, long id) {
+				PartyListFragment.onContextItemClick(getActivity(), partyAdapter, view, position, id);
+			}
 		});
 
         //When user clicks on Add Party Button, add the mParty to the list and return its ID
@@ -93,13 +98,19 @@ public class PartyListDialog extends DialogFragment {
 						OnDialogBtnClickedListener.BUTTON_POSITIVE, Activity.RESULT_OK,
 						getArguments().getInt(Constants.KEY_REQUEST_CODE));
 
-            }
+              }
 		});
 
 		((FloatingActionButton)view.findViewById(R.id.fragment_party_list_fab)).setVisibility(View.INVISIBLE);
 
+        mServices.registerPartyObserver(partyAdapter);
 
 		return view;
 	}
-	
+
+    @Override
+    public void onDestroyView() {
+        mServices.unregisterPartyObserver(partyAdapter);
+        super.onDestroyView();
+    }
 }

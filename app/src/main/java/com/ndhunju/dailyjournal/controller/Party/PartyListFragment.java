@@ -7,25 +7,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.database.PartyDAO;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
@@ -44,15 +41,15 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class PartyListFragment extends Fragment implements PartyDAO.Observer, PartyCardAdapter.OnItemClickListener{
+public class PartyListFragment extends Fragment implements PartyCardAdapter.OnItemClickListener{
 
-    //The serialization (saved instance state) Bundle key representing the
-    //activated item position. Only used on tablets.
+    // The serialization (saved instance state) Bundle key representing the
+    // activated item position. Only used on tablets.
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
+    private static final int INVALID_POSITION = -1;
     public static final int REQUEST_PARTY_INFO_CHGD = 135;
 
-
-//     The fragment's current callback object, which is notified of list item clicks.
+    // The fragment's current callback object, which is notified of list item clicks.
     private Callbacks mCallbacks = sDummyCallbacks;
 
     //List view
@@ -61,14 +58,46 @@ public class PartyListFragment extends Fragment implements PartyDAO.Observer, Pa
     private EditText srchPartyET;
     private PartyCardAdapter mPartyAdapter;
 
-//      The current activated item position. Only used on tablets
-    private int mActivatedPosition = ListView.INVALID_POSITION;
+    // The current activated item position. Only used on tablets
+    private int mActivatedPosition = INVALID_POSITION;
 
     @Override
     public void onItemClick(View view, int position, long id) {
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
         mCallbacks.onItemSelected(String.valueOf(id), view, position);
+    }
+
+    @Override
+    public void onContextItemClick(View view, final int position, long id) {
+        onContextItemClick(getActivity(), mPartyAdapter, view, position, id);
+    }
+
+    public static void onContextItemClick(final FragmentActivity activity, final PartyCardAdapter partyAdapter, View view, final int position, long id) {
+        switch ((int) id){
+            case android.R.drawable.ic_menu_edit:
+                // selected to edit the party
+                Intent partyEditIntent = new Intent(activity, PartyActivity.class);
+                partyEditIntent.putExtra(Constants.KEY_PARTY_ID, partyAdapter.getItem(position).getId());
+                partyEditIntent.putExtra(Constants.KEY_POS, position);
+                activity.startActivityForResult(partyEditIntent, REQUEST_PARTY_INFO_CHGD);
+                break;
+            case android.R.drawable.ic_menu_delete:
+                // selected to delete the Party
+                String msg = String.format(activity.getString(R.string.msg_delete_confirm), activity.getString(R.string.str_party));
+                //Alert user before deleting the Journal
+                UtilsView.alert(activity, msg, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Services.getInstance(activity).deleteParty(partyAdapter.getItem(position));
+                        String msg = String.format(activity.getString(R.string.msg_deleted), partyAdapter.getItem(position).getName());
+                        UtilsView.toast(activity, msg);
+                    }
+                }, null);
+
+                break;
+        }
+
     }
 
     /**
@@ -205,7 +234,7 @@ public class PartyListFragment extends Fragment implements PartyDAO.Observer, Pa
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mActivatedPosition != ListView.INVALID_POSITION) {
+        if (mActivatedPosition != INVALID_POSITION) {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
         }
@@ -262,76 +291,6 @@ public class PartyListFragment extends Fragment implements PartyDAO.Observer, Pa
 
     public RecyclerView.Adapter getArrayAdapter(){
         return mPartyAdapter;
-    }
-
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        //prepare context menu
-        MenuItem itemEdit = menu.add(0, PartyListActivity.CONTEXT_MENU_PARTY_EDIT, 1, getString(R.string.str_edit));
-        itemEdit.setIcon(getResources().getDrawable(android.R.drawable.ic_menu_edit));
-
-        MenuItem itemDelete = menu.add(0, PartyListActivity.CONTEXT_MENU_PARTY_DELETE, 2, getString(R.string.str_delete));
-        itemDelete.setIcon(getResources().getDrawable(android.R.drawable.ic_menu_delete));
-
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-
-        //Get the list item position
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        ListView lv = (ListView)info.targetView.getParent();
-        Object obj = lv.getAdapter().getItem(info.position);
-        final Party party;
-
-        if(!(obj instanceof Party)) {
-            return false;
-        }
-
-        party = (Party)obj;
-
-        //getInt the id of select journal
-        long journalId = info.id;
-
-        switch (id){
-            case PartyListActivity.CONTEXT_MENU_PARTY_EDIT:
-                Intent partyEditIntent = new Intent(getActivity(), PartyActivity.class);
-                partyEditIntent.putExtra(Constants.KEY_PARTY_ID, party.getId());
-                startActivityForResult(partyEditIntent, REQUEST_PARTY_INFO_CHGD);
-                break;
-            case PartyListActivity.CONTEXT_MENU_PARTY_DELETE:
-                String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_party));
-                //Alert user before deleting the Journal
-                UtilsView.alert(getActivity(), msg, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        mServices.deleteParty(party);
-                        String msg = String.format(getString(R.string.msg_deleted), party.getName());
-                        UtilsView.toast(getActivity(), msg);
-                    }
-                }, null);
-
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    public void onPartyAdded(Party party) {
-
-    }
-
-    @Override
-    public void onPartyChanged(Party party) {
-
-    }
-
-    @Override
-    public void onPartyDeleted(Party party) {
-
     }
 
     @Override

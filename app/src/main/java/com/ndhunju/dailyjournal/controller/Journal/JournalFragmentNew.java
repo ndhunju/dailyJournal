@@ -231,6 +231,12 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                     return;
                 }
 
+                // Party might have been deleted. one way is from Party dialog -> context menu -> delete
+                if (mServices.getParty(mParty.getId()) == null) {
+                    UtilsView.alert(getActivity(), getString(R.string.warning_party_not_found));
+                    return;
+                }
+
                 mServices.updateNewJournal(tempJournal);
                 //Save selected values so that user doesn't have to selected them again
                 long selectedDate = tempJournal.getDate();

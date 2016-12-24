@@ -1,6 +1,8 @@
 package com.ndhunju.dailyjournal.controller;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.ndhunju.dailyjournal.service.Setup;
 
@@ -13,6 +15,8 @@ import com.ndhunju.dailyjournal.service.Setup;
  */
 public class DailyJournalApplication extends Application {
 
+    private static Handler sUiThreadHandler;
+
     /**
      * Called when the application is starting, before any activity, service, or receiver objects
      * (excluding content providers) have been created.
@@ -20,8 +24,16 @@ public class DailyJournalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //Load defaults setttings
+        //Load defaults settings
         Setup.from(getBaseContext()).loadSettings();
+        sUiThreadHandler = new Handler(Looper.getMainLooper());
+    }
+
+    /**
+     * Execute {@code runnable} on main/ui thread.
+     */
+    public static void postOnUiThread(Runnable runnable) {
+        sUiThreadHandler.post(runnable);
     }
 
 
