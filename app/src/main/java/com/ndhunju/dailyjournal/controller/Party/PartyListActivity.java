@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -44,10 +45,13 @@ public class PartyListActivity extends NavDrawerActivity implements PartyListFra
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the sw600dp screen
             mTwoPane = true;
-            // In two-pane mode, list items should be given the 'activated' state when touched.
-            ((PartyListFragment) getFragmentManager()
-                                .findFragmentById(R.id.item_list))
-                                .setActivateOnItemClick(true);
+
+        } else {
+            mTwoPane = false;
+            /** {@link PartyDetailFragment} is attached, remove it. It could be attached on device rotation from
+             * Landscape to Portrait*/
+            Fragment partyFragment = getSupportFragmentManager().findFragmentByTag(PartyDetailFragment.TAG);
+            if (partyFragment != null) getSupportFragmentManager().beginTransaction().remove(partyFragment).commit();
         }
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -81,7 +85,7 @@ public class PartyListActivity extends NavDrawerActivity implements PartyListFra
             PartyDetailFragment fragment = new PartyDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment).commit();
+                    .replace(R.id.item_detail_container, fragment, PartyDetailFragment.TAG).commit();
 
         } else {
             // In single-pane mode, simply start the detail activity

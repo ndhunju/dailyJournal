@@ -247,11 +247,11 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_party_list_activity, menu);
         UtilsView.setMenuIconTint(menu, ContextCompat.getColor(getContext(), R.color.icon_tint));
         super.onCreateOptionsMenu(menu, inflater);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
