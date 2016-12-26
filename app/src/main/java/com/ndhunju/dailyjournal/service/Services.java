@@ -555,6 +555,22 @@ public class Services {
         createDB();
     }
 
+	public boolean recreateJournalDB() {
+		return dropJournalTable() && createJournalDB();
+	}
+
+	private boolean dropJournalTable() {
+		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+		db.execSQL(DailyJournalContract.JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
+		return true;
+	}
+
+	private boolean createJournalDB() {
+		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+		db.execSQL(DailyJournalContract.JournalColumns.SQL_CREATE_ENTRIES_JOURNALS);
+		return true;
+	}
+
 
     /**
      * Creates tables in the database
@@ -603,6 +619,27 @@ public class Services {
 			e.printStackTrace();
 		}
 
+		return success;
+	}
+
+	public boolean eraseAllJournals() {
+		boolean success = true;
+		try {
+			success &= recreateJournalDB();
+			success &= eraseAllAttachments();
+			success &= partyDAO.resetDrCrBalance() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+	}
+
+	public boolean eraseAllAttachments() {
+		boolean success = true;
+		for (File attch : UtilsFile.getAttachmentFolder(UtilsFile.getAppFolder(getContext()), true).listFiles()) {
+			// make sure it is a file. Could be party folder
+			if (attch.isFile()) success &= UtilsFile.deleteFile(attch.getAbsolutePath());
+		}
 		return success;
 	}
 

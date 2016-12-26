@@ -345,7 +345,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                                             break;
 
                                         case 1: //Select parties
-                                            createPartySelectDialog(services, parties, dir).show();
+                                            createPartySelectDialogToExport(services, parties, dir).show();
                                             break;
 
                                     }
@@ -362,17 +362,22 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
 
     }
 
-    private AlertDialog createPartySelectDialog(Services services, final List<Party> parties, final String dir) {
+    private AlertDialog createPartySelectDialogToExport(Services services, final List<Party> parties, final String dir) {
         final ArrayList<Party> selectedParties = new ArrayList<>();
+
+        // create array of Parties' name
+        String[] allParties = new String[parties.size()];
+        for (int i = 0; i < parties.size(); i++)
+            allParties[i] = parties.get(i).getName();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.msg_choose, getString(R.string.str_contact)));
         builder.setNegativeButton(getString(android.R.string.cancel), null);
-        builder.setMultiChoiceItems(services.getPartyNameAsArray(), null,
+        builder.setMultiChoiceItems(allParties, null,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        //Add checked contacts into importContacts list
+                        //Add checked contacts into selectedParties list
                         if (b) selectedParties.add(parties.get(i));
                         else selectedParties.remove(parties.get(i));
                     }

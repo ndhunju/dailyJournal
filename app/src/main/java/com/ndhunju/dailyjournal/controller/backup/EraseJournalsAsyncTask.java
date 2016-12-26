@@ -13,7 +13,7 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 /**
  * Created by dhunju on 9/24/2015.
  * * This class is a child class of {@link AsyncTask} that erases
- * all data by calling {@link Services#eraseAllJournals()}. This
+ * all journal data by calling {@link Services#eraseAllJournals()}. This
  * class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
