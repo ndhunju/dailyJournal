@@ -116,16 +116,4 @@ public class PartyListActivity extends NavDrawerActivity implements PartyListFra
         LockService.checkPassCode(PartyListActivity.this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        switch (requestCode){
-            case PartyListFragment.REQUEST_PARTY_INFO_CHGD:
-                //relay it to list fragment
-                getFragmentManager().findFragmentById(R.id.item_list)
-                        .onActivityResult(requestCode, resultCode, data);
-
-                break;
-        }
-    }
 }

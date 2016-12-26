@@ -249,7 +249,7 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_party_list_activity, menu);
-        UtilsView.setMenuIconTint(menu, ContextCompat.getColor(getContext(), R.color.icon_tint));
+        UtilsView.setMenuIconTint(menu, ContextCompat.getColor(getContext(), R.color.icon_tint_menu));
         super.onCreateOptionsMenu(menu, inflater);
     }
 

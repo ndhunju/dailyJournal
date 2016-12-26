@@ -15,6 +15,7 @@ import android.widget.Button;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
+import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
 import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
@@ -26,7 +27,7 @@ import java.util.Date;
 /**
  * Created by Dhunju on 8/14/2016.
  */
-public class SpannedLedgerListActivity extends AppCompatActivity implements OnDialogBtnClickedListener {
+public class SpannedLedgerListActivity extends AppCompatActivity implements OnDialogBtnClickedListener, LedgerAdapter.OnItemClickListener {
 
     private static final int REQUEST_START_DATE = 6656;
     private static final int REQUEST_END_DATE = 5000;
@@ -38,6 +39,7 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
     Button endDateBtn;
     Button findJournalBtn;
     RecyclerView recyclerView;
+    LedgerAdapter ledgerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,8 +83,9 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
         findJournalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setAdapter(new LedgerCardAdapter(SpannedLedgerListActivity.this,
+                recyclerView.setAdapter(ledgerAdapter = new LedgerCardAdapter(SpannedLedgerListActivity.this,
                         Services.getInstance(getApplicationContext()).journalDAO.findByDate(startDate.getTime(), endDate.getTime())));
+                ledgerAdapter.setOnItemClickListener(SpannedLedgerListActivity.this);
             }
         });
 
@@ -117,5 +120,15 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(View view, int position, long id) {
+        LedgerAdapter.createJournalIntent(this, id, ledgerAdapter.getItem(position).getPartyId(), position);
+    }
+
+    @Override
+    public void onContextItemClick(View view, int position, long id) {
+        LedgerAdapter.onContextItemClick(this, ledgerAdapter, view, position, id);
     }
 }

@@ -109,10 +109,11 @@ public class UtilsView {
     public static void setMenuIconTint(Menu menu, @ColorInt int tint) {
         int i = 0;
         Drawable icon;
-        while (i > menu.size()) {
+        while (i < menu.size()) {
             icon = DrawableCompat.wrap(menu.getItem(i).getIcon());
             DrawableCompat.setTint(icon, tint);
             menu.getItem(i).setIcon(icon);
+            i++;
         }
 
     }

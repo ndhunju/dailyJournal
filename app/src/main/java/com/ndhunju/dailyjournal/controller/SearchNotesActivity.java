@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
 import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
@@ -20,11 +21,12 @@ import com.ndhunju.dailyjournal.util.UtilsFormat;
 /**
  * Created by Dhunju on 8/14/2016.
  */
-public class SearchNotesActivity extends AppCompatActivity {
+public class SearchNotesActivity extends AppCompatActivity implements LedgerAdapter.OnItemClickListener{
 
     EditText keywordEditText;
     Button searchJournalNotes;
     RecyclerView recyclerView;
+    LedgerAdapter ledgerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,8 +50,9 @@ public class SearchNotesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String keyword = keywordEditText.getText().toString();
                 if (TextUtils.isEmpty(keyword)) keyword = " ";
-                recyclerView.setAdapter(new LedgerCardAdapter(SearchNotesActivity.this,
+                recyclerView.setAdapter(ledgerAdapter = new LedgerCardAdapter(SearchNotesActivity.this,
                         Services.getInstance(getApplicationContext()).journalDAO.searchNotes(keyword)));
+                ledgerAdapter.setOnItemClickListener(SearchNotesActivity.this);
             }
         });
 
@@ -65,5 +68,15 @@ public class SearchNotesActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(View view, int position, long id) {
+        LedgerAdapter.createJournalIntent(this, id, ledgerAdapter.getItem(position).getPartyId(), position);
+    }
+
+    @Override
+    public void onContextItemClick(View view, int position, long menuID) {
+        LedgerAdapter.onContextItemClick(this, ledgerAdapter, view, position, menuID);
     }
 }

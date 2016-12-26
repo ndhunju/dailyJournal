@@ -1,94 +1,85 @@
 package com.ndhunju.dailyjournal.controller.party;
 
-import android.content.Context;
+import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;
+import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by dhunju on 9/26/2015.
  * This adapter provides view for row of a Ledger
  */
-class LedgerRowAdapter extends ArrayAdapter<Journal> {
+class LedgerRowAdapter extends LedgerAdapter {
 
-    private String formattedAmt;
+    // variable.
+    private String formattedAmt; // stores formatted amount. Declared here to prevent memory alloc and dealloc on every bind call
     private boolean showNoteCol;
 
-    public LedgerRowAdapter(Context context, List<Journal> journals) {
-        super(context, R.layout.ledger_row, journals);
+    public LedgerRowAdapter(Activity activity, Party party) {
+        super(activity, party);
     }
 
     @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new LedgerVH(LayoutInflater.from(getContext()).inflate(R.layout.ledger_row, parent, false));
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if(convertView == null){
-            holder = new ViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.ledger_row, null);
-            holder.idCol = (TextView) convertView.findViewById(R.id.ledger_row_col0);
-            holder.dateCol = (TextView) convertView.findViewById(R.id.ledger_row_col1);
-            holder.noteCol = (TextView) convertView.findViewById(R.id.ledger_row_col2);
-            holder.drCol = (TextView) convertView.findViewById(R.id.ledger_row_col3);
-            holder.crCol = (TextView) convertView.findViewById(R.id.ledger_row_col4);
-
-            //apply common settings
-            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.END, holder.dateCol,
-                                                                        holder.noteCol);
-            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.START,holder.idCol,
-                                                            holder.drCol, holder.crCol);
-
-            //tag the holder to the view to retrieve it later
-            convertView.setTag(holder);
-        }else{
-            holder = (ViewHolder)convertView.getTag();
-        }
-
-
-
-        //Log.d("journals " + getCount(), " pos: " + position + "date : " +  getContext().getString(R.string.dateFormat));
-
-        Journal journal = getItem(position);
-        holder.idCol.setText(String.valueOf(getPosition(journal) + 1));
-        holder.dateCol.setText(UtilsFormat.formatDate(
-                new Date(journal.getDate()), getContext()));
-
-        //showNoteCol will be false for smaller devices
-        showNoteCol = getContext().getResources().getBoolean(R.bool.note_col);
-        if(showNoteCol) {holder.noteCol.setText(journal.getNote());}
-        else{holder.noteCol.setVisibility(View.GONE); }
-
-        formattedAmt = UtilsFormat.formatDecimal(journal.getAmount(), getContext());
-
-        if (journal.getType().equals(Journal.Type.Debit)) {
-            holder.drCol.setText(formattedAmt);
-            holder.crCol.setText("");
-        } else {
-            holder.crCol.setText(formattedAmt);
-            holder.drCol.setText("");
-        }
-
-        return convertView;
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        ((LedgerVH) holder).bind(getItem(position));
     }
 
-    static class ViewHolder{
-        TextView idCol ;
+    class LedgerVH extends LedgerAdapter.LedgerVH {
+        TextView posCol;
         TextView dateCol ;
         TextView noteCol ;
         TextView drCol;
         TextView crCol;
+
+        public LedgerVH(View convertView) {
+            super(convertView);
+            posCol = (TextView) convertView.findViewById(R.id.ledger_row_col0);
+            dateCol = (TextView) convertView.findViewById(R.id.ledger_row_col1);
+            noteCol = (TextView) convertView.findViewById(R.id.ledger_row_col2);
+            drCol = (TextView) convertView.findViewById(R.id.ledger_row_col3);
+            crCol = (TextView) convertView.findViewById(R.id.ledger_row_col4);
+            //apply common settings
+            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.END, dateCol,
+                    noteCol);
+            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.START, posCol,
+                    drCol, crCol);
+        }
+
+        public void bind(Journal journal) {
+            super.bind(journal);
+            posCol.setText(String.valueOf(getAdapterPosition() + 1));
+            dateCol.setText(UtilsFormat.formatDate(new Date(journal.getDate()), getContext()));
+
+            //showNoteCol will be false for smaller devices
+            showNoteCol = getContext().getResources().getBoolean(R.bool.note_col);
+            if(showNoteCol) {noteCol.setText(journal.getNote());}
+            else{noteCol.setVisibility(View.GONE); }
+
+            formattedAmt = UtilsFormat.formatDecimal(journal.getAmount(), getContext());
+
+            if (journal.getType().equals(Journal.Type.Debit)) {
+                drCol.setText(formattedAmt);
+                crCol.setText("");
+            } else {
+                crCol.setText(formattedAmt);
+                drCol.setText("");
+            }
+        }
     }
 }
