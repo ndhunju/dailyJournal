@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
+import com.ndhunju.dailyjournal.controller.DailyJournalApplication;
 import com.ndhunju.dailyjournal.database.DailyJournalContract.PartyColumns;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -15,31 +16,44 @@ import java.util.List;
 
 /**
  * This class is Data Access Object for Party
+ * <b>Note: This class is not thread safe</b>
  */
 public class PartyDAO implements IPartyDAO {
 
     //Variables
     private SQLiteOpenHelper mSqLiteOpenHelper;
+    private List<Observer> mObservers;
+    private int rowsAffected;                   // use same identifier/variable
 
     //Constructor
     public PartyDAO(SQLiteOpenHelper sqLiteOpenHelper){
         mSqLiteOpenHelper = sqLiteOpenHelper;
+        mObservers = new ArrayList<>();
+//        mParties = new ArrayList<>();
     }
 
     /**
      * Inserts the passed party in the database
-     * @param party
      * @return row id of newly inserted row. if you have column with integer data type and PK then
-     * it returns the values of this column other tables maintains a separate rowid column
+     * it returns the values of this column other tables maintains a separate row id column
      */
     @Override
     public long create(Party party) {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-        return db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
+        long rowId = db.insert(PartyColumns.TABLE_PARTY, null, toContentValues(party));
+        if (rowId != -1) {
+            // Possible logic for caching and using cached value in the memory
+//            party.setId(rowId);
+//              update cache with new list
+//            mParties = findAll();
+            notifyPartyAdded(party);
+        }
+        return rowId;
     }
 
     @Override
     public Party find(Long id) {
+        // check database
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, null,
                 PartyColumns.PARTY_ID + "=" + id, null, null, null, null, null);
@@ -49,6 +63,19 @@ public class PartyDAO implements IPartyDAO {
         c.close();
         return party;
     }
+
+// Possible logic for caching and using cached value in the memory
+//    public Party findInCacheFirst(Long id) {
+//        // check memory cache first
+//        if (mParties.containsKey(id)) return mParties.get(id);
+//
+//        // check database
+//        Party party = find(id);
+//
+//        // cache it
+//        mParties.put(party.getId(), party);
+//        return party;
+//    }
 
     /**
      * This method updates the Debit column of respective party row
@@ -60,61 +87,76 @@ public class PartyDAO implements IPartyDAO {
      * id | .... | drAmt | crAmt<br></br>
      * 1  | .... | 300.00| 100.00<br></br>
      *
-     * @param id
-     * @param amount
      * @param operation
      * @return
      */
     @Override
-    public int updateDr(long id, double amount, String operation){
-        return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_DR_AMT,
-                amount, operation, PartyColumns.PARTY_ID, id);
+    public int updateDr(Journal journal, String operation){
+        rowsAffected = execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_DR_AMT,
+                journal.getAmount(), operation, PartyColumns.PARTY_ID, journal.getPartyId());
+        if (rowsAffected > 0) {
+            // Possible logic for caching and using cached value in the memory
+            // update cached value
+//            Party updatedParty = find(journal.getPartyId());
+//            mParties.put(updatedParty.getId(), updatedParty);
+            notifyPartyChanged(find(journal.getPartyId()));
+        }
+        return rowsAffected;
     }
 
 
     /**
      * Updates the credit column of respective party row
-     * @param id
-     * @param amount
      * @param operation
      * @return
      */
     @Override
-    public int updateCr(long id, double amount, String operation){
-        return  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_CR_AMT,
-                           amount, operation, PartyColumns.PARTY_ID, id);
+    public int updateCr(Journal journal, String operation){
+        rowsAffected =  execUpdate(PartyColumns.TABLE_PARTY, PartyColumns.COL_PARTY_CR_AMT,
+                           journal.getAmount(), operation, PartyColumns.PARTY_ID, journal.getPartyId());
+        if (rowsAffected > 0) {
+            // Possible logic for caching and using cached value in the memory
+            // update cached value
+//            Party updatedParty = find(journal.getPartyId());
+//            mParties.put(updatedParty.getId(), updatedParty);
+            notifyPartyChanged(find(journal.getPartyId()));
+        }
+        return rowsAffected;
     }
 
-    private int execUpdate(String table, String column, double amount, String operation, String pk, long val){
-        String sql = "UPDATE " + table + " SET " + column + "=" + column + operation + " ? WHERE " + pk + "=?";
+    private int execUpdate(String table, String column, double amount, String operation, String primaryKey, long val){
+        String sql = "UPDATE " + table + " SET " + column + "=" + column + operation + " ? WHERE " + primaryKey + "=?";
         SQLiteStatement sqlSt = mSqLiteOpenHelper.getWritableDatabase().compileStatement(sql);
         sqlSt.bindDouble(1, amount);
         sqlSt.bindLong(2, val);
         return sqlSt.executeUpdateDelete();
     }
 
-    @Override
-    public Party find(String partyName){
-        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
-        Cursor c = db.query(PartyColumns.TABLE_PARTY, null, PartyColumns.COL_PARTY_NAME + "= ?",
-                new String[]{partyName}, null, null, null);
-
-        if(!c.moveToFirst())   return null;
-        Party party = fromCursor(c);
-        c.close();
-        return party;
+    public int resetDrCrBalance() {
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        ContentValues values = new ContentValues(2);
+        values.put(PartyColumns.COL_PARTY_CR_AMT, 0);
+        values.put(PartyColumns.COL_PARTY_DR_AMT, 0);
+        rowsAffected = db.update(PartyColumns.TABLE_PARTY, values, null, null);
+        return rowsAffected;
     }
 
     @Override
     public List<Party> findAll() {
+        // get the fresh list from database in chronological order
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(true, PartyColumns.TABLE_PARTY, null, null, null, null, null,
                 PartyColumns.COL_PARTY_NAME, null);
 
         List<Party> temp = new ArrayList<>();
         if(!c.moveToFirst()) return temp;
+        Party current;
         do{
-            temp.add(fromCursor(c));
+            current = fromCursor(c);
+            temp.add(current);
+            // Possible logic for caching and using cached value in the memory
+            // cache it
+//            mParties.put(current.getId(), current);
         }while(c.moveToNext());
         c.close();
         return temp;
@@ -124,7 +166,6 @@ public class PartyDAO implements IPartyDAO {
      *  Returns the array[limit] with largest Credit or Debit balance among {@link Party}
      * @param type : type of jounal
      * @param limit : limit size
-     * @return
      */
     @Override
     public Party[] findTopDrCrAmt(Journal.Type type, int limit){
@@ -153,42 +194,30 @@ public class PartyDAO implements IPartyDAO {
     @Override
     public long update(Party party) {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-        return db.update(PartyColumns.TABLE_PARTY, toContentValues(party),
+        rowsAffected = db.update(PartyColumns.TABLE_PARTY, toContentValues(party),
                 PartyColumns.PARTY_ID + "=" + party.getId(), null);
-    }
-
-    @Override
-    public void delete(Long aLong) {
-        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-        db.delete(PartyColumns.TABLE_PARTY, PartyColumns.PARTY_ID + "=" + aLong, null);
+        if (rowsAffected > 0 ) {
+            // Possible logic for caching and using cached value in the memory
+//            mParties.put(party.getId(), party);
+            notifyPartyChanged(party);
+        }
+        return rowsAffected;
     }
 
     @Override
     public void delete(Party party) {
-        delete(party.getId());
-    }
-
-    @Override
-    public List<String> getNames(){
-        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
-        Cursor c = db.query(PartyColumns.TABLE_PARTY, new String[]{PartyColumns.COL_PARTY_NAME},
-                            null, null, null, null, PartyColumns.COL_PARTY_NAME);
-
-        List<String> names = new ArrayList<>();
-        if(!c.moveToFirst())return names;
-
-        do{
-            names.add(c.getString(c.getColumnIndex(PartyColumns.COL_PARTY_NAME)));
-        }while(c.moveToNext());
-        c.close();
-        return names;
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        rowsAffected = db.delete(PartyColumns.TABLE_PARTY, PartyColumns.PARTY_ID + "=" + party.getId(), null);
+        if (rowsAffected > 0) {
+            notifyPartyDeleted(party);
+        }
     }
 
     @Override
     public String[] getNamesAsArray(){
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(PartyColumns.TABLE_PARTY, new String[]{PartyColumns.COL_PARTY_NAME},
-                null, null, null, null, PartyColumns.COL_PARTY_NAME);
+                            null, null, null, null, PartyColumns.COL_PARTY_NAME);
 
         String[] names = new String[c.getCount()];
         if(!c.moveToFirst())return names;
@@ -198,6 +227,53 @@ public class PartyDAO implements IPartyDAO {
         }while(c.moveToNext());
         c.close();
         return names;
+    }
+
+    /**
+     * Returns total credit amount for the user
+     * that is using this app
+     */
+    public double getUserCreditTotal() {
+        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
+        Cursor c = db.query(PartyColumns.TABLE_PARTY,
+                new String[]{PartyColumns.COL_PARTY_DR_AMT},
+                null,
+                null,
+                null,
+                null,
+                PartyColumns.COL_PARTY_DR_AMT);
+
+        if(!c.moveToFirst())return 0.0;
+        double amount = 0.0;
+        do{
+            amount += (c.getLong(c.getColumnIndex(PartyColumns.COL_PARTY_DR_AMT)));
+        }while(c.moveToNext());
+        c.close();
+        return amount;
+    }
+
+    /**
+     * Returns total debit amout for the user
+     * using this app
+     */
+    public double getUserDebitTotal() {
+        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
+        Cursor c = db.query(PartyColumns.TABLE_PARTY,
+                new String[]{PartyColumns.COL_PARTY_CR_AMT},
+                null,
+                null,
+                null,
+                null,
+                PartyColumns.COL_PARTY_CR_AMT);
+
+        if(!c.moveToFirst())return 0.0;
+
+        double amount = 0.0;
+        do{
+            amount += (c.getLong(c.getColumnIndex(PartyColumns.COL_PARTY_CR_AMT)));
+        }while(c.moveToNext());
+        c.close();
+        return amount;
     }
 
     /**
@@ -250,5 +326,43 @@ public class PartyDAO implements IPartyDAO {
         return party;
     }
 
+    public void registerObserver(Observer observer) {
+        mObservers.add(observer);
+    }
+
+    public void unregisterObserver(Observer observer) {
+        mObservers.remove(observer);
+    }
+
+    private void notifyPartyChanged(final Party party) {
+        // most observers are fragments that mostly modifies UI
+        DailyJournalApplication.postOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for(Observer observer: mObservers)
+                    observer.onPartyChanged(party);
+            }
+        });
+    }
+
+    private void notifyPartyDeleted(final Party party) {
+        DailyJournalApplication.postOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (Observer observer: mObservers)
+                    observer.onPartyDeleted(party);
+            }
+        });
+    }
+
+    private void notifyPartyAdded(final Party party) {
+        DailyJournalApplication.postOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (Observer observer: mObservers)
+                    observer.onPartyAdded(party);
+            }
+        });
+    }
 
 }

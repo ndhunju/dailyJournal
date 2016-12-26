@@ -3,24 +3,30 @@ package com.ndhunju.dailyjournal.database;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 
-import java.util.List;
-
 /**
  * Created by dhunju on 10/21/2015.
  */
 public interface IPartyDAO extends IGenericDAO<Party, Long> {
 
-    int updateDr(long id, double amount, String operation);
+    int updateDr(Journal journal, String operation);
 
-    int updateCr(long id, double amount, String operation);
-
-    Party find(String partyName);
+    int updateCr(Journal journal, String operation);
 
     Party[] findTopDrCrAmt(Journal.Type type, int limit);
 
-    List<String> getNames();
+    public int resetDrCrBalance();
 
     String[] getNamesAsArray();
 
     int truncateTable();
+
+    void registerObserver(PartyDAO.Observer observer);
+
+    void unregisterObserver(PartyDAO.Observer observer);
+
+    interface Observer {
+        void onPartyAdded(Party party);
+        void onPartyChanged(Party party);
+        void onPartyDeleted(Party party);
+    }
 }

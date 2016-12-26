@@ -51,7 +51,7 @@ public class SearchNotesActivity extends AppCompatActivity implements LedgerAdap
                 String keyword = keywordEditText.getText().toString();
                 if (TextUtils.isEmpty(keyword)) keyword = " ";
                 recyclerView.setAdapter(ledgerAdapter = new LedgerCardAdapter(SearchNotesActivity.this,
-                        Services.getInstance(getApplicationContext()).journalDAO.searchNotes(keyword)));
+                        Services.getInstance(getApplicationContext()).findByNotes(keyword)));
                 ledgerAdapter.setOnItemClickListener(SearchNotesActivity.this);
             }
         });

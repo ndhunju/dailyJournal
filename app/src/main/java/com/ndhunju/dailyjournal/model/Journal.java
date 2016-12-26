@@ -17,6 +17,10 @@ public class Journal implements Serializable{
 	private double mAmount;
 	private long mCreatedDate; //Date when the journal was recorded
 
+	/** it is mainly used to relay instance's position across activities
+	 * there is no need to persist its value outside of app's lifecycle */
+	private transient Object mTag;
+
     //Class constructor
     public Journal(long partyId){
         mNote = "";
@@ -102,6 +106,13 @@ public class Journal implements Serializable{
 		this.mNote = mNote;
 	}
 
+	public void setTag(Object mTag) {
+		this.mTag = mTag;
+	}
+
+	public Object getTag() {
+		return mTag;
+	}
 	/**
 	 * Returns a deep copy of this Journal object
 	 * @return

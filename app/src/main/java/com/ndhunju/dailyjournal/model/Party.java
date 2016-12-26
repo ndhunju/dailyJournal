@@ -16,6 +16,10 @@ public class Party implements Serializable{
 	private String mPicturePath;
 	private double mCreditTotal;
 
+    /** it is mainly used to relay instance's position across activities.
+     * there is no need to persist its value outside of app's lifecycle */
+	private transient Object mTag;
+
 	//private ArrayList<Journal> mJournals;
 
 	//Constructor
@@ -96,7 +100,14 @@ public class Party implements Serializable{
 	public double getCreditTotal(){
 		return mCreditTotal;
 	}
-	
+
+	public Object getTag() {
+		return mTag;
+	}
+
+	public void setTag(Object tag) {
+		this.mTag = tag;
+	}
 
 	@Override
 	public String toString() {

@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -35,9 +34,6 @@ public class Services {
 	//Variables
 	private Context mContext;
 	private SQLiteOpenHelper mSqLiteOpenHelper;
-
-    //Cache
-    private HashMap<Long, Party> mParties;
 
 	//DAOs
 	private IPartyDAO partyDAO;
@@ -123,24 +119,29 @@ public class Services {
 
 	/********************PARTY SERVICES ************************/
 
+	public void registerPartyObserver(PartyDAO.Observer observer) {
+		partyDAO.registerObserver(observer);
+	}
+
+	public void unregisterPartyObserver(PartyDAO.Observer observer) {
+		partyDAO.unregisterObserver(observer);
+	}
+
 	public Party getParty(long partyId) {
 		return partyDAO.find(partyId);
 	}
 
-	public Party getParty(String partyName) {
-		return partyDAO.find(partyName);
-	}
+	// Possible logic for caching and using cached value in the memory
+//	public Party getPartyFromCache(Long partyId) {
+//		return partyDAO.findInCacheFirst(partyId);
+//	}
+
 
 	public ArrayList<Party> getParties() {
-		ArrayList<Party> parties = (ArrayList<Party>)partyDAO.findAll();
+		ArrayList<Party> parties = (ArrayList<Party>) partyDAO.findAll();
 		if(parties != null) return parties;
 		return new ArrayList<>();
 
-	}
-
-	public ArrayList<String> getPartyNames() {
-		//Get parties from the DAO
-		return (ArrayList<String>)partyDAO.getNames();
 	}
 
 	public String[] getPartyNameAsArray(){
@@ -181,7 +182,7 @@ public class Services {
 		try{
 			deleteAllJournals(party.getId());
 			UtilsFile.deleteFile(party.getPicturePath());
-			partyDAO.delete(party.getId());
+			partyDAO.delete(party);
 			db.setTransactionSuccessful();
 			success = true;
 		}catch (Exception e){
@@ -197,6 +198,14 @@ public class Services {
 	}
 
 	/********************JOURNAL SERVICES ************************/
+
+	public void registerJournalObserver(JournalDAO.Observer observer) {
+		journalDAO.registerObserver(observer);
+	}
+
+	public void unregisterJournalObserver(JournalDAO.Observer observer) {
+		journalDAO.unregisterObserver(observer);
+	}
 
 	/**
 	 * Returns a Journal with passed id.
@@ -219,7 +228,7 @@ public class Services {
         if(rowId != 0){newJournal= journalDAO.find(rowId);}
         //check if this journal has been associated with a party
         if(newJournal == null || (newJournal.getPartyId() != Constants.NO_PARTY)){
-            //if the journal is null or has been associated with a party, create new
+            //if the journal is null or has not been associated with a party, create new
             newJournal = new Journal(Constants.NO_PARTY);
             long id = journalDAO.create(newJournal);
             newJournal.setId(id);
@@ -240,8 +249,8 @@ public class Services {
     public long getNewJournalId(){
         //get the last created new journal's id
         KeyValPersistence persistence = KeyValPersistence.from(mContext);
-        long rowId = persistence.getLong(String.valueOf(Constants.ID_NEW_JOURNAL), 0);
-        return rowId;
+		// return last save row id
+        return persistence.getLong(String.valueOf(Constants.ID_NEW_JOURNAL), 0);
     }
 
     /**
@@ -307,6 +316,13 @@ public class Services {
 		return new ArrayList<>();
 	}
 
+// Possible logic for caching and using cached value in the memory
+//	public ArrayList<Journal> getJournalsFromCache(long partyId){
+//		ArrayList<Journal> journals = (ArrayList<Journal>)journalDAO.findAllInCacheFirst(partyId);
+//		if(journals != null) return journals;
+//		return new ArrayList<>();
+//	}
+
 	public ArrayList<Journal> getJournals(){
 		return (ArrayList<Journal>)journalDAO.findAll();
 	}
@@ -364,11 +380,6 @@ public class Services {
 
 	}
 
-	public boolean deleteJournal(long journalId){
-		Journal journal = getJournal(journalId);
-		return deleteJournal(journal);
-	}
-
 	/**
 	 * Helper method that updates the debit or credit column
      * of a party based on journal type
@@ -377,9 +388,9 @@ public class Services {
 	 */
 	private int updatePartyAmount(Journal updatedJournal, String operation){
 		if(updatedJournal.getType() == Journal.Type.Debit){
-			return partyDAO.updateDr(updatedJournal.getPartyId(), updatedJournal.getAmount(), operation);
+			return partyDAO.updateDr(updatedJournal, operation);
 		}else{
-			return partyDAO.updateCr(updatedJournal.getPartyId(), updatedJournal.getAmount(), operation);
+			return partyDAO.updateCr(updatedJournal, operation);
 		}
 	}
 
@@ -440,6 +451,14 @@ public class Services {
         return success;
     }
 
+    public List<Journal> findByNotes(String keyword) {
+        return journalDAO.findByNotes(keyword);
+    }
+
+    public List<Journal> findByDate(long start, long end) {
+        return journalDAO.findByDate(start, end);
+    }
+
 	/********************ATTACHMENT SERVICES ************************/
 
 	public Attachment getAttachment(long attchID){
@@ -466,23 +485,6 @@ public class Services {
         attachmentDAO.bulkInsert(attachments);
     }
 
-	/**
-	 * Deletes the attachment from physical storage as
-	 * well as from the table. Use {@link #deleteAttachment(Attachment)}
-	 * if you have the attachment object.
-	 * @param id
-	 * @return
-	 */
-	public boolean deleteAttachment(long id){
-		//1. Delete the physical file from storage
-		if(!UtilsFile.deleteFile(attachmentDAO.find(id).getPath()))
-			return false;
-
-		//2. Delete from the database
-		attachmentDAO.delete(id);
-		return true;
-	}
-
     /**
      * Deletes the attachment from physical storage as
      * well as from the table. Use {@link #deleteAttachment(Attachment)}
@@ -490,8 +492,11 @@ public class Services {
      * @return
      */
 	public boolean deleteAttachment(Attachment attch){
+		//1. Delete the physical file from storage
 		if(!UtilsFile.deleteFile(attch.getPath()))
 			return false;
+
+		//2. Delete from the database
 		attachmentDAO.delete(attch);
 		return true;
 	}
@@ -506,6 +511,25 @@ public class Services {
     public boolean updateAttachment(Attachment attachment){
         return (attachmentDAO.update(attachment) > 0);
     }
+
+	/********************MISCELLANEOUS*******************************/
+
+	public double getDebitTotal() {
+        double totalUserDebit = 0.0;
+        for (Party party: getParties()) {
+            totalUserDebit += party.getCreditTotal();
+        }
+
+		return totalUserDebit;
+	}
+
+	public double getCreditTotal() {
+		double totalUserCredit = 0.0;
+        for (Party party : getParties()) {
+            totalUserCredit += party.getDebitTotal();
+        }
+        return totalUserCredit;
+	}
 
 
 	/********************DELETION FUNCTIONS ************************/

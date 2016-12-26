@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.UiThread;
 
 import com.ndhunju.dailyjournal.database.DailyJournalContract.JournalColumns;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -18,15 +19,45 @@ import java.util.List;
 public class JournalDAO implements IJournalDAO {
 
     private SQLiteOpenHelper mSqLiteOpenHelper;
+    private List<Observer> mObservers;
+    private long rowsAffected;          // use same identifier/variable
 
     public JournalDAO(SQLiteOpenHelper sqLiteOpenHelper){
         mSqLiteOpenHelper = sqLiteOpenHelper;
+        mObservers = new ArrayList<>();
     }
 
     @Override
     public long create(Journal journal) {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-        return db.insert(JournalColumns.TABLE_JOURNAL, null, toContentValues(journal));
+        long rowId = db.insert(JournalColumns.TABLE_JOURNAL, null, toContentValues(journal));
+        if (rowId != -1) notifyJournalAdded(journal);
+        return rowId;
+        // Possible logic for caching and using cached value in the memory
+//        if (id != -1) {
+//            journal.setId(id);
+//            List<Journal> journals;
+//            if (mJournals.containsKey(journal.getPartyId())) {
+//                // was previously cached
+//                journals = mJournals.get(journal.getPartyId());
+//                if (journal.getDate() >= journals.get(journals.size() - 1).getDate()) {
+//                    // journal with later date added. new item will go at the end of the list
+//                    journals.add(journal);
+//                    notifyJournalAdded(journal);
+//                } else {
+//                    // order is disrupted . update the cached list
+//                    mJournals.put(journal.getPartyId(), findAll(journal.getPartyId()));
+//                    notifyJournalDataSetChanged(journal.getPartyId());
+//                }
+//            } else {
+//                // first time being cached
+//                journals = new ArrayList<>();
+//                journals.add(journal);
+//                mJournals.put(journal.getPartyId(), journals);
+//                notifyJournalAdded(journal);
+//            }
+//        }
+//        return id;
     }
 
     @Override
@@ -71,24 +102,138 @@ public class JournalDAO implements IJournalDAO {
         c.close();
         return temp;
     }
+// Possible logic for caching and using cached value in the memory
+//    public List<Journal> findAllInCacheFirst(long partyId){
+//        // check cache
+//        if (mJournals.containsKey(partyId)) return mJournals.get(partyId);
+//
+//        // database
+//        List<Journal> temp = findAll(partyId);
+//
+//        // cache it
+//        mJournals.put(partyId, temp);
+//
+//        return temp;
+//    }
+
+    public List<Journal> findByNotes(String keywords) {
+        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
+
+        //order by date
+        Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null,
+                JournalColumns.COL_JOURNAL_NOTE + " like '%" + keywords + "%' ", null, null, null,
+                JournalColumns.COL_JOURNAL_DATE, null);
+
+        List<Journal> temp = new ArrayList<>();
+        if(!c.moveToFirst()) return temp;
+
+        Journal journal;
+        do{
+            journal = fromCursor(c);
+            temp.add(journal);
+        }while(c.moveToNext());
+
+        c.close();
+        return temp;
+    }
+
+    public List<Journal> findByDate(long startDate, long endDate) {
+        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
+
+        //order by date
+        Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null,
+                JournalColumns.COL_JOURNAL_DATE + " >= " + startDate + " AND " + JournalColumns.COL_JOURNAL_DATE + " <= " + endDate, null, null, null,
+                JournalColumns.COL_JOURNAL_DATE, null);
+
+        List<Journal> temp = new ArrayList<>();
+        if(!c.moveToFirst()) return temp;
+
+        Journal journal;
+        do{
+            journal = fromCursor(c);
+            temp.add(journal);
+        }while(c.moveToNext());
+
+        c.close();
+        return temp;
+    }
 
     @Override
     public long update(Journal journal) {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-        return db.update(JournalColumns.TABLE_JOURNAL, toContentValues(journal),
+        rowsAffected = db.update(JournalColumns.TABLE_JOURNAL, toContentValues(journal),
                          JournalColumns.JOURNAL_ID +"="+journal.getId(),null);
+        if (rowsAffected > 0) notifyJournalChanged(journal);
+        return rowsAffected;
     }
 
-    @Override
-    public void delete(Long aLong) {
-        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-        db.delete(JournalColumns.TABLE_JOURNAL, JournalColumns.JOURNAL_ID +"="+aLong,null );
-    }
+    // Possible logic for caching and using cached value in the memory
+//    public long updateInCache(Journal journal) {
+//        Journal oldJournal = find(journal.getId());
+//
+//        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+//        rowsAffected = db.update(JournalColumns.TABLE_JOURNAL, toContentValues(journal),
+//                JournalColumns.JOURNAL_ID +"="+journal.getId(),null);
+//
+//        if (rowsAffected > 0) {
+//            List<Journal> journals = mJournals.get(journal.getPartyId());
+//            if (journal.getTag() instanceof Integer) {
+//                int pos = (Integer) journal.getTag();
+//                if (journals.get(pos).getId() == journal.getId()) {
+//                    if (journal.getDate() != oldJournal.getDate()) {
+//                        // journal date changed. could be in any order. update the cache
+//                        mJournals.put(journal.getPartyId(), findAll(journal.getPartyId()));
+//                        notifyJournalDataSetChanged(journal.getPartyId());
+//                    } else {
+//                        // order didn't change. just update local cache.
+//                        journals.set(pos, journal);
+//                        notifyJournalChanged(journal);
+//                    }
+//
+//                    return rowsAffected;
+//                }
+//            }
+//
+//            // position not found. loop through journals
+//            for (int i = 0; i < journals.size() ; i++) {
+//                if (journals.get(i).getId() == journal.getId()) {
+//                    if (journal.getDate() != oldJournal.getDate()) {
+//                        // journal date changed. could be in any order. update the cache
+//                        mJournals.put(journal.getPartyId(), findAll(journal.getPartyId()));
+//                        notifyJournalDataSetChanged(journal.getPartyId());
+//                    } else {
+//                        // order didn't change. just update local cache.
+//                        journals.set(i, journal);
+//                        notifyJournalChanged(journal);
+//                    }
+//
+//                    return rowsAffected;
+//                }
+//            }
+//
+//            notifyJournalDataSetChanged(journal.getPartyId());
+//        }
+//        return rowsAffected;
+//    }
+
 
     @Override
     public void delete(Journal journal) {
-        delete(journal.getId());
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        rowsAffected = db.delete(JournalColumns.TABLE_JOURNAL, JournalColumns.JOURNAL_ID +"="+journal.getId(),null );
+        if (rowsAffected > 0) notifyJournalDeleted(journal);
     }
+
+// Possible logic for caching and using cached value in the memory
+//    public void deleteInCache(Journal journal) {
+//        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+//        rowsAffected = db.delete(JournalColumns.TABLE_JOURNAL, JournalColumns.JOURNAL_ID +"="+journal.getId(),null );
+//        if (rowsAffected > 0) {
+//            // remove from local cache
+//            mJournals.get(journal.getPartyId()).remove(journal);
+//            notifyJournalDeleted(journal);
+//        }
+//    }
 
     @Override
     public void deleteAll(long partyId){
@@ -136,4 +281,39 @@ public class JournalDAO implements IJournalDAO {
 
         return journal;
     }
+
+    public void registerObserver(Observer observer) {
+        mObservers.add(observer);
+    }
+
+    public void unregisterObserver(Observer observer) {
+        mObservers.remove(observer);
+    }
+
+    @UiThread
+    private void notifyJournalChanged(Journal journal) {
+
+        for(Observer observer: mObservers)
+            observer.onJournalChanged(journal);
+
+    }
+
+    @UiThread
+    private void notifyJournalDeleted(Journal journal) {
+        for (Observer observer: mObservers)
+            observer.onJournalDeleted(journal);
+    }
+
+    @UiThread
+    private void notifyJournalAdded(Journal journal) {
+        for (Observer observer: mObservers)
+            observer.onJournalAdded(journal);
+    }
+
+    @UiThread
+    private void notifyJournalDataSetChanged(long partyId) {
+        for (Observer observer: mObservers)
+            observer.onJournalDataSetChanged(partyId);
+    }
+
 }

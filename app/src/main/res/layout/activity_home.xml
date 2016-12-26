@@ -35,8 +35,8 @@
                     android:id="@+id/activity_home_refresh_balance"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/ic_refresh_24px"
-                    android:padding="15dp"
+                    android:src="@drawable/ic_refresh_24px"
+                    android:background="?attr/selectableItemBackground"
                     />
 
             </LinearLayout>

@@ -15,5 +15,4 @@ interface IGenericDAO<T, ID extends Serializable> {
     List<T> findAll();
     long update(T t);
     void delete(T t);
-    void delete(ID id);
 }

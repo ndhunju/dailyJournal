@@ -84,7 +84,7 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
             @Override
             public void onClick(View v) {
                 recyclerView.setAdapter(ledgerAdapter = new LedgerCardAdapter(SpannedLedgerListActivity.this,
-                        Services.getInstance(getApplicationContext()).journalDAO.findByDate(startDate.getTime(), endDate.getTime())));
+                        Services.getInstance(getApplicationContext()).findByDate(startDate.getTime(), endDate.getTime())));
                 ledgerAdapter.setOnItemClickListener(SpannedLedgerListActivity.this);
             }
         });

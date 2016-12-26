@@ -105,7 +105,6 @@ public class AttachmentDAO implements IAttachmentDAO {
         return db.update(AttachmentColumns.TABLE_NAME_ATTACHMENTS, toContentValues(attch), selection, null);
     }
 
-    @Override
     public void delete(Long aLong) {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         String selection = AttachmentColumns.ATTACHMENT_ID +"="+aLong;

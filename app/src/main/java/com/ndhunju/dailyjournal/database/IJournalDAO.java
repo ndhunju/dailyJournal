@@ -11,4 +11,20 @@ public interface IJournalDAO extends IGenericDAO<Journal, Long> {
     void deleteAll(long partyId);
 
     int truncateTable();
+
+    List<Journal> findByDate(long start, long end);
+
+    List<Journal> findByNotes(String keywords);
+
+    void registerObserver(JournalDAO.Observer observer);
+
+    void unregisterObserver(JournalDAO.Observer observer);
+
+
+    interface Observer {
+        void onJournalAdded(Journal journal);
+        void onJournalChanged(Journal journal);
+        void onJournalDeleted(Journal journal);
+        void onJournalDataSetChanged(long party);
+    }
 }
