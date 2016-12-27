@@ -209,13 +209,10 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
             public void onClick(View v) {
                 try{
 					UtilsFormat.parseCurrency(amountEt.getText().toString(), getActivity());
-					Intent i = new Intent();
 					if (journalChanged) {
-						i.putExtra(Constants.KEY_JOURNAL_CHGD, true);
 						mServices.updateJournal(mJournal);
 						mJournal = null;
 					}
-					getActivity().setResult(AppCompatActivity.RESULT_OK, i);
 					getActivity().finish(); //Finish the Activity once user is done changing
 
 					UtilsView.toast(getActivity(), String.format(getString(R.string.msg_saved),
@@ -257,9 +254,6 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 						mServices.deleteJournal(mJournal);
 						String msg = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
 						UtilsView.toast(getActivity(), msg);
-						Intent intent = new Intent();
-						intent.putExtra(Constants.KEY_JOURNAL_CHGD, true);
-						getActivity().setResult(AppCompatActivity.RESULT_OK, intent);
 						getActivity().finish();
 					}
 				}, null);

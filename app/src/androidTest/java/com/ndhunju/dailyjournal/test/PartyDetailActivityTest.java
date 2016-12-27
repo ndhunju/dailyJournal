@@ -3,7 +3,9 @@ package com.ndhunju.dailyjournal.test;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.TouchUtils;
 import android.test.ViewAsserts;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.test.suitebuilder.annotation.MediumTest;
@@ -11,10 +13,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ndhunju.dailyjournal.controller.journal.JournalActivity;
+import com.ndhunju.dailyjournal.controller.JournalActivity;
+import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyDetailActivity;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -22,15 +24,12 @@ import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.action.ViewActions.click;
-
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 /**
  * Functional test across multiple Activities. Tests {@link PartyDetailActivity},  {@link PartyActivity}
- * and {@link JournalActivity}.
+ * and {@link JournalNewActivity}.
  */
 public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<PartyDetailActivity> {
 
@@ -89,7 +88,7 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
     }
 
     /**
-     * Test when Click Option Menu Information, goes to {@Link PartyActivity}PartyActivity, users changes the name,
+     * Test when Click Option Menu Information, goes to {@link PartyActivity}PartyActivity, users changes the name,
      * press backs button, activity result passed to previous activity, new name is reflected in the {@link PartyDetailActivity}
      */
     @LargeTest
@@ -97,24 +96,19 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
 
         final String NEW_NAME = "NIKESH DHUNJU";
 
-        //click on the option menu
-        getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
-        getInstrumentation().invokeMenuActionSync(mPartyDetailActivity, R.id.menu_party_activity_info, 0);
-
-        //Or // Click ActionBar Search Icon
-        //TouchUtils.clickView(this, optionMenuView);
-
         //Mock up an ActivityResult:
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(Constants.KEY_PARTY_INFO_CHGD, true);
         Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
-        // Create an ActivityMonitor to monitor the interaction between the PartyDetailActivity and
-        //PartyActivity and to return mock ActivityResult:
+        // Create an ActivityMonitor to monitor the interaction between the PartyDetailActivity and PartyActivity
         Instrumentation.ActivityMonitor activityMonitor = mInstrumentation.addMonitor(PartyActivity.class.getName(), activityResult, false);
 
-        //Wait until all events from the MainHandler's queue are processed
-        getInstrumentation().waitForIdleSync();
+        //click on the option menu
+        //getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        //getInstrumentation().invokeMenuActionSync(mPartyDetailActivity, R.id.menu_party_activity_info, 0);
+
+        //Or // Click ActionBar
+        TouchUtils.clickView(this, mPartyDetailActivity.findViewById(R.id.menu_party_activity_info));
 
         // Wait for the ActivityMonitor to be launched, Instrumentation will then return the mock ActivityResult, getInt a reference to it
         final PartyActivity partyActivity = (PartyActivity) mInstrumentation.waitForMonitorWithTimeout(activityMonitor, TIME_OUT);
@@ -146,7 +140,7 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
     }
 
     /**
-     * Tests that when a journal is changed in {@Link JournalActivity}, it is reflected in
+     * Tests that when a journal is changed in {@Link JournalNewActivity}, it is reflected in
      * {@Link PartyDetailActivity}
      */
     @LargeTest
@@ -159,25 +153,23 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
        final long testJournalId;
 
         // Simulate a button click that start ChildActivity for result:
-        final ListView journalLV = (ListView) mPartyDetailActivity.findViewById(R.id.activity_party_lv);
+        final RecyclerView journalLV = (RecyclerView) mPartyDetailActivity.findViewById(R.id.activity_party_lv);
 
         //Wait until all events from the MainHandler's queue are processed
         getInstrumentation().waitForIdleSync();
 
-        testJournalId = journalLV.getItemIdAtPosition(position);
+        testJournalId = journalLV.getAdapter().getItemId(position);
         //Perform Click should be done on UI thread
         mInstrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                journalLV.performItemClick(journalLV.getAdapter().getView(0, null, null), position, testJournalId);
+                journalLV.findViewHolderForAdapterPosition(position).itemView.performClick();
             }
         });
 
        // Mock up an ActivityResult:
        Intent returnIntent = new Intent();
-       returnIntent.putExtra(Constants.KEY_JOURNAL_CHGD, true);
        Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
-
 
        // Create an ActivityMonitor that catch ChildActivity and return mock ActivityResult:
        Instrumentation.ActivityMonitor activityMonitor = mInstrumentation.addMonitor(JournalActivity.class.getName(), activityResult, false);
@@ -202,8 +194,8 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         mInstrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                ((EditText)journalActivity.findViewById(R.id.fragment_home_amount_et)).setText(String.valueOf(NEW_AMT));
-                ((EditText)journalActivity.findViewById(R.id.fragment_home_note_et)).setText(NEW_NOTES);
+                ((EditText) journalActivity.findViewById(R.id.fragment_home_amount_et)).setText(String.valueOf(NEW_AMT));
+                ((EditText) journalActivity.findViewById(R.id.fragment_home_note_et)).setText(NEW_NOTES);
                 journalActivity.findViewById(R.id.fragment_home_save_btn).performClick();
             }
         });
