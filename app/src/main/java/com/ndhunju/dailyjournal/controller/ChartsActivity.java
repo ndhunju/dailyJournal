@@ -60,8 +60,10 @@ public class ChartsActivity extends AppCompatActivity {
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getString(R.string.title_activity_charts));
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.title_activity_charts));
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
     }
 
