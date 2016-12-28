@@ -9,13 +9,12 @@ import android.test.TouchUtils;
 import android.test.ViewAsserts;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.test.suitebuilder.annotation.MediumTest;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.ndhunju.dailyjournal.controller.JournalActivity;
+import com.ndhunju.dailyjournal.controller.JournalPagerActivity;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyDetailActivity;
@@ -172,18 +171,18 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
        Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
        // Create an ActivityMonitor that catch ChildActivity and return mock ActivityResult:
-       Instrumentation.ActivityMonitor activityMonitor = mInstrumentation.addMonitor(JournalActivity.class.getName(), activityResult, false);
+       Instrumentation.ActivityMonitor activityMonitor = mInstrumentation.addMonitor(JournalPagerActivity.class.getName(), activityResult, false);
 
         // Wait for the ActivityMonitor to be hit, Instrumentation will then return the mock ActivityResult:
-        final JournalActivity journalActivity = (JournalActivity)mInstrumentation.waitForMonitorWithTimeout(activityMonitor, TIME_OUT);
+        final JournalPagerActivity journalPagerActivity = (JournalPagerActivity)mInstrumentation.waitForMonitorWithTimeout(activityMonitor, TIME_OUT);
 
         //wait for change in UI
         mInstrumentation.waitForIdleSync();
 
         //Verify that PartyActivity was started
-        assertNotNull("journalActivity is null", journalActivity);
-        //assertTrue("Monitor for journalActivity has not been called", activityMonitor.getHits() > 0);
-        assertEquals("Activity is of wrong type", JournalActivity.class, journalActivity.getClass());
+        assertNotNull("journalPagerActivity is null", journalPagerActivity);
+        //assertTrue("Monitor for journalPagerActivity has not been called", activityMonitor.getHits() > 0);
+        assertEquals("Activity is of wrong type", JournalPagerActivity.class, journalPagerActivity.getClass());
 
        //save journal information to test later
         Journal testJournal= services.getJournal(testJournalId);
@@ -194,9 +193,9 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         mInstrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                ((EditText) journalActivity.findViewById(R.id.fragment_home_amount_et)).setText(String.valueOf(NEW_AMT));
-                ((EditText) journalActivity.findViewById(R.id.fragment_home_note_et)).setText(NEW_NOTES);
-                journalActivity.findViewById(R.id.fragment_home_save_btn).performClick();
+                ((EditText) journalPagerActivity.findViewById(R.id.fragment_home_amount_et)).setText(String.valueOf(NEW_AMT));
+                ((EditText) journalPagerActivity.findViewById(R.id.fragment_home_note_et)).setText(NEW_NOTES);
+                journalPagerActivity.findViewById(R.id.fragment_home_save_btn).performClick();
             }
         });
 
@@ -205,7 +204,7 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         assertEquals(UtilsFormat.formatCurrency(expectedNewBal, mInstrumentation.getTargetContext()),
                 ((TextView) mPartyDetailActivity.findViewById(R.id.fragment_party_detail_balance_tv)).getText());
 
-        //Unregister monitor for JournalActivity
+        //Unregister monitor for JournalPagerActivity
         getInstrumentation().removeMonitor(activityMonitor);
 
     }

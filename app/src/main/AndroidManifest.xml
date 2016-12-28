@@ -77,7 +77,7 @@
             android:label="@string/title_activity_charts" >
         </activity>
 
-        <activity android:name=".controller.JournalActivity"
+        <activity android:name=".controller.JournalPagerActivity"
             android:label="@string/title_activity_journal"/>
 
         <activity android:name=".controller.backup.BackupActivity"

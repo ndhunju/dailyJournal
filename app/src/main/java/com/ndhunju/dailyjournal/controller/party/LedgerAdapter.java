@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,7 @@ import android.view.View;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.IconTextAdapter;
-import com.ndhunju.dailyjournal.controller.JournalActivity;
+import com.ndhunju.dailyjournal.controller.JournalPagerActivity;
 import com.ndhunju.dailyjournal.database.JournalDAO;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -36,7 +37,7 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
     protected OnItemClickListener mOnItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick (View view,int position, long id);
+        void onItemClick (View view,int position, List<Journal> journals);
         /**
          * For one of the items, context menu was opened and a menu item was clicked
          * @param view : view associated with the item ( not context menu item)
@@ -59,6 +60,11 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
         mJournals = journals;
         mServices = Services.getInstance(context);
         setHasStableIds(true);
+    }
+
+    public void setJournals(List<Journal> journals) {
+        mJournals = journals;
+        notifyDataSetChanged();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -118,7 +124,7 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
 
         @Override
         public void onClick(View view) {
-            if (mOnItemClickListener != null) mOnItemClickListener.onItemClick(view, getAdapterPosition(), currentJournal.getId());
+            if (mOnItemClickListener != null) mOnItemClickListener.onItemClick(view, getAdapterPosition(), mJournals);
         }
 
         @Override
@@ -233,12 +239,14 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
         notifyDataSetChanged();
     }
 
-    public static void createJournalIntent(Activity activity, long journalId, long partyId, int position) {
+    public static void createJournalIntent(Activity activity, long[] journalIds, int position) {
         // Open journal activity to show the detail info of the clicked Journal
-        Intent intent = new Intent(activity, JournalActivity.class);
-        intent.putExtra(Constants.KEY_JOURNAL_ID, journalId);
-        intent.putExtra(Constants.KEY_PARTY_ID, partyId);
-        intent.putExtra(Constants.KEY_JOURNAL_POS, position);
+        Intent intent = new Intent(activity, JournalPagerActivity.class);
+        Bundle extra = new Bundle();
+        extra.putInt(Constants.KEY_JOURNAL_POS, position);
+        // to pass array of long, you MUST use Bundle#putLongArray()
+        extra.putLongArray(JournalPagerActivity.BUNDLE_JOURNAL_IDS, journalIds);
+        intent.putExtras(extra);
         activity.startActivity(intent);
 
     }
@@ -247,7 +255,9 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
         switch ((int) menuId){
             case android.R.drawable.ic_menu_edit:
                 // selected to edit the journal
-                LedgerAdapter.createJournalIntent(activity, ledgerAdapter.getItemId(position), ledgerAdapter.getItem(position).getPartyId() , position);
+                long[] id = new long[1];
+                id[0] = ledgerAdapter.getItemId(position);
+                LedgerAdapter.createJournalIntent(activity, id, position);
                 break;
             case android.R.drawable.ic_menu_delete:
                 // selected to delete the Journal

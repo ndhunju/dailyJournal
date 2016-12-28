@@ -6,43 +6,35 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.journal.JournalFragment;
-import com.ndhunju.dailyjournal.model.Journal;
-import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 
-import java.util.List;
-
 /**
  * Created by Dhunju on 7/29/2016.
+ * This fragment shows {@link JournalFragment} in a pager.
  */
 public class JournalPagerFragment extends Fragment {
 
     public static final String TAG = JournalPagerAdapter.class.getSimpleName();
-    public static final String BUNDLE_JOURNALS = TAG + "journals";
 
     Services mServices;
-    Party mParty;
-    List<Journal> mJournals;
+    Integer currentPos;
+    long[] mJournalIds; // id of Journals this pager will show
 
-        @Override
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mServices = Services.getInstance(getContext());
-        long mPartyId = getArguments().getLong(Constants.KEY_PARTY_ID, Constants.ID_NEW_PARTY);
-        mParty = mServices.getParty(mPartyId);
-        mJournals = mServices.getJournals(mPartyId);
-
+        currentPos = getArguments().getInt(Constants.KEY_JOURNAL_POS, 0);
+        mJournalIds = getArguments().getLongArray(JournalPagerActivity.BUNDLE_JOURNAL_IDS);
     }
 
 
@@ -53,7 +45,7 @@ public class JournalPagerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_journal_pager, container, false);
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.journal_view_pager);
         viewPager.setAdapter(new JournalPagerAdapter(appCompatActivity.getSupportFragmentManager()));
-        viewPager.setCurrentItem(getArguments().getInt(Constants.KEY_JOURNAL_POS, 0));
+        viewPager.setCurrentItem(currentPos);
 
         setHasOptionsMenu(true);
         return rootView;
@@ -69,13 +61,12 @@ public class JournalPagerFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            mJournals.get(position).setTag(position);
-            return JournalFragment.newInstance(mJournals.get(position).getId(), mJournals.get(position).getPartyId(), position);
+            return JournalFragment.newInstance(mJournalIds[position], position);
         }
 
         @Override
         public int getCount() {
-            return mJournals.size();
+            return mJournalIds.length;
         }
 
     }

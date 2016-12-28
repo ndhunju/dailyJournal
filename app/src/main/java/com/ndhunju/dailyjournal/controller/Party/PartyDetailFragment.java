@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.database.PartyDAO;
+import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.PreferenceService;
@@ -36,6 +37,7 @@ import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -349,8 +351,13 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
     }
 
     @Override
-    public void onItemClick(View view, int position, long id) {
-        LedgerAdapter.createJournalIntent(getActivity(), id, mParty.getId(), position);
+    public void onItemClick(View view, int position, List<Journal> journalList) {
+        // copy id of journals to an array
+        long[] ids = new long[journalList.size()];
+        for (int i = 0; i < journalList.size(); i++)
+            ids[i] = journalList.get(i).getId();
+
+        LedgerAdapter.createJournalIntent(getActivity(), ids, position);
     }
 
     @Override

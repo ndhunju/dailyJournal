@@ -61,14 +61,10 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 	/**
 	 * Returns new instance of a JournalFragment Class based on passed arguments. Implements
 	 * Factory Pattern.
-	 * @param journalId
-	 * @param partyId
-	 * @return
 	 */
-	public static Fragment newInstance(long journalId, long partyId, int pos) {
+	public static Fragment newInstance(long journalId, int pos) {
 		Bundle args = new Bundle();
 		args.putLong(Constants.KEY_JOURNAL_ID, journalId);
-		args.putLong(Constants.KEY_PARTY_ID, partyId);
 		args.putInt(Constants.KEY_POS, pos);
 		JournalFragment newJF = new JournalFragment();
 		newJF.setArguments(args);
@@ -82,15 +78,15 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
 		mServices = Services.getInstance(getActivity());
 		long journalId = getArguments().getLong(Constants.KEY_JOURNAL_ID);
-        long partyId = getArguments().getLong(Constants.KEY_PARTY_ID);
 		int position = getArguments().getInt(Constants.KEY_POS);
 
         mJournal = mServices.getJournal(journalId);
-        mParty = mServices.getParty(partyId);
+        mParty = mServices.getParty(mJournal.getPartyId());
         mJournal = mServices.getJournal(journalId);
 		mJournal.setTag(position);
-        getActivity().setTitle(mParty.getName());
-        setHasOptionsMenu(true);
+
+		setHasOptionsMenu(true);
+		getActivity().setTitle(getString(R.string.str_journal));
 		ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
 
 		if (actionBar != null ) {

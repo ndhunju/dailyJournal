@@ -15,8 +15,12 @@ import android.widget.EditText;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
 import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
+import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dhunju on 8/14/2016.
@@ -50,13 +54,14 @@ public class SearchNotesActivity extends AppCompatActivity implements LedgerAdap
             public void onClick(View v) {
                 String keyword = keywordEditText.getText().toString();
                 if (TextUtils.isEmpty(keyword)) keyword = " ";
-                recyclerView.setAdapter(ledgerAdapter = new LedgerCardAdapter(SearchNotesActivity.this,
-                        Services.getInstance(getApplicationContext()).findByNotes(keyword)));
-                ledgerAdapter.setOnItemClickListener(SearchNotesActivity.this);
+                ledgerAdapter.setJournals(Services.getInstance(getApplicationContext()).findByNotes(keyword));
             }
         });
 
-
+        ledgerAdapter = new LedgerCardAdapter(this, new ArrayList<Journal>());
+        ledgerAdapter.setOnItemClickListener(SearchNotesActivity.this);
+        Services.getInstance(this).registerJournalObserver(ledgerAdapter);
+        recyclerView.setAdapter(ledgerAdapter);
     }
 
     @Override
@@ -71,12 +76,22 @@ public class SearchNotesActivity extends AppCompatActivity implements LedgerAdap
     }
 
     @Override
-    public void onItemClick(View view, int position, long id) {
-        LedgerAdapter.createJournalIntent(this, id, ledgerAdapter.getItem(position).getPartyId(), position);
+    public void onItemClick(View view, int position, List<Journal> journalList) {
+        long[] ids = new long[journalList.size()];
+        for (int i = 0; i < journalList.size(); i++)
+            ids[i] = journalList.get(i).getId();
+
+        LedgerAdapter.createJournalIntent(this, ids, position);
     }
 
     @Override
     public void onContextItemClick(View view, int position, long menuID) {
         LedgerAdapter.onContextItemClick(this, ledgerAdapter, view, position, menuID);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Services.getInstance(this).unregisterJournalObserver(ledgerAdapter);
+        super.onDestroy();
     }
 }

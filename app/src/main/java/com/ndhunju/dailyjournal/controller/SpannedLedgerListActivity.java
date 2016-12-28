@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +16,15 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
 import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
+import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Dhunju on 8/14/2016.
@@ -83,12 +85,14 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
         findJournalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setAdapter(ledgerAdapter = new LedgerCardAdapter(SpannedLedgerListActivity.this,
-                        Services.getInstance(getApplicationContext()).findByDate(startDate.getTime(), endDate.getTime())));
-                ledgerAdapter.setOnItemClickListener(SpannedLedgerListActivity.this);
+                ledgerAdapter.setJournals(Services.getInstance(getApplicationContext()).findByDate(startDate.getTime(), endDate.getTime()));
             }
         });
 
+        ledgerAdapter = new LedgerCardAdapter(this, new ArrayList<Journal>());
+        ledgerAdapter.setOnItemClickListener(SpannedLedgerListActivity.this);
+        Services.getInstance(this).registerJournalObserver(ledgerAdapter);
+        recyclerView.setAdapter(ledgerAdapter);
 
     }
 
@@ -123,12 +127,22 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
     }
 
     @Override
-    public void onItemClick(View view, int position, long id) {
-        LedgerAdapter.createJournalIntent(this, id, ledgerAdapter.getItem(position).getPartyId(), position);
+    public void onItemClick(View view, int position, List<Journal> journalList) {
+        long[] ids = new long[journalList.size()];
+        for (int i = 0; i < journalList.size(); i++)
+            ids[i] = journalList.get(i).getId();
+
+        LedgerAdapter.createJournalIntent(this, ids, position);
     }
 
     @Override
     public void onContextItemClick(View view, int position, long id) {
         LedgerAdapter.onContextItemClick(this, ledgerAdapter, view, position, id);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Services.getInstance(this).unregisterJournalObserver(ledgerAdapter);
+        super.onDestroy();
     }
 }
