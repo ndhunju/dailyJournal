@@ -7,7 +7,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.ReportGenerator;
+import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
+import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
+import com.ndhunju.dailyjournal.service.report.PlainTextReportGenerator;
+import com.ndhunju.dailyjournal.service.report.ReportGenerator;
+import com.ndhunju.dailyjournal.service.report.TextFileReportGenerator;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.io.File;
@@ -15,7 +19,7 @@ import java.io.File;
 /**
  * Created by dhunju on 9/27/2015.
  * This class is a child class of {@link AsyncTask} that generates
- * report for a party by calling {@link ReportGenerator#getReportFile()}
+ * report for a party by calling {@link ReportGenerator#getReport(File)} ()}
  * This class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
@@ -26,7 +30,7 @@ class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
     private ProgressDialog pd;
     private Activity mActivity;
 
-    static enum Type{FILE, TEXT}
+    static enum Type{FILE, PDF, CSV, TEXT}
 
 
     public ReportGeneratorAsync(Activity activity, Type type){
@@ -47,20 +51,58 @@ class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(Long... longs) {
-        ReportGenerator rg = new ReportGenerator(mActivity, longs[0]);
+        long partyId = longs[0];
+        ReportGenerator rg;
+        StringBuilder sb;
+        File report;
+
         intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
+
         switch (mType){
             case FILE:
-                File report = rg.getReportFile();
-                intent.putExtra(Intent.EXTRA_TEXT, rg.getReportHeader());
+                rg = new TextFileReportGenerator(mActivity, partyId);
+                report = (File) rg.getReport(null);
+                // check if report was successfully generated
+                if (report == null) return false;
+                sb = new StringBuilder();
+                rg.fillAppBanner(sb);
+                rg.fillPartyInfo(sb);
+                intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+                intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(report));
+                break;
+            case PDF:
+                rg = new PdfReportGenerator(mActivity, partyId);
+                report = (File) rg.getReport(null);
+                // check if report was successfully generated
+                if (report == null) return false;
+
+                sb = new StringBuilder();
+                rg.fillAppBanner(sb);
+                rg.fillPartyInfo(sb);
+                intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+                intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(report));
+                break;
+            case CSV:
+                rg = new CsvReportGenerator(mActivity, partyId);
+                report = (File) rg.getReport(null);
+                // check if report was successfully generated
+                if (report == null) return false;
+
+                sb = new StringBuilder();
+                rg.fillAppBanner(sb);
+                rg.fillPartyInfo(sb);
+                intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+                intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(report));
                 break;
             case TEXT:
-                intent.putExtra(Intent.EXTRA_TEXT,
-                        rg.getReportHeader() + rg.getSimpleReportBody());
+                rg = new PlainTextReportGenerator(mActivity, partyId);
+                intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
+                intent.putExtra(Intent.EXTRA_TEXT, (String) rg.getReport(null));
+                return true;
 
-                break;
         }
 
         return true;
@@ -71,6 +113,7 @@ class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         pd.cancel();
         if(!success){
             UtilsView.alert(mActivity, String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_report)));
+            return;
         }
         intent.setType("text/plain");
         mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));

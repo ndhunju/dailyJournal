@@ -1,1 +1,1 @@
-include ':app', ':folderpicker'
+include ':app', ':folderpicker', ':androidpdfwriter'

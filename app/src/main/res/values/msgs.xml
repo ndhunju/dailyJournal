@@ -29,4 +29,16 @@
     <string name="msg_rate_title">Rate Daily Journal</string>
     <string name="msg_rate_body">Do you like this app? Please rate our app on Google Play. Thanks for your support!</string>
     <string name="msg_share_subject">Try Daily Journal App</string>
+
+    <!-- title passed to DownloadManager after creating a report. %1$s is name of the app. -->
+    <string name="msg_report_created_title">%1$s app created a report.</string>
+    <!-- description passed to DownloadManager after creating a report. %1$s is name of the Party/Account-->
+    <string name="msg_report_created_desc">Report created for %1$s.</string>
+
+    <!-- The library used for generating PDF report is under BSD license. As per BSD, following text must be included in the product.-->
+    <string name="msg_pdf_lib_ref">This product includes software developed by the CRL.</string>
+    <string name="msg_pdf_courtesy">Thanks to Javier Santo Domingo for making it free!</string>
+
+    <!-- This message is included in the text file report. -->
+    <string name="msg_text_format_issue">(If the report is not formatted properly, use a monospaced font like COURIER)</string>
 </resources>

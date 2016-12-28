@@ -6,9 +6,11 @@ import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
-import com.ndhunju.dailyjournal.service.ReportGenerator;
+import com.ndhunju.dailyjournal.service.report.ReportGenerator;
+import com.ndhunju.dailyjournal.service.report.TextFileReportGenerator;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -45,8 +47,8 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     protected Boolean doInBackground(List<Party>... parties) {
         List<Party> partyList = parties[0];
         for(int i = 0; i < partyList.size() ; i++){
-            ReportGenerator rg = new ReportGenerator(mActivity, partyList.get(i));
-            rg.storeReportFile(mPath);
+            ReportGenerator rg = new TextFileReportGenerator(mActivity, partyList.get(i));
+            rg.getReport(new File(mPath));
             publishProgress(i / partyList.size());
         }
         return true;

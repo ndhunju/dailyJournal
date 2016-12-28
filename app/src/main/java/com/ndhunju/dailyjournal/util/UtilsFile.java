@@ -229,8 +229,8 @@ public class UtilsFile {
 		return file;
 	}
 
-    public static String getPublicDocumentDir(){
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
+    public static String getPublicDownloadDir(){
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
     }
 
     public static boolean deleteExternalStoragePublicPicture() {

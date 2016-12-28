@@ -19,7 +19,6 @@ public class BackupActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction().add(android.R.id.content,
                 new BackupPreferenceFragment(), BackupPreferenceFragment.TAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack(null)
                 .commit();
     }
 }
