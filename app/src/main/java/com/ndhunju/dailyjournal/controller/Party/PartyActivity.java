@@ -15,6 +15,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,14 +76,16 @@ public class PartyActivity extends AppCompatActivity {
 
         partyPicIV = (ImageView)findViewById(R.id.activity_party_pic_iv);
         //make the image circular
-        RoundedBitmapDrawable bitmapDrawable = mParty.getPicturePath().equals("")?
-                RoundedBitmapDrawableFactory.create(getResources(),
-                        BitmapFactory.decodeResource(getResources(), R.drawable.party_default_pic))
-                : RoundedBitmapDrawableFactory.create(getResources(),
-                mParty.getPicturePath());
+        if (!TextUtils.isEmpty(mParty.getPicturePath())) {
+            RoundedBitmapDrawable bitmapDrawable = RoundedBitmapDrawableFactory.create(
+                    getResources(),
+                    mParty.getPicturePath());
 
-        bitmapDrawable.setCircular(true);
-        partyPicIV.setImageDrawable(bitmapDrawable);
+            bitmapDrawable.setCircular(true);
+            partyPicIV.setImageDrawable(bitmapDrawable);
+        } else {
+            partyPicIV.setImageResource(R.drawable.default_party_pic);
+        }
 
         partyPicIV.setOnClickListener(new OnClickListener() {
             @Override

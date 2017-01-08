@@ -35,6 +35,8 @@
             android:textColor="@color/text_title"
             android:textSize="@dimen/text_size_xlarge"
             android:textStyle="bold"
+            android:maxLines="2"
+            android:scrollbars="vertical"
             android:layout_toRightOf="@id/fragment_party_detail_circle_iv"
             android:layout_alignTop="@id/fragment_party_detail_circle_iv"
             android:layout_toEndOf="@id/fragment_party_detail_circle_iv"/>

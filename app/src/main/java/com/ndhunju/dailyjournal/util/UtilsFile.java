@@ -215,6 +215,9 @@ public class UtilsFile {
     }
 
 	/**
+	 * @deprecated Document directory is not guaranteed to be present in all device. Rather
+	 * use {@link UtilsFile#getPublicDownloadDir()}
+     *
 	 * Create a temporary image file in public Picture directory. It can be used to save an
 	 * image taken by camera app since camera app cannot access thus save image to app's
 	 * private folder

@@ -15,6 +15,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -106,6 +107,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
         });
         picIV = (ImageView) rootView.findViewById(R.id.fragment_party_detail_circle_iv);
         nameTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_name_tv);
+        nameTV.setMovementMethod(new ScrollingMovementMethod());
 
         ledgerListView = (RecyclerView) rootView.findViewById(R.id.activity_party_lv);
         ledgerListView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -161,14 +163,17 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
     private void setPartyViews(Party party){
 
         //make the image circular
-        RoundedBitmapDrawable bitmapDrawable = mParty.getPicturePath().equals("")?
-                RoundedBitmapDrawableFactory.create(getResources(),
-                        BitmapFactory.decodeResource(getResources(), R.drawable.party_default_pic))
-                : RoundedBitmapDrawableFactory.create(getResources(),
-                mParty.getPicturePath());
+        //make the image circular
+        if (!TextUtils.isEmpty(mParty.getPicturePath())) {
+            RoundedBitmapDrawable bitmapDrawable = RoundedBitmapDrawableFactory.create(
+                    getResources(),
+                    mParty.getPicturePath());
 
-        bitmapDrawable.setCircular(true);
-        picIV.setImageDrawable(bitmapDrawable);
+            bitmapDrawable.setCircular(true);
+            picIV.setImageDrawable(bitmapDrawable);
+        } else {
+            picIV.setImageResource(R.drawable.default_party_pic);
+        }
 
         nameTV.setText(party.getName());
 

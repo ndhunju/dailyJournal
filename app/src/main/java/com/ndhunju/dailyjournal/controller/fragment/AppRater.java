@@ -268,13 +268,7 @@ public class AppRater {
     }
 
     private static void savePreferences(SharedPreferences.Editor editor) {
-        if (editor != null) {
-            if (Build.VERSION.SDK_INT < 9) {
-                editor.commit();
-            } else {
-                editor.apply();
-            }
-        }
+        editor.commit();
     }
 
     private static void closeDialog(DialogInterface dialog) {

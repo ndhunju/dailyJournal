@@ -50,7 +50,7 @@ class PartyRowAdapter extends ArrayAdapter<Party> {
         Party currentParty  =  getItem(position);
         holder.displayName.setText(currentParty.getName());
         holder.imageView.setImageDrawable(currentParty.getPicturePath().equals("") ?
-                getContext().getResources().getDrawable(R.drawable.party_default_pic) :
+                getContext().getResources().getDrawable(R.drawable.default_party_pic) :
                 Drawable.createFromPath(currentParty.getPicturePath()));
 
         return convertView;

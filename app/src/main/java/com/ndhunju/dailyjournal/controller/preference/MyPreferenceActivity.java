@@ -68,7 +68,7 @@ public class MyPreferenceActivity extends AppCompatPreferenceActivity {
             final String DEFAULT_TARGET_URI = "market://details?id=%s";
             Intent appRateIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(String.format(DEFAULT_TARGET_URI, MyPreferenceActivity.this.getPackageName())));
-            startActivityForResult(appRateIntent, 0);
+            startActivityForResult(Intent.createChooser(appRateIntent, getString(R.string.str_choose)), 0);
         } else
 
         {

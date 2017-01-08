@@ -88,6 +88,9 @@
 
         <activity android:name=".controller.SearchNotesActivity"/>
 
+        <activity android:name=".controller.ToolsActivity"
+            android:label="@string/str_tools"/>
+
     </application>
 
 </manifest>

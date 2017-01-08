@@ -206,14 +206,17 @@ public class PartyCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public void bind(Party party, int position) {
             //make the image circular
-            RoundedBitmapDrawable bitmapDrawable = party.getPicturePath().equals("")?
-                    RoundedBitmapDrawableFactory.create(getContext().getResources(),
-                            BitmapFactory.decodeResource(getContext().getResources(), R.drawable.party_default_pic))
-                    : RoundedBitmapDrawableFactory.create(getContext().getResources(),
-                    party.getPicturePath());
+            //make the image circular
+            if (!TextUtils.isEmpty(party.getPicturePath())) {
+                RoundedBitmapDrawable bitmapDrawable = RoundedBitmapDrawableFactory.create(
+                        getContext().getResources(),
+                        party.getPicturePath());
 
-            bitmapDrawable.setCircular(true);
-            picImageView.setImageDrawable(bitmapDrawable);
+                bitmapDrawable.setCircular(true);
+                picImageView.setImageDrawable(bitmapDrawable);
+            } else {
+                picImageView.setImageResource(R.drawable.default_party_pic);
+            }
 
             partyNameTV.setText(party.getName());
 
