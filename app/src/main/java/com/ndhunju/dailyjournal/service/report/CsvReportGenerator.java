@@ -39,6 +39,11 @@ public class CsvReportGenerator extends ReportGenerator<File>{
     }
 
     @Override
+    public String getReportType() {
+        return "text/csv";
+    }
+
+    @Override
     public void onAppendHeader(Builder builder) {
         builder.appendText(addGap(R.string.str_num, 3));
         builder.appendText(addGap(R.string.str_date));
@@ -74,11 +79,6 @@ public class CsvReportGenerator extends ReportGenerator<File>{
             OutputStream os = new FileOutputStream(cvsFile);
             os.write(builder.asString().getBytes("UTF-8"));
             os.close();
-
-            // notify user
-            DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
-            downloadManager.addCompletedDownload(mContext.getString(R.string.msg_report_created_title, getString(R.string.app_name)),
-                    mContext.getString(R.string.msg_report_created_desc, mParty.getName()), true, "text/csv", cvsFile.getAbsolutePath(), cvsFile.length(), true);
 
             //to let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(mContext, new String[]{cvsFile.getAbsolutePath()}, null, null);

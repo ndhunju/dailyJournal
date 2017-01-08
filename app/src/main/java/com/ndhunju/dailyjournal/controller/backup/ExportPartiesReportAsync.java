@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
+import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
 import com.ndhunju.dailyjournal.service.report.ReportGenerator;
 import com.ndhunju.dailyjournal.service.report.TextFileReportGenerator;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -26,10 +28,14 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     private ProgressDialog pd;
     private Activity mActivity;
     private String mPath;           //path to save the report
+    private Type mType;
 
-    public ExportPartiesReportAsync(Activity activity, String path){
+    static enum Type{FILE, PDF, CSV}
+
+    public ExportPartiesReportAsync(Activity activity, String path, Type type){
         mActivity = activity;
         mPath = path;
+        mType = type;
     }
 
     @Override
@@ -46,13 +52,26 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     @Override
     protected Boolean doInBackground(List<Party>... parties) {
         List<Party> partyList = parties[0];
-        for(int i = 0; i < partyList.size() ; i++){
-            ReportGenerator rg = new TextFileReportGenerator(mActivity, partyList.get(i));
-            rg.getReport(new File(mPath));
+        ReportGenerator rg;
+        boolean success = true;
+        for(int i = 0; i < partyList.size() ; i++) {
+            switch (mType) {
+                case FILE:
+                    rg = new TextFileReportGenerator(mActivity, partyList.get(i));
+                    success &= rg.getReport(new File(mPath)) != null;
+                case PDF:
+                    rg = new PdfReportGenerator(mActivity, partyList.get(i));
+                    success &= rg.getReport(new File(mPath)) != null;
+                    break;
+                case CSV:
+                    rg = new CsvReportGenerator(mActivity, partyList.get(i));
+                    success &= rg.getReport(new File(mPath)) != null;
+                    break;
+            }
+
             publishProgress(i / partyList.size());
         }
-        return true;
-
+        return success;
     }
 
     @Override
@@ -68,5 +87,14 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
                 : String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_export_printable));
 
         UtilsView.alert(mActivity, resultMsg);
+    }
+
+    //helper
+    public static String[] getStrTypes(){
+        Type types[] = Type.values();
+        String[] strTypes = new String[types.length];
+        for(int index=0; index < types.length;index++)
+            strTypes[index] = types[index].name();
+        return strTypes;
     }
 }

@@ -128,6 +128,11 @@ public class PdfReportGenerator extends ReportGenerator<File>{
     }
 
     @Override
+    public String getReportType() {
+        return "application/pdf";
+    }
+
+    @Override
     public File getReport(@Nullable File folder) {
         super.getReport(folder);
 
@@ -155,11 +160,6 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             OutputStream os = new FileOutputStream(pdfFile);
             os.write(builder.asString().getBytes("UTF-8"));
             os.close();
-
-            // notify user
-            DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
-            downloadManager.addCompletedDownload(mContext.getString(R.string.msg_report_created_title, getString(R.string.app_name)),
-                    mContext.getString(R.string.msg_report_created_desc, mParty.getName()), true, "application/pdf", pdfFile.getAbsolutePath(), pdfFile.length(), true);
 
             //to let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(mContext, new String[]{pdfFile.getAbsolutePath()}, null, null);

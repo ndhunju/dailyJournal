@@ -17,14 +17,14 @@ import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.folderpicker.FolderPickerDialogFragment;
-import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
+import com.ndhunju.folderpicker.FolderPickerDialogFragment;
+import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -330,30 +330,16 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                     final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
                     final Services services = Services.getInstance(getActivity());
 
-                    //Let the user choose the parties
-                    final List<Party> parties = services.getParties();
-
-                    CharSequence[] options = getResources().getStringArray(R.array.options_export_print);
-                    AlertDialog chooseDialog = new AlertDialog.Builder(getActivity())
-                            .setTitle(getString(R.string.str_choose))
-                            .setItems(options, new DialogInterface.OnClickListener() {
+                    // let the user choose the type of printable she wants to export
+                    String[] options = ExportPartiesReportAsync.getStrTypes();
+                    new AlertDialog.Builder(getActivity()).setItems(options,
+                            new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which) {
-                                        case 0: //All parties
-                                            new ExportPartiesReportAsync(getActivity(), dir).execute(parties);
-                                            break;
-
-                                        case 1: //Select parties
-                                            createPartySelectDialogToExport(services, parties, dir).show();
-                                            break;
-
-                                    }
+                                public void onClick(DialogInterface dialogInterface, int optionIndex) {
+                                    createAllOrSelectPartyDialog(services, dir, optionIndex);
                                 }
-                            }).create();
-
-                    chooseDialog.show();
-
+                            })
+                            .create().show();
                 }
 
                 break;
@@ -362,7 +348,33 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
 
     }
 
-    private AlertDialog createPartySelectDialogToExport(Services services, final List<Party> parties, final String dir) {
+    private void createAllOrSelectPartyDialog(final Services services, final String dir, final int optionIndex) {
+        //Let the user choose the parties
+        final List<Party> parties = services.getParties();
+
+        CharSequence[] options = getResources().getStringArray(R.array.options_export_print);
+        AlertDialog chooseDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.str_choose))
+                .setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0: //All parties
+                                new ExportPartiesReportAsync(getActivity(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(parties);
+                                break;
+
+                            case 1: //Select parties
+                                createPartySelectDialogToExport(services, parties, dir, optionIndex).show();
+                                break;
+
+                        }
+                    }
+                }).create();
+
+        chooseDialog.show();
+    }
+
+    private AlertDialog createPartySelectDialogToExport(Services services, final List<Party> parties, final String dir, final int optionIndex) {
         final ArrayList<Party> selectedParties = new ArrayList<>();
 
         // create array of Parties' name
@@ -386,7 +398,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        new ExportPartiesReportAsync(getActivity(), dir).execute(selectedParties);
+                        new ExportPartiesReportAsync(getActivity(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
                     }
                 });
 

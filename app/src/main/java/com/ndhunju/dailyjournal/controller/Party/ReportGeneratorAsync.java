@@ -1,7 +1,9 @@
 package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,14 +25,17 @@ import java.io.File;
  * This class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
-class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
+public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
 
     private Type mType;
     private Intent intent;
     private ProgressDialog pd;
     private Activity mActivity;
 
-    static enum Type{FILE, PDF, CSV, TEXT}
+    private ReportGenerator rg;
+    private File report;
+
+    enum Type{FILE, PDF, CSV, TEXT}
 
 
     public ReportGeneratorAsync(Activity activity, Type type){
@@ -52,13 +57,12 @@ class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
     @Override
     protected Boolean doInBackground(Long... longs) {
         long partyId = longs[0];
-        ReportGenerator rg;
         StringBuilder sb;
-        File report;
 
         intent = new Intent(Intent.ACTION_SEND);
 
         switch (mType){
+            default:
             case FILE:
                 rg = new TextFileReportGenerator(mActivity, partyId);
                 report = (File) rg.getReport(null);
@@ -117,6 +121,13 @@ class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         }
         intent.setType("text/plain");
         mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));
+
+        if (mType != Type.TEXT) {
+            // notify user that we created a file
+            DownloadManager downloadManager = (DownloadManager) mActivity.getSystemService(Context.DOWNLOAD_SERVICE);
+            downloadManager.addCompletedDownload(mActivity.getString(R.string.msg_report_created_title, mActivity.getString(R.string.app_name)),
+                    mActivity.getString(R.string.msg_report_created_desc, rg.getParty().getName()), true, rg.getReportType(), report.getAbsolutePath(), report.length(), true);
+        }
     }
 
     //helper

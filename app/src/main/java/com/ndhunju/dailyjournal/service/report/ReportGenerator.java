@@ -92,6 +92,14 @@ public abstract class ReportGenerator<T>{
         mParty = party;
     }
 
+    public Party getParty() {
+        return mParty;
+    }
+
+    public String getReportType() {
+        return "";
+    }
+
     public String getSubject(){
         return getString(R.string.str_report) + " " + mParty.getName();
     }
