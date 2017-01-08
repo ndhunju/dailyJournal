@@ -24,15 +24,19 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 public class ToolsActivity extends NavDrawerActivity {
 
     RecyclerView recyclerView;
+    int columnCount = 2;      // default column count
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addContentFrame(R.layout.activity_tools);
 
+        // get column count value from the resources
+        columnCount = getResources().getInteger(R.integer.activity_tools_column_count);
+
         // wire up and set up
         recyclerView = (RecyclerView) findViewById(R.id.activity_tools_recycler_view);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2,
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), columnCount,
                 GridLayoutManager.VERTICAL,
                 false);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -51,7 +55,7 @@ public class ToolsActivity extends NavDrawerActivity {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ToolVH(LayoutInflater.from(getContext()).inflate(R.layout.item_activity_home, parent, false),
-                    parent.getMeasuredWidth()/2) ;
+                    parent.getMeasuredWidth()/columnCount) ;
         }
 
         @Override
