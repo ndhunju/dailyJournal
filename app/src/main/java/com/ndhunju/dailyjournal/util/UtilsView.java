@@ -8,22 +8,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.ColorInt;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.party.PartyListFragment;
 
 /**
  * Created by dhunju on 9/24/2015.

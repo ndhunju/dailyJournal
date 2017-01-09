@@ -1,7 +1,6 @@
 package com.ndhunju.dailyjournal.service;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.model.Journal;
@@ -9,7 +8,6 @@ import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 

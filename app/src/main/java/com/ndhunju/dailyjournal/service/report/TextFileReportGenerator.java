@@ -1,6 +1,5 @@
 package com.ndhunju.dailyjournal.service.report;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 

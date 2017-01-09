@@ -1,7 +1,5 @@
 package com.ndhunju.dailyjournal.service;
 
-import com.ndhunju.dailyjournal.controller.journal.JournalFragment;
-
 public interface Constants {
 
     //Constants

@@ -10,7 +10,6 @@ import com.ndhunju.dailyjournal.service.PreferenceService;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.IllegalFormatException;
 import java.util.Locale;
 
 public class UtilsFormat {

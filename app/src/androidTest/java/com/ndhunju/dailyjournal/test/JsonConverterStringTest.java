@@ -1,7 +1,6 @@
 package com.ndhunju.dailyjournal.test;
 
 import android.content.Context;
-import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 
@@ -15,12 +14,8 @@ import com.ndhunju.dailyjournal.util.UtilsZip;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * This class uses the JUnit3 syntax for tests.

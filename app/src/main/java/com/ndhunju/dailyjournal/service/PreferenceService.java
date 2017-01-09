@@ -13,8 +13,6 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.service.AutoBackupService;
 import com.ndhunju.dailyjournal.util.UtilsDate;
 
-import java.text.ParseException;
-
 /**
  * Created by dhunju on 10/4/2015.
  * Service class for storing and retrieving user preferences stored on xml file

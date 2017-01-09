@@ -1,9 +1,7 @@
 package com.ndhunju.dailyjournal.test;
 
-import android.app.Instrumentation;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
-import android.test.mock.MockContext;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.ndhunju.dailyjournal.util.UtilsFormat;

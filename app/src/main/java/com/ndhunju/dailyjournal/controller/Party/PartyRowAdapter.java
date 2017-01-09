@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
-import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.ArrayList;
 

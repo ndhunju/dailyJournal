@@ -4,7 +4,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.NavDrawerActivity;

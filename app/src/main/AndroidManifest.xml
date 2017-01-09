@@ -18,27 +18,27 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application
-        android:name=".controller.DailyJournalApplication"
+        android:name="com.ndhunju.dailyjournal.controller.DailyJournalApplication"
         android:allowBackup="true"
         android:description="@string/app_descrip"
         android:icon="@mipmap/ic_app"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <service
-            android:name=".controller.service.NotificationService"
+            android:name="com.ndhunju.dailyjournal.controller.service.NotificationService"
             android:exported="false" />
         <service
-            android:name=".controller.service.AutoBackupService"
+            android:name="com.ndhunju.dailyjournal.controller.service.AutoBackupService"
             android:exported="false" />
 
-        <activity android:name=".controller.HomeActivity" >
+        <activity android:name="com.ndhunju.dailyjournal.controller.HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.journal.JournalNewActivity"
+            android:name="com.ndhunju.dailyjournal.controller.journal.JournalNewActivity"
             android:windowSoftInputMode="stateHidden" />
        <!-- <activity
             android:name=".controller.party.PartyListActivityOld"
@@ -47,48 +47,48 @@
             android:name=".controller.party.PartyLedgerActivityOld"
             android:windowSoftInputMode="stateHidden" />-->
         <activity
-            android:name=".controller.party.PartyActivity"
+            android:name="com.ndhunju.dailyjournal.controller.party.PartyActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".viewPager.AttachmentViewPagerActivity"
+            android:name="com.ndhunju.dailyjournal.viewPager.AttachmentViewPagerActivity"
             android:windowSoftInputMode="stateHidden" />
 
         <!-- https://developers.google.com/drive/android/java-client -->
         <activity
-            android:name=".controller.lock.LockScreenActivity"
+            android:name="com.ndhunju.dailyjournal.controller.lock.LockScreenActivity"
             android:label="@string/title_activity_lock_screen" />
         <activity
-            android:name=".controller.party.PartyListActivity"
+            android:name="com.ndhunju.dailyjournal.controller.party.PartyListActivity"
             android:label="@string/title_item_list"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".controller.party.PartyDetailActivity"
+            android:name="com.ndhunju.dailyjournal.controller.party.PartyDetailActivity"
             android:label="@string/title_item_detail" >
         </activity>
         <activity
-            android:name=".controller.preference.MyPreferenceActivity"
+            android:name="com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity"
             android:label="@string/str_preference" />
 
-        <receiver android:name=".controller.AlarmReceiver" >
+        <receiver android:name="com.ndhunju.dailyjournal.controller.AlarmReceiver" >
         </receiver>
 
         <activity
-            android:name=".controller.ChartsActivity"
+            android:name="com.ndhunju.dailyjournal.controller.ChartsActivity"
             android:label="@string/title_activity_charts" >
         </activity>
 
-        <activity android:name=".controller.JournalPagerActivity"
+        <activity android:name="com.ndhunju.dailyjournal.controller.JournalPagerActivity"
             android:label="@string/title_activity_journal"/>
 
-        <activity android:name=".controller.backup.BackupActivity"
+        <activity android:name="com.ndhunju.dailyjournal.controller.backup.BackupActivity"
             android:label="@string/str_backup"/>
 
-        <activity android:name=".controller.SpannedLedgerListActivity"
+        <activity android:name="com.ndhunju.dailyjournal.controller.SpannedLedgerListActivity"
             android:label="@string/str_journal"/>
 
-        <activity android:name=".controller.SearchNotesActivity"/>
+        <activity android:name="com.ndhunju.dailyjournal.controller.SearchNotesActivity"/>
 
-        <activity android:name=".controller.ToolsActivity"
+        <activity android:name="com.ndhunju.dailyjournal.controller.ToolsActivity"
             android:label="@string/str_tools"/>
 
     </application>

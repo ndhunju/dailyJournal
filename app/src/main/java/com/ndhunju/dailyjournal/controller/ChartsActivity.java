@@ -9,13 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.PieChartFrag;
 import com.ndhunju.dailyjournal.service.Analytics;
-import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import java.util.Locale;
 

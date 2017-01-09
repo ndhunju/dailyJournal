@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
