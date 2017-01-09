@@ -48,6 +48,7 @@ public class PartyActivity extends AppCompatActivity {
 	private Services mServices;
 	private EditText phoneET;
     private EditText nameET;
+    private EditText noteET;
 	private Party mParty;
 
 	@Override
@@ -108,6 +109,9 @@ public class PartyActivity extends AppCompatActivity {
 		typeSpinner.setAdapter(new ArrayAdapter<>
                 (this, android.R.layout.simple_list_item_1, partyTypes));
 		typeSpinner.setSelection(mParty.getType().ordinal());
+
+        noteET = (EditText) findViewById(R.id.activity_party_note_et);
+        noteET.setText(mParty.getNote());
 		
 		Button okBtn = (Button)findViewById(R.id.activity_party_ok_btn);
 		okBtn.setOnClickListener(new OnClickListener() {
@@ -115,6 +119,7 @@ public class PartyActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				mParty.setName(nameET.getText().toString());
+                mParty.setNote(noteET.getText().toString());
 				mParty.setPhone(phoneET.getText().toString());
 				mParty.setType(Party.Type.valueOf(typeSpinner.getSelectedItem().toString()));
 

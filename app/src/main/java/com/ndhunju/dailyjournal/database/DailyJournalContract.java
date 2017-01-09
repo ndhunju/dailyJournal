@@ -31,16 +31,20 @@ public abstract class DailyJournalContract {
         String COL_PARTY_DR_AMT= "drAmt";
         String COL_PARTY_CR_AMT= "crAmt";
         String COL_PARTY_PICTURE = "picturePath";
+        String COL_PARTY_NOTE = "note";
+        String COL_PARTY_EXTRA = "extra";
 
         String SQL_CREATE_ENTRIES_PARTY =
                 "CREATE TABLE " + TABLE_PARTY +
                         " (" +
                         PARTY_ID + INTEGER + " PRIMARY KEY AUTOINCREMENT," +
                         COL_PARTY_NAME + TEXT_TYPE + "UNIQUE " + COMMA_SEP +
+                        COL_PARTY_NOTE + TEXT_TYPE + COMMA_SEP +
                         COL_PARTY_PHONE + TEXT_TYPE + COMMA_SEP +
                         COL_PARTY_TYPE + TEXT_TYPE + COMMA_SEP +
                         COL_PARTY_DR_AMT + DOUBLE + COMMA_SEP +
                         COL_PARTY_CR_AMT +  DOUBLE + COMMA_SEP +
+                        COL_PARTY_EXTRA +  TEXT_TYPE + COMMA_SEP +
                         COL_PARTY_PICTURE + TEXT_TYPE +
                         " )";
 
@@ -59,6 +63,7 @@ public abstract class DailyJournalContract {
         String COL_JOURNAL_AMOUNT = "amount";
         String COL_JOURNAL_NOTE = "note";
         String COL_PARTY_ID = "merchantId";
+        String COL_JOURNAL_EXTRA = "extra";
 
         String SQL_CREATE_ENTRIES_JOURNALS =
                 "CREATE TABLE " + TABLE_JOURNAL +
@@ -68,6 +73,7 @@ public abstract class DailyJournalContract {
                         COL_JOURNAL_ADDED_DATE + LONG + COMMA_SEP +
                         COL_JOURNAL_TYPE + TEXT_TYPE + COMMA_SEP +
                         COL_JOURNAL_AMOUNT + DOUBLE + COMMA_SEP +
+                        COL_JOURNAL_EXTRA +  TEXT_TYPE + COMMA_SEP +
                         COL_PARTY_ID + LONG +
                         " )";
 
@@ -81,6 +87,7 @@ public abstract class DailyJournalContract {
         //Values for Attachment Table
         String TABLE_NAME_ATTACHMENTS = "attachment";
         String ATTACHMENT_ID = "id";
+        String COL_ATTACHMENT_EXTRA = "extra";
         String COL_ATTACHMENT_NAME = "fileName";
         String COL_FK_JOURNAL_ID = "journalId";
 
@@ -89,6 +96,7 @@ public abstract class DailyJournalContract {
                         " (" +
                         ATTACHMENT_ID + INTEGER + " PRIMARY KEY AUTOINCREMENT," +
                         COL_ATTACHMENT_NAME + TEXT_TYPE + COMMA_SEP +
+                        COL_ATTACHMENT_EXTRA +  TEXT_TYPE + COMMA_SEP +
                         COL_FK_JOURNAL_ID + LONG +
                         " )";
 

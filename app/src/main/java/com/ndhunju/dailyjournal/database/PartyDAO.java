@@ -296,6 +296,7 @@ public class PartyDAO implements IPartyDAO {
         ContentValues values = new ContentValues();
         //values.put(PartyColumns.PARTY_ID, party.getId()); //will never change
         values.put(PartyColumns.COL_PARTY_NAME, party.getName());
+        values.put(PartyColumns.COL_PARTY_NOTE, party.getNote());
         values.put(PartyColumns.COL_PARTY_PHONE, party.getPhone());
         values.put(PartyColumns.COL_PARTY_TYPE, party.getType().toString());
         values.put(PartyColumns.COL_PARTY_DR_AMT, party.getDebitTotal());
@@ -307,6 +308,7 @@ public class PartyDAO implements IPartyDAO {
     private static Party fromCursor(Cursor c){
         long id = c.getLong(c.getColumnIndexOrThrow(PartyColumns.PARTY_ID));
         String name = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_NAME));
+        String note = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_NOTE));
         String phone = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_PHONE));
         //Since Debitors was corrected to Debtors, Type.valueOf("Debitors") throws error
         String typeStr = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_TYPE));
@@ -316,6 +318,7 @@ public class PartyDAO implements IPartyDAO {
         String picture = c.getString(c.getColumnIndexOrThrow(PartyColumns.COL_PARTY_PICTURE));
 
         Party party = new Party(name, id);
+        party.setNote(note);
         party.setPhone(phone);
         party.setType(type);
         party.setDebitTotal(drAmt);

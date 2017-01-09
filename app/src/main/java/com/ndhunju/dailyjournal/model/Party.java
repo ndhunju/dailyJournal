@@ -11,6 +11,7 @@ public class Party implements Serializable{
 	private long mId;
     private Type mType;
 	private String mName;
+	private String mNote;
 	private String mPhone;
 	private double mDebitTotal;
 	private String mPicturePath;
@@ -52,7 +53,15 @@ public class Party implements Serializable{
 	public void setName(String mName) {
 		this.mName = mName;
 	}
-	
+
+	public void setNote(String note) {
+		this.mNote = note;
+	}
+
+	public String getNote() {
+		return this.mNote;
+	}
+
 	public String getPhone() {
 		return mPhone;
 	}
