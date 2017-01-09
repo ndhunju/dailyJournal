@@ -89,6 +89,7 @@ public final class JsonConverterString extends JsonConverter{
         try{
             json.put(KEY_ID, party.getId());
             json.put(KEY_NAME, party.getName());
+            json.put(KEY_NOTE, party.getNote());
             json.put(KEY_PHONE, party.getPhone());
             json.put(KEY_DEBIT, party.getDebitTotal());
             json.put(KEY_CREDIT, party.getCreditTotal());
@@ -163,10 +164,12 @@ public final class JsonConverterString extends JsonConverter{
             double debit = json.getDouble(KEY_DEBIT);
             double credit = json.getDouble(KEY_CREDIT);
             String picPath = json.getString(KEY_PICTURE);
+            String note = json.has(KEY_NOTE) ? json.getString(KEY_NOTE) : "";
 
             Party newParty = new Party(name);
 
             newParty.setId(id);
+            newParty.setNote(note);
             newParty.setPhone(phone);
             newParty.setDebitTotal(debit);
             newParty.setCreditTotal(credit);

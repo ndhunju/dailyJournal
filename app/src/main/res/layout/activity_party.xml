@@ -103,7 +103,8 @@
             <EditText
                 android:id="@+id/activity_party_note_et"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_note"/>
 
             <Button
                 android:id="@+id/activity_party_ok_btn"
