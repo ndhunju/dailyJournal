@@ -130,7 +130,7 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         mInstrumentation.waitForIdleSync();
 
         //Check that the name is updated
-        assertEquals(((TextView) mPartyDetailActivity.findViewById(R.id.fragment_party_detail_name_tv)).getText(), (NEW_NAME));
+        assertEquals(((TextView) mPartyDetailActivity.findViewById(R.id.fragment_party_detail_name_tv)).getText().toString(), (NEW_NAME));
 
         //Unregister monitor for PartyActivity
         getInstrumentation().removeMonitor(activityMonitor);
