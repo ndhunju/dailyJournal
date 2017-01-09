@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         // The values in defaultConfig override those in the manifest file.
-        applicationId "com.ndhunju.dailyjournal"
+        applicationId "com.ndhunju.dailyjournalplus"
         minSdkVersion 14
         targetSdkVersion 23
 

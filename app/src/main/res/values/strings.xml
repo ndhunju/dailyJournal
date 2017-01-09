@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Daily Journal</string>
+    <string name="app_name">Daily Journal +</string>
      <string name="app_descrip">This accounting app allows you to record your
          daily transactions in the easiest way possible. It achieves easiness
          by altering the usual flow of journal entry.</string>
