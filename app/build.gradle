@@ -7,7 +7,7 @@ android {
     compileSdkVersion 23
     // Always use a build tools version whose major revision number is higher or equal to that of
     // your compilation target and target SDK.
-    buildToolsVersion "23.0.1"
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         // The values in defaultConfig override those in the manifest file.
