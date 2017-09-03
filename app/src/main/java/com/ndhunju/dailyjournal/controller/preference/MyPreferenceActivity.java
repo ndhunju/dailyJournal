@@ -11,7 +11,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment;
 import com.ndhunju.dailyjournal.controller.backup.TransferOldDataAsyncTask;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
@@ -108,19 +107,6 @@ public class MyPreferenceActivity extends AppCompatPreferenceActivity {
         //check pass code
         LockService.checkPassCode(MyPreferenceActivity.this);
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        switch(requestCode){
-            case BackupPreferenceFragment.REQUEST_CODE_GDRIVE_PICKER:
-            case BackupPreferenceFragment.REQUEST_CODE_GDRIVE_RESOLUTION:
-                //forward it to {@link BackupPreferenceFragment}
-                getFragmentManager().findFragmentByTag(BackupPreferenceFragment.TAG)
-                        .onActivityResult(requestCode, resultCode, data);
-                break;
-        }
     }
 
     @Override

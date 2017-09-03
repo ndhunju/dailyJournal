@@ -91,6 +91,14 @@
         <activity android:name="com.ndhunju.dailyjournal.controller.ToolsActivity"
             android:label="@string/str_tools"/>
 
+        <activity android:name=".controller.backup.GoogleDriveRestoreBackupActivity"
+            android:screenOrientation="locked"
+            android:label="@string/str_backup"/>
+
+        <activity android:name=".controller.backup.GoogleDriveUploadBackupActivity"
+            android:screenOrientation="locked"
+            android:label="@string/str_backup"/>
+
     </application>
 
 </manifest>

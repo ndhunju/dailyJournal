@@ -7,16 +7,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
@@ -27,19 +29,19 @@ import java.io.OutputStream;
  * class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
-public class UploadBackUpToGDriveAsync extends AsyncTask<Void,Void,Void> {
+public class UploadBackUpToGDriveAsync extends AsyncTask<DriveApi.DriveContentsResult, Integer, IntentSender> {
 
     private static final String TAG = UploadBackUpToGDriveAsync.class.getSimpleName();
 
     //variables
+    private FinishCallback<IntentSender> mFinishCallback;
     private GoogleApiClient mGoogleApiClient;
-    private int mReturnRequestCode;
     private Activity mActivity;
     private ProgressDialog pd;
 
-    public UploadBackUpToGDriveAsync(Activity activity, GoogleApiClient googleApiClient, int requestCode){
+    public UploadBackUpToGDriveAsync(Activity activity, GoogleApiClient googleApiClient, FinishCallback<IntentSender> resultCallback){
         mGoogleApiClient = googleApiClient;
-        mReturnRequestCode = requestCode;
+        mFinishCallback = resultCallback;
         mActivity = activity;
     }
 
@@ -50,73 +52,89 @@ public class UploadBackUpToGDriveAsync extends AsyncTask<Void,Void,Void> {
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
-        pd.setProgress(10);
         pd.setMax(100);
         pd.show();
+        pd.setProgress(10);
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected IntentSender doInBackground(DriveApi.DriveContentsResult... results) {
         //Create a new Content in google drive and set a callback
-        Drive.DriveApi.newDriveContents(mGoogleApiClient)
-                .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
-                    @Override
-                    public void onResult(DriveApi.DriveContentsResult result) {
-                        if (!result.getStatus().isSuccess()) { //Failed
-                            Log.i(TAG, "Failed to create new backup: " + result.getStatus().getStatusMessage());
-                            return;
-                        }
 
-                        // If successful write the data to the new contents.
-                        Log.i(TAG, "Content created.");
+        // Get an output stream for the contents.
+        OutputStream outputStream = results[0].getDriveContents().getOutputStream();
 
-                        // Get an output stream for the contents.
-                        OutputStream outputStream = result.getDriveContents().getOutputStream();
+        File backUpfile = null;
 
-                        File backUpfile = null;
+        try {
+            //Create a new full backup of data into local drive
+            Services s = Services.getInstance(mActivity);
+            String filePath = s.createBackUp(UtilsFile.getCacheDir(mActivity));
+            backUpfile = new File(filePath);
+            publishProgress(20);
 
-                        try {
-                            //Create a new full backup of data into local drive
-                            Services s = Services.getInstance(mActivity);
-                            String filePath = s.createBackUp(UtilsFile.getCacheDir(mActivity));
-                            backUpfile = new File(filePath);
-                            outputStream.write(UtilsFile.read(backUpfile));
+            InputStream ios = null;
+            try {
+                byte[] buffer = new byte[4096];
+                ios = new FileInputStream(backUpfile);
+                int read;
+                while ((read = ios.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, read);
+                }
+            } finally {
+                try {
+                    if (outputStream != null) outputStream.close();
+                } catch (IOException ignore) {
+                }
 
-                            //delete the backup file from internal storage
-                            UtilsFile.deleteFile(filePath);
+                try {
+                    if (ios != null) ios.close();
+                } catch (IOException ignore) {
+                }
+            }
+            publishProgress(60);
 
-                            // Create the initial metadata - MIME type and title.
-                            // Note that the user will be able to change the title later.
-                            MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                                    .setTitle(backUpfile.getName())
-                                    .setMimeType(UtilsFile.BACK_FILE_TYPE).build();
+            //delete the backup file from internal storage
+            UtilsFile.deleteFile(filePath);
+            publishProgress(80);
+
+            // Create the initial metadata - MIME type and title.
+            // Note that the user will be able to change the title later.
+            MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                    .setTitle(backUpfile.getName())
+                    .setMimeType(UtilsFile.BACK_FILE_TYPE).build();
+            publishProgress(90);
 
 
-                            // Create an intent for the file chooser, and start it.
-                            IntentSender intentSender = Drive.DriveApi
-                                    .newCreateFileActivityBuilder()
-                                    .setInitialMetadata(metadataChangeSet)
-                                    .setInitialDriveContents(result.getDriveContents())
-                                    .setActivityTitle(backUpfile.getName())
-                                    .build(mGoogleApiClient);
+            // Create an intent for the file chooser, and start it.
+            IntentSender intentSender = Drive.DriveApi
+                    .newCreateFileActivityBuilder()
+                    .setInitialMetadata(metadataChangeSet)
+                    .setInitialDriveContents(results[0].getDriveContents())
+                    .setActivityTitle(backUpfile.getName())
+                    .build(mGoogleApiClient);
+            publishProgress(100);
 
+            return intentSender;
+        } catch (IOException e1) {
+            Log.i(TAG, "Unable to write file contents.");
+        }
 
-                            //Show a Google Drive Picker where user can select the folder to save backup file in
-                            //It usu takes a while for Drive Picker to show up. So cancel gDrivePD at onActivityResult();
-                            mActivity.startIntentSenderForResult(intentSender, mReturnRequestCode, null, 0, 0, 0);
-
-                        } catch (IOException e1) {Log.i(TAG, "Unable to write file contents.");
-                        } catch (IntentSender.SendIntentException e) {Log.i(TAG, "Failed to launch file chooser.");}
-
-                        pd.cancel();
-                    }
-                });
         return null;
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        //this is called before the all the progress in background is complemeted
-        //pd.cancel();
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+        pd.setProgress(values[0]);
+        //Log.d(TAG, "progress " + values[0]);
+    }
+
+    @Override
+    protected void onPostExecute(IntentSender intentSender) {
+        pd.cancel();
+        if (mFinishCallback != null) {
+            mFinishCallback.onFinish(intentSender);
+        }
     }
 }

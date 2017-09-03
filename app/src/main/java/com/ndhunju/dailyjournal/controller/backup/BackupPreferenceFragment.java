@@ -4,18 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveId;
-import com.google.android.gms.drive.OpenFileActivityBuilder;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.PreferenceService;
@@ -31,7 +25,7 @@ import java.util.List;
 
 /**
  * Created by dhunju on 10/8/2015.
- * This Activity allows users to create/restore backup from Google drive/SD Card
+ * This fragment allows users to create/restore backup from Google drive/SD Card
  * as well as set Automatic Backup and erase all data
  */
 public class BackupPreferenceFragment extends PreferenceFragment implements OnDialogBtnClickedListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -43,15 +37,8 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
     private static final int REQUEST_CODE_PICK_JSON = 1235;
     private static final int REQUEST_CODE_PICK_BACKUP = 8489;
     private static final int REQUEST_CODE_BACKUP_DIR = 3561;
-
-    //For Google Drive Api
-    private static final int REQUEST_CODE_GDRIVE_CREATOR = 1185;
-    public static final int REQUEST_CODE_GDRIVE_PICKER = 1189;
-    public static final int REQUEST_CODE_GDRIVE_RESOLUTION = 1258;
     private static final int REQUEST_CODE_BACKUP_DIR_PRINTABLE = 1264;
 
-
-    private GoogleApiClientManager mGoogleClientMgr;
     private PreferenceService preferenceService;
 
 
@@ -72,57 +59,20 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        mGoogleClientMgr = new GoogleApiClientManager(getActivity());
-                        //Initiate the connection to create a file in drive
-                        mGoogleClientMgr.connectGoogleApiClient(new GoogleApiClient.ConnectionCallbacks() {
-                            @Override
-                            public void onConnected(Bundle bundle) {
-                                new UploadBackUpToGDriveAsync(getActivity(),
-                                        mGoogleClientMgr.getGoogleApiClient(), REQUEST_CODE_GDRIVE_CREATOR).execute();
-                            }
-
-                            @Override
-                            public void onConnectionSuspended(int i) {
-                            }
-                        }, REQUEST_CODE_GDRIVE_RESOLUTION);
-
+                        startActivity(new Intent(getActivity(), GoogleDriveUploadBackupActivity.class));
                         return true;
                     }
-
                 });
 
         findPreference(getString(R.string.key_pref_restore_google_drive))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        mGoogleClientMgr = new GoogleApiClientManager(getActivity());
                         UtilsView.alert(getActivity(), getString(R.string.warning_restore),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        //TODO It's taking too long to download file and progress bar is not working either
-                                        //connect to pick a file from drive
-                                        mGoogleClientMgr
-                                                .connectGoogleApiClient(new GoogleApiClient.ConnectionCallbacks() {
-                                                    @Override
-                                                    public void onConnected(Bundle bundle) {
-                                                        IntentSender intentSender = Drive
-                                                                .DriveApi
-                                                                .newOpenFileActivityBuilder()
-                                                                .setMimeType(new String[]{UtilsFile.BACK_FILE_TYPE})
-                                                                .build(mGoogleClientMgr.getGoogleApiClient());
-                                                        try {
-                                                            getActivity().startIntentSenderForResult(intentSender, REQUEST_CODE_GDRIVE_PICKER, null, 0, 0, 0);
-                                                        } catch (IntentSender.SendIntentException e) {
-                                                            Log.w(TAG, "Unable to send intent", e);
-                                                        }
-                                                    }
-
-                                                    @Override
-                                                    public void onConnectionSuspended(int i) {
-                                                        Log.i(TAG, "GoogleApiClient connection suspended. Cause = " + i);
-                                                    }
-                                                }, REQUEST_CODE_GDRIVE_RESOLUTION);
+                                        startActivity(new Intent(getActivity(), GoogleDriveRestoreBackupActivity.class));
                                     }
                                 }, null);
                         return true;
@@ -247,19 +197,6 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
         String msg = "";
         getActivity().setResult(resultCode);
         switch (requestCode) {
-            case REQUEST_CODE_GDRIVE_CREATOR:   // Called after the file is created in the google drive.
-                //Format the message
-                msg = String.format(getString(R.string.msg_exporting), resultCode == Activity.RESULT_OK
-                        ? getString(R.string.str_finished) : getString(R.string.str_failed));
-                UtilsView.alert(getActivity(), msg);
-
-                break;
-
-            case REQUEST_CODE_GDRIVE_RESOLUTION:    //Called after google drive connection issue has been resolved
-                Log.i(TAG, "Activity result request code resolution");
-                // Make sure the app is not already connected or attempting to connect
-                mGoogleClientMgr.connect();
-                break;
 
             //Currently this feature is disabled. User needs some technical knowledge to use this
             case REQUEST_CODE_PICK_JSON:     //Called when the user has picked a json file to restore data from
@@ -292,18 +229,6 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 new RestoreBackUpAsync(getActivity()).execute(selectedFile.getPath());
 
                 break;
-
-            case REQUEST_CODE_GDRIVE_PICKER://User picks a file from Google Drive
-
-                if (resultCode == Activity.RESULT_OK) {
-                    DriveId driveId = (DriveId) data
-                            .getParcelableExtra(OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
-                    Log.d(TAG, "Selected file's ID: " + driveId);
-                    //Download the file in background thread
-                    new FetchBackUpFromGDriveAsync(getActivity(), mGoogleClientMgr.getGoogleApiClient()).execute(driveId);
-                }
-                break;
-
         }
     }
 
@@ -405,9 +330,4 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
         return builder.create();
     }
 
-    @Override
-    public void onDestroy() {
-        if (mGoogleClientMgr != null) mGoogleClientMgr.disconnect();
-        super.onDestroy();
-    }
 }
