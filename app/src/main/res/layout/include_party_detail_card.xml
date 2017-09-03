@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/fragment_party_detail_circle_iv"
-            android:layout_width="@dimen/party_pic_width"
-            android:layout_height="@dimen/party_pic_width"
+            android:layout_width="@dimen/party_ledger_pic_width"
+            android:layout_height="@dimen/party_ledger_pic_width"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_gravity="left"
