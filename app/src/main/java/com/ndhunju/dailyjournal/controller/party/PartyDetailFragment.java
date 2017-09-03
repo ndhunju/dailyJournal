@@ -256,10 +256,14 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
         totalCr.setTextColor(ContextCompat.getColor(getContext(), R.color.red_medium));
         TextView totalDr = (TextView) footerRow.findViewById(R.id.ledger_card_footer_dr_total);
         totalDr.setTextColor(ContextCompat.getColor(getContext(), R.color.green_medium));
+        TextView totalTV = (TextView) footerRow.findViewById(R.id.ledger_card_footer_total);
 
         totalCr.setText(String.format(Locale.getDefault(), "%1$s%2$s", UtilsFormat.formatCurrency(party.getCreditTotal(), getActivity()), getString(R.string.str_cr)));
         totalDr.setText(String.format(Locale.getDefault(), "%1$s%2$s", UtilsFormat.formatCurrency(party.getDebitTotal(), getActivity()), getString(R.string.str_dr)));
-        addAttributes(TextUtils.TruncateAt.MARQUEE, totalCr, totalDr);
+        double total = party.getCreditTotal() - party.getDebitTotal();
+        totalTV.setText(UtilsFormat.formatCurrency(total, getContext()));
+        
+        addAttributes(TextUtils.TruncateAt.MARQUEE, totalCr, totalDr, totalTV);
         return footerRow;
     }
 

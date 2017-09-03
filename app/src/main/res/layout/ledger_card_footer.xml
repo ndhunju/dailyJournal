@@ -39,6 +39,15 @@
                 android:text="152.36"
                 android:layout_gravity="right"
                 android:textSize="@dimen/text_size_medium" />
+
+            <TextView
+                android:id="@+id/ledger_card_footer_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="152.36"
+                android:layout_gravity="right"
+                android:textSize="@dimen/text_size_medium"
+                android:background="@drawable/top_border"/>
         </LinearLayout>
 
 </LinearLayout>
