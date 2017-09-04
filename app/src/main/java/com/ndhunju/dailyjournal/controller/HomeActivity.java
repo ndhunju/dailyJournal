@@ -43,25 +43,27 @@ public class HomeActivity extends NavDrawerActivity {
 			}
 		});
 
-		setCompanySettings();
-
 		mServices = Services.getInstance(getContext());
+
+		setCompanySettings();
 
 		setUserBalance();
 
 	}
 
-	private void setCompanySettings() {
+	private boolean setCompanySettings() {
 		PreferenceService preferenceService = PreferenceService.from(this);
 		String companyName = preferenceService.getVal(R.string.key_company_name, "");
 		long startingYearDate = preferenceService.getVal(R.string.key_financial_year, new Date().getTime());
 
 		if (TextUtils.isEmpty(companyName)) {
 			startActivityForResult(new Intent(getContext(), CompanySettingsActivity.class), REQUEST_CODE_COMPANY_SETTING);
+			return false;
 		}
 
 		mCompanyName.setText(companyName);
 		mFinancialYear.setText(getString(R.string.msg_financial_year, UtilsFormat.formatDate(new Date(startingYearDate), getContext())));
+		return true;
 	}
 
 	private void setUserBalance() {

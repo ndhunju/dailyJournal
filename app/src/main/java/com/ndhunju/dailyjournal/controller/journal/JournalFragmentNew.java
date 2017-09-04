@@ -235,6 +235,12 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                     return;
                 }
 
+                // check if the selected date is within current financial year
+                if (!mServices.isWithinFinancialYear(tempJournal.getDate())) {
+                    UtilsView.alert(getActivity(), getString(R.string.msg_date_not_in_range, UtilsFormat.formatDate(mServices.getFinancialYear(), getContext())));
+                    return;
+                }
+
                 mServices.updateNewJournal(tempJournal);
                 //Save selected values so that user doesn't have to selected them again
                 long selectedDate = tempJournal.getDate();

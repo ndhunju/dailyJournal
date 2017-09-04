@@ -203,6 +203,13 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		saveJournalBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+				// check if the selected date is within current financial year
+				if (!mServices.isWithinFinancialYear(mJournal.getDate())) {
+					UtilsView.alert(getActivity(), getString(R.string.msg_date_not_in_range, UtilsFormat.formatDate(mServices.getFinancialYear(), getContext())));
+                    return;
+				}
+
                 try{
 					UtilsFormat.parseCurrency(amountEt.getText().toString(), getActivity());
 					if (journalChanged) {

@@ -43,4 +43,6 @@
     <string name="msg_text_format_issue">(If the report is not formatted properly, use a monospaced font like COURIER)</string>
 
     <string name="msg_financial_year">From %1$s</string>
+
+    <string name="msg_date_not_in_range">Selected date is not in the range of current financial year, %s</string>
 </resources>

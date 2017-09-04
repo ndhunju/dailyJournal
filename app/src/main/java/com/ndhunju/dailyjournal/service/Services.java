@@ -7,6 +7,7 @@ import android.media.MediaScannerConnection;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
 import com.ndhunju.dailyjournal.database.DailyJournalContract;
 import com.ndhunju.dailyjournal.database.DbHelper;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -33,6 +35,7 @@ public class Services {
 
 	//Variables
 	private Context mContext;
+	private Date mCurrentFinancialYear;
 	private SQLiteOpenHelper mSqLiteOpenHelper;
 
 	//DAOs
@@ -55,22 +58,21 @@ public class Services {
 
 	//Constructor
 	private Services(@NonNull Context context) {
-		mContext = context;
-		mSqLiteOpenHelper = new DbHelper(mContext);
-		partyDAO = new PartyDAO(mSqLiteOpenHelper);
-		journalDAO = new JournalDAO(mSqLiteOpenHelper);
-		attachmentDAO = new AttachmentDAO(mSqLiteOpenHelper);
+		init(context, new DbHelper(context));
 	}
 
     private Services(Context context, SQLiteOpenHelper sqLiteOpenHelper){
-        mContext = context;
-        mSqLiteOpenHelper = sqLiteOpenHelper;
-        partyDAO = new PartyDAO(mSqLiteOpenHelper);
-        journalDAO = new JournalDAO(mSqLiteOpenHelper);
-        attachmentDAO = new AttachmentDAO(mSqLiteOpenHelper);
-
-
+        init(context, sqLiteOpenHelper);
     }
+
+    private void init(Context context, SQLiteOpenHelper sqLiteOpenHelper) {
+		mContext = context;
+		mSqLiteOpenHelper = sqLiteOpenHelper;
+		partyDAO = new PartyDAO(mSqLiteOpenHelper);
+		journalDAO = new JournalDAO(mSqLiteOpenHelper);
+		attachmentDAO = new AttachmentDAO(mSqLiteOpenHelper);
+		mCurrentFinancialYear = calculateFinancialYear();
+	}
 
     /**
      * Creates a backup file of existing data along with attachments.
@@ -481,6 +483,38 @@ public class Services {
     public List<Journal> findByDate(long start, long end) {
         return journalDAO.findByDate(start, end);
     }
+
+	private Date calculateFinancialYear() {
+		return new Date(PreferenceService.from(mContext).getVal(R.string.key_financial_year, System.currentTimeMillis()));
+	}
+
+	public Date getFinancialYear() {
+		return mCurrentFinancialYear;
+	}
+
+	// declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
+	private Calendar calendar = Calendar.getInstance();
+
+    public boolean isWithinFinancialYear(long date) {
+
+		calendar.setTime(getFinancialYear());
+		int startDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+		int startYear = calendar.get(Calendar.YEAR);
+
+		calendar.add(Calendar.YEAR, 1);
+		int endDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+		int endYear = calendar.get(Calendar.YEAR);
+
+		calendar.setTimeInMillis(date);
+		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+		int year = calendar.get(Calendar.YEAR);
+
+		return dayOfYear >= startDayOfYear  // equal or greater than start day
+				&& dayOfYear < endDayOfYear // less than end day
+				&& year >= startYear 		// equal or greater than start year
+				&& year <= endYear;			// equal or less than end year
+
+	}
 
 	/********************ATTACHMENT SERVICES ************************/
 
