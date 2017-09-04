@@ -60,7 +60,10 @@ public class IconTextAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_nav_icon_text, parent, false);
+        if (convertView == null || convertView.getId() != R.id.item_nav_icon_text_parent) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_nav_icon_text, parent, false);
+        }
+
         textView  = (TextView) convertView.findViewById(R.id.text);
         imageView = (ImageView) convertView.findViewById(R.id.icon_image);
 
