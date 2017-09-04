@@ -7,7 +7,6 @@ import android.media.MediaScannerConnection;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
 import com.ndhunju.dailyjournal.database.DailyJournalContract;
 import com.ndhunju.dailyjournal.database.DbHelper;
@@ -33,8 +32,13 @@ import java.util.List;
 
 public class Services {
 
+    // Constants
+    private static final String KEY_COMPANY_NAME = Services.class.getName() + "KEY_COMPANY_NAME ";
+    private static final String KEY_FINANCIAL_YEAR = Services.class.getName() + "KEY_FINANCIAL_YEAR";
+
 	//Variables
 	private Context mContext;
+    private String mCompanyName;
 	private Date mCurrentFinancialYear;
 	private SQLiteOpenHelper mSqLiteOpenHelper;
 
@@ -71,7 +75,8 @@ public class Services {
 		partyDAO = new PartyDAO(mSqLiteOpenHelper);
 		journalDAO = new JournalDAO(mSqLiteOpenHelper);
 		attachmentDAO = new AttachmentDAO(mSqLiteOpenHelper);
-		mCurrentFinancialYear = calculateFinancialYear();
+
+		loadCompanyInfoFromPreferences();
 	}
 
     /**
@@ -484,13 +489,41 @@ public class Services {
         return journalDAO.findByDate(start, end);
     }
 
-	private Date calculateFinancialYear() {
-		return new Date(PreferenceService.from(mContext).getVal(R.string.key_financial_year, System.currentTimeMillis()));
-	}
+    private void loadCompanyInfoFromPreferences() {
+        PreferenceService preferenceService = PreferenceService.from(mContext);
+        mCompanyName = preferenceService.getVal(KEY_COMPANY_NAME, "");
+
+        long now = System.currentTimeMillis();
+        long financialYear = preferenceService.getVal(KEY_FINANCIAL_YEAR, now /* default value */);
+        if (now != financialYear) {
+            // set mCurrentFinancialYear only if not same as default value
+            mCurrentFinancialYear = new Date(financialYear);
+        }
+    }
+
+    public String getCompanyName() {
+        return mCompanyName;
+    }
+
+    public void setCompanyName(String name) {
+        mCompanyName = name;
+        PreferenceService.from(mContext).putVal(KEY_COMPANY_NAME, name);
+    }
 
 	public Date getFinancialYear() {
 		return mCurrentFinancialYear;
 	}
+
+	public void setFinancialYear(Date financialYear) throws Exception {
+        if (mCurrentFinancialYear != null) {
+            // don't allow to change mCurrentFinancialYear if already set because there could be
+            // journal with date that might be outside the range of this new financial year
+            throw new IllegalStateException("Current financial year is already set.");
+        }
+
+        mCurrentFinancialYear = financialYear;
+        PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
+    }
 
 	// declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
 	private Calendar calendar = Calendar.getInstance();

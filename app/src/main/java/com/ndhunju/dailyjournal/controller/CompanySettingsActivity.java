@@ -12,8 +12,9 @@ import android.widget.EditText;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
-import com.ndhunju.dailyjournal.service.PreferenceService;
+import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
+import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.Calendar;
@@ -27,7 +28,7 @@ public class CompanySettingsActivity extends AppCompatActivity implements OnDial
     Button dateBtn;
     Button doneBtn;
 
-    PreferenceService preferenceService;
+    Services services;
     Date financialYear;
 
     @Override
@@ -36,7 +37,7 @@ public class CompanySettingsActivity extends AppCompatActivity implements OnDial
         setContentView(R.layout.activity_company_settings);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        preferenceService = PreferenceService.from(getContext());
+        services = Services.getInstance(getContext());
 
         companyNameEt = (EditText) findViewById(R.id.activity_company_settings_company_name_et);
 
@@ -58,15 +59,27 @@ public class CompanySettingsActivity extends AppCompatActivity implements OnDial
                     return;
                 }
 
-                preferenceService.putVal(R.string.key_company_name, companyNameEt.getText().toString())
-                        .putVal(R.string.key_financial_year, financialYear.getTime());
+                services.setCompanyName(companyNameEt.getText().toString());
+                try {
+                    services.setFinancialYear(financialYear);
+                } catch (IllegalStateException ex) {
+                    UtilsView.alert(getContext(), getString(R.string.msg_financial_year_set, services.getFinancialYear()));
+                    return;
+                } catch (Exception ex) {
+                    UtilsView.alert(getContext(), getString(R.string.msg_is_not_valid, getString(R.string.str_date)));
+                    return;
+                }
 
                 finish();
             }
         });
 
-        companyNameEt.setText(preferenceService.getVal(R.string.key_company_name, ""));
-        financialYear = new Date(preferenceService.getVal(R.string.key_financial_year, System.currentTimeMillis()));
+        companyNameEt.setText(services.getCompanyName());
+        if (services.getFinancialYear() != null) {
+            financialYear = new Date(services.getFinancialYear().getTime());
+        } else {
+            financialYear = new Date();
+        }
         dateBtn.setText(UtilsFormat.formatDate(financialYear, this));
 
     }

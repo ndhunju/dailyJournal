@@ -76,7 +76,7 @@ public class PreferenceService {
      * @return
      */
     public String getVal(@StringRes int resKeyId, String defaultVal){
-        return getSharedPreference().getString(getKey(resKeyId), defaultVal);
+        return getVal(getKey(resKeyId), defaultVal);
     }
 
     /**
@@ -107,18 +107,26 @@ public class PreferenceService {
     }
 
     public long getVal(@StringRes int resKeyId, long defaultVal){
-        return Long.parseLong(getSharedPreference().getString(getKey(resKeyId),
+        return getVal(getKey(resKeyId), defaultVal);
+    }
+
+    public long getVal(String key, long defaultVal) {
+        return Long.parseLong(getSharedPreference().getString(key,
                 String.valueOf(defaultVal)));
     }
 
-    public PreferenceService putVal(@StringRes int resKeyId, String value) {
-        getSharedPreference().edit().putString(getKey(resKeyId), value).apply();
+    public String getVal(String key, String defaultVal){
+        return getSharedPreference().getString(key, defaultVal);
+    }
+
+    public PreferenceService putVal(String key, String value) {
+        getSharedPreference().edit().putString(key, value).apply();
         return this;
     }
 
-    public PreferenceService putVal(@StringRes int resKeyId, long value) {
+    public PreferenceService putVal(String key, long value) {
         // store all values as String as preference_backup.xml does it so
-        getSharedPreference().edit().putString(getKey(resKeyId), String.valueOf(value)).apply();
+        getSharedPreference().edit().putString(key, String.valueOf(value)).apply();
         return this;
     }
 

@@ -22,7 +22,4 @@
     <string name="key_pref_cr_choice">preferenceCrChoiceLP</string>
     <string name="key_pref_journal_choice">preferenceJournalChoiceLP</string>
     <string name="key_pref_party_choice">preferencePartyChoiceLP</string>
-    <string name="key_company_name">key_company_name</string>
-    <string name="key_financial_year">key_financial_year</string>
-
 </resources>
