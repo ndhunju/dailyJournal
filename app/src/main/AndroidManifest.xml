@@ -31,6 +31,11 @@
             android:name="com.ndhunju.dailyjournal.controller.service.AutoBackupService"
             android:exported="false" />
 
+        <activity
+            android:name=".controller.CompanySettingsActivity"
+            android:label="@string/title_activity_company_settings"
+            />
+
         <activity android:name="com.ndhunju.dailyjournal.controller.HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

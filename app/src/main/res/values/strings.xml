@@ -14,6 +14,7 @@
     <string name="title_activity_journal">New Journal</string>
     <string name="title_activity_lock_screen">Lock Screen</string>
     <string name="title_activity_charts">Charts</string>
+    <string name="title_activity_company_settings">Welcome</string>
 
     <!-- Summary -->
     <string name="sum_pincode_val">Enter the pin code</string>
@@ -60,6 +61,7 @@
     <string name="str_information">Information</string>
     <string name="str_select">Select</string>
     <string name="str_google_drive">Google Drive</string>
+    <string name="str_financial_year">Financial Year</string>
     <string name="str_attch_delete">Attachment Deleted</string>
     <string name="str_new_folder_name">New folder name</string>
     <string name="str_export_printable">Export Printable</string>

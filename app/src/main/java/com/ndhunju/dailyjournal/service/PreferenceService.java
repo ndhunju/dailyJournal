@@ -111,6 +111,17 @@ public class PreferenceService {
                 String.valueOf(defaultVal)));
     }
 
+    public PreferenceService putVal(@StringRes int resKeyId, String value) {
+        getSharedPreference().edit().putString(getKey(resKeyId), value).apply();
+        return this;
+    }
+
+    public PreferenceService putVal(@StringRes int resKeyId, long value) {
+        // store all values as String as preference_backup.xml does it so
+        getSharedPreference().edit().putString(getKey(resKeyId), String.valueOf(value)).apply();
+        return this;
+    }
+
 
     public boolean clear(){
         return getSharedPreference().edit().clear().commit();

@@ -41,4 +41,6 @@
 
     <!-- This message is included in the text file report. -->
     <string name="msg_text_format_issue">(If the report is not formatted properly, use a monospaced font like COURIER)</string>
+
+    <string name="msg_financial_year">From %1$s</string>
 </resources>
