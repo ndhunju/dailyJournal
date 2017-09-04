@@ -262,7 +262,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
         totalDr.setText(String.format(Locale.getDefault(), "%1$s%2$s", UtilsFormat.formatCurrency(party.getDebitTotal(), getActivity()), getString(R.string.str_dr)));
         double total = party.getCreditTotal() - party.getDebitTotal();
         totalTV.setText(UtilsFormat.formatCurrency(total, getContext()));
-        
+
         addAttributes(TextUtils.TruncateAt.MARQUEE, totalCr, totalDr, totalTV);
         return footerRow;
     }
@@ -270,7 +270,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_party_activity, menu);
-        UtilsView.setMenuIconTint(menu, ContextCompat.getColor(getContext(), R.color.icon_tint_menu));
+        if (getContext() != null) UtilsView.setMenuIconTint(menu, ContextCompat.getColor(getContext(), R.color.icon_tint_menu));
         super.onCreateOptionsMenu(menu, inflater);
     }
 
