@@ -72,22 +72,11 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
             UtilsFile.deleteDirectory(appFolder);
 
             //Unzip the files into app folder
-            UtilsZip.unzip(new File(params[0]), appFolder);
+            UtilsZip.unzip(new File(filePath), appFolder);
 
-            //Get data from json file
-            JsonConverterString converter = JsonConverterString.getInstance(mActivity);
-
-            //search .json file
+            //load .json and .properties files
             File[] files = appFolder.listFiles();
-            for (int i = files.length - 1; i >= 0; i--)
-                if (files[i].isFile() && files[i].getName().endsWith(".json")) {
-                    if (!converter.readFromJSON(files[i].getAbsolutePath()))
-                        return false;
-                    //takes the first json file from the last
-                    //name of json file has date on it so the latest json file
-                    //wil likely be at the bottom of the list
-                    break;
-                }
+            Services.getInstance(mActivity).loadFromJsonAndPropertiesFile(files, JsonConverterString.getInstance(mActivity));
 
             //to let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(mActivity, new String[]{appFolder.getAbsolutePath()}

@@ -132,22 +132,11 @@ public class FetchBackUpFromGDriveAsync extends AsyncTask<DriveId, Integer, Bool
             UtilsZip.unzip(backUpFileFromGDrive, appFolder);
             publishProgress(80);
 
-            //search .json file
+            //load .json and .properties files
             File[] files = appFolder.listFiles();
-
-            JsonConverterString converter = JsonConverterString.getInstance(mActivity);
-            publishProgress(90);
-
             publishProgress(SHOW_INDETERMINATE_PROGRESS);
-            for (int i = files.length - 1; i >= 0; i--)
-                if (files[i].isFile() && files[i].getName().endsWith(".json")) {
-                    if(!converter.readFromJSON(files[i].getAbsolutePath()))
-                        return null;
-                    //takes the first json file from the last
-                    //name of json file has date on it so the latest json file
-                    //wil likely be at the bottom of the list
-                    break;
-                }
+            return Services.getInstance(mActivity).loadFromJsonAndPropertiesFile(files, JsonConverterString.getInstance(mActivity));
+
 
         } catch (Exception ex) {
             Log.e(TAG, "Error copying file to local drive:" + ex.getMessage());

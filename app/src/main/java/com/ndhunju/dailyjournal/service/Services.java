@@ -18,16 +18,22 @@ import com.ndhunju.dailyjournal.database.PartyDAO;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.json.JsonConverter;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsZip;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 
 public class Services {
@@ -35,49 +41,50 @@ public class Services {
     // Constants
     private static final String KEY_COMPANY_NAME = Services.class.getName() + "KEY_COMPANY_NAME ";
     private static final String KEY_FINANCIAL_YEAR = Services.class.getName() + "KEY_FINANCIAL_YEAR";
+    private static final String FILE_COMPANY_INFO = "info.properties";
 
-	//Variables
-	private Context mContext;
+    //Variables
+    private Context mContext;
     private String mCompanyName;
-	private Date mCurrentFinancialYear;
-	private SQLiteOpenHelper mSqLiteOpenHelper;
+    private Date mCurrentFinancialYear;
+    private SQLiteOpenHelper mSqLiteOpenHelper;
 
-	//DAOs
-	private IPartyDAO partyDAO;
-	private IJournalDAO journalDAO;
-	private IAttachmentDAO attachmentDAO;
+    //DAOs
+    private IPartyDAO partyDAO;
+    private IJournalDAO journalDAO;
+    private IAttachmentDAO attachmentDAO;
 
-	//Static variable
-	private static Services mServices;
+    //Static variable
+    private static Services mServices;
 
-	public static Services getInstance(Context con) {
-		if (mServices == null)	mServices = new Services(con);
-		return mServices;
-	}
+    public static Services getInstance(Context con) {
+        if (mServices == null)	mServices = new Services(con);
+        return mServices;
+    }
 
-	public static Services getInstance(Context con, SQLiteOpenHelper sqLiteOpenHelper) {
-		if (mServices == null)	mServices = new Services(con, sqLiteOpenHelper);
-		return mServices;
-	}
+    public static Services getInstance(Context con, SQLiteOpenHelper sqLiteOpenHelper) {
+        if (mServices == null)	mServices = new Services(con, sqLiteOpenHelper);
+        return mServices;
+    }
 
-	//Constructor
-	private Services(@NonNull Context context) {
-		init(context, new DbHelper(context));
-	}
+    //Constructor
+    private Services(@NonNull Context context) {
+        init(context, new DbHelper(context));
+    }
 
     private Services(Context context, SQLiteOpenHelper sqLiteOpenHelper){
         init(context, sqLiteOpenHelper);
     }
 
     private void init(Context context, SQLiteOpenHelper sqLiteOpenHelper) {
-		mContext = context;
-		mSqLiteOpenHelper = sqLiteOpenHelper;
-		partyDAO = new PartyDAO(mSqLiteOpenHelper);
-		journalDAO = new JournalDAO(mSqLiteOpenHelper);
-		attachmentDAO = new AttachmentDAO(mSqLiteOpenHelper);
+        mContext = context;
+        mSqLiteOpenHelper = sqLiteOpenHelper;
+        partyDAO = new PartyDAO(mSqLiteOpenHelper);
+        journalDAO = new JournalDAO(mSqLiteOpenHelper);
+        attachmentDAO = new AttachmentDAO(mSqLiteOpenHelper);
 
-		loadCompanyInfoFromPreferences();
-	}
+        loadCompanyInfoFromPreferences();
+    }
 
     /**
      * Creates a backup file of existing data along with attachments.
@@ -93,10 +100,14 @@ public class Services {
         //2.1 Get the app folder
         File directoryToZip = UtilsFile.getAppFolder(mContext);
 
+        File infoFile = new File(directoryToZip.getPath(), FILE_COMPANY_INFO);
+        if (!infoFile.exists()) infoFile.createNewFile();
+        storeCompanyInfoInFile(infoFile);
+
         //2.2 get backup Folder. Backup file will be created here
         File backupFolder = new File(dir);
-		//if the file doesn't exit choose default folder
-		if(!backupFolder.exists())  backupFolder = UtilsFile.getAppFolder(false);
+        //if the file doesn't exit choose default folder
+        if(!backupFolder.exists())  backupFolder = UtilsFile.getAppFolder(false);
 
 
         //2.3 create a zip file in not hidden app folder so that user can use it
@@ -109,11 +120,60 @@ public class Services {
 
         //let know that a new file has been created so that it appears in the computer
         MediaScannerConnection.scanFile(mContext,
-                    new String[]{backupFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
+                new String[]{backupFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
 
         Log.i("BackUp", "Backup file created");
 
         return zipFile.getAbsolutePath();
+    }
+
+    public boolean loadFromJsonAndPropertiesFile(File[] files, JsonConverter converter) {
+        boolean foundJson = false, foundProperties = false;
+        for (int i = files.length - 1; i >= 0; i--) {
+            if (!foundJson && files[i].isFile() && files[i].getName().endsWith(".json")) {
+                if (!converter.readFromJSON(files[i].getAbsolutePath()))
+                    return false;
+                //takes the first json file from the last
+                //name of json file has date on it so the latest json file
+                //wil likely be at the bottom of the list
+                foundJson = true;
+            } else if (!foundProperties && files[i].isFile() && files[i].getName().endsWith(".properties")) {
+                loadCompanyInfoFromFile(files[i]);
+                foundProperties = true;
+            }
+
+            if (foundJson && foundProperties) {
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    public void storeCompanyInfoInFile(File infoFile) {
+        try {
+            OutputStream infoFileOutputStream = new FileOutputStream(infoFile);
+            Properties properties = new Properties();
+            properties.setProperty(KEY_COMPANY_NAME, getCompanyName());
+            properties.setProperty(KEY_FINANCIAL_YEAR, String.valueOf(getFinancialYear().getTime()));
+            properties.store(infoFileOutputStream, "");
+            infoFileOutputStream.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void loadCompanyInfoFromFile(File infoFile) {
+        try {
+            Properties properties = new Properties();
+            InputStream inputStream = new FileInputStream(infoFile);
+            properties.load(inputStream);
+            inputStream.close();
+            setCompanyName(properties.getProperty(KEY_COMPANY_NAME));
+            setFinancialYear(new Date(Long.parseLong(properties.getProperty(KEY_FINANCIAL_YEAR))));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -124,44 +184,44 @@ public class Services {
         return  mContext;
     }
 
-	/********************PARTY SERVICES ************************/
+    /********************PARTY SERVICES ************************/
 
-	public void registerPartyObserver(PartyDAO.Observer observer) {
-		partyDAO.registerObserver(observer);
-	}
+    public void registerPartyObserver(PartyDAO.Observer observer) {
+        partyDAO.registerObserver(observer);
+    }
 
-	public void unregisterPartyObserver(PartyDAO.Observer observer) {
-		partyDAO.unregisterObserver(observer);
-	}
+    public void unregisterPartyObserver(PartyDAO.Observer observer) {
+        partyDAO.unregisterObserver(observer);
+    }
 
-	public Party getParty(long partyId) {
-		return partyDAO.find(partyId);
-	}
+    public Party getParty(long partyId) {
+        return partyDAO.find(partyId);
+    }
 
-	// Possible logic for caching and using cached value in the memory
+    // Possible logic for caching and using cached value in the memory
 //	public Party getPartyFromCache(Long partyId) {
 //		return partyDAO.findInCacheFirst(partyId);
 //	}
 
 
-	public ArrayList<Party> getParties() {
-		ArrayList<Party> parties = (ArrayList<Party>) partyDAO.findAll();
-		if(parties != null) return parties;
-		return new ArrayList<>();
+    public ArrayList<Party> getParties() {
+        ArrayList<Party> parties = (ArrayList<Party>) partyDAO.findAll();
+        if(parties != null) return parties;
+        return new ArrayList<>();
 
-	}
+    }
 
-	public String[] getPartyNameAsArray(){
-		return partyDAO.getNamesAsArray();
-	}
+    public String[] getPartyNameAsArray(){
+        return partyDAO.getNamesAsArray();
+    }
 
-	/**
-	 * Adds passed party to the database
-	 * @param party
-	 */
-	public long addParty(Party party) {
-		return partyDAO.create(party);
-	}
+    /**
+     * Adds passed party to the database
+     * @param party
+     */
+    public long addParty(Party party) {
+        return partyDAO.create(party);
+    }
 
     /**
      * Adds party with passed name argument and returns a party
@@ -169,12 +229,12 @@ public class Services {
      * @param name
      * @return
      */
-	public Party addParty(String name){
-		Party party = new Party(name);
-		long partyId = addParty(party);
-		party.setId(partyId);
-		return party;
-	}
+    public Party addParty(String name){
+        Party party = new Party(name);
+        long partyId = addParty(party);
+        party.setId(partyId);
+        return party;
+    }
 
     /**
      * Deletes the party along with its Journals
@@ -182,46 +242,46 @@ public class Services {
      * @param party
      * @return
      */
-	public boolean deleteParty(Party party){
-		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-		boolean success = false;
-		db.beginTransaction();
-		try{
-			deleteAllJournals(party.getId());
-			UtilsFile.deleteFile(party.getPicturePath());
-			partyDAO.delete(party);
-			db.setTransactionSuccessful();
-			success = true;
-		}catch (Exception e){
-			e.printStackTrace();
-		}finally {
-			db.endTransaction();
-		}
-		return success;
-	}
+    public boolean deleteParty(Party party){
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        boolean success = false;
+        db.beginTransaction();
+        try{
+            deleteAllJournals(party.getId());
+            UtilsFile.deleteFile(party.getPicturePath());
+            partyDAO.delete(party);
+            db.setTransactionSuccessful();
+            success = true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+        return success;
+    }
 
-	public boolean updateParty(Party party){
-		return (partyDAO.update(party) > 0);
-	}
+    public boolean updateParty(Party party){
+        return (partyDAO.update(party) > 0);
+    }
 
-	/********************JOURNAL SERVICES ************************/
+    /********************JOURNAL SERVICES ************************/
 
-	public void registerJournalObserver(JournalDAO.Observer observer) {
-		journalDAO.registerObserver(observer);
-	}
+    public void registerJournalObserver(JournalDAO.Observer observer) {
+        journalDAO.registerObserver(observer);
+    }
 
-	public void unregisterJournalObserver(JournalDAO.Observer observer) {
-		journalDAO.unregisterObserver(observer);
-	}
+    public void unregisterJournalObserver(JournalDAO.Observer observer) {
+        journalDAO.unregisterObserver(observer);
+    }
 
-	/**
-	 * Returns a Journal with passed id.
-	 * @param journalId
-	 * @return
-	 */
-	public Journal getJournal(long journalId) {
-		return journalDAO.find(journalId);
-	}
+    /**
+     * Returns a Journal with passed id.
+     * @param journalId
+     * @return
+     */
+    public Journal getJournal(long journalId) {
+        return journalDAO.find(journalId);
+    }
 
     /**
      * Returns an instance of new journal which doesn't belong to any party
@@ -256,7 +316,7 @@ public class Services {
     public long getNewJournalId(){
         //get the last created new journal's id
         KeyValPersistence persistence = KeyValPersistence.from(mContext);
-		// return last save row id
+        // return last save row id
         return persistence.getLong(String.valueOf(Constants.ID_NEW_JOURNAL), 0);
     }
 
@@ -317,14 +377,14 @@ public class Services {
         }
     }
 
-	public ArrayList<Journal> getJournals(long partyId){
-		ArrayList<Journal> journals = (ArrayList<Journal>)journalDAO.findAll(partyId);
-		if(journals != null) {
-			return journals;
-		}
+    public ArrayList<Journal> getJournals(long partyId){
+        ArrayList<Journal> journals = (ArrayList<Journal>)journalDAO.findAll(partyId);
+        if(journals != null) {
+            return journals;
+        }
 
-		return new ArrayList<>();
-	}
+        return new ArrayList<>();
+    }
 
     public ArrayList<Journal> getJournalsWithBalance(long partyId){
         ArrayList<Journal> journals = (ArrayList<Journal>)journalDAO.findAll(partyId);
@@ -353,90 +413,90 @@ public class Services {
 //		return new ArrayList<>();
 //	}
 
-	public ArrayList<Journal> getJournals(){
-		return (ArrayList<Journal>)journalDAO.findAll();
-	}
+    public ArrayList<Journal> getJournals(){
+        return (ArrayList<Journal>)journalDAO.findAll();
+    }
 
     /**
      * Adds Journal that is associated with a Party
      * @param journal
      * @return
      */
-	public long addJournal(Journal journal){
-		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-		db.beginTransaction();
+    public long addJournal(Journal journal){
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        db.beginTransaction();
         long id = Constants.ID_NEW_JOURNAL;
-		try{
-			updatePartyAmount(journal, "+");
-			id = journalDAO.create(journal);
-			db.setTransactionSuccessful();
-		}catch (Exception e){
-			//can have custom exception such as negative balance
-			e.printStackTrace();
-		}finally {
-			db.endTransaction();
-		}
+        try{
+            updatePartyAmount(journal, "+");
+            id = journalDAO.create(journal);
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            //can have custom exception such as negative balance
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
 
         return id;
-	}
+    }
 
     /**
      * Deletes the journal from the table along with associated Attachments
      * @param journal
      * @return
      */
-	public boolean deleteJournal(Journal journal){
-		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-		db.beginTransaction();
-		boolean success =false;
-		try{
-			//delete the relevant attachments
-			for(Attachment attch : attachmentDAO.findAll(journal.getId()))
-				deleteAttachment(attch);
-			//delete the journal
-			journalDAO.delete(journal);
-			//subtract from the Dr/Cr column in party table
-			if(!(updatePartyAmount(journal, "-") > 0))
+    public boolean deleteJournal(Journal journal){
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        db.beginTransaction();
+        boolean success =false;
+        try{
+            //delete the relevant attachments
+            for(Attachment attch : attachmentDAO.findAll(journal.getId()))
+                deleteAttachment(attch);
+            //delete the journal
+            journalDAO.delete(journal);
+            //subtract from the Dr/Cr column in party table
+            if(!(updatePartyAmount(journal, "-") > 0))
                 throw new Exception("No rows updated");
-			db.setTransactionSuccessful();
-			success = true;
-		}catch (Exception e){
-			e.printStackTrace();
-		}finally {
-			db.endTransaction();
-		}
+            db.setTransactionSuccessful();
+            success = true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
 
-		return  success;
+        return  success;
 
-	}
+    }
 
-	/**
-	 * Helper method that updates the debit or credit column
+    /**
+     * Helper method that updates the debit or credit column
      * of a party based on journal type
-	 * @param updatedJournal : journal that has been updated
-	 * @param operation : + or - ; + performs similar to x += x;
-	 */
-	private int updatePartyAmount(Journal updatedJournal, String operation){
-		if(updatedJournal.getType() == Journal.Type.Debit){
-			return partyDAO.updateDr(updatedJournal, operation);
-		}else{
-			return partyDAO.updateCr(updatedJournal, operation);
-		}
-	}
+     * @param updatedJournal : journal that has been updated
+     * @param operation : + or - ; + performs similar to x += x;
+     */
+    private int updatePartyAmount(Journal updatedJournal, String operation){
+        if(updatedJournal.getType() == Journal.Type.Debit){
+            return partyDAO.updateDr(updatedJournal, operation);
+        }else{
+            return partyDAO.updateCr(updatedJournal, operation);
+        }
+    }
 
     /**
      * Deletes all the journal of passed party
      * @param partyId
      * @return
      */
-	private boolean deleteAllJournals(long partyId){
-		for(Journal j : journalDAO.findAll(partyId))
-			for(Attachment attch : attachmentDAO.findAll(j.getId()))
-				if(!deleteAttachment(attch))
-					return false;
+    private boolean deleteAllJournals(long partyId){
+        for(Journal j : journalDAO.findAll(partyId))
+            for(Attachment attch : attachmentDAO.findAll(j.getId()))
+                if(!deleteAttachment(attch))
+                    return false;
 
-		return true;
-	}
+        return true;
+    }
 
     /**
      * Updates the journal and associated party table
@@ -510,11 +570,11 @@ public class Services {
         PreferenceService.from(mContext).putVal(KEY_COMPANY_NAME, name);
     }
 
-	public Date getFinancialYear() {
-		return mCurrentFinancialYear;
-	}
+    public Date getFinancialYear() {
+        return mCurrentFinancialYear;
+    }
 
-	public void setFinancialYear(Date financialYear) throws Exception {
+    public void setFinancialYear(Date financialYear) throws Exception {
         if (mCurrentFinancialYear != null) {
             // don't allow to change mCurrentFinancialYear if already set because there could be
             // journal with date that might be outside the range of this new financial year
@@ -525,39 +585,44 @@ public class Services {
         PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
     }
 
-	// declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
-	private Calendar calendar = Calendar.getInstance();
+    // declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
+    private Calendar calendar = Calendar.getInstance();
 
     public boolean isWithinFinancialYear(long date) {
 
-		calendar.setTime(getFinancialYear());
-		int startDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-		int startYear = calendar.get(Calendar.YEAR);
+        calendar.setTime(getFinancialYear());
+        int startDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        int startYear = calendar.get(Calendar.YEAR);
 
-		calendar.add(Calendar.YEAR, 1);
-		int endDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-		int endYear = calendar.get(Calendar.YEAR);
+        calendar.add(Calendar.YEAR, 1);
+        int endDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        int endYear = calendar.get(Calendar.YEAR);
 
-		calendar.setTimeInMillis(date);
-		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-		int year = calendar.get(Calendar.YEAR);
+        calendar.setTimeInMillis(date);
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        int year = calendar.get(Calendar.YEAR);
 
-		return dayOfYear >= startDayOfYear  // equal or greater than start day
-				&& dayOfYear < endDayOfYear // less than end day
-				&& year >= startYear 		// equal or greater than start year
-				&& year <= endYear;			// equal or less than end year
+        return dayOfYear >= startDayOfYear  // equal or greater than start day
+                && dayOfYear < endDayOfYear // less than end day
+                && year >= startYear 		// equal or greater than start year
+                && year <= endYear;			// equal or less than end year
 
-	}
+    }
 
-	/********************ATTACHMENT SERVICES ************************/
+    private void clearCompanyInfo() {
+        mCompanyName = null;
+        mCurrentFinancialYear = null;
+    }
 
-	public Attachment getAttachment(long attchID){
-		return attachmentDAO.find(attchID);
-	}
+    /********************ATTACHMENT SERVICES ************************/
 
-	public List<Attachment> getAttachments(long journalId){
-		return attachmentDAO.findAll(journalId);
-	}
+    public Attachment getAttachment(long attchID){
+        return attachmentDAO.find(attchID);
+    }
+
+    public List<Attachment> getAttachments(long journalId){
+        return attachmentDAO.findAll(journalId);
+    }
 
     public ArrayList<String> getAttachmentPaths(long journalId){
         ArrayList<String> paths = new ArrayList<>();
@@ -567,9 +632,9 @@ public class Services {
     }
 
 
-	public void addAttachment(Attachment attachment){
-		attachmentDAO.create(attachment);
-	}
+    public void addAttachment(Attachment attachment){
+        attachmentDAO.create(attachment);
+    }
 
     public void addAttachments(List<Attachment> attachments){
         attachmentDAO.bulkInsert(attachments);
@@ -581,60 +646,60 @@ public class Services {
      * if you have the attachment object.
      * @return
      */
-	public boolean deleteAttachment(Attachment attch){
-		//1. Delete the physical file from storage
-		if(!UtilsFile.deleteFile(attch.getPath()))
-			return false;
+    public boolean deleteAttachment(Attachment attch){
+        //1. Delete the physical file from storage
+        if(!UtilsFile.deleteFile(attch.getPath()))
+            return false;
 
-		//2. Delete from the database
-		attachmentDAO.delete(attch);
-		return true;
-	}
+        //2. Delete from the database
+        attachmentDAO.delete(attch);
+        return true;
+    }
 
-	public boolean deleteAllAttachments(long journalId){
-		for(Attachment attach : attachmentDAO.findAll(journalId))
-			if(!deleteAttachment(attach))
-				return false;
-		return true;
-	}
+    public boolean deleteAllAttachments(long journalId){
+        for(Attachment attach : attachmentDAO.findAll(journalId))
+            if(!deleteAttachment(attach))
+                return false;
+        return true;
+    }
 
     public boolean updateAttachment(Attachment attachment){
         return (attachmentDAO.update(attachment) > 0);
     }
 
-	/********************MISCELLANEOUS*******************************/
+    /********************MISCELLANEOUS*******************************/
 
-	public double getDebitTotal() {
+    public double getDebitTotal() {
         double totalUserDebit = 0.0;
         for (Party party: getParties()) {
             totalUserDebit += party.getCreditTotal();
         }
 
-		return totalUserDebit;
-	}
+        return totalUserDebit;
+    }
 
-	public double getCreditTotal() {
-		double totalUserCredit = 0.0;
+    public double getCreditTotal() {
+        double totalUserCredit = 0.0;
         for (Party party : getParties()) {
             totalUserCredit += party.getDebitTotal();
         }
         return totalUserCredit;
-	}
+    }
 
 
-	/********************DELETION FUNCTIONS ************************/
+    /********************DELETION FUNCTIONS ************************/
     /**
      * Deletes all the rows in the tables but not the schema. It
      * doesn't reset any autoincrement columns
      * @return
      */
-	public boolean truncateAllTables(){
-		//doesn't reset the table ids
-		partyDAO.truncateTable();
-		journalDAO.truncateTable();
-		attachmentDAO.truncateTable();
-		return true;
-	}
+    public boolean truncateAllTables(){
+        //doesn't reset the table ids
+        partyDAO.truncateTable();
+        journalDAO.truncateTable();
+        attachmentDAO.truncateTable();
+        return true;
+    }
 
     /**
      * Deletes all the table and recreates them
@@ -642,24 +707,24 @@ public class Services {
      */
     public boolean recreateDB(){
         return dropAllTables() &&
-        createDB();
+                createDB();
     }
 
-	public boolean recreateJournalDB() {
-		return dropJournalTable() && createJournalDB();
-	}
+    public boolean recreateJournalDB() {
+        return dropJournalTable() && createJournalDB();
+    }
 
-	private boolean dropJournalTable() {
-		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-		db.execSQL(DailyJournalContract.JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
-		return true;
-	}
+    private boolean dropJournalTable() {
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        db.execSQL(DailyJournalContract.JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
+        return true;
+    }
 
-	private boolean createJournalDB() {
-		SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-		db.execSQL(DailyJournalContract.JournalColumns.SQL_CREATE_ENTRIES_JOURNALS);
-		return true;
-	}
+    private boolean createJournalDB() {
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        db.execSQL(DailyJournalContract.JournalColumns.SQL_CREATE_ENTRIES_JOURNALS);
+        return true;
+    }
 
 
     /**
@@ -693,45 +758,46 @@ public class Services {
         return true;
     }
 
-	/**
-	 * Deletes all parties, journals along with the attachments from the storage as well as
+    /**
+     * Deletes all parties, journals along with the attachments from the storage as well as
      * from the database. However, it recreates the DB schema
-	 * @return
-	 */
-	public boolean eraseAll(){
-		boolean success = true;
-		try{
-			success &= recreateDB();
-			success &= KeyValPersistence.from(mContext).clear();
-			success &= PreferenceService.from(mContext).clear();
-			success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(mContext));
-		}catch (Exception e){
-			e.printStackTrace();
-		}
+     * @return
+     */
+    public boolean eraseAll(){
+        boolean success = true;
+        try{
+            success &= recreateDB();
+            success &= KeyValPersistence.from(mContext).clear();
+            success &= PreferenceService.from(mContext).clear();
+            success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(mContext));
+            clearCompanyInfo();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-		return success;
-	}
+        return success;
+    }
 
-	public boolean eraseAllJournals() {
-		boolean success = true;
-		try {
-			success &= recreateJournalDB();
-			success &= eraseAllAttachments();
-			success &= partyDAO.resetDrCrBalance() > 0;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return success;
-	}
+    public boolean eraseAllJournals() {
+        boolean success = true;
+        try {
+            success &= recreateJournalDB();
+            success &= eraseAllAttachments();
+            success &= partyDAO.resetDrCrBalance() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
 
-	public boolean eraseAllAttachments() {
-		boolean success = true;
-		for (File attch : UtilsFile.getAttachmentFolder(UtilsFile.getAppFolder(getContext()), true).listFiles()) {
-			// make sure it is a file. Could be party folder
-			if (attch.isFile()) success &= UtilsFile.deleteFile(attch.getAbsolutePath());
-		}
-		return success;
-	}
+    public boolean eraseAllAttachments() {
+        boolean success = true;
+        for (File attch : UtilsFile.getAttachmentFolder(UtilsFile.getAppFolder(getContext()), true).listFiles()) {
+            // make sure it is a file. Could be party folder
+            if (attch.isFile()) success &= UtilsFile.deleteFile(attch.getAbsolutePath());
+        }
+        return success;
+    }
 
 
 }
