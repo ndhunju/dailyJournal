@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.ndhunju.dailyjournal.ObservableField;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.IconTextAdapter;
 import com.ndhunju.dailyjournal.controller.JournalPagerActivity;
@@ -36,6 +37,8 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
     protected List<Journal> mJournals;
     protected OnItemClickListener mOnItemClickListener;
 
+    protected ObservableField<Boolean> showBalance = new ObservableField<>(true);
+
     public interface OnItemClickListener {
         void onItemClick (View view,int position, List<Journal> journals);
         /**
@@ -51,7 +54,7 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
         mParty = party;
         mContext = context;
         mServices = Services.getInstance(context);
-        mJournals = mServices.getJournals(party.getId());
+        mJournals = mServices.getJournalsWithBalance(party.getId());
         setHasStableIds(true);
     }
 
@@ -153,6 +156,7 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
         // no way to add new journal while this adapter is used to show journals
         if (journal.getDate() >= mJournals.get(mJournals.size()-1).getDate()) {
             // journal with later date added
+            journal.setBalance(mJournals.get(mJournals.size()-1).getBalance() + (journal.getType() == Journal.Type.Credit ? -journal.getAmount() : journal.getAmount()));
             mJournals.add(journal);
             notifyItemInserted(mJournals.size()-1);
         } else {
@@ -179,6 +183,8 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
                     // update just the changed journal
                     mJournals.set(pos, journal);
                     notifyItemChanged(pos);
+                    // the evaluated balance amount is no longer valid
+                    showBalance.set(false);
                 }
                 return;
             }
@@ -194,6 +200,8 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
                     // update just the changed journal
                     mJournals.set(i, journal);
                     notifyItemChanged(i);
+                    // the evaluated balance amount is no longer valid
+                    showBalance.set(false);
                 }
                 return;
             }
@@ -212,6 +220,9 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
             if (isInBound(pos) && mJournals.get(pos).getId() == journal.getId()) {
                 mJournals.remove(pos);
                 notifyItemRemoved(pos);
+                // the evaluated balance amount is no longer valid
+                showBalance.set(false);
+                return;
             }
         }
 
@@ -220,6 +231,8 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
             if (mJournals.get(i).getId() == journal.getId()) {
                 mJournals.remove(i);
                 notifyItemRemoved(i);
+                // the evaluated balance amount is no longer valid
+                showBalance.set(false);
                 return;
             }
 
@@ -235,7 +248,9 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
 
     public void dataSetChanged() {
         // get the latest data
-        mJournals = mServices.getJournals(mParty.getId());
+        mJournals = mServices.getJournalsWithBalance(mParty.getId());
+        // the balance amount is re-evaluated
+        showBalance.set(true);
         notifyDataSetChanged();
     }
 

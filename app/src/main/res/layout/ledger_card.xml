@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/blue_mild"
+    android:orientation="vertical"
+    android:layout_marginTop="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@color/blue_mild"
         android:orientation="horizontal"
         android:padding="@dimen/activity_horizontal_margin">
 
@@ -20,41 +22,24 @@
             android:background="@drawable/round_edge_rect"
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
-            android:text="@string/str_00.00" />
+            tools:text="0" />
 
         <ImageView
             android:id="@+id/ledger_card_attch_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_margin="1dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:contentDescription="@string/str_attachment"
             android:src="@drawable/ic_attachment_black_32dp" />
 
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/ledger_card_date_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/ledger_card_date_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="@string/str_date"
-                android:textSize="@dimen/text_size_medium" />
-
-            <TextView
-                android:id="@+id/ledger_card_note_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_note"
-                android:textStyle="italic" />
-
-
-        </LinearLayout>
+            android:gravity="center_vertical"
+            android:text="@string/str_date"
+            android:textSize="@dimen/text_size_medium" />
 
         <TextView
             android:id="@+id/ledger_card_amount_tv"
@@ -70,6 +55,36 @@
             android:text="@string/str_dr"
             android:textSize="@dimen/text_size_medium" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/ledger_card_note_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:text="@string/str_note"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/ledger_card_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/top_border"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="00.00" />
 
     </LinearLayout>
-</FrameLayout>
+
+
+</LinearLayout>

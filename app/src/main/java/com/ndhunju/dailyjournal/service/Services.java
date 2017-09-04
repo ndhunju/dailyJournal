@@ -312,9 +312,32 @@ public class Services {
 
 	public ArrayList<Journal> getJournals(long partyId){
 		ArrayList<Journal> journals = (ArrayList<Journal>)journalDAO.findAll(partyId);
-		if(journals != null) return journals;
+		if(journals != null) {
+			return journals;
+		}
+
 		return new ArrayList<>();
 	}
+
+    public ArrayList<Journal> getJournalsWithBalance(long partyId){
+        ArrayList<Journal> journals = (ArrayList<Journal>)journalDAO.findAll(partyId);
+        // Calculate the balances for journals
+        if(journals != null) {
+            double balance = 0;
+            for (Journal journal : journals) {
+                if (journal.getType() == Journal.Type.Debit) {
+                    balance += journal.getAmount();
+                } else {
+                    balance -= journal.getAmount();
+                }
+                journal.setBalance(balance);
+            }
+
+            return journals;
+        }
+
+        return new ArrayList<>();
+    }
 
 // Possible logic for caching and using cached value in the memory
 //	public ArrayList<Journal> getJournalsFromCache(long partyId){

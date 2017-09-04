@@ -16,6 +16,8 @@ public class Journal implements Serializable{
 	private long  mPartyId;
 	private double mAmount;
 	private long mCreatedDate; //Date when the journal was recorded
+	/** Party's balance at this point. This is not always calculated and thus can be null.**/
+	private Double mBalance;
 
 	/** it is mainly used to relay instance's position across activities
 	 * there is no need to persist its value outside of app's lifecycle */
@@ -25,6 +27,7 @@ public class Journal implements Serializable{
     public Journal(long partyId){
         mNote = "";
         mAmount = 0;
+		mBalance = null;
         mType = Type.Debit;
         mPartyId = partyId;
         long time = Calendar.getInstance().getTimeInMillis();
@@ -45,6 +48,14 @@ public class Journal implements Serializable{
 
 	public void setId(long id){
 		mId = id;
+	}
+
+	public void setBalance(Double balance) {
+		mBalance = balance;
+	}
+
+	public Double getBalance() {
+		return mBalance;
 	}
 	
 	public long getPartyId(){
