@@ -29,6 +29,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
 
     public static final String TAG = PreferenceFragment.class.getSimpleName();
     public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
+    public static final String KEY_FINISH_ON_BACKUP_SUCCESS = TAG + ".KEY_FINISH_ON_BACKUP_SUCCESS";
 
 
     //Request codes with random values
@@ -38,6 +39,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
     private static final int REQUEST_CODE_BACKUP_COMPLETE = 5465;
 
     private PreferenceService preferenceService;
+    private boolean finishOnBackUpSuccess;
 
 
     @Override
@@ -51,6 +53,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
 
         //load the preference file
         preferenceService = PreferenceService.from(getActivity());
+        finishOnBackUpSuccess = getActivity().getIntent().getBooleanExtra(KEY_FINISH_ON_BACKUP_SUCCESS, false);
 
 
         findPreference(getString(R.string.key_pref_backup_google_drive))
@@ -234,6 +237,9 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
 
     private void setBackupSuccessResult() {
         getActivity().setResult(Activity.RESULT_OK, new Intent().putExtra(KEY_BACKUP_RESULT, true));
+        if (finishOnBackUpSuccess) {
+            getActivity().finish();
+        }
     }
 
 }

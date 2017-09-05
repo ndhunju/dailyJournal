@@ -129,7 +129,9 @@ public class StartNextYearActivity extends AppCompatActivity {
         @Override
         public void run() {
             super.run();
-            startActivityForResult(new Intent(getActivity(), BackupActivity.class), REQUEST_CODE_BACKUP_COMPLETE);
+            startActivityForResult(new Intent(getActivity(), BackupActivity.class)
+                    .putExtra(BackupPreferenceFragment.KEY_FINISH_ON_BACKUP_SUCCESS, true)
+                    , REQUEST_CODE_BACKUP_COMPLETE);
         }
     }
 
