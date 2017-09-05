@@ -156,14 +156,16 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                 R.string.activity_home_backup,
                 R.string.activity_home_charts,
                 R.string.str_export_printable,
-                R.string.title_activity_erase};
+                R.string.title_activity_erase,
+                R.string.title_activity_start_next_year};
 
         int[] itemIconResId = {R.drawable.ic_date_range,
                 R.drawable.ic_search,
                 R.drawable.ic_save,
                 R.drawable.ic_chart_pie,
                 R.drawable.ic_content_copy_black_24dp,
-                R.drawable.ic_delete_black_24dp};
+                R.drawable.ic_delete_black_24dp,
+                R.drawable.ic_forward_black_24dp};
 
         public ToolsAdapter() {}
 
@@ -231,6 +233,10 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                         break;
                     case R.string.title_activity_erase:
                         startActivity(new Intent(getContext(), EraseActivity.class));
+                        break;
+                    case R.string.title_activity_start_next_year:
+                        startActivity(new Intent(getContext(), StartNextYearActivity.class));
+                        break;
                 }
             }
         }

@@ -85,11 +85,7 @@ public class Party implements Serializable{
 	public void setPicturePath(String path){
 		this.mPicturePath = path;
 	}
-	/**
-	 * Returns the balance of this party. <b>NOTE: </b>This method should be used as less as
-	 * possible as it loops through all the journals to calculate the total debit, credit and balance.
-	 * @return
-	 */
+
 	public double calculateBalances() {
 		return mDebitTotal - mCreditTotal;
 	}

@@ -142,6 +142,16 @@ public class PartyDAO implements IPartyDAO {
     }
 
     @Override
+    public int resetDrCrBalance(long partyId) {
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        ContentValues values = new ContentValues(2);
+        values.put(PartyColumns.COL_PARTY_CR_AMT, 0);
+        values.put(PartyColumns.COL_PARTY_DR_AMT, 0);
+        rowsAffected = db.update(PartyColumns.TABLE_PARTY, values, PartyColumns.PARTY_ID + "=" + partyId, null);
+        return rowsAffected;
+    }
+
+    @Override
     public List<Party> findAll() {
         // get the fresh list from database in chronological order
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();

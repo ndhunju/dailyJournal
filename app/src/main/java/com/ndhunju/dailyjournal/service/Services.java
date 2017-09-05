@@ -7,6 +7,7 @@ import android.media.MediaScannerConnection;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.database.AttachmentDAO;
 import com.ndhunju.dailyjournal.database.DailyJournalContract;
 import com.ndhunju.dailyjournal.database.DbHelper;
@@ -262,6 +263,36 @@ public class Services {
 
     public boolean updateParty(Party party){
         return (partyDAO.update(party) > 0);
+    }
+
+    public boolean addBalanceAsOpeningJournalAndDeleteParty(long startingDate) {
+        List<Party> parties = getParties();
+        double balance;
+        Journal journal;
+
+        for (Party party : parties) {
+            balance = party.calculateBalances();
+            if (balance != 0) {
+                journal = new Journal(party.getId());
+                journal.setDate(startingDate);
+                journal.setType(balance < 0 ? Journal.Type.Credit : Journal.Type.Debit );
+                if (balance < 0) balance *= -1; // get absolute value of balance
+                journal.setAmount(balance);
+                journal.setNote(mContext.getString(R.string.str_opening_balance));
+                // at this point, clear party's Debit and Credit balance
+                long rowId = partyDAO.resetDrCrBalance(party.getId());
+                if (rowId < 1) {
+                    Log.d("test", "resetDrCrBalance() failed");
+                }
+                // now add opening balance journal
+                rowId = addJournal(journal);
+                if (rowId < 1) {
+                    Log.d("test", "addJournal() failed");
+                }
+            }
+        }
+
+        return true;
     }
 
     /********************JOURNAL SERVICES ************************/
@@ -609,6 +640,11 @@ public class Services {
         PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
     }
 
+    public void forceSetFinancialYear(Date financialYear) {
+        mCurrentFinancialYear = financialYear;
+        PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
+    }
+
     private void clearCompanyInfo() {
         mCompanyName = null;
         mCurrentFinancialYear = null;
@@ -784,6 +820,17 @@ public class Services {
             success &= recreateJournalDB();
             success &= eraseAllAttachments();
             success &= partyDAO.resetDrCrBalance() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
+
+    public boolean eraseAllJournalsOnly() {
+        boolean success = true;
+        try {
+            success &= recreateJournalDB();
+            success &= eraseAllAttachments();
         } catch (Exception e) {
             e.printStackTrace();
         }

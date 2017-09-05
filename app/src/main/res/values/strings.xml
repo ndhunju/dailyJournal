@@ -16,6 +16,7 @@
     <string name="title_activity_charts">Charts</string>
     <string name="title_activity_company_settings">Welcome</string>
     <string name="title_activity_erase">Erase</string>
+    <string name="title_activity_start_next_year">Start Next Year</string>
 
     <!-- Summary -->
     <string name="sum_pincode_val">Enter the pin code</string>
@@ -33,10 +34,13 @@
     <string name="str_new">New</string>
     <string name="str_lock">Lock</string>
     <string name="str_note">Note</string>
+    <string name="str_next">Next</string>
     <string name="str_save">Save</string>
     <string name="str_edit">Edit</string>
+    <string name="str_done">Done</string>
     <string name="str_date">Date</string>
     <string name="str_data">Data</string>
+    <string name="str_start">Start</string>
     <string name="str_00.00">00.00</string>
     <string name="str_tools">Tools</string>
     <string name="str_share">Share</string>
@@ -64,6 +68,7 @@
     <string name="str_select">Select</string>
     <string name="str_google_drive">Google Drive</string>
     <string name="str_financial_year">Financial Year</string>
+    <string name="str_opening_balance">Opening balance</string>
     <string name="str_attch_delete">Attachment Deleted</string>
     <string name="str_new_folder_name">New folder name</string>
     <string name="str_export_printable">Export Printable</string>

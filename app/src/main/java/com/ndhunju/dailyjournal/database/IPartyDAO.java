@@ -16,6 +16,8 @@ public interface IPartyDAO extends IGenericDAO<Party, Long> {
 
     public int resetDrCrBalance();
 
+    public int resetDrCrBalance(long partyId);
+
     String[] getNamesAsArray();
 
     int truncateTable();

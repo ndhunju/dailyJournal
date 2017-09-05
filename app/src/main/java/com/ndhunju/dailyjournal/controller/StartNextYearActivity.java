@@ -84,6 +84,10 @@ public class StartNextYearActivity extends AppCompatActivity {
 
     }
 
+    private void onStepsFinished() {
+        mNextButton.setText(getString(R.string.str_done));
+    }
+
     int currentStepIndex = 0;
     List<Step> steps = new ArrayList<>();
 
@@ -101,6 +105,13 @@ public class StartNextYearActivity extends AppCompatActivity {
 
     private Step nextStep() {
         return steps.get(currentStepIndex);
+    }
+
+    private void incrementStepIndex() {
+        currentStepIndex++;
+        if (currentStepIndex >= steps.size()) {
+            onStepsFinished();
+        }
     }
 
 
@@ -149,7 +160,7 @@ public class StartNextYearActivity extends AppCompatActivity {
         @Override
         public void run() {
             super.run();
-            onFinish(mServices.createOpeningJournalAndDeleteParties(nextFinancialYear.getTimeInMillis()));
+            onFinish(mServices.addBalanceAsOpeningJournalAndDeleteParty(nextFinancialYear.getTimeInMillis()));
         }
 
         @Override
@@ -230,7 +241,9 @@ public class StartNextYearActivity extends AppCompatActivity {
 
         public void onFinish(boolean success) {
             mCheck.setChecked(success);
-            if (success) currentStepIndex++;
+            if (success) {
+                incrementStepIndex();
+            }
         }
 
         @Override

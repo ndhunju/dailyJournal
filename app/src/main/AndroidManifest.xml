@@ -107,6 +107,9 @@
         <activity android:name=".controller.erase.EraseActivity"
             android:label="@string/title_activity_erase"/>
 
+        <activity android:name=".controller.StartNextYearActivity"
+            android:label="@string/title_activity_start_next_year"/>
+
     </application>
 
 </manifest>
