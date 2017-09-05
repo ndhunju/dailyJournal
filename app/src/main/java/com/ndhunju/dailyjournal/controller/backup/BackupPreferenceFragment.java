@@ -192,6 +192,9 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
             case REQUEST_CODE_BACKUP_COMPLETE:
                 if (resultCode == Activity.RESULT_OK) {
                     setBackupSuccessResult();
+                    if (finishOnBackUpSuccess) {
+                        getActivity().finish();
+                    }
                 } else {
                     getActivity().setResult(Activity.RESULT_CANCELED);
                 }
@@ -219,13 +222,22 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                                 setBackupSuccessResult();
                                 resultMsg = String.format(getString(R.string.msg_finished), getString(R.string.str_backup));
                                 resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
+                                //Display the result
+                                UtilsView.alert(getActivity(), resultMsg, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (finishOnBackUpSuccess) {
+                                            getActivity().finish();
+                                        }
+                                    }
+                                });
                             } else {
                                 getActivity().setResult(Activity.RESULT_CANCELED);
                                 resultMsg = String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
+                                //Display the result
+                                UtilsView.alert(getActivity(), resultMsg);
                             }
 
-                            //Display the result
-                            UtilsView.alert(getActivity(), resultMsg);
                         }
                     }).execute(dir);
                 }
@@ -237,9 +249,6 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
 
     private void setBackupSuccessResult() {
         getActivity().setResult(Activity.RESULT_OK, new Intent().putExtra(KEY_BACKUP_RESULT, true));
-        if (finishOnBackUpSuccess) {
-            getActivity().finish();
-        }
     }
 
 }
