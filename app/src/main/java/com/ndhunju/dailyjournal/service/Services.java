@@ -549,6 +549,30 @@ public class Services {
         return journalDAO.findByDate(start, end);
     }
 
+    // declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
+    private Calendar calendar = Calendar.getInstance();
+
+    public boolean isWithinFinancialYear(long date) {
+
+        calendar.setTime(getFinancialYear());
+        int startDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        int startYear = calendar.get(Calendar.YEAR);
+
+        calendar.add(Calendar.YEAR, 1);
+        int endDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        int endYear = calendar.get(Calendar.YEAR);
+
+        calendar.setTimeInMillis(date);
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        int year = calendar.get(Calendar.YEAR);
+
+        return (year == startYear && dayOfYear >= startDayOfYear)
+                || (year == endYear && dayOfYear < endDayOfYear);
+
+    }
+
+    /********************COMPANY SERVICES ************************/
+
     private void loadCompanyInfoFromPreferences() {
         PreferenceService preferenceService = PreferenceService.from(mContext);
         mCompanyName = preferenceService.getVal(KEY_COMPANY_NAME, "");
@@ -583,30 +607,6 @@ public class Services {
 
         mCurrentFinancialYear = financialYear;
         PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
-    }
-
-    // declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
-    private Calendar calendar = Calendar.getInstance();
-
-    public boolean isWithinFinancialYear(long date) {
-
-        calendar.setTime(getFinancialYear());
-        int startDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-        int startYear = calendar.get(Calendar.YEAR);
-
-        calendar.add(Calendar.YEAR, 1);
-        int endDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-        int endYear = calendar.get(Calendar.YEAR);
-
-        calendar.setTimeInMillis(date);
-        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-        int year = calendar.get(Calendar.YEAR);
-
-        return dayOfYear >= startDayOfYear  // equal or greater than start day
-                && dayOfYear < endDayOfYear // less than end day
-                && year >= startYear 		// equal or greater than start year
-                && year <= endYear;			// equal or less than end year
-
     }
 
     private void clearCompanyInfo() {
