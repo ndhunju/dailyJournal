@@ -15,6 +15,7 @@
     <string name="title_activity_lock_screen">Lock Screen</string>
     <string name="title_activity_charts">Charts</string>
     <string name="title_activity_company_settings">Welcome</string>
+    <string name="title_activity_erase">Erase</string>
 
     <!-- Summary -->
     <string name="sum_pincode_val">Enter the pin code</string>

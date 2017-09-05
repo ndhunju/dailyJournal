@@ -104,6 +104,9 @@
             android:screenOrientation="locked"
             android:label="@string/str_backup"/>
 
+        <activity android:name=".controller.erase.EraseActivity"
+            android:label="@string/title_activity_erase"/>
+
     </application>
 
 </manifest>

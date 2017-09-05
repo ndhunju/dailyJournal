@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.content.ContextCompat;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.PreferenceService;
@@ -116,44 +117,13 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                     }
                 });
 
-        findPreference(getString(R.string.key_pref_erase_all))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        UtilsView.alert(getActivity(), getString(R.string.msg_erase_all), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                new EraseAllAsyncTask(getActivity()).execute();
-                            }
-                        }, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
-                        });
-                        return true;
-                    }
-                });
-
-        findPreference(getString(R.string.key_pref_erase_journals))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        UtilsView.alert(getActivity(), getString(R.string.msg_erase_journals), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                new EraseJournalsAsyncTask(getActivity()).execute();
-                            }
-                        }, null);
-                        return true;
-                    }
-                });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //block the preview view
-        getView().setBackgroundColor(getResources().getColor(android.R.color.white));
+        //block the previous view
+        getView().setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference android:title="@string/str_erase_all"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:key="@string/key_pref_erase_all"
+        />
+
+    <Preference android:title="@string/activity_backup_erase_journals"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:key="@string/key_pref_erase_journals"
+        />
+
+</PreferenceScreen>

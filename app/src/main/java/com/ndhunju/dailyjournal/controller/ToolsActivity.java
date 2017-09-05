@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.backup.ExportPartiesReportAsync;
+import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -150,10 +151,19 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
 
     private class ToolsAdapter extends RecyclerView.Adapter {
 
-        int[] itemStringResId = {R.string.activity_home_find_journal_by_date, R.string.activity_home_search_journal_notes,
-                R.string.activity_home_backup, R.string.activity_home_charts, R.string.str_export_printable};
-        int[] itemIconResId = {R.drawable.ic_date_range, R.drawable.ic_search,
-                R.drawable.ic_save, R.drawable.ic_chart_pie,R.drawable.ic_content_copy_black_24dp};
+        int[] itemStringResId = {R.string.activity_home_find_journal_by_date,
+                R.string.activity_home_search_journal_notes,
+                R.string.activity_home_backup,
+                R.string.activity_home_charts,
+                R.string.str_export_printable,
+                R.string.title_activity_erase};
+
+        int[] itemIconResId = {R.drawable.ic_date_range,
+                R.drawable.ic_search,
+                R.drawable.ic_save,
+                R.drawable.ic_chart_pie,
+                R.drawable.ic_content_copy_black_24dp,
+                R.drawable.ic_delete_black_24dp};
 
         public ToolsAdapter() {}
 
@@ -219,6 +229,8 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                         FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
                         dpdf.show(getFragmentManager(), FolderPickerDialogFragment.class.getName());
                         break;
+                    case R.string.title_activity_erase:
+                        startActivity(new Intent(getContext(), EraseActivity.class));
                 }
             }
         }
