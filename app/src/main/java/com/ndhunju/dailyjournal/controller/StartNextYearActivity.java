@@ -2,7 +2,9 @@ package com.ndhunju.dailyjournal.controller;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -114,6 +117,9 @@ public class StartNextYearActivity extends AppCompatActivity {
         }
     }
 
+    private void enableNextButton(boolean enable) {
+        mNextButton.setEnabled(enable);
+    }
 
     private class BackUpStep extends Step {
 
@@ -129,9 +135,15 @@ public class StartNextYearActivity extends AppCompatActivity {
         @Override
         public void run() {
             super.run();
-            startActivityForResult(new Intent(getActivity(), BackupActivity.class)
-                    .putExtra(BackupPreferenceFragment.KEY_FINISH_ON_BACKUP_SUCCESS, true)
-                    , REQUEST_CODE_BACKUP_COMPLETE);
+            UtilsView.alert(getActivity(), getString(R.string.msg_begin_next_year_step_backup_start_msg),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivityForResult(new Intent(getActivity(), BackupActivity.class)
+                                            .putExtra(BackupPreferenceFragment.KEY_FINISH_ON_BACKUP_SUCCESS, true)
+                                    , REQUEST_CODE_BACKUP_COMPLETE);
+                        }
+                    });
         }
     }
 
@@ -149,7 +161,18 @@ public class StartNextYearActivity extends AppCompatActivity {
         @Override
         public void run() {
             super.run();
-            onFinish(mServices.eraseAllJournalsOnly());
+            new AsyncTask<Void, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Void... params) {
+                    return mServices.eraseAllJournalsOnly();
+                }
+
+                @Override
+                protected void onPostExecute(Boolean aBoolean) {
+                    super.onPostExecute(aBoolean);
+                    onFinish(aBoolean);
+                }
+            }.execute();
         }
     }
 
@@ -162,7 +185,19 @@ public class StartNextYearActivity extends AppCompatActivity {
         @Override
         public void run() {
             super.run();
-            onFinish(mServices.addBalanceAsOpeningJournalAndDeleteParty(nextFinancialYear.getTimeInMillis()));
+            new AsyncTask<Void, Void, Boolean>() {
+
+                @Override
+                protected Boolean doInBackground(Void... params) {
+                    return mServices.addBalanceAsOpeningJournalAndDeleteParty(nextFinancialYear.getTimeInMillis());
+                }
+
+                @Override
+                protected void onPostExecute(Boolean aBoolean) {
+                    super.onPostExecute(aBoolean);
+                    onFinish(aBoolean);
+                }
+            }.execute();
         }
 
         @Override
@@ -239,9 +274,12 @@ public class StartNextYearActivity extends AppCompatActivity {
         }
 
         @Override
-        public void run() {}
+        public void run() {
+            enableNextButton(false);
+        }
 
         public void onFinish(boolean success) {
+            enableNextButton(true);
             mCheck.setChecked(success);
             if (success) {
                 incrementStepIndex();
