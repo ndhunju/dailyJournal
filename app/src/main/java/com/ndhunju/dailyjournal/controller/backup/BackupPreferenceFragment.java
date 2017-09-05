@@ -1,7 +1,6 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,17 +10,12 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.PreferenceService;
-import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.folderpicker.FolderPickerDialogFragment;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by dhunju on 10/8/2015.
@@ -37,7 +31,6 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
     private static final int REQUEST_CODE_PICK_JSON = 1235;
     private static final int REQUEST_CODE_PICK_BACKUP = 8489;
     private static final int REQUEST_CODE_BACKUP_DIR = 3561;
-    private static final int REQUEST_CODE_BACKUP_DIR_PRINTABLE = 1264;
 
     private PreferenceService preferenceService;
 
@@ -120,17 +113,6 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                                     }
                                 }, null);
                         return  true;
-                    }
-                });
-
-        findPreference(getString(R.string.key_pref_export_printable))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
-                        dpdf.setTargetFragment(BackupPreferenceFragment.this, 0);
-                        dpdf.show(getFragmentManager(), TAG);
-                        return false;
                     }
                 });
 
@@ -247,87 +229,8 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 }
                 break;
 
-            case REQUEST_CODE_BACKUP_DIR_PRINTABLE:
-                if (result != Activity.RESULT_OK)
-                    UtilsView.toast(getActivity(), getString(R.string.str_failed));
-                if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
-                    data.getData();
-                    final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-                    final Services services = Services.getInstance(getActivity());
-
-                    // let the user choose the type of printable she wants to export
-                    String[] options = ExportPartiesReportAsync.getStrTypes();
-                    new AlertDialog.Builder(getActivity()).setItems(options,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int optionIndex) {
-                                    createAllOrSelectPartyDialog(services, dir, optionIndex);
-                                }
-                            })
-                            .create().show();
-                }
-
-                break;
-
         }
 
-    }
-
-    private void createAllOrSelectPartyDialog(final Services services, final String dir, final int optionIndex) {
-        //Let the user choose the parties
-        final List<Party> parties = services.getParties();
-
-        CharSequence[] options = getResources().getStringArray(R.array.options_export_print);
-        AlertDialog chooseDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(getString(R.string.str_choose))
-                .setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0: //All parties
-                                new ExportPartiesReportAsync(getActivity(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(parties);
-                                break;
-
-                            case 1: //Select parties
-                                createPartySelectDialogToExport(services, parties, dir, optionIndex).show();
-                                break;
-
-                        }
-                    }
-                }).create();
-
-        chooseDialog.show();
-    }
-
-    private AlertDialog createPartySelectDialogToExport(Services services, final List<Party> parties, final String dir, final int optionIndex) {
-        final ArrayList<Party> selectedParties = new ArrayList<>();
-
-        // create array of Parties' name
-        String[] allParties = new String[parties.size()];
-        for (int i = 0; i < parties.size(); i++)
-            allParties[i] = parties.get(i).getName();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getString(R.string.msg_choose, getString(R.string.str_contact)));
-        builder.setNegativeButton(getString(android.R.string.cancel), null);
-        builder.setMultiChoiceItems(allParties, null,
-                new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        //Add checked contacts into selectedParties list
-                        if (b) selectedParties.add(parties.get(i));
-                        else selectedParties.remove(parties.get(i));
-                    }
-                });
-        builder.setPositiveButton(getString(android.R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        new ExportPartiesReportAsync(getActivity(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
-                    }
-                });
-
-        return builder.create();
     }
 
 }

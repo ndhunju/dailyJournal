@@ -19,10 +19,6 @@
             android:icon="@drawable/ic_file_download_black_24dp"
             android:key="@string/key_pref_restore_sd"
             android:title="@string/str_restore_backup_from_sd" />
-        <Preference android:key="@string/key_pref_export_printable"
-            android:title="@string/str_export_printable"
-            android:icon="@drawable/ic_content_copy_black_24dp"
-            />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/str_auto_backup">
         <CheckBoxPreference

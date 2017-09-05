@@ -30,7 +30,7 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     private String mPath;           //path to save the report
     private Type mType;
 
-    static enum Type{FILE, PDF, CSV}
+    public static enum Type{FILE, PDF, CSV}
 
     public ExportPartiesReportAsync(Activity activity, String path, Type type){
         mActivity = activity;
