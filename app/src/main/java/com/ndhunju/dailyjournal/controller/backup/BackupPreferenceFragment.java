@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 
+import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
@@ -26,12 +28,14 @@ import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 public class BackupPreferenceFragment extends PreferenceFragment implements OnDialogBtnClickedListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String TAG = PreferenceFragment.class.getSimpleName();
+    public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
 
 
     //Request codes with random values
     private static final int REQUEST_CODE_PICK_JSON = 1235;
     private static final int REQUEST_CODE_PICK_BACKUP = 8489;
     private static final int REQUEST_CODE_BACKUP_DIR = 3561;
+    private static final int REQUEST_CODE_BACKUP_COMPLETE = 5465;
 
     private PreferenceService preferenceService;
 
@@ -53,7 +57,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        startActivity(new Intent(getActivity(), GoogleDriveUploadBackupActivity.class));
+                        startActivityForResult(new Intent(getActivity(), GoogleDriveUploadBackupActivity.class), REQUEST_CODE_BACKUP_COMPLETE);
                         return true;
                     }
                 });
@@ -181,6 +185,14 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 new RestoreBackUpAsync(getActivity()).execute(selectedFile.getPath());
 
                 break;
+
+            case REQUEST_CODE_BACKUP_COMPLETE:
+                if (resultCode == Activity.RESULT_OK) {
+                    setBackupSuccessResult();
+                } else {
+                    getActivity().setResult(Activity.RESULT_CANCELED);
+                }
+                break;
         }
     }
 
@@ -195,12 +207,33 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
                     data.getData();
                     String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-                    new BackUpAsyncTask(getActivity()).execute(dir);
+                    new BackUpAsyncTask(getActivity(), new FinishCallback<String>() {
+                        @Override
+                        public void onFinish(String filePath) {
+                            boolean success = !TextUtils.isEmpty(filePath);
+                            String resultMsg;
+                            if (success) {
+                                setBackupSuccessResult();
+                                resultMsg = String.format(getString(R.string.msg_finished), getString(R.string.str_backup));
+                                resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
+                            } else {
+                                getActivity().setResult(Activity.RESULT_CANCELED);
+                                resultMsg = String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
+                            }
+
+                            //Display the result
+                            UtilsView.alert(getActivity(), resultMsg);
+                        }
+                    }).execute(dir);
                 }
                 break;
 
         }
 
+    }
+
+    private void setBackupSuccessResult() {
+        getActivity().setResult(Activity.RESULT_OK, new Intent().putExtra(KEY_BACKUP_RESULT, true));
     }
 
 }

@@ -29,7 +29,7 @@ public class GoogleDriveUploadBackupActivity extends GoogleDriveBackupActivity i
                         if (!result.getStatus().isSuccess()) {
                             Log.i(TAG, "Failed to create new backup: " + result.getStatus().getStatusMessage());
                             // Failed, show message to the user
-                            showEndResultToUser(result.getStatus().getStatusMessage());
+                            showEndResultToUser(result.getStatus().getStatusMessage(), false);
                         }
                         // If successful write the data to the new contents.
                         Log.i(TAG, "Content created.");
@@ -47,7 +47,7 @@ public class GoogleDriveUploadBackupActivity extends GoogleDriveBackupActivity i
             Log.i(TAG, "Failed to launch file chooser.");
             e.printStackTrace();
 
-            showEndResultToUser(String.format(getString(R.string.msg_exporting), getString(R.string.str_failed)));
+            showEndResultToUser(String.format(getString(R.string.msg_exporting), getString(R.string.str_failed)), false);
         }
     }
 
@@ -55,11 +55,10 @@ public class GoogleDriveUploadBackupActivity extends GoogleDriveBackupActivity i
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_GDRIVE_CREATOR:   // Called after the file is created in the google drive.
-                getActivity().setResult(resultCode);
                 //Format the message
                 String msg = String.format(getString(R.string.msg_exporting), resultCode == Activity.RESULT_OK
                         ? getString(R.string.str_finished) : getString(R.string.str_failed));
-                showEndResultToUser(msg);
+                showEndResultToUser(msg, resultCode == Activity.RESULT_OK);
 
                 break;
             default:

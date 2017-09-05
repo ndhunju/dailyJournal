@@ -46,9 +46,8 @@ public class GoogleDriveRestoreBackupActivity extends GoogleDriveBackupActivity 
                     //Download the file in background thread
                     new FetchBackUpFromGDriveAsync(getActivity(), getGoogleApiClient(), this).execute(driveId);
                 } else {
-                    getActivity().setResult(resultCode);
                     // show failed error message
-                    showEndResultToUser(String.format(getString(R.string.msg_importing), getString(R.string.str_failed)));
+                    showEndResultToUser(String.format(getString(R.string.msg_importing), getString(R.string.str_failed)), false);
                 }
                 break;
             default:
@@ -69,6 +68,6 @@ public class GoogleDriveRestoreBackupActivity extends GoogleDriveBackupActivity 
             msg = String.format(getString(R.string.msg_failed), getString(R.string.str_restore_backup_from_google_drive));
         }
 
-        showEndResultToUser(msg);
+        showEndResultToUser(msg, result);
     }
 }

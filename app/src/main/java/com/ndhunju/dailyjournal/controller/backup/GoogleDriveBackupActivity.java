@@ -122,7 +122,7 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity implem
             // there is no resolution for the failure, show message and finish the activity
             String msg = GoogleApiAvailability.getInstance().getErrorString(connectionResult.getErrorCode());
             Log.i(TAG, "GoogleApiClient connection failed: " + msg);
-            showEndResultToUser(msg);
+            showEndResultToUser(msg, false);
         }
 
         // If the failure has a resolution. Resolve it. Called typically when the app is
@@ -132,7 +132,7 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity implem
             Log.i(TAG, "Resolving resolution");
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, "Exception while starting resolution activity", e);
-            showEndResultToUser(e.getLocalizedMessage());
+            showEndResultToUser(e.getLocalizedMessage(), false);
         }
     }
 
@@ -167,7 +167,8 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity implem
         }
     }
 
-    protected void showEndResultToUser(String message) {
+    protected void showEndResultToUser(String message, boolean success) {
+        setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
         UtilsView.alert(getActivity(), message, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -2,12 +2,13 @@ package com.ndhunju.dailyjournal.controller.backup;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.io.IOException;
 
@@ -24,9 +25,13 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
 
     private Activity mActivity;
     private ProgressDialog pd;
+    private FinishCallback<String> mCallback;
 
-    public BackUpAsyncTask(Activity context) {
+    public BackUpAsyncTask(Activity context, FinishCallback<String> callback) {
         mActivity = context;
+        mCallback = callback;
+        // lock the orientation, otherwise we will lose reference to callback
+        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
@@ -44,8 +49,11 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... String) {
         String filePath = "";
         Services mServices = Services.getInstance(mActivity);
-        try { filePath = mServices.createBackUp(String[0]);}
-        catch (IOException e) { Log.w(TAG, "Error creating backup file: " + e.getMessage());}
+        try {
+            filePath = mServices.createBackUp(String[0]);
+        } catch (IOException e) {
+            Log.w(TAG, "Error creating backup file: " + e.getMessage());
+        }
         return filePath;
 
     }
@@ -54,15 +62,8 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String filePath) {
         //End progress bar
         pd.cancel();
-        boolean success = !filePath.equals("")  || filePath != null;
-        mActivity.setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
-        String resultMsg =  success ?
-                            String.format(mActivity.getString(R.string.msg_finished), mActivity.getString(R.string.str_backup))
-                            : String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_backup));
-
-        resultMsg += String.format(mActivity.getString(R.string.msg_saved_in), filePath);
-        //Display the result
-        UtilsView.alert(mActivity, resultMsg);
+        mCallback.onFinish(filePath);
+        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
 }
