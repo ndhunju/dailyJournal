@@ -260,8 +260,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
 
         totalCr.setText(String.format(Locale.getDefault(), "%1$s%2$s", UtilsFormat.formatCurrency(party.getCreditTotal(), getActivity()), getString(R.string.str_cr)));
         totalDr.setText(String.format(Locale.getDefault(), "%1$s%2$s", UtilsFormat.formatCurrency(party.getDebitTotal(), getActivity()), getString(R.string.str_dr)));
-        double total = party.getCreditTotal() - party.getDebitTotal();
-        totalTV.setText(UtilsFormat.formatCurrency(total, getContext()));
+        totalTV.setText(UtilsFormat.formatCurrency(party.calculateBalances(), getContext()));
 
         addAttributes(TextUtils.TruncateAt.MARQUEE, totalCr, totalDr, totalTV);
         return footerRow;
