@@ -22,6 +22,7 @@
 
     <!--hint-->
     <string name="hint_note">Write notes here....</string>
+    <string name="hint_company_name">Company Name</string>
 
     <!--Strings as it is-->
     <string name="str_num">No.</string>
