@@ -42,7 +42,7 @@
     <!-- This message is included in the text file report. -->
     <string name="msg_text_format_issue">(If the report is not formatted properly, use a monospaced font like COURIER)</string>
     <!-- Eg. From 3-Sept-2017 -->
-    <string name="msg_financial_year">Financial year from %1$s</string>
+    <string name="msg_financial_year">From %1$s</string>
     <!-- Eg. Financial year is already set to 3-Sept-2017 -->
     <string name="msg_financial_year_set">Financial year is already set to %s.</string>
     <!-- Eg. Selected date is not in the range of current financial year, 3-Sept-2017 -->

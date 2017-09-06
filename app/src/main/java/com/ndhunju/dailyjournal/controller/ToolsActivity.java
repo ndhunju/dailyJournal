@@ -2,6 +2,7 @@ package com.ndhunju.dailyjournal.controller;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,44 +64,48 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
         switch (requestCode) {
 
             case REQUEST_CODE_BACKUP_DIR_PRINTABLE:
-                if (result != Activity.RESULT_OK)
-                    UtilsView.toast(getContext(), getString(R.string.str_failed));
-                if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
-                    data.getData();
-                    final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-                    final Services services = Services.getInstance(getContext());
-
-                    // let the user choose the type of printable she wants to export
-                    String[] options = ExportPartiesReportAsync.getStrTypes();
-                    new AlertDialog.Builder(getContext()).setItems(options,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int optionIndex) {
-                                    createAllOrSelectPartyDialog(services, dir, optionIndex);
-                                }
-                            })
-                            .create().show();
-                }
-
+                onBackUpDirForPrintableSelected(getContext(), data, whichBtn, result);
                 break;
 
         }
 
     }
 
-    private void createAllOrSelectPartyDialog(final Services services, final String dir, final int optionIndex) {
+    public static void onBackUpDirForPrintableSelected(Context context, Intent data, int whichBtn, int result) {
+        if (result != Activity.RESULT_OK)
+            UtilsView.toast(context, context.getString(R.string.str_failed));
+        if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
+            data.getData();
+            final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
+            final Services services = Services.getInstance(context);
+
+            // let the user choose the type of printable she wants to export
+            String[] options = ExportPartiesReportAsync.getStrTypes();
+            new AlertDialog.Builder(context).setItems(options,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int optionIndex) {
+                            createAllOrSelectPartyDialog(services, dir, optionIndex);
+                        }
+                    })
+                    .create().show();
+        }
+
+    }
+
+    public static void createAllOrSelectPartyDialog(final Services services, final String dir, final int optionIndex) {
         //Let the user choose the parties
         final List<Party> parties = services.getParties();
 
-        CharSequence[] options = getResources().getStringArray(R.array.options_export_print);
-        AlertDialog chooseDialog = new AlertDialog.Builder(getContext())
-                .setTitle(getString(R.string.str_choose))
+        CharSequence[] options = services.getContext().getResources().getStringArray(R.array.options_export_print);
+        AlertDialog chooseDialog = new AlertDialog.Builder(services.getContext())
+                .setTitle(services.getContext().getString(R.string.str_choose))
                 .setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0: //All parties
-                                new ExportPartiesReportAsync(getActivity(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(parties);
+                                new ExportPartiesReportAsync(services.getContext(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(parties);
                                 break;
 
                             case 1: //Select parties
@@ -114,7 +119,7 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
         chooseDialog.show();
     }
 
-    private AlertDialog createPartySelectDialogToExport(Services services, final List<Party> parties, final String dir, final int optionIndex) {
+    public static AlertDialog createPartySelectDialogToExport(final Services services, final List<Party> parties, final String dir, final int optionIndex) {
         final ArrayList<Party> selectedParties = new ArrayList<>();
 
         // create array of Parties' name
@@ -122,9 +127,9 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
         for (int i = 0; i < parties.size(); i++)
             allParties[i] = parties.get(i).getName();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.msg_choose, getString(R.string.str_contact)));
-        builder.setNegativeButton(getString(android.R.string.cancel), null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(services.getContext());
+        builder.setTitle(services.getContext().getString(R.string.msg_choose, services.getContext().getString(R.string.str_contact)));
+        builder.setNegativeButton(services.getContext().getString(android.R.string.cancel), null);
         builder.setMultiChoiceItems(allParties, null,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -134,11 +139,11 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                         else selectedParties.remove(parties.get(i));
                     }
                 });
-        builder.setPositiveButton(getString(android.R.string.ok),
+        builder.setPositiveButton(services.getContext().getString(android.R.string.ok),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        new ExportPartiesReportAsync(getActivity(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
+                        new ExportPartiesReportAsync(services.getContext(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
                     }
                 });
 

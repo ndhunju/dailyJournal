@@ -1,7 +1,7 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
@@ -26,22 +26,22 @@ import java.util.List;
 public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Boolean> {
 
     private ProgressDialog pd;
-    private Activity mActivity;
+    private Context mContext;
     private String mPath;           //path to save the report
     private Type mType;
 
     public static enum Type{FILE, PDF, CSV}
 
-    public ExportPartiesReportAsync(Activity activity, String path, Type type){
-        mActivity = activity;
+    public ExportPartiesReportAsync(Context con, String path, Type type){
+        mContext = con;
         mPath = path;
         mType = type;
     }
 
     @Override
     protected void onPreExecute() {
-        String msg = String.format(mActivity.getString(R.string.msg_creating), mActivity.getString(R.string.str_report));
-        pd= new ProgressDialog(mActivity);
+        String msg = String.format(mContext.getString(R.string.msg_creating), mContext.getString(R.string.str_report));
+        pd= new ProgressDialog(mContext);
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setMessage(msg);
         pd.setCancelable(false);
@@ -57,14 +57,14 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
         for(int i = 0; i < partyList.size() ; i++) {
             switch (mType) {
                 case FILE:
-                    rg = new TextFileReportGenerator(mActivity, partyList.get(i));
+                    rg = new TextFileReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(new File(mPath)) != null;
                 case PDF:
-                    rg = new PdfReportGenerator(mActivity, partyList.get(i));
+                    rg = new PdfReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(new File(mPath)) != null;
                     break;
                 case CSV:
-                    rg = new CsvReportGenerator(mActivity, partyList.get(i));
+                    rg = new CsvReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(new File(mPath)) != null;
                     break;
             }
@@ -83,10 +83,10 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     protected void onPostExecute(Boolean success) {
         pd.cancel();
         String resultMsg =  success ?
-                String.format(mActivity.getString(R.string.msg_finished), mActivity.getString(R.string.str_export_printable))
-                : String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_export_printable));
+                String.format(mContext.getString(R.string.msg_finished), mContext.getString(R.string.str_export_printable))
+                : String.format(mContext.getString(R.string.msg_failed), mContext.getString(R.string.str_export_printable));
 
-        UtilsView.alert(mActivity, resultMsg);
+        UtilsView.alert(mContext, resultMsg);
     }
 
     //helper
