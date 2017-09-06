@@ -645,6 +645,9 @@ public class Services {
         PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
     }
 
+    /** <b>Note: </b> Caller of this method should soon call
+     * startActivity(new Intent(mActivity, CompanySettingsActivity.class));
+     * to ensure that the company info is valid. **/
     private void clearCompanyInfo() {
         mCompanyName = null;
         mCurrentFinancialYear = null;

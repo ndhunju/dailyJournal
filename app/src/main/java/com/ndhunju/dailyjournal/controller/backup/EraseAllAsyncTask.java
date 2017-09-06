@@ -3,9 +3,11 @@ package com.ndhunju.dailyjournal.controller.backup;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.CompanySettingsActivity;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
@@ -51,6 +53,7 @@ public class EraseAllAsyncTask extends AsyncTask<Void,Integer,Boolean> {
             public void onClick(DialogInterface dialogInterface, int i) {
                 mActivity.recreate(); //update the view
                 mActivity.finish();
+                mActivity.startActivity(new Intent(mActivity, CompanySettingsActivity.class));
             }
         });
         super.onPostExecute(success);
