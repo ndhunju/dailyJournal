@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
+import com.ndhunju.dailyjournal.service.KeyValPersistence;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -125,6 +126,9 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 
 	private class ShortCutAdapter extends RecyclerView.Adapter {
 
+        final String PREF_KEY_SAVED_SHORTCUT = "PREF_KEY_SAVED_SHORTCUT";
+        final String SAVED_SHORTCUT_DELIMITER = ";";
+
         ShortCut[] allShortCuts = {
                 new FindJournalShortCut(),
                 new SearchJournalByNoteShortCut(),
@@ -135,8 +139,21 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
         };
 
         List<ShortCut> selectedShortCuts = new ArrayList<>();
+        KeyValPersistence keyValPersistence;
 
 		/*package*/ ShortCutAdapter() {
+            keyValPersistence = KeyValPersistence.from(getContext());
+
+            // retrieve saved shortcuts in order from preferences
+            String savedShortCuts = keyValPersistence.get(PREF_KEY_SAVED_SHORTCUT, "");
+            for (String shortCutName : savedShortCuts.split(SAVED_SHORTCUT_DELIMITER)) {
+                for (ShortCut shortCut : allShortCuts) {
+                    if (shortCutName.equals(shortCut.mPrefVal)) {
+                        selectedShortCuts.add(shortCut);
+                    }
+                }
+            }
+
             selectedShortCuts.add(new AddNewShortCut());
         }
 
@@ -195,8 +212,10 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
         private class ShortCut {
             @StringRes int mStringResId;
             @DrawableRes int mIconResId;
+            String mPrefVal;
 
             ShortCut(int stringResId, int iconResId) {
+                mPrefVal = this.getClass().getSimpleName();
                 mStringResId = stringResId;
                 mIconResId = iconResId;
             }
@@ -243,7 +262,17 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
                                     }
                                 }
                             }
-                        }).setPositiveButton(getString(android.R.string.ok), null).create().show();
+                        }).setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // save selected short cuts to preferences
+                                StringBuilder selectedShortCutNames = new StringBuilder();
+                                for (ShortCut shortCut : selectedShortCuts) {
+                                    selectedShortCutNames.append(shortCut.mPrefVal).append(SAVED_SHORTCUT_DELIMITER);
+                                }
+                                keyValPersistence.putString(PREF_KEY_SAVED_SHORTCUT, selectedShortCutNames.toString());
+                            }
+                }).create().show();
             }
         }
 
