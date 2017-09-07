@@ -75,18 +75,18 @@ public abstract class ReportGenerator<T>{
     // Constructors
     public ReportGenerator(Context context, long partyId){
         Services services = Services.getInstance(context);
-        mJournals = services.getJournals(partyId);
-        mParty = services.getParty(partyId);
-        mContext = context;
+        init(context, services.getParty(partyId), services.getJournals(partyId));
     }
 
     public ReportGenerator(Context context, Party party){
-        mJournals = Services.getInstance(context).getJournals(party.getId());
-        mContext = context;
-        mParty = party;
+        init(context, party, Services.getInstance(context).getJournals(party.getId()));
     }
 
     public ReportGenerator(Context context, Party party, List<Journal> journals){
+        init(context, party, journals);
+    }
+
+    private void init(Context context, Party party, List<Journal> journals) {
         mJournals = journals;
         mContext = context;
         mParty = party;
@@ -230,6 +230,18 @@ public abstract class ReportGenerator<T>{
     //helper method to get string by resource id
     protected String getString(int resId){
         return mContext.getString(resId);
+    }
+
+    public void setColumnSeparator(String columnSeparator) {
+        mColumnSeparator = columnSeparator;
+    }
+
+    public void setGapChar(String gapChar) {
+        mGapChar = gapChar;
+    }
+
+    public void setColumnSize(int size) {
+        mColumnSize = size;
     }
 
     protected String addGap(int resId){

@@ -25,16 +25,17 @@ public class CsvReportGenerator extends ReportGenerator<File>{
 
     public CsvReportGenerator(Context context, long partyId) {
         super(context, partyId);
-        mColumnSeparator = ",";
-        mGapChar = "";
+        init();
     }
 
     public CsvReportGenerator(Context context, Party party) {
         super(context, party);
+        init();
     }
 
-    public CsvReportGenerator(Context context, Party party, List<Journal> journals) {
-        super(context, party, journals);
+    private void init() {
+        mColumnSeparator = ",";
+        mGapChar = "";
     }
 
     @Override
