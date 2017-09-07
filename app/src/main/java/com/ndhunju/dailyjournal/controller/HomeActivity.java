@@ -119,7 +119,7 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 
         switch (requestCode) {
             case REQUEST_CODE_BACKUP_DIR_PRINTABLE:
-                ToolsActivity.onBackUpDirForPrintableSelected(getContext(), data, whichBtn, result);
+                ToolsActivity.onBackUpDirForPrintableSelected(this, data, whichBtn, result);
                 break;
         }
     }

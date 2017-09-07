@@ -64,28 +64,27 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
         switch (requestCode) {
 
             case REQUEST_CODE_BACKUP_DIR_PRINTABLE:
-                onBackUpDirForPrintableSelected(getContext(), data, whichBtn, result);
+                onBackUpDirForPrintableSelected(getActivity(), data, whichBtn, result);
                 break;
 
         }
 
     }
 
-    public static void onBackUpDirForPrintableSelected(Context context, Intent data, int whichBtn, int result) {
+    public static void onBackUpDirForPrintableSelected(final Activity activity, Intent data, int whichBtn, int result) {
         if (result != Activity.RESULT_OK)
-            UtilsView.toast(context, context.getString(R.string.str_failed));
+            UtilsView.toast(activity, activity.getString(R.string.str_failed));
         if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
             data.getData();
             final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-            final Services services = Services.getInstance(context);
 
             // let the user choose the type of printable she wants to export
             String[] options = ExportPartiesReportAsync.getStrTypes();
-            new AlertDialog.Builder(context).setItems(options,
+            new AlertDialog.Builder(activity).setItems(options,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int optionIndex) {
-                            createAllOrSelectPartyDialog(services, dir, optionIndex);
+                            createAllOrSelectPartyDialog(activity, dir, optionIndex);
                         }
                     })
                     .create().show();
@@ -93,23 +92,23 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
 
     }
 
-    public static void createAllOrSelectPartyDialog(final Services services, final String dir, final int optionIndex) {
+    public static void createAllOrSelectPartyDialog(final Activity activity, final String dir, final int optionIndex) {
         //Let the user choose the parties
-        final List<Party> parties = services.getParties();
+        final List<Party> parties = Services.getInstance(activity).getParties();
 
-        CharSequence[] options = services.getContext().getResources().getStringArray(R.array.options_export_print);
-        AlertDialog chooseDialog = new AlertDialog.Builder(services.getContext())
-                .setTitle(services.getContext().getString(R.string.str_choose))
+        CharSequence[] options = activity.getResources().getStringArray(R.array.options_export_print);
+        AlertDialog chooseDialog = new AlertDialog.Builder(activity)
+                .setTitle(activity.getString(R.string.str_choose))
                 .setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0: //All parties
-                                new ExportPartiesReportAsync(services.getContext(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(parties);
+                                new ExportPartiesReportAsync(activity, dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(parties);
                                 break;
 
                             case 1: //Select parties
-                                createPartySelectDialogToExport(services, parties, dir, optionIndex).show();
+                                createPartySelectDialogToExport(activity, parties, dir, optionIndex).show();
                                 break;
 
                         }
@@ -119,7 +118,7 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
         chooseDialog.show();
     }
 
-    public static AlertDialog createPartySelectDialogToExport(final Services services, final List<Party> parties, final String dir, final int optionIndex) {
+    public static AlertDialog createPartySelectDialogToExport(final Activity activity, final List<Party> parties, final String dir, final int optionIndex) {
         final ArrayList<Party> selectedParties = new ArrayList<>();
 
         // create array of Parties' name
@@ -127,9 +126,9 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
         for (int i = 0; i < parties.size(); i++)
             allParties[i] = parties.get(i).getName();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(services.getContext());
-        builder.setTitle(services.getContext().getString(R.string.msg_choose, services.getContext().getString(R.string.str_contact)));
-        builder.setNegativeButton(services.getContext().getString(android.R.string.cancel), null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(activity.getString(R.string.msg_choose, activity.getString(R.string.str_contact)));
+        builder.setNegativeButton(activity.getString(android.R.string.cancel), null);
         builder.setMultiChoiceItems(allParties, null,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -139,11 +138,11 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                         else selectedParties.remove(parties.get(i));
                     }
                 });
-        builder.setPositiveButton(services.getContext().getString(android.R.string.ok),
+        builder.setPositiveButton(activity.getString(android.R.string.ok),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        new ExportPartiesReportAsync(services.getContext(), dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
+                        new ExportPartiesReportAsync(activity, dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
                     }
                 });
 
