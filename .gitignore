@@ -91,6 +91,7 @@ local.properties
 .gradle
 build/
 .idea/workspace.xml
+google-services.json
 
 android-support-v7-appcompat
 app/build.gradle

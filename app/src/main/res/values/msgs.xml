@@ -45,7 +45,7 @@
     <string name="msg_financial_year">From %1$s</string>
     <!-- Eg. Financial year is already set to 3-Sept-2017 -->
     <string name="msg_financial_year_set">Financial year is already set to %s.</string>
-    <!-- Eg. Selected date is not in the range of current financial year, 3-Sept-2017 -->
+    <!-- Eg. Selected date is not in the range of current financial year, 3-Sept-2017 -->f
     <string name="msg_date_not_in_range">Selected date is not in the range of current financial year, %s</string>
 
     <!-- TextField. Show at the top of list of step that will be performed -->
@@ -61,5 +61,7 @@
     <string name="msg_begin_next_year_step_move_parties">Migrate %s.</string>
     <!-- TextField. Eg. Start Sept-4-2018 financial year.-->
     <string name="msg_begin_next_year_step_update_year">Start %s financial year.</string>
+    <!-- TextField. Shown when a connection with a google service, like Drive, is lost.-->
+    <string name="msg_error_google_service">Connection lost with Google Service.</string>
 
 </resources>

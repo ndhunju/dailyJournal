@@ -110,7 +110,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
 
         ledgerListView = (RecyclerView) rootView.findViewById(R.id.activity_party_lv);
         ledgerListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ledgerListView.getItemAnimator().setSupportsChangeAnimations(false);
+        ledgerListView.setItemAnimator(UtilsView.getDefaultItemAnimator());
 
         balanceTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_balance_tv);
         headerRow = (TableRow)rootView.findViewById(R.id.fragment_party_detail_header_tr);

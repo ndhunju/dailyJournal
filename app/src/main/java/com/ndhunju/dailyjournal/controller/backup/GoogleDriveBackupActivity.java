@@ -103,8 +103,8 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity implem
             }
 
             suspendedAlertDialog = new AlertDialog.Builder(getActivity())
-                    .setMessage(getString(R.string.common_google_play_services_network_error_text))
-                    .setTitle(getString(R.string.common_google_play_services_network_error_title))
+                    .setMessage(getString(R.string.msg_error_google_service))
+                    .setTitle(getString(R.string.str_alert))
                     .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
