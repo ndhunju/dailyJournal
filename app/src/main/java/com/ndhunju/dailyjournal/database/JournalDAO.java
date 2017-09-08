@@ -8,6 +8,7 @@ import android.support.annotation.UiThread;
 
 import com.ndhunju.dailyjournal.database.DailyJournalContract.JournalColumns;
 import com.ndhunju.dailyjournal.model.Journal;
+import com.ndhunju.dailyjournal.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +138,7 @@ public class JournalDAO implements IJournalDAO {
         return temp;
     }
 
-    public List<Journal> findByDate(long startDate, long endDate) {
+    public List<Journal> findByDate(long startDate, long endDate, long... excludeJournalsWithId) {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
 
         //order by date
@@ -151,7 +152,9 @@ public class JournalDAO implements IJournalDAO {
         Journal journal;
         do{
             journal = fromCursor(c);
-            temp.add(journal);
+            if (!Utils.contains(excludeJournalsWithId, journal.getId())) {
+                temp.add(journal);
+            }
         }while(c.moveToNext());
 
         c.close();

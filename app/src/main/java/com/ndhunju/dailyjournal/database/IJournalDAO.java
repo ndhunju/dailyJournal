@@ -12,7 +12,7 @@ public interface IJournalDAO extends IGenericDAO<Journal, Long> {
 
     int truncateTable();
 
-    List<Journal> findByDate(long start, long end);
+    List<Journal> findByDate(long start, long end, long... excludeJournalsWithId);
 
     List<Journal> findByNotes(String keywords);
 

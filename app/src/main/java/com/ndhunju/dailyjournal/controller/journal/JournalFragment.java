@@ -91,7 +91,6 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 
 		if (actionBar != null ) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
-			actionBar.setDefaultDisplayHomeAsUpEnabled(true);
 		}
 
 	}

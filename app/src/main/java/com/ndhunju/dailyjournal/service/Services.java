@@ -577,7 +577,7 @@ public class Services {
     }
 
     public List<Journal> findByDate(long start, long end) {
-        return journalDAO.findByDate(start, end);
+        return journalDAO.findByDate(start, end, getNewJournalId());
     }
 
     // declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
