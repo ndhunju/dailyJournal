@@ -59,7 +59,7 @@ public class UtilsFormat {
      */
     public static String formatCurrency(Double currency, Context context) {
         NumberFormat nf = NumberFormat.getCurrencyInstance(getLocaleFromPref(context));
-        return nf.format(currency);
+        return nf.format(currency).replace("NPR", context.getString(R.string.symbol_nepali_rupee));
     }
 
     public static String formatDecimal(Double amount, Context context){
