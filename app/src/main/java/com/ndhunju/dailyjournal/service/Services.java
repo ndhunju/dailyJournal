@@ -49,6 +49,7 @@ public class Services {
     private String mCompanyName;
     private Date mCurrentFinancialYear;
     private SQLiteOpenHelper mSqLiteOpenHelper;
+    private List<Listener> mListeners;
 
     //DAOs
     private IPartyDAO partyDAO;
@@ -79,6 +80,7 @@ public class Services {
 
     private void init(Context context, SQLiteOpenHelper sqLiteOpenHelper) {
         mContext = context;
+        mListeners = new ArrayList<>();
         mSqLiteOpenHelper = sqLiteOpenHelper;
         partyDAO = new PartyDAO(mSqLiteOpenHelper);
         journalDAO = new JournalDAO(mSqLiteOpenHelper);
@@ -810,6 +812,7 @@ public class Services {
             success &= PreferenceService.from(mContext).clear();
             success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(mContext));
             clearCompanyInfo();
+            notifyEraseAllListener();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -849,5 +852,23 @@ public class Services {
         return success;
     }
 
+    public void addListener(Listener listener) {
+        if (listener == null) return;
+        mListeners.add(listener);
+    }
 
+    public boolean removeListener(Listener listener) {
+        if (listener == null) return false;
+        return mListeners.remove(listener);
+    }
+
+    private void notifyEraseAllListener() {
+        for (Listener listener : mListeners) {
+            listener.onEraseAll();
+        }
+    }
+
+    public interface Listener {
+        void onEraseAll();
+    }
 }

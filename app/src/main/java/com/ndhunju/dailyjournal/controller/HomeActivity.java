@@ -28,7 +28,7 @@ import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClickedListener {
+public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClickedListener, Services.Listener {
 
 	private static final int REQUEST_CODE_COMPANY_SETTING = 34534;
     private static final int REQUEST_CODE_BACKUP_DIR_PRINTABLE = 9834;
@@ -36,8 +36,10 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 
     // member variables
 	Services mServices;
+    boolean mRefreshNeeded;
     // view variables
     RecyclerView mRecyclerView;
+    View mRefreshHomeBtn;
 	TextView mCompanyName;
 	TextView mFinancialYear;
 	TextView mDrAmount;
@@ -57,11 +59,11 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 		mCrAmount = (TextView) findViewById(R.id.activity_home_cr_balance);
 		mTotal    = (TextView) findViewById(R.id.activity_home_total_balance);
 
-		findViewById(R.id.activity_home_refresh_balance).setOnClickListener(new View.OnClickListener() {
+		mRefreshHomeBtn = findViewById(R.id.activity_home_refresh_home);
+        mRefreshHomeBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                setCompanySettings();
-                setUserBalance();
+                refreshHomeView();
 			}
 		});
 
@@ -74,12 +76,25 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
         mRecyclerView.setAdapter(new ShortCutAdapter());
 
 		mServices = Services.getInstance(getContext());
-
-		setCompanySettings();
-
-		setUserBalance();
+        mServices.addListener(this);
+        mRefreshNeeded = true;
 
 	}
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mRefreshNeeded) {
+           refreshHomeView();
+        }
+    }
+
+    private void refreshHomeView() {
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+        setCompanySettings();
+        setUserBalance();
+        mRefreshNeeded = false;
+    }
 
 	private boolean setCompanySettings() {
 
@@ -124,7 +139,13 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
         }
     }
 
-	private class ShortCutAdapter extends RecyclerView.Adapter {
+    @Override
+    public void onEraseAll() {
+        mRefreshNeeded = true;
+        ((ShortCutAdapter) mRecyclerView.getAdapter()).clearSelectedShortCuts();
+    }
+
+    private class ShortCutAdapter extends RecyclerView.Adapter {
 
         final String PREF_KEY_SAVED_SHORTCUT = "PREF_KEY_SAVED_SHORTCUT";
         final String SAVED_SHORTCUT_DELIMITER = ";";
@@ -175,6 +196,10 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 
 		public ShortCut getItem(int position) {
             return selectedShortCuts.get(position);
+        }
+
+        public void clearSelectedShortCuts() {
+            selectedShortCuts.clear();
         }
 
         /*package*/ class ShortCutVH extends RecyclerView.ViewHolder implements View.OnClickListener{
