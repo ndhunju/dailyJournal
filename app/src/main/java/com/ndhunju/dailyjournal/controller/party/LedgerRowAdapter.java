@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ndhunju.dailyjournal.ObservableField;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -40,30 +41,28 @@ class LedgerRowAdapter extends LedgerAdapter {
         ((LedgerVH) holder).bind(getItem(position));
     }
 
-    class LedgerVH extends LedgerAdapter.LedgerVH {
-        TextView posCol;
+    class LedgerVH extends LedgerAdapter.LedgerVH implements ObservableField.Observer {
         TextView dateCol ;
         TextView noteCol ;
         TextView drCol;
         TextView crCol;
+        TextView balCol;
 
         public LedgerVH(View convertView) {
             super(convertView);
-            posCol = (TextView) convertView.findViewById(R.id.ledger_row_col0);
             dateCol = (TextView) convertView.findViewById(R.id.ledger_row_col1);
             noteCol = (TextView) convertView.findViewById(R.id.ledger_row_col2);
             drCol = (TextView) convertView.findViewById(R.id.ledger_row_col3);
             crCol = (TextView) convertView.findViewById(R.id.ledger_row_col4);
+            balCol = (TextView) convertView.findViewById(R.id.ledger_row_col5);
+            showBalance.addObserver(this);
             //apply common settings
-            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.END, dateCol,
-                    noteCol);
-            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.START, posCol,
-                    drCol, crCol);
+            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.END, dateCol, noteCol);
+            PartyDetailFragment.addAttributes(TextUtils.TruncateAt.START, drCol, crCol);
         }
 
         public void bind(Journal journal) {
             super.bind(journal);
-            posCol.setText(String.valueOf(getAdapterPosition() + 1));
             dateCol.setText(UtilsFormat.formatDate(new Date(journal.getDate()), getContext()));
 
             //showNoteCol will be false for smaller devices
@@ -79,6 +78,22 @@ class LedgerRowAdapter extends LedgerAdapter {
             } else {
                 crCol.setText(formattedAmt);
                 drCol.setText("");
+            }
+
+            if (balCol != null) {
+                if (journal.getBalance() != null && showBalance.get()) {
+                    balCol.setText(UtilsFormat.formatCurrency(journal.getBalance(), getContext()));
+                    balCol.setVisibility(View.VISIBLE);
+                } else {
+                    balCol.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        @Override
+        public void onChanged(ObservableField observableField) {
+            if (observableField.equals(showBalance) && balCol != null) {
+                balCol.setVisibility((boolean) observableField.get() ? View.VISIBLE : View.GONE);
             }
         }
     }

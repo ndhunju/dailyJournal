@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/blue_mild"
     android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin"
     android:layout_marginTop="5dp">
 
     <LinearLayout
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/activity_horizontal_margin">
+        >
 
 
         <TextView
@@ -26,8 +27,9 @@
 
         <ImageView
             android:id="@+id/ledger_card_attch_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/str_attachment"
             android:src="@drawable/ic_attachment_black_32dp" />
 
@@ -61,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="right"
+        android:gravity="end"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
         android:paddingBottom="5dp">
@@ -72,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="3"
+            android:layout_marginRight="5dp"
             android:ellipsize="end"
             android:text="@string/str_note"
             android:textStyle="italic" />

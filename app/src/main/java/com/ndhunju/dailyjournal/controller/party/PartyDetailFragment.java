@@ -234,19 +234,22 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
     //Add Totals in the footer row
     private TableRow getFooterRow(Party party) {
         TableRow footerRow = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.ledger_row, null);
-        TextView col0 = (TextView) footerRow.findViewById(R.id.ledger_row_col0);
         TextView col1 = (TextView) footerRow.findViewById(R.id.ledger_row_col1);
         TextView col2 = (TextView) footerRow.findViewById(R.id.ledger_row_col2);
         TextView col3 = (TextView) footerRow.findViewById(R.id.ledger_row_col3);
         TextView col4 = (TextView) footerRow.findViewById(R.id.ledger_row_col4);
+        TextView balCol = (TextView) footerRow.findViewById(R.id.ledger_row_col5);
 
         col1.setText(getString(R.string.str_total));
         col2.setText("");
         col3.setText(UtilsFormat.formatDecimal(party.getDebitTotal(), getActivity()));
         col4.setText(UtilsFormat.formatDecimal(party.getCreditTotal(), getActivity()));
-        addDrawables(getActivity(), col0, col1, col2, col3, col4);
+        if (balCol != null) {
+            balCol.setText(UtilsFormat.formatCurrency(party.calculateBalances(), getContext()));
+        }
+        addDrawables(getActivity(), col1, col2, col3, col4, balCol);
         //add common attributes
-        addAttributes(TextUtils.TruncateAt.MARQUEE, col3, col4);
+        addAttributes(TextUtils.TruncateAt.MARQUEE, col3, col4, balCol);
         return footerRow;
     }
 
@@ -308,6 +311,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
 
     public static void addAttributes(TextUtils.TruncateAt truncateAt, TextView... view) {
         for (TextView v : view) {
+            if (v == null) return;
             v.setSingleLine();
             v.setEllipsize(truncateAt);
         }
@@ -315,6 +319,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
 
     private static void addDrawables(Context con, View... view) {
         for (View v : view) {
+            if (v == null) return;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 v.setBackground(ContextCompat.getDrawable(con, R.drawable.cell_header_shape));
             } else {

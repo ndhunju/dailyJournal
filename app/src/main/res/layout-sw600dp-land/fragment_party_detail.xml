@@ -17,15 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/fragment_party_detail_header_tr"
         android:layout_marginTop="5dp">
-        <TextView
-            android:text="@string/str_num"
-            android:layout_height="wrap_content"
-            android:layout_width="55dp"
-            android:gravity="center"
-            android:background="@drawable/cell_header_shape"
-            android:padding="5dp"
-            android:textSize="@dimen/text_size_medium"
-            />
+
         <TextView
             android:text="@string/str_date"
             android:layout_height="wrap_content"
@@ -62,6 +54,15 @@
             android:padding="5dp"
             android:background="@drawable/cell_header_shape"
             android:textSize="@dimen/text_size_medium"/>
+        <TextView
+            android:text="@string/str_balance"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/cell_header_shape"
+            android:padding="5dp"
+            android:textSize="@dimen/text_size_medium"
+            />
     </TableRow>
 
     <android.support.v7.widget.RecyclerView
