@@ -106,17 +106,21 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 
 		switch (item.getItemId()){
 			case R.id.viewpager_delete_picture:
-				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_attachment));
-				UtilsView.alert(AttachmentViewPagerActivity.this, msg, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						int currentItemPos = mViewPager.getCurrentItem();
-						UtilsView.toast(AttachmentViewPagerActivity.this, getString(R.string.str_attch_delete));
-						mServices.deleteAttachment(attachmentPagerAdapter.getItem(currentItemPos));
-						attachmentPagerAdapter.deleteItem(currentItemPos);
-						attachmentPagerAdapter.notifyDataSetChanged();
-					}
-				}, null);
+				if (attachmentPagerAdapter.getCount() > 0) {
+					String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_attachment));
+					UtilsView.alert(AttachmentViewPagerActivity.this, msg, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i) {
+							int currentItemPos = mViewPager.getCurrentItem();
+							UtilsView.toast(AttachmentViewPagerActivity.this, getString(R.string.str_attch_delete));
+							mServices.deleteAttachment(attachmentPagerAdapter.getItem(currentItemPos));
+							attachmentPagerAdapter.deleteItem(currentItemPos);
+							attachmentPagerAdapter.notifyDataSetChanged();
+						}
+					}, null);
+				} else {
+					UtilsView.alert(getActivity(), getString(R.string.msg_attachment_count_zero));
+				}
 				break;
 
 			case R.id.viewpager_new_picture:

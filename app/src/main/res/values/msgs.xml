@@ -64,4 +64,6 @@
     <!-- TextField. Shown when a connection with a google service, like Drive, is lost.-->
     <string name="msg_error_google_service">Connection lost with Google Service.</string>
 
+    <string name="msg_attachment_count_zero">There are 0 attachments.</string>
+
 </resources>
