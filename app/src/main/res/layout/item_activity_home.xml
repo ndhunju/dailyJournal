@@ -25,13 +25,23 @@
             android:layout_height="wrap_content"
             tools:src="@drawable/ic_search" />
 
-        <TextView
-            android:id="@+id/item_home_activity_name"
+        <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:gravity="center"
-            tools:text="@string/str_search" />
+            android:layout_gravity="start">
+
+            <TextView
+                android:id="@+id/item_home_activity_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="3dp"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:lines="1"
+                android:scrollHorizontally="true"
+                android:gravity="center"
+                tools:text="@string/str_search" />
+
+        </HorizontalScrollView>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
