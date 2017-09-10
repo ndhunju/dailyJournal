@@ -89,7 +89,7 @@ public class FolderPickerDialogFragment extends DialogFragment{
         mCurrentDir = (initDir != null) ? initDir : mSdcardDir;
 
 
-        //If the passed dir doesn't exist or is not a directory, use the root sdcard directory
+        //If the passed dir doesn't exist or is not a directory, use the root local storage directory
         File dirFile = new File(mCurrentDir);
         if (!dirFile.exists() || !dirFile.isDirectory())
             mCurrentDir = mSdcardDir;

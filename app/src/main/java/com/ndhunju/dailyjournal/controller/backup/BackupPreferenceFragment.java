@@ -22,7 +22,7 @@ import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 /**
  * Created by dhunju on 10/8/2015.
- * This fragment allows users to create/restore backup from Google drive/SD Card
+ * This fragment allows users to create/restore backup from Google drive/Local Storage
  * as well as set Automatic Backup and erase all data
  */
 public class BackupPreferenceFragment extends PreferenceFragment implements OnDialogBtnClickedListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -80,7 +80,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                     }
                 });
 
-        findPreference(getString(R.string.key_pref_backup_sd))
+        findPreference(getString(R.string.key_pref_backup_local_storage))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
@@ -91,7 +91,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                     }
                 });
 
-        findPreference(getString(R.string.key_pref_restore_sd))
+        findPreference(getString(R.string.key_pref_restore_local_storage))
                 .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
@@ -184,8 +184,8 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                     return;
                 }
 
-                Uri selectedFile = data.getData();
-                new RestoreBackUpAsync(getActivity()).execute(selectedFile.getPath());
+                String selectedFilePath = UtilsFile.getPath(getActivity(), data.getData());
+                new RestoreBackUpAsync(getActivity()).execute(selectedFilePath);
 
                 break;
 

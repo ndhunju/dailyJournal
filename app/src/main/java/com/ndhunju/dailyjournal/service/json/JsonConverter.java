@@ -47,7 +47,7 @@ public abstract class JsonConverter implements JsonKeys{
 
     /**
      * Creates a JSON file containing the data into predefined ({@link UtilsFile#getAppFolder(Context)} ) path
-     * in sd card. <b>It deletes the old JSON file</b>
+     * in local storage. <b>It deletes the old JSON file</b>
      * @return If successful, returns the absolute path of the file. Otherwise, null.
      */
     public String createJSONFile() throws IOException {

@@ -10,15 +10,15 @@
             android:key="@string/key_pref_restore_google_drive"
             android:title="@string/str_restore_backup_from_google_drive" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/str_sd_card">
+    <PreferenceCategory android:title="@string/str_local_storage">
         <Preference
             android:icon="@drawable/ic_file_upload_black_24dp"
-            android:key="@string/key_pref_backup_sd"
-            android:title="@string/str_create_backup_in_sd" />
+            android:key="@string/key_pref_backup_local_storage"
+            android:title="@string/str_create_backup_in_local_storage" />
         <Preference
             android:icon="@drawable/ic_file_download_black_24dp"
-            android:key="@string/key_pref_restore_sd"
-            android:title="@string/str_restore_backup_from_sd" />
+            android:key="@string/key_pref_restore_local_storage"
+            android:title="@string/str_restore_backup_from_local_storage" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/str_auto_backup">
         <CheckBoxPreference

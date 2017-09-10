@@ -44,8 +44,8 @@ class ImportDataAsyncTask extends AsyncTask<String, Void, Boolean> {
         pd.cancel();
 
         //Display msg
-        String msg = result ? String.format(mActivity.getString(R.string.msg_finished), mActivity.getString(R.string.str_import_json_from_sd))
-                : String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_import_json_from_sd));
+        String msg = result ? String.format(mActivity.getString(R.string.msg_finished), mActivity.getString(R.string.str_import_json))
+                : String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_import_json));
         UtilsView.alert(mActivity, msg);
     }
 

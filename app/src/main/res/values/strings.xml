@@ -74,9 +74,9 @@
     <string name="str_attch_delete">Attachment Deleted</string>
     <string name="str_new_folder_name">New folder name</string>
     <string name="str_export_printable">Export Printable</string>
-    <string name="str_import_json_from_sd">Import JSON Backup File</string>
-	<string name="str_create_backup_in_sd">Create Backup in SD Card</string>
-	<string name="str_restore_backup_from_sd">Restore Backup from SD Card</string>
+    <string name="str_import_json">Import JSON Backup File</string>
+	<string name="str_create_backup_in_local_storage">Create Backup in Local Storage</string>
+	<string name="str_restore_backup_from_local_storage">Restore Backup from Local Storage</string>
     <string name="str_create_backup_in_google_drive">Create Backup in Google Drive</string>
     <string name="str_restore_backup_from_google_drive">Restore from Google Drive</string>
     <string name="str_import">Import</string>
@@ -95,7 +95,7 @@
     <string name="str_security">Security</string>
     <string name="str_unlock">Unlock</string>
     <string name="msg_share_body">Organize your accounts and cashbook in the simplest way possible with Daily Journal App</string>
-    <string name="str_sd_card">SD Card</string>
+    <string name="str_local_storage">Local Storage</string>
     <string name="str_thank_you">Thank you.</string>
     <string name="str_amount">Amount</string>
     <string name="str_dashboard">Dashboard</string>
