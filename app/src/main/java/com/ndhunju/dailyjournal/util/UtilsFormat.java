@@ -59,7 +59,7 @@ public class UtilsFormat {
      */
     public static String formatCurrency(Double currency, Context context) {
         NumberFormat nf = NumberFormat.getCurrencyInstance(getLocaleFromPref(context));
-        return nf.format(currency).replace("NPR", context.getString(R.string.symbol_nepali_rupee));
+        return replaceNPRWithNepaliCurrency(context, nf.format(currency));
     }
 
     public static String formatDecimal(Double amount, Context context){
@@ -83,7 +83,7 @@ public class UtilsFormat {
 
     public static double parseCurrency(String currency, Context context) throws NumberFormatException {
         NumberFormat nf = NumberFormat.getCurrencyInstance(getLocaleFromPref(context));
-        return parseCurrency(currency, nf);
+        return parseCurrency(replaceNepaliCurrencyWithNPR(context, currency), nf);
     }
 
     public static double parseCurrency(String currency, NumberFormat numberFormat) throws NumberFormatException{
@@ -102,6 +102,14 @@ public class UtilsFormat {
         }
 
         return doubleCurrency;
+    }
+
+    private static String replaceNPRWithNepaliCurrency(Context context, String value) {
+        return value.replace("NPR", context.getString(R.string.symbol_nepali_rupee));
+    }
+
+    private static String replaceNepaliCurrencyWithNPR(Context context, String value) {
+        return value.replace(context.getString(R.string.symbol_nepali_rupee), "NPR");
     }
 
     public static String getDrFromPref(Context context){
