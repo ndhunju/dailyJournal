@@ -40,8 +40,8 @@ import java.util.Properties;
 public class Services {
 
     // Constants
-    private static final String KEY_COMPANY_NAME = Services.class.getName() + "KEY_COMPANY_NAME ";
-    private static final String KEY_FINANCIAL_YEAR = Services.class.getName() + "KEY_FINANCIAL_YEAR";
+    private static final String KEY_COMPANY_NAME = "KEY_COMPANY_NAME";
+    private static final String KEY_FINANCIAL_YEAR = "KEY_FINANCIAL_YEAR";
     private static final String FILE_COMPANY_INFO = "info.properties";
 
     //Variables
