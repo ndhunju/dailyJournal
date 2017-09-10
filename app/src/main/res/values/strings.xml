@@ -121,13 +121,17 @@
     <string name="trans_party_img">transPartyImg</string>
 
     <!-- noun. this is one the items shown in side navigation menu -->
-    <string name="nav_item_journals">Journals</string>
+    <string name="nav_item_journal">New Journal</string>
+    <!-- noun. this is one the items shown in side navigation menu -->
+    <string name="nav_item_transaction">New Transaction</string>
     <!-- noun. this is one the items shown in side navigation menu -->
     <string name="nav_item_preference">Preference</string>
     <!-- noun. this is one the items shown in side navigation menu -->
     <string name="nav_item_tools">Tools</string>
     <!-- noun. this is one the items shown in side navigation menu -->
     <string name="nav_item_party">Parties</string>
+    <!-- noun. this is one the items shown in side navigation menu -->
+    <string name="nav_item_account">Accounts</string>
     <!-- noun. this is one the items shown in side navigation menu -->
     <string name="nav_item_charts">Charts</string>
     <!-- noun. this is one the items shown in side navigation menu -->

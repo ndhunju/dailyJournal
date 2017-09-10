@@ -22,6 +22,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 /**
  * Created by Dhunju on 6/26/2016.
@@ -69,8 +70,8 @@ public class NavDrawerActivity extends AppCompatActivity implements AdapterView.
 
         NavListAdapter adapter = new NavListAdapter(getContext());
         adapter.add(R.string.str_dashboard, R.drawable.ic_dashboard_black_48dp)
-                .add(R.string.nav_item_journals, R.drawable.ic_journal)
-                .add(R.string.nav_item_party,    R.drawable.ic_nav_parties)
+                .add(UtilsFormat.getJournalFromPref(getContext()).contains(getString(R.string.str_journal)) ? R.string.nav_item_journal : R.string.nav_item_transaction, R.drawable.ic_journal)
+                .add(UtilsFormat.getPartyFromPref(getContext()).contains(getString(R.string.str_party)) ? R.string.nav_item_party : R.string.nav_item_account, R.drawable.ic_nav_parties)
                 .add(R.string.nav_item_preference, R.drawable.ic_settings_black_48dp)
                 .add(R.string.nav_item_tools,    R.drawable.ic_tools)
                 .add(R.string.nav_item_share,    R.drawable.ic_share_black_48dp)
