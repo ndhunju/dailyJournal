@@ -25,7 +25,7 @@ android {
         // The values in defaultConfig override those in the manifest file.
         applicationId "com.ndhunju.dailyjournalplus"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 22
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
