@@ -1,5 +1,6 @@
 package com.ndhunju.dailyjournal.controller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,15 @@ public class CompanySettingsActivity extends AppCompatActivity implements OnDial
 
     Services services;
     Date financialYear;
+
+    public static void startActivity(Activity callingActivity, int requestCode) {
+        Intent intent = new Intent(callingActivity, CompanySettingsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (requestCode > 0) {
+            callingActivity.startActivityForResult(intent, requestCode);
+        } else {
+            callingActivity.startActivity(intent);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

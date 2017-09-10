@@ -99,7 +99,7 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 	private boolean setCompanySettings() {
 
 		if (TextUtils.isEmpty(mServices.getCompanyName())) {
-			startActivityForResult(new Intent(getContext(), CompanySettingsActivity.class), REQUEST_CODE_COMPANY_SETTING);
+            CompanySettingsActivity.startActivity(this, REQUEST_CODE_COMPANY_SETTING);
 			return false;
 		}
 

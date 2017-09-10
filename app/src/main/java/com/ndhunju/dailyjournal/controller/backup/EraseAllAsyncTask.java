@@ -53,7 +53,7 @@ public class EraseAllAsyncTask extends AsyncTask<Void,Integer,Boolean> {
             public void onClick(DialogInterface dialogInterface, int i) {
                 mActivity.recreate(); //update the view
                 mActivity.finish();
-                mActivity.startActivity(new Intent(mActivity, CompanySettingsActivity.class));
+                CompanySettingsActivity.startActivity(mActivity, -1);
             }
         });
         super.onPostExecute(success);
