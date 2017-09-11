@@ -1,0 +1,21 @@
+open app, 
+Name: B & Brothers
+Date: today’s
+
+Add shortcuts
+
+Go to New Journal
+add 2500, Received By John Smith, Notes 25 pcs shirts
+add 1500, Given By John Smith, Notes. down payment by check, Add check pic.
+
+Go to Party
+Add new party named Rohan.
+Click on John’s account. Add attachments. save
+
+Go to Tools. Scroll
+Go to Backup. Restore from google drive. 
+Go to home, refresh view.
+
+Select Search by notes. search for “parts”
+
+Select Search by dates, 
