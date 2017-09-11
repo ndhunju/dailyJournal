@@ -31,6 +31,7 @@ public class LockService {
         boolean pincodeOn = preferenceService.getVal(R.string.key_pref_pincode_cb, false);
         if(pincodeOn && !isPasscodeActive(whichActivity)){
             Intent i = new Intent(whichActivity, LockScreenActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             whichActivity.startActivity(i);
             updatePasscodeTime();
         }

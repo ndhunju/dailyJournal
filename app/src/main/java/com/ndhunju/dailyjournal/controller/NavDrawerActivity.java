@@ -22,6 +22,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
+import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 /**
@@ -97,6 +98,19 @@ public class NavDrawerActivity extends AppCompatActivity implements AdapterView.
         mDrawerToggle.syncState();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //check pass code
+        LockService.checkPassCode(this);
+    }
+
+    @Override
+    protected void onPause() {
+        LockService.updatePasscodeTime();
+        super.onPause();
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
