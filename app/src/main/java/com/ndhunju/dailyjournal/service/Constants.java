@@ -7,6 +7,8 @@ public interface Constants {
     int ID_NEW_JOURNAL=-2;
     long ID_NEW_PARTY = -3;
 
+    long ONE_DAY_IN_MILLI = 1000 * 60 * 60 * 24;
+
     //Constant Keys usu used to get and put data in an Intent or Bundle
     String APP_PREFIX = "com.ndhunju.dailyJournal"; //DON'T CHANGE THIS VAL
     String KEY_REQUEST_CODE = APP_PREFIX + "RequestCode";

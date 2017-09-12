@@ -14,6 +14,8 @@ public interface IJournalDAO extends IGenericDAO<Journal, Long> {
 
     List<Journal> findByDate(long start, long end, long... excludeJournalsWithId);
 
+    List<Journal> findByPartyAndDate(long partyId, long date);
+
     List<Journal> findByNotes(String keywords);
 
     void registerObserver(JournalDAO.Observer observer);

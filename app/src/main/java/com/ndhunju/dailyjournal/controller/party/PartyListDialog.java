@@ -69,7 +69,18 @@ public class PartyListDialog extends DialogFragment {
 			public void onItemClick(View view, int position, long id) {
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, partyAdapter.getItem(position).getId());
-				((OnDialogBtnClickedListener)getTargetFragment()).onDialogBtnClicked(i,
+				OnDialogBtnClickedListener listener = null;
+				if (getTargetFragment() instanceof OnDialogBtnClickedListener) {
+					listener = (OnDialogBtnClickedListener) getTargetFragment();
+				} else if (getActivity() instanceof OnDialogBtnClickedListener) {
+					listener = (OnDialogBtnClickedListener) getActivity();
+				}
+
+				if (listener == null) {
+					return;
+				}
+
+				listener.onDialogBtnClicked(i,
 						OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
 			}
 

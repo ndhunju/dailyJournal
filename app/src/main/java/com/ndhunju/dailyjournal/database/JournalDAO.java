@@ -8,6 +8,7 @@ import android.support.annotation.UiThread;
 
 import com.ndhunju.dailyjournal.database.DailyJournalContract.JournalColumns;
 import com.ndhunju.dailyjournal.model.Journal;
+import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.util.Utils;
 
 import java.util.ArrayList;
@@ -143,7 +144,7 @@ public class JournalDAO implements IJournalDAO {
 
         //order by date
         Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null,
-                JournalColumns.COL_JOURNAL_DATE + " >= " + startDate + " AND " + JournalColumns.COL_JOURNAL_DATE + " <= " + endDate, null, null, null,
+                JournalColumns.COL_JOURNAL_DATE + " >= " + startDate + " AND " + JournalColumns.COL_JOURNAL_DATE + " < " + (endDate + Constants.ONE_DAY_IN_MILLI) , null, null, null,
                 JournalColumns.COL_JOURNAL_DATE, null);
 
         List<Journal> temp = new ArrayList<>();
@@ -155,6 +156,30 @@ public class JournalDAO implements IJournalDAO {
             if (!Utils.contains(excludeJournalsWithId, journal.getId())) {
                 temp.add(journal);
             }
+        }while(c.moveToNext());
+
+        c.close();
+        return temp;
+    }
+
+    @Override
+    public List<Journal> findByPartyAndDate(long partyId, long date) {
+        SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
+
+        //order by date
+        Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null,
+                JournalColumns.COL_PARTY_ID + " == " + partyId + " AND "
+                        + JournalColumns.COL_JOURNAL_DATE + " >= " + date + " AND "
+                        + JournalColumns.COL_JOURNAL_DATE + " < " + (date + Constants.ONE_DAY_IN_MILLI), null, null, null,
+                JournalColumns.COL_JOURNAL_DATE, null);
+
+        List<Journal> temp = new ArrayList<>();
+        if(!c.moveToFirst()) return temp;
+
+        Journal journal;
+        do{
+            journal = fromCursor(c);
+            temp.add(journal);
         }while(c.moveToNext());
 
         c.close();

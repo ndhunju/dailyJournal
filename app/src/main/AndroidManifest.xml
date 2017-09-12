@@ -110,6 +110,9 @@
         <activity android:name=".controller.StartNextYearActivity"
             android:label="@string/title_activity_start_next_year"/>
 
+        <activity android:name=".controller.DailyReportActivity"
+            android:label="@string/title_activity_daily_report"/>
+
     </application>
 
 </manifest>

@@ -2,6 +2,8 @@ package com.ndhunju.dailyjournal.util;
 
 import android.os.Build;
 
+import java.util.Calendar;
+
 /**
  * Created by dhunju on 1/25/2016.
  */
@@ -18,5 +20,13 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    /** Removes hours, minutes, seconds and milliseconds from {@code calendar}*/
+    public static void removeValuesBelowHours(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
     }
 }

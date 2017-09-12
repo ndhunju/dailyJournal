@@ -582,6 +582,27 @@ public class Services {
         return journalDAO.findByDate(start, end, getNewJournalId());
     }
 
+    public List<Journal> findByPartyAndDate(long partyId, long date) {
+        List<Journal> journals = journalDAO.findByPartyAndDate(partyId, date);
+
+        // Calculate the balances for journals
+        if(journals != null) {
+            double balance = 0;
+            for (Journal journal : journals) {
+                if (journal.getType() == Journal.Type.Debit) {
+                    balance += journal.getAmount();
+                } else {
+                    balance -= journal.getAmount();
+                }
+                journal.setBalance(balance);
+            }
+
+            return journals;
+        }
+
+        return new ArrayList<>();
+    }
+
     // declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
     private Calendar calendar = Calendar.getInstance();
 
