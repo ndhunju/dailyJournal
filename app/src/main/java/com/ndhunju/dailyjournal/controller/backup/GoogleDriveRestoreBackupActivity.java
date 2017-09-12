@@ -40,7 +40,7 @@ public class GoogleDriveRestoreBackupActivity extends GoogleDriveBackupActivity 
         switch (requestCode) {
             case REQUEST_CODE_GDRIVE_PICKER:
                 //User has picked a file from Google Drive
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK && data != null) {
                     DriveId driveId = data.getParcelableExtra(OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
                     Log.d(TAG, "Selected file's ID: " + driveId);
                     //Download the file in background thread
