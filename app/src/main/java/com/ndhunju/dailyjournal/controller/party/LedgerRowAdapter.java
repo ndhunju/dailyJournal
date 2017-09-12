@@ -28,11 +28,12 @@ class LedgerRowAdapter extends LedgerAdapter {
 
     public LedgerRowAdapter(Activity activity, Party party) {
         super(activity, party);
+        setLayoutId(R.layout.ledger_row);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new LedgerVH(LayoutInflater.from(getContext()).inflate(R.layout.ledger_row, parent, false));
+        return new LedgerVH(LayoutInflater.from(getContext()).inflate(mLayoutResId, parent, false));
     }
 
     @Override

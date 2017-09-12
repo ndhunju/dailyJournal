@@ -26,15 +26,17 @@ public class LedgerCardAdapter extends LedgerAdapter {
 
     public LedgerCardAdapter(Context context, Party party) {
         super(context, party);
+        setLayoutId(R.layout.ledger_card);
     }
 
     public LedgerCardAdapter(Context context, List<Journal> journals) {
         super(context, journals);
+        setLayoutId(R.layout.ledger_card);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new LedgerCardViewHolder(LayoutInflater.from(getContext()).inflate(R.layout.ledger_card, parent, false));
+        return new LedgerCardViewHolder(LayoutInflater.from(getContext()).inflate(mLayoutResId, parent, false));
     }
 
     @Override
@@ -44,6 +46,7 @@ public class LedgerCardAdapter extends LedgerAdapter {
     }
 
     private class LedgerCardViewHolder extends LedgerVH implements ObservableField.Observer {
+        TextView partyTV;
         TextView dateTV;
         TextView noteTV;
         TextView amountTV;
@@ -53,6 +56,7 @@ public class LedgerCardAdapter extends LedgerAdapter {
 
         public LedgerCardViewHolder(View itemView) {
             super(itemView);
+            partyTV = (TextView) itemView.findViewById(R.id.ledger_card_party);
             dateTV = (TextView)  itemView.findViewById(R.id.ledger_card_date_tv);
             noteTV = (TextView)  itemView.findViewById(R.id.ledger_card_note_tv);
             amountTV = (TextView)itemView.findViewById(R.id.ledger_card_amount_tv);
@@ -64,6 +68,10 @@ public class LedgerCardAdapter extends LedgerAdapter {
 
         public void bind(Journal journal) {
             super.bind(journal);
+            if (partyTV != null) {
+                partyTV.setText(mServices.getParty(journal.getPartyId()).getName());
+            }
+
             //Log.d("journals " + getCount(), " pos: " + position + "date : " +  getContext().getString(R.string.dateFormat));
             dateTV.setText(UtilsFormat.formatDate(new Date(journal.getDate()), getContext()));
             if (!TextUtils.isEmpty(journal.getNote())) {

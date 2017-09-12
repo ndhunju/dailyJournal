@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,7 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
 
     protected Party mParty;
     protected Context mContext;
+    protected int mLayoutResId;
     protected Services mServices;
     protected List<Journal> mJournals;
     protected OnItemClickListener mOnItemClickListener;
@@ -63,6 +65,10 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
         mJournals = journals;
         mServices = Services.getInstance(context);
         setHasStableIds(true);
+    }
+
+    public void setLayoutId(@LayoutRes int layoutResId) {
+        mLayoutResId = layoutResId;
     }
 
     public void setJournals(List<Journal> journals) {

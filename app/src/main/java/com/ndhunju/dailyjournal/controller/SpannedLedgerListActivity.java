@@ -90,6 +90,7 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
         });
 
         ledgerAdapter = new LedgerCardAdapter(this, new ArrayList<Journal>());
+        ledgerAdapter.setLayoutId(R.layout.spanned_ledger_card);
         ledgerAdapter.setOnItemClickListener(SpannedLedgerListActivity.this);
         Services.getInstance(this).registerJournalObserver(ledgerAdapter);
         recyclerView.setAdapter(ledgerAdapter);
