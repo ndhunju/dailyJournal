@@ -155,7 +155,8 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
 
     private class ToolsAdapter extends RecyclerView.Adapter {
 
-        int[] itemStringResId = {R.string.activity_home_find_journal_by_date,
+        int[] itemStringResId = {R.string.title_activity_daily_report,
+                R.string.activity_home_find_journal_by_date,
                 R.string.activity_home_search_journal_notes,
                 R.string.activity_home_backup,
                 R.string.activity_home_charts,
@@ -163,7 +164,8 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                 R.string.title_activity_erase,
                 R.string.title_activity_start_next_year};
 
-        int[] itemIconResId = {R.drawable.ic_date_range,
+        int[] itemIconResId = {R.drawable.ic_daily_report_24dp,
+                R.drawable.ic_date_range,
                 R.drawable.ic_search,
                 R.drawable.ic_save,
                 R.drawable.ic_chart_pie,
@@ -241,6 +243,8 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                     case R.string.title_activity_start_next_year:
                         startActivity(new Intent(getContext(), StartNextYearActivity.class));
                         break;
+                    case R.string.title_activity_daily_report:
+                        startActivity(new Intent(getContext(), DailyReportActivity.class));
                 }
             }
         }

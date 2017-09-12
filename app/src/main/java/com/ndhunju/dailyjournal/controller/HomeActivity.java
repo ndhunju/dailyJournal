@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
+import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
+import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
@@ -151,6 +153,8 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
         final String SAVED_SHORTCUT_DELIMITER = ";";
 
         ShortCut[] allShortCuts = {
+                new NewJournalShortCut(),
+                new DailyReportShortCut(),
                 new FindJournalShortCut(),
                 new SearchJournalByNoteShortCut(),
                 new ExportPrintableShortCut(),
@@ -298,6 +302,34 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
                                 keyValPersistence.putString(PREF_KEY_SAVED_SHORTCUT, selectedShortCutNames.toString());
                             }
                 }).create().show();
+            }
+        }
+
+        private class NewJournalShortCut extends ShortCut {
+
+            NewJournalShortCut() {
+                super(UtilsFormat.getJournalFromPref(getContext()).contains(getString(R.string.str_journal))
+                                ? R.string.nav_item_journal : R.string.nav_item_transaction,
+                        R.drawable.ic_journal);
+            }
+
+            @Override
+            void onClick() {
+                super.onClick();
+                startActivity(new Intent(getContext(), JournalNewActivity.class).putExtra(Constants.KEY_JOURNAL_ID, Constants.ID_NEW_JOURNAL));
+            }
+        }
+
+        private class DailyReportShortCut extends ShortCut {
+
+            DailyReportShortCut() {
+                super(R.string.title_activity_daily_report, R.drawable.ic_daily_report_24dp);
+            }
+
+            @Override
+            void onClick() {
+                super.onClick();
+                startActivity(new Intent(getContext(), DailyReportActivity.class));
             }
         }
 
