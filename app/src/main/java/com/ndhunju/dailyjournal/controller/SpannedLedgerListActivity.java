@@ -18,12 +18,12 @@ import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
 import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,8 +34,8 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
     private static final int REQUEST_START_DATE = 6656;
     private static final int REQUEST_END_DATE = 5000;
 
-    Date startDate;
-    Date endDate;
+    Calendar startDate;
+    Calendar endDate;
 
     Button startDateBtn;
     Button endDateBtn;
@@ -48,8 +48,10 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spanned_ledger);
 
-        startDate = new Date();
-        endDate   = new Date();
+        startDate = Calendar.getInstance();
+        endDate   = Calendar.getInstance();
+        Utils.removeValuesBelowHours(startDate);
+        Utils.removeValuesBelowHours(endDate);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle(UtilsFormat.getJournalFromPref(this));
@@ -63,21 +65,21 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
         recyclerView = (RecyclerView) findViewById(R.id.activity_spanned_ledger_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
 
-        startDateBtn.setText(UtilsFormat.formatDate(startDate, getApplicationContext()));
+        startDateBtn.setText(UtilsFormat.formatDate(startDate.getTime(), getApplicationContext()));
         startDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment dpf = DatePickerFragment.newInstance(startDate, REQUEST_START_DATE);
+                DatePickerFragment dpf = DatePickerFragment.newInstance(startDate.getTime(), REQUEST_START_DATE);
                 dpf.show(getSupportFragmentManager(), DatePickerFragment.TAG);
                 //the result is delivered to OnDialoguePressedOk()
             }
         });
 
-        endDateBtn.setText(UtilsFormat.formatDate(endDate, getApplicationContext()));
+        endDateBtn.setText(UtilsFormat.formatDate(endDate.getTime(), getApplicationContext()));
         endDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment dpf = DatePickerFragment.newInstance(endDate, REQUEST_END_DATE);
+                DatePickerFragment dpf = DatePickerFragment.newInstance(endDate.getTime(), REQUEST_END_DATE);
                 dpf.show(getSupportFragmentManager(), DatePickerFragment.TAG);
             }
         });
@@ -85,7 +87,7 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
         findJournalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ledgerAdapter.setJournals(Services.getInstance(getApplicationContext()).findByDate(startDate.getTime(), endDate.getTime()));
+                ledgerAdapter.setJournals(Services.getInstance(getApplicationContext()).findByDate(startDate.getTimeInMillis(), endDate.getTimeInMillis()));
             }
         });
 
@@ -101,17 +103,19 @@ public class SpannedLedgerListActivity extends AppCompatActivity implements OnDi
     public void onDialogBtnClicked(Intent data, @ButtonType int whichBtn, int result, int requestCode) {
         if (result != Activity.RESULT_OK) return;
 
-        long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
+        Calendar calendar = (Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL);
+        Utils.removeValuesBelowHours(calendar);
+
         switch (requestCode) {
 
             case REQUEST_START_DATE:
-                startDate.setTime(newDate);
-                startDateBtn.setText(UtilsFormat.formatDate(startDate, getApplicationContext()));
+                startDate = calendar;
+                startDateBtn.setText(UtilsFormat.formatDate(startDate.getTime(), getApplicationContext()));
                 break;
 
             case REQUEST_END_DATE:
-                endDate.setTime(newDate);
-                endDateBtn.setText(UtilsFormat.formatDate(endDate, getApplicationContext()));
+                endDate = calendar;
+                endDateBtn.setText(UtilsFormat.formatDate(endDate.getTime(), getApplicationContext()));
                 break;
         }
     }
