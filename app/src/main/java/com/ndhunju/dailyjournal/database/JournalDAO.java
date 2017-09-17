@@ -166,9 +166,9 @@ public class JournalDAO implements IJournalDAO {
     public List<Journal> findByPartyAndDate(long partyId, long date) {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
 
-        //order by date
-        Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null,
-                JournalColumns.COL_PARTY_ID + " == " + partyId + " AND "
+        Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null, (partyId > 0
+                ? JournalColumns.COL_PARTY_ID + " == " + partyId + " AND "
+                : "")
                         + JournalColumns.COL_JOURNAL_DATE + " >= " + date + " AND "
                         + JournalColumns.COL_JOURNAL_DATE + " < " + (date + Constants.ONE_DAY_IN_MILLI), null, null, null,
                 JournalColumns.COL_JOURNAL_DATE, null);

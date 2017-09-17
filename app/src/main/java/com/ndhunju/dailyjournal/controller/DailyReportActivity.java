@@ -96,15 +96,12 @@ public class DailyReportActivity extends AppCompatActivity implements LedgerAdap
         findJournalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mParty == null) {
-                    UtilsView.alert(DailyReportActivity.this, getString(R.string.warning_select_party));
-                    return;
-                }
-                ledgerAdapter.setJournals(mServices.findByPartyAndDate(mParty.getId(), mSelectedDate.getTimeInMillis()));
+                ledgerAdapter.setJournals(mServices.findByPartyAndDate(mParty == null ? Constants.NO_PARTY : mParty.getId(), mSelectedDate.getTimeInMillis()));
             }
         });
 
         ledgerAdapter = new LedgerCardAdapter(this, new ArrayList<Journal>());
+        ledgerAdapter.setLayoutId(R.layout.spanned_ledger_card);
         ledgerAdapter.setOnItemClickListener(this);
         Services.getInstance(this).registerJournalObserver(ledgerAdapter);
         recyclerView.setAdapter(ledgerAdapter);

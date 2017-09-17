@@ -46,6 +46,7 @@ public class LedgerCardAdapter extends LedgerAdapter {
     }
 
     private class LedgerCardViewHolder extends LedgerVH implements ObservableField.Observer {
+        TextView number;
         TextView partyTV;
         TextView dateTV;
         TextView noteTV;
@@ -56,6 +57,7 @@ public class LedgerCardAdapter extends LedgerAdapter {
 
         public LedgerCardViewHolder(View itemView) {
             super(itemView);
+            number = (TextView) itemView.findViewById(R.id.ledger_card_number);
             partyTV = (TextView) itemView.findViewById(R.id.ledger_card_party);
             dateTV = (TextView)  itemView.findViewById(R.id.ledger_card_date_tv);
             noteTV = (TextView)  itemView.findViewById(R.id.ledger_card_note_tv);
@@ -68,6 +70,10 @@ public class LedgerCardAdapter extends LedgerAdapter {
 
         public void bind(Journal journal) {
             super.bind(journal);
+            if (number != null) {
+                number.setText(String.valueOf(getAdapterPosition() + 1));
+            }
+
             if (partyTV != null) {
                 partyTV.setText(mServices.getParty(journal.getPartyId()).getName());
             }
