@@ -21,6 +21,7 @@ import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.json.JsonConverter;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
+import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsZip;
 
@@ -46,8 +47,14 @@ public class Services {
 
     //Variables
     private Context mContext;
+
     private String mCompanyName;
     private Date mCurrentFinancialYear;
+
+    private double mTodaysTotalDr;
+    private double mTodaysTotalCr;
+    private int mTodaysJouranlCount;
+
     private SQLiteOpenHelper mSqLiteOpenHelper;
     private List<Listener> mListeners;
 
@@ -583,7 +590,7 @@ public class Services {
     }
 
     public List<Journal> findByPartyAndDate(long partyId, long date) {
-        List<Journal> journals = journalDAO.findByPartyAndDate(partyId, date);
+        List<Journal> journals = journalDAO.findByPartyAndDate(partyId, date, getNewJournalId());
 
         // Calculate the balances for journals
         if(journals != null) {
@@ -745,7 +752,43 @@ public class Services {
         for (Party party : getParties()) {
             totalUserCredit += party.getDebitTotal();
         }
+
         return totalUserCredit;
+    }
+
+    public int getTotalJournalCount() {
+        return journalDAO.findAll().size();
+    }
+
+    public void calculateTodaysDrCrTotal() {
+        mTodaysTotalDr = 0;
+        mTodaysTotalCr = 0;
+
+        List<Journal> todaysJournal = findByPartyAndDate(Constants.NO_PARTY, Utils.removeValuesBelowHours(Calendar.getInstance()).getTimeInMillis());
+        mTodaysJouranlCount = todaysJournal.size();
+
+        // Calculate the balances for journals
+        if(todaysJournal != null) {
+            for (Journal journal : todaysJournal) {
+                if (journal.getType() == Journal.Type.Debit) {
+                    mTodaysTotalCr += journal.getAmount();
+                } else {
+                    mTodaysTotalDr += journal.getAmount();
+                }
+            }
+        }
+    }
+
+    public double getTodaysDebit() {
+        return mTodaysTotalDr;
+    }
+
+    public double getTodaysCredit() {
+        return mTodaysTotalCr;
+    }
+
+    public int getTodaysJournalCount() {
+        return mTodaysJouranlCount;
     }
 
 

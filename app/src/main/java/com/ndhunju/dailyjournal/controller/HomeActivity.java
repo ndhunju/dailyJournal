@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.controller;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,6 +30,7 @@ import com.ndhunju.folderpicker.FolderPickerDialogFragment;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClickedListener, Services.Listener {
@@ -39,14 +42,24 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
     // member variables
 	Services mServices;
     boolean mRefreshNeeded;
+
     // view variables
-    RecyclerView mRecyclerView;
     View mRefreshHomeBtn;
-	TextView mCompanyName;
+    ViewGroup mTodaysCardView;
+    ViewGroup mYearlyCardView;
+
+    TextView mCompanyName;
+    TextView mTodaysDate;
+    TextView mTodaysDrAmount;
+    TextView mTodaysCrAmount;
+    TextView mTodaysTotal;
+
+    RecyclerView mRecyclerView;
+	TextView mYearlyReportHeader;
 	TextView mFinancialYear;
-	TextView mDrAmount;
-	TextView mCrAmount;
-	TextView mTotal;
+	TextView mYearlyDrAmount;
+	TextView mYearlyCrAmount;
+	TextView mYearlyTotal;
 
 	@Override
 	public void onCreate(android.os.Bundle arg0) {
@@ -55,19 +68,20 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
         addContentFrame(R.layout.activity_home);
 
         // wire up and set up
-		mFinancialYear = (TextView) findViewById(R.id.activity_home_financial_year);
-		mCompanyName = (TextView) findViewById(R.id.activity_home_company_name);
-		mDrAmount = (TextView) findViewById(R.id.activity_home_dr_balance);
-		mCrAmount = (TextView) findViewById(R.id.activity_home_cr_balance);
-		mTotal    = (TextView) findViewById(R.id.activity_home_total_balance);
+        mTodaysCardView = (ViewGroup) findViewById(R.id.activity_home_card_view_daily);
+        mCompanyName = (TextView) findViewById(R.id.activity_home_company_name);
+        mTodaysDate = (TextView) findViewById(R.id.activity_home_todays_date);
+        mTodaysDrAmount = (TextView) findViewById(R.id.activity_home_todays_dr_balance);
+        mTodaysCrAmount = (TextView) findViewById(R.id.activity_home_todays_cr_balance);
+        mTodaysTotal    = (TextView) findViewById(R.id.activity_home_todays_total_balance);
 
-		mRefreshHomeBtn = findViewById(R.id.activity_home_refresh_home);
-        mRefreshHomeBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-                refreshHomeView();
-			}
-		});
+        mYearlyCardView = (ViewGroup) findViewById(R.id.activity_home_card_view_yearly);
+		mFinancialYear = (TextView) findViewById(R.id.activity_home_financial_year);
+		mYearlyReportHeader = (TextView) findViewById(R.id.activity_home_yearly);
+		mYearlyDrAmount = (TextView) findViewById(R.id.activity_home_yearly_dr_balance);
+		mYearlyCrAmount = (TextView) findViewById(R.id.activity_home_yearly_cr_balance);
+		mYearlyTotal = (TextView) findViewById(R.id.activity_home_yearly_total_balance);
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.activity_home_recycler_view);
         mRecyclerView.setItemAnimator(UtilsView.getDefaultItemAnimator());
@@ -77,11 +91,40 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(new ShortCutAdapter());
 
+        mRefreshHomeBtn = findViewById(R.id.activity_home_refresh_home);
+        mRefreshHomeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshHomeView();
+            }
+        });
+
+        setupSizeForCards();
+
+
 		mServices = Services.getInstance(getContext());
         mServices.addListener(this);
         mRefreshNeeded = true;
 
 	}
+
+	private void setupSizeForCards() {
+        mCompanyName.getRootView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int screenWidth = mCompanyName.getRootView().getMeasuredWidth();
+                int dp35 = UtilsView.dpToPx(getContext(), 35);
+                mTodaysCardView.getChildAt(0).setMinimumWidth(screenWidth - dp35);
+                mYearlyCardView.getChildAt(0).setMinimumWidth(screenWidth - dp35);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    mCompanyName.getRootView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    mCompanyName.getRootView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
+    }
 
     @Override
     protected void onResume() {
@@ -94,7 +137,8 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
     private void refreshHomeView() {
         mRecyclerView.getAdapter().notifyDataSetChanged();
         setCompanySettings();
-        setUserBalance();
+        setYearlyUserBalance();
+        setTodaysUserBalance();
         mRefreshNeeded = false;
     }
 
@@ -110,18 +154,35 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 		return true;
 	}
 
-	private void setUserBalance() {
+	private void setYearlyUserBalance() {
 		double drBalance = mServices.getDebitTotal();
 		double crBalance = mServices.getCreditTotal();
 		double balance = drBalance - crBalance;
 
-		((TextView) findViewById(R.id.activity_home_cr_text)).setText(UtilsFormat.getUserDrFromPref(getContext()));
-		((TextView) findViewById(R.id.activity_home_dr_text)).setText(UtilsFormat.getUserCrFromPref(getContext()));
+		((TextView) findViewById(R.id.activity_home_yearly_cr_text)).setText(UtilsFormat.getUserDrFromPref(getContext()));
+		((TextView) findViewById(R.id.activity_home_yearly_dr_text)).setText(UtilsFormat.getUserCrFromPref(getContext()));
+        ((TextView) findViewById(R.id.activity_home_yearly_journal_count)).setText(String.valueOf(mServices.getTotalJournalCount()));
 
-		mDrAmount.setText(UtilsFormat.formatCurrency(drBalance, getContext()));
-		mCrAmount.setText(UtilsFormat.formatCurrency(crBalance, getContext()));
-		mTotal.setText(UtilsFormat.formatCurrency(balance, getContext()));
+		mYearlyDrAmount.setText(UtilsFormat.formatCurrency(drBalance, getContext()));
+		mYearlyCrAmount.setText(UtilsFormat.formatCurrency(crBalance, getContext()));
+		mYearlyTotal.setText(UtilsFormat.formatCurrency(balance, getContext()));
 	}
+
+	private void setTodaysUserBalance() {
+        mServices.calculateTodaysDrCrTotal();
+        double drBalance = mServices.getTodaysDebit();
+        double crBalance = mServices.getTodaysCredit();
+        double balance = drBalance - crBalance;
+
+        ((TextView) findViewById(R.id.activity_home_todays_cr_text)).setText(UtilsFormat.getUserDrFromPref(getContext()));
+        ((TextView) findViewById(R.id.activity_home_todays_dr_text)).setText(UtilsFormat.getUserCrFromPref(getContext()));
+        ((TextView) findViewById(R.id.activity_home_todays_journal_count)).setText(String.valueOf(mServices.getTodaysJournalCount()));
+
+        mTodaysDate.setText(getString(R.string.msg_todays_date, UtilsFormat.formatDate(new Date(), getContext())));
+        mTodaysDrAmount.setText(UtilsFormat.formatCurrency(drBalance, getContext()));
+        mTodaysCrAmount.setText(UtilsFormat.formatCurrency(crBalance, getContext()));
+        mTodaysTotal.setText(UtilsFormat.formatCurrency(balance, getContext()));
+    }
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -163,7 +163,7 @@ public class JournalDAO implements IJournalDAO {
     }
 
     @Override
-    public List<Journal> findByPartyAndDate(long partyId, long date) {
+    public List<Journal> findByPartyAndDate(long partyId, long date, long... excludeJournalsWithId) {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
 
         Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null, (partyId > 0
@@ -179,7 +179,9 @@ public class JournalDAO implements IJournalDAO {
         Journal journal;
         do{
             journal = fromCursor(c);
-            temp.add(journal);
+            if (!Utils.contains(excludeJournalsWithId, journal.getId())) {
+                temp.add(journal);
+            }
         }while(c.moveToNext());
 
         c.close();
