@@ -5,296 +5,55 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <HorizontalScrollView
+    <android.support.v7.widget.CardView
+        android:id="@+id/activity_home_card_view_daily"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        card_view:cardCornerRadius="4dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="8dp">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/activity_home_card_view_daily"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                card_view:cardCornerRadius="4dp">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                 <TextView
+                     android:id="@+id/activity_home_company_name"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:layout_marginBottom="5dp"
+                     android:layout_marginRight="22dp"
+                     android:layout_weight="1"
+                     android:textAppearance="@android:style/TextAppearance.Large"
+                     android:textStyle="bold"
+                     tools:text="Company Name" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/activity_home_refresh_home"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_refresh_24px" />
 
-                            <TextView
-                                android:id="@+id/activity_home_company_name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@android:style/TextAppearance.Large"
-                                android:textStyle="bold"
-                                tools:text="Company Name" />
+            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/activity_home_todays_date"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@android:style/TextAppearance.Small"
-                                tools:text="From 11 Sept (Today)" />
-
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/activity_home_refresh_home"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="?attr/selectableItemBackground"
-                            android:src="@drawable/ic_refresh_24px" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:text="@string/str_no_of_journal"
-                            android:textAppearance="@android:style/TextAppearance.Medium" />
-
-                        <TextView
-                            android:id="@+id/activity_home_todays_journal_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            android:textColor="@color/green"
-                            tools:text="46" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/activity_home_todays_dr_text"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:text="@string/str_debit"
-                            android:textAppearance="@android:style/TextAppearance.Medium" />
-
-                        <TextView
-                            android:id="@+id/activity_home_todays_dr_balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            android:textColor="@color/green"
-                            tools:text="5000" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/activity_home_todays_cr_text"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:text="@string/str_credit"
-                            android:textAppearance="@android:style/TextAppearance.Medium" />
-
-                        <TextView
-                            android:id="@+id/activity_home_todays_cr_balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            android:textColor="@color/red_light_pressed"
-                            tools:text="2500" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/top_border">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:text="@string/str_total"
-                            android:textAppearance="@android:style/TextAppearance.Medium" />
-
-                        <TextView
-                            android:id="@+id/activity_home_todays_total_balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            tools:text="2500" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/activity_home_card_view_yearly"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/activity_home_summary_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                card_view:cardCornerRadius="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="22dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/activity_home_yearly"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=" "
-                            android:textAppearance="@android:style/TextAppearance.Large"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/activity_home_financial_year"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Small"
-                            tools:text="From 3 Sept 2017" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:text="@string/str_no_of_journal"
-                            android:textAppearance="@android:style/TextAppearance.Medium" />
-
-                        <TextView
-                            android:id="@+id/activity_home_yearly_journal_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            android:textColor="@color/green"
-                            tools:text="46" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/activity_home_yearly_dr_text"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:text="@string/str_debit"
-                            android:textAppearance="@android:style/TextAppearance.Medium" />
-
-                        <TextView
-                            android:id="@+id/activity_home_yearly_dr_balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            android:textColor="@color/green"
-                            tools:text="5000" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/activity_home_yearly_cr_text"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:text="@string/str_credit"
-                            android:textAppearance="@android:style/TextAppearance.Medium" />
-
-                        <TextView
-                            android:id="@+id/activity_home_yearly_cr_balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            android:textColor="@color/red_light_pressed"
-                            tools:text="2500" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/top_border"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="22dp"
-                            android:layout_weight="1"
-                            android:text="@string/str_total"
-                            android:textAppearance="@android:style/TextAppearance.Medium" />
-
-                        <TextView
-                            android:id="@+id/activity_home_yearly_total_balance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@android:style/TextAppearance.Medium"
-                            tools:text="2500" />
-                    </LinearLayout>
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
-    </HorizontalScrollView>
+    </android.support.v7.widget.CardView>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/activity_home_recycler_view"

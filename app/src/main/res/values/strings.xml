@@ -100,7 +100,8 @@
     <string name="str_thank_you">Thank you.</string>
     <string name="str_amount">Amount</string>
     <string name="str_dashboard">Dashboard</string>
-    <string name="str_no_of_journal">Journal Count</string>
+    <!-- %s is Journal/Transaction based on user's preference -->
+    <string name="str_no_of_journal">%s Count</string>
 
 
     <string name="action_settings">Settings</string>
