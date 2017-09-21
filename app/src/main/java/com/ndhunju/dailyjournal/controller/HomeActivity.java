@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
@@ -71,6 +72,9 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 
         mSummaryPager = (ViewPager) findViewById(R.id.activity_home_summary_pager);
         mSummaryPager.setAdapter(new SummaryPagerAdapter());
+
+        TabLayout dotTabLayout = (TabLayout) findViewById(R.id.activity_home_tab_dots);
+        dotTabLayout.setupWithViewPager(mSummaryPager);
 
         mRefreshHomeBtn = findViewById(R.id.activity_home_refresh_home);
         mRefreshHomeBtn.setOnClickListener(new View.OnClickListener() {
