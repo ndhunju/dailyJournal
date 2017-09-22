@@ -8,6 +8,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -93,9 +94,16 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 	}
 
 	private void setupSizeForSummaryPager() {
-        mSummaryPager.getRootView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        mSummaryPager.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+
+                // Make sure the view is laid out before determining the height
+                if (!ViewCompat.isLaidOut(mSummaryPager)) {
+                    return;
+                }
+
                 ViewGroup summaryRootView = (ViewGroup) findViewById(R.id.item_summary_root);
                 int summaryPagerChildHeight = 0;
                 // add height of each child
@@ -105,12 +113,15 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
                 // add top and bottom padding as well
                 summaryPagerChildHeight += summaryRootView.getPaddingBottom() + summaryRootView.getPaddingTop();
                 // set the height because by default view pager covers the entire screen
-                mSummaryPager.getLayoutParams().height = summaryPagerChildHeight;
+                ViewGroup.LayoutParams params = mSummaryPager.getLayoutParams();
+                params.height = summaryPagerChildHeight;
+                mSummaryPager.setLayoutParams(params);
 
+                // remove this GlobalLayoutListener
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mCompanyName.getRootView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    mSummaryPager.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    mCompanyName.getRootView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    mSummaryPager.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
             }
         });
@@ -212,7 +223,7 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
                 double balance = drBalance - crBalance;
 
                 ((TextView) rootView.findViewById(R.id.item_summary_title)).setText(getString(R.string.msg_todays_date, UtilsFormat.formatDate(new Date(), getContext())));
-                ((TextView) rootView.findViewById(R.id.item_summary_journal_count)).setText(String.valueOf(mServices.getTotalJournalCount()));
+                ((TextView) rootView.findViewById(R.id.item_summary_journal_count)).setText(String.valueOf(mServices.getTodaysJournalCount()));
                 ((TextView) rootView.findViewById(R.id.item_summary_dr_balance)).setText(UtilsFormat.formatCurrency(drBalance, getContext()));
                 ((TextView) rootView.findViewById(R.id.item_summary_cr_balance)).setText(UtilsFormat.formatCurrency(crBalance, getContext()));
                 ((TextView) rootView.findViewById(R.id.item_summary_total_balance)).setText(UtilsFormat.formatCurrency(balance, getContext()));
