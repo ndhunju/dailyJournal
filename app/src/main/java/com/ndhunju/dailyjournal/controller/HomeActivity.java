@@ -426,7 +426,7 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
             NewJournalShortCut() {
                 super(UtilsFormat.getJournalFromPref(getContext()).contains(getString(R.string.str_journal))
                                 ? R.string.nav_item_journal : R.string.nav_item_transaction,
-                        R.drawable.ic_journal);
+                        R.drawable.ic_journal_shortcut);
             }
 
             @Override
