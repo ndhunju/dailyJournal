@@ -757,7 +757,7 @@ public class Services {
     }
 
     public int getTotalJournalCount() {
-        return journalDAO.findAll().size();
+        return getNewJournalId() > 0 ? journalDAO.findAll().size() - 1 : journalDAO.findAll().size();
     }
 
     public void calculateTodaysDrCrTotal() {
