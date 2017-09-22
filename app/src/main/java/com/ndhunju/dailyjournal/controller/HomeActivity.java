@@ -137,7 +137,7 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 
     private void refreshHomeView() {
         mRecyclerView.getAdapter().notifyDataSetChanged();
-        mSummaryPager.getAdapter().notifyDataSetChanged();
+        mSummaryPager.setAdapter(new SummaryPagerAdapter());
         setCompanySettings();
         mRefreshNeeded = false;
     }
