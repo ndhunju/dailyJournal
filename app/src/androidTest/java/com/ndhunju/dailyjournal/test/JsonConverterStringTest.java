@@ -72,8 +72,8 @@ public class JsonConverterStringTest extends InstrumentationTestCase{
 
         //Assert that a Party's information is parsed correctly
         Party testParty = partyList.get(0);
-        assertEquals("Party's name is not in alphabetical order", "Bikesh Dhunju", testParty.getName());
-        assertEquals("Party's phone number doesn't match", "201-284-1641", testParty.getPhone());
+        assertEquals("Party's name is not in alphabetical order", "Aaron Sorkin", testParty.getName());
+        assertEquals("Party's phone number doesn't match", "743-849-4893", testParty.getPhone());
         assertEquals("Party's debit balance doesn't match", 555.0, testParty.getDebitTotal());
         assertEquals("Party's credit balance doesn't match", 552.0, testParty.getCreditTotal());
         assertEquals("Party's type doesn't match" , Party.Type.Debtors, testParty.getType());
