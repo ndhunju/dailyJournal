@@ -27,7 +27,8 @@ import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 public class PartyListDialog extends DialogFragment {
 
 	//Variables
-	private RecyclerView partyLV ;
+	public final static String TAG = PartyListDialog.class.getSimpleName();
+	private RecyclerView partyLV;
 	private EditText srchPartyET;
 	private PartyCardAdapter partyAdapter;
 
@@ -104,9 +105,19 @@ public class PartyListDialog extends DialogFragment {
 
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, addedParty.getId());
-				((OnDialogBtnClickedListener)getTargetFragment()).onDialogBtnClicked(i,
-						OnDialogBtnClickedListener.BUTTON_POSITIVE, Activity.RESULT_OK,
-						getArguments().getInt(Constants.KEY_REQUEST_CODE));
+
+				OnDialogBtnClickedListener listener = null;
+				if (getTargetFragment() instanceof  OnDialogBtnClickedListener) {
+					listener = (OnDialogBtnClickedListener) getTargetFragment();
+				} else if (getActivity() instanceof OnDialogBtnClickedListener) {
+					listener = (OnDialogBtnClickedListener) getActivity();
+				}
+
+				if (listener != null) {
+					listener.onDialogBtnClicked(i,
+							OnDialogBtnClickedListener.BUTTON_POSITIVE, Activity.RESULT_OK,
+							getArguments().getInt(Constants.KEY_REQUEST_CODE));
+				}
 
               }
 		});

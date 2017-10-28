@@ -84,8 +84,8 @@ public class DailyReportActivity extends AppCompatActivity implements LedgerAdap
 
             @Override
             public void onClick(View v) {
-                PartyListDialog partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
-                partylistdialog.show(getSupportFragmentManager(), Constants.KEY_PARTY_ID);
+                partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
+                partylistdialog.show(getSupportFragmentManager(), PartyListDialog.TAG);
                 //the result is delivered to onDialogBtnClicked()
             }
         });
@@ -123,6 +123,10 @@ public class DailyReportActivity extends AppCompatActivity implements LedgerAdap
                 long partyId = data.getLongExtra(Constants.KEY_PARTY_ID, 0);
                 mParty = mServices.getParty(partyId);
                 partyBtn.setText(mParty.getName());
+                partylistdialog = (PartyListDialog) getSupportFragmentManager().findFragmentByTag(PartyListDialog.TAG);
+                if (partylistdialog != null) {
+                    partylistdialog.dismiss();
+                }
                 break;
         }
     }

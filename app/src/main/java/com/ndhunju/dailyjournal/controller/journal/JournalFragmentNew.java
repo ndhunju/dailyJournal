@@ -169,7 +169,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
             public void onClick(View v) {
                 PartyListDialog partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
                 partylistdialog.setTargetFragment(JournalFragmentNew.this, REQUEST_CHGD_PARTY);
-                partylistdialog.show(getActivity().getSupportFragmentManager(), Constants.KEY_PARTY_ID);
+                partylistdialog.show(getActivity().getSupportFragmentManager(), PartyListDialog.TAG);
                 //the result is delivered to onDialogBtnClicked()
             }
         });
@@ -415,6 +415,10 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 mParty = mServices.getParty(partyId);
                 partyBtn.setText(mParty.getName());
                 tempJournal.setPartyId(partyId);
+                partylistdialog = (PartyListDialog) getFragmentManager().findFragmentByTag(PartyListDialog.TAG);
+                if (partylistdialog != null) {
+                    partylistdialog.dismiss();
+                }
                 break;
 
             case REQUEST_CHGED_DATE: //A Date is selected
