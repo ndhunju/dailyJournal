@@ -2,6 +2,7 @@ package com.ndhunju.dailyjournal.controller.preference;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -36,15 +37,18 @@ public class MyPreferenceActivity extends AppCompatPreferenceActivity {
             headers.add(header);
         }
 
-        setContentView(R.layout.activity_preference);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+            // setting context view with below method causes crash in Android O
+            setContentView(R.layout.activity_preference);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        ActionBar bar = getSupportActionBar();
-        bar.setHomeButtonEnabled(true);
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setDisplayShowTitleEnabled(true);
-        bar.setTitle(getString(R.string.str_preference));
+            ActionBar bar = getSupportActionBar();
+            bar.setHomeButtonEnabled(true);
+            bar.setDisplayHomeAsUpEnabled(true);
+            bar.setDisplayShowTitleEnabled(true);
+            bar.setTitle(getString(R.string.str_preference));
+        }
     }
 
     @Override
