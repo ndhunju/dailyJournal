@@ -62,10 +62,35 @@ public class SecurityPreferenceFragment extends PreferenceFragment implements Sh
         //Check if the changed preference is Reminder Checkbox or reminder interval preference
         if (key.equals(getString(R.string.key_pref_pincode_cb))) {
             if (((CheckBoxPreference) findPreference(key)).isChecked()){
-                //Alert user to enter the pind code
+                //Alert user to enter the pin code
                 UtilsView.alert(getActivity(), getString(R.string.msg_please, getString(R.string.sum_pincode_val)));
             }
 
+        } else if (key.equals(getString(R.string.key_pref_pincode_val_et))) {
+            String pinCode = ((EditTextPreference) findPreference(key)).getText();
+            try {
+                Integer.valueOf(pinCode);
+            } catch (NumberFormatException ex) {
+                //Alert user
+                UtilsView.alert(getActivity(), getString(R.string.msg_is_not_valid, getString(R.string.str_pincode)));
+                // disable the pincode lock
+                PreferenceService.from(getActivity()).putVal(getString(R.string.key_pref_pincode_cb), "false");
+            }
+        } else if (key.equals(getString(R.string.key_pref_pincode_time_et))) {
+            String timeStr = ((EditTextPreference) findPreference(key)).getText();
+            try {
+                int time = Integer.valueOf(timeStr);
+                if (time < 1) {
+                    UtilsView.alert(getActivity(), getString(R.string.msg_is_not_valid, getString(R.string.str_lock_time)));
+                    // set to minimum value allowed
+                    PreferenceService.from(getActivity()).putVal(getString(R.string.key_pref_pincode_time_et), 1);
+                }
+            } catch (NumberFormatException ex) {
+                //Alert user
+                UtilsView.alert(getActivity(), getString(R.string.msg_is_not_valid, getString(R.string.str_pincode)));
+                // set to default value
+                PreferenceService.from(getActivity()).putVal(getString(R.string.key_pref_pincode_time_et), 3);
+            }
         }
     }
 
