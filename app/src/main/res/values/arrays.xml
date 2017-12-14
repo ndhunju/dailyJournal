@@ -53,7 +53,9 @@
         <item>Indian Rupee (Rs)</item>
         <item>Nepali Rupee (Rs)</item>
         <item>Ringgit (MYR)</item>
+        <item>Rupiah (IDR)</item>
         <item>Taka (BDT)</item>
+        <item>UAE (AED)</item>
 
     </string-array>
 
@@ -62,7 +64,9 @@
         <item>IN</item>
         <item>NP</item>
         <item>MY</item>
+        <item>ID</item>
         <item>BD</item>
+        <item>AE</item>
     </string-array>
 
     <string-array name="ledger_view">
