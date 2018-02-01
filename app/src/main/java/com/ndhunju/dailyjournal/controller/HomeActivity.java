@@ -135,9 +135,14 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
         }
     }
 
+    int currentSummaryIndex;
+
     private void refreshHomeView() {
+        // save the index of the summary page that user was viewing before refresh
+        currentSummaryIndex = mSummaryPager.getCurrentItem();
         mRecyclerView.getAdapter().notifyDataSetChanged();
         mSummaryPager.setAdapter(new SummaryPagerAdapter());
+        mSummaryPager.setCurrentItem(currentSummaryIndex);
         setCompanySettings();
         mRefreshNeeded = false;
     }
