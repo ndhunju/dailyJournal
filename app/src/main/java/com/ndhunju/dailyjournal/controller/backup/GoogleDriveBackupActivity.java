@@ -151,6 +151,13 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity implem
                     Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(),
                             connectionResult != null ? connectionResult.getErrorCode() : 0,
                             REQUEST_CODE_GDRIVE_RESOLUTION);
+
+                    if (dialog == null) {
+                        dialog = new AlertDialog.Builder(getActivity())
+                                .setMessage(getString(R.string.common_google_play_services_unknown_issue, getString(R.string.app_name)))
+                                .create();
+                    }
+
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
