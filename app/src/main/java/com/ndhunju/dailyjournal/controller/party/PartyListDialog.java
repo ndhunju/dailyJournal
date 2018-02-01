@@ -13,14 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsView;
+import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 public class PartyListDialog extends DialogFragment {
 
@@ -111,6 +112,12 @@ public class PartyListDialog extends DialogFragment {
 		((FloatingActionButton)view.findViewById(R.id.fragment_party_list_fab)).setVisibility(View.INVISIBLE);
 
         mServices.registerPartyObserver(partyAdapter);
+
+        // show keyboard
+		srchPartyET.requestFocus();
+		if (getDialog().getWindow() != null) {
+			getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+		}
 
 		return view;
 	}
