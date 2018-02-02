@@ -7,15 +7,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-
-    <include layout="@layout/toolbar"/>
-
-    <com.ndhunju.dailyjournal.viewPager.HackyViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/view_pager"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_upload"
-        />
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar"/>
+
+        <com.ndhunju.dailyjournal.viewPager.HackyViewPager
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_upload"
+            />
+
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
