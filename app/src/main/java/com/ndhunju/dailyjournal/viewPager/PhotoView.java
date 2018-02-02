@@ -21,15 +21,15 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
-import android.widget.ImageView;
 
 import com.ndhunju.dailyjournal.viewPager.PhotoViewAttacher.OnMatrixChangedListener;
 import com.ndhunju.dailyjournal.viewPager.PhotoViewAttacher.OnPhotoTapListener;
 import com.ndhunju.dailyjournal.viewPager.PhotoViewAttacher.OnViewTapListener;
 
-public class PhotoView extends ImageView implements IPhotoView {
+public class PhotoView extends AppCompatImageView implements IPhotoView {
 	private final PhotoViewAttacher mAttacher;
 	private ScaleType mPendingScaleType;
 
@@ -174,6 +174,14 @@ public class PhotoView extends ImageView implements IPhotoView {
 	// setImageBitmap calls through to this method
 	public void setImageDrawable(Drawable drawable) {
 		super.setImageDrawable(drawable);
+		if (null != mAttacher) {
+			mAttacher.update();
+		}
+	}
+
+	@Override
+	public void setImageBitmap(Bitmap bm) {
+		super.setImageBitmap(bm);
 		if (null != mAttacher) {
 			mAttacher.update();
 		}

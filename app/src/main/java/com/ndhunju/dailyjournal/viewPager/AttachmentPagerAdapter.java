@@ -1,11 +1,14 @@
 package com.ndhunju.dailyjournal.viewPager;
 
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.ndhunju.dailyjournal.model.Attachment;
+import com.ndhunju.dailyjournal.util.Utils;
 
 import java.util.List;
 
@@ -28,10 +31,21 @@ class AttachmentPagerAdapter extends PagerAdapter {
         }
 
         @Override
-        public View instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = new PhotoView(container.getContext());
-            photoView.setImageDrawable(Drawable
-                     .createFromPath(mAttachments.get(position).getPath()));
+        public View instantiateItem(ViewGroup container, final int position) {
+            final PhotoView photoView = new PhotoView(container.getContext());
+            photoView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override public void onGlobalLayout() {
+                    // make sure PhotoView is laid out so that its dimensions are measured
+                    if (ViewCompat.isLaidOut(photoView)) {
+                        photoView.setImageBitmap(Utils.scaleBitmap(mAttachments.get(position).getPath(), photoView.getWidth(), photoView.getHeight()));
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                            photoView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        } else {
+                            photoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+                    }
+                }
+            });
             // Now just add PhotoView to ViewPager and return it
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT,
                                          ViewGroup.LayoutParams.MATCH_PARENT);
