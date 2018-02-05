@@ -290,20 +290,23 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
 
             case R.id.menu_party_list_activity_share:
                 // let the user choose the type of report she wants to share
-                String[] options = SharePartiesReportAsync.getStrTypes();
-                new AlertDialog.Builder(getActivity()).setItems(options,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int optionIndex) {
-                                shareAllOrSelectPartyDialog(getActivity(), optionIndex);
-                            }
-                        })
-                        .create().show();
-
+                createDialogForSharePartiesReport(getActivity()).show();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static AlertDialog createDialogForSharePartiesReport(final Activity activity) {
+        String[] options = SharePartiesReportAsync.getStrTypes();
+        return new AlertDialog.Builder(activity).setItems(options,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int optionIndex) {
+                        shareAllOrSelectPartyDialog(activity, optionIndex);
+                    }
+                })
+                .create();
     }
 
     public static void shareAllOrSelectPartyDialog(final Activity activity, final int optionIndex) {

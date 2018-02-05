@@ -11,6 +11,11 @@
     </string-array>
 
 
+    <string-array name="options_export_print_location">
+        <item>Local Storage</item>
+        <item>Other Apps</item>
+    </string-array>
+
     <string-array name="reminder_intervals">
         <item >Hourly</item>
         <item >Daily</item>

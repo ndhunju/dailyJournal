@@ -2,7 +2,6 @@ package com.ndhunju.dailyjournal.controller;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +18,10 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.backup.ExportPartiesReportAsync;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
+import com.ndhunju.dailyjournal.controller.party.PartyListFragment;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.folderpicker.FolderPickerDialogFragment;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
@@ -127,7 +128,7 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
             allParties[i] = parties.get(i).getName();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(activity.getString(R.string.msg_choose, activity.getString(R.string.str_contact)));
+        builder.setTitle(activity.getString(R.string.msg_choose, UtilsFormat.getPartyFromPref(activity)));
         builder.setNegativeButton(activity.getString(android.R.string.cancel), null);
         builder.setMultiChoiceItems(allParties, null,
                 new DialogInterface.OnMultiChoiceClickListener() {
@@ -234,8 +235,28 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         break;
                     case R.string.str_export_printable:
-                        FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
-                        dpdf.show(getFragmentManager(), FolderPickerDialogFragment.class.getName());
+                        // show export location options
+                        CharSequence[] options = getResources().getStringArray(R.array.options_export_print_location);
+                        AlertDialog chooseDialog = new AlertDialog.Builder(getContext())
+                                .setTitle(getString(R.string.str_choose))
+                                .setItems(options, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which) {
+                                            case 0: // Local Storage
+                                                FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
+                                                dpdf.show(getFragmentManager(), FolderPickerDialogFragment.class.getName());
+                                                break;
+
+                                            case 1: // Other Apps
+                                                PartyListFragment.createDialogForSharePartiesReport(getActivity()).show();
+                                                break;
+
+                                        }
+                                    }
+                                }).create();
+
+                        chooseDialog.show();
                         break;
                     case R.string.title_activity_erase:
                         startActivity(new Intent(getContext(), EraseActivity.class));
