@@ -119,7 +119,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
             UtilsView.alert(mActivity, String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_report)));
             return;
         }
-        intent.setType("text/plain");
+        intent.setType(rg.getReportType());
         mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));
 
         if (mType != Type.TEXT) {
