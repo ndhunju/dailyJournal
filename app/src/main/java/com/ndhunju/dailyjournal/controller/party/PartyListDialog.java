@@ -20,6 +20,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
@@ -118,6 +119,8 @@ public class PartyListDialog extends DialogFragment {
 		if (getDialog().getWindow() != null) {
 			getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		}
+
+		getDialog().setTitle(getString(R.string.msg_choose, UtilsFormat.getPartyFromPref(getContext())));
 
 		return view;
 	}

@@ -105,7 +105,9 @@ public class UtilsFormat {
     }
 
     private static String replaceNPRWithNepaliCurrency(Context context, String value) {
-        return value.replace("NPR", context.getString(R.string.symbol_nepali_rupee));
+        return value.contains("NPRs")
+                ? value.replaceFirst("NPRs", context.getString(R.string.symbol_nepali_rupee))
+                : value.replaceFirst("NPR", context.getString(R.string.symbol_nepali_rupee));
     }
 
     private static String replaceNepaliCurrencyWithNPR(Context context, String value) {
