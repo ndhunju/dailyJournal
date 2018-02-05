@@ -9,5 +9,12 @@
         android:title="@string/str_import"
         />
 
+    <item
+        android:id="@+id/menu_party_list_activity_share"
+        app:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_share_black_48dp"
+        android:title="@string/str_share_report"
+        />
+
 
 </menu>

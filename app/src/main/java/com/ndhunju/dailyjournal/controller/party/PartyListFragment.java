@@ -1,5 +1,6 @@
 package com.ndhunju.dailyjournal.controller.party;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,10 +24,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.backup.SharePartiesReportAsync;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.util.ArrayList;
@@ -284,9 +287,80 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
                 AlertDialog selectContactsAD = builder.create();
                 selectContactsAD.show();
                 break;
+
+            case R.id.menu_party_list_activity_share:
+                // let the user choose the type of report she wants to share
+                String[] options = SharePartiesReportAsync.getStrTypes();
+                new AlertDialog.Builder(getActivity()).setItems(options,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int optionIndex) {
+                                shareAllOrSelectPartyDialog(getActivity(), optionIndex);
+                            }
+                        })
+                        .create().show();
+
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void shareAllOrSelectPartyDialog(final Activity activity, final int optionIndex) {
+        // let the user choose the parties
+        final List<Party> parties = Services.getInstance(activity).getParties();
+
+        CharSequence[] options = activity.getResources().getStringArray(R.array.options_export_print);
+        AlertDialog chooseDialog = new AlertDialog.Builder(activity)
+                .setTitle(activity.getString(R.string.str_choose))
+                .setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0: //All parties
+                                new SharePartiesReportAsync(activity, SharePartiesReportAsync.Type.values()[optionIndex]).execute(parties);
+                                break;
+
+                            case 1: //Select parties
+                                createPartySelectDialogToShare(activity, parties, optionIndex).show();
+                                break;
+
+                        }
+                    }
+                }).create();
+
+        chooseDialog.show();
+    }
+
+    public static AlertDialog createPartySelectDialogToShare(final Activity activity, final List<Party> parties, final int optionIndex) {
+        final ArrayList<Party> selectedParties = new ArrayList<>();
+
+        // create array of Parties' name
+        String[] allParties = new String[parties.size()];
+        for (int i = 0; i < parties.size(); i++)
+            allParties[i] = parties.get(i).getName();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(activity.getString(R.string.msg_choose, UtilsFormat.getPartyFromPref(activity)));
+        builder.setNegativeButton(activity.getString(android.R.string.cancel), null);
+        builder.setMultiChoiceItems(allParties, null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        // Add checked contacts into selectedParties list
+                        if (b) selectedParties.add(parties.get(i));
+                        else selectedParties.remove(parties.get(i));
+                    }
+                });
+        builder.setPositiveButton(activity.getString(android.R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        new SharePartiesReportAsync(activity, SharePartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
+                    }
+                });
+
+        return builder.create();
     }
 
     public RecyclerView.Adapter getArrayAdapter(){

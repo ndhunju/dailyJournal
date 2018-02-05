@@ -32,6 +32,8 @@
 
     <!-- title passed to DownloadManager after creating a report. %1$s is name of the app. -->
     <string name="msg_report_created_title">%1$s app created a report.</string>
+    <!-- title passed to DownloadManager after creating multiple reports. %1$s is name of the app. -->
+    <string name="msg_reports_created_title">%1$s app created reports.</string>
     <!-- description passed to DownloadManager after creating a report. %1$s is name of the Party/Account-->
     <string name="msg_report_created_desc">Report created for %1$s.</string>
 
