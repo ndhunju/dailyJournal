@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.util.UtilsFile;
@@ -74,7 +75,9 @@ public class ImportContacts {
             String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             boolean hasPhoneNum = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) >0;
-            contacts.add(new Contact(id, name, hasPhoneNum));
+            if (!TextUtils.isEmpty(name)) {
+                contacts.add(new Contact(id, name, hasPhoneNum));
+            }
         }while(cursor.moveToNext());
 
         return contacts;
