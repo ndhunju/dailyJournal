@@ -75,7 +75,7 @@ public class NavDrawerActivity extends AppCompatActivity implements AdapterView.
                 .add(UtilsFormat.getPartyFromPref(getContext()).contains(getString(R.string.str_party)) ? R.string.nav_item_party : R.string.nav_item_account, R.drawable.ic_nav_parties)
                 .add(R.string.nav_item_preference, R.drawable.ic_settings_black_48dp)
                 .add(R.string.nav_item_tools,    R.drawable.ic_tools)
-                .add(R.string.nav_item_share,    R.drawable.ic_share_black_48dp)
+                .add(R.string.nav_item_share,    R.drawable.ic_share)
                 .setIconTint(ContextCompat.getColor(getContext(), R.color.blue_medium));
         // Set the adapter for the list view
         mDrawerList.setAdapter(adapter);
