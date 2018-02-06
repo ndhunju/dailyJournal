@@ -74,4 +74,9 @@ public class PlainTextReportGenerator extends ReportGenerator<String> {
 
         return builder.asString();
     }
+
+    @Override
+    public String getReportType() {
+        return "text/plain";
+    }
 }

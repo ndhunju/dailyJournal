@@ -109,6 +109,7 @@
     <string name="str_creditor">Creditor</string>
     <string name="str_top">Top</string>
     <string name="str_debtor">Debtors</string>
+    <string name="str_view">View</string>
     <string name="str_ledger_view">Ledger View</string>
     <string name="str_word_choice">Word Choice</string>
     <string name="str_given_by">Given By</string>

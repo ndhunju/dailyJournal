@@ -8,11 +8,22 @@
         app:showAsAction="ifRoom|withText"
         android:title="@string/str_information"
         android:icon="@drawable/ic_report_black_48dp"
+        android:orderInCategory="2"
         />
+
     <item
         android:id="@+id/menu_party_activity_share"
         app:showAsAction="ifRoom|withText"
         android:title="@string/str_share"
         android:icon="@drawable/ic_share_black_48dp"
+        android:orderInCategory="0"
+        />
+
+    <item
+        android:id="@+id/menu_party_activity_view_report"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/str_view"
+        android:icon="@drawable/ic_view_report"
+        android:orderInCategory="1"
         />
 </menu>

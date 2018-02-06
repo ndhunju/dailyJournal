@@ -5,6 +5,7 @@ import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -31,6 +32,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
     private Intent intent;
     private ProgressDialog pd;
     private Activity mActivity;
+    private String mAction;
 
     private ReportGenerator rg;
     private File report;
@@ -38,8 +40,9 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
     enum Type{FILE, PDF, CSV, TEXT}
 
 
-    public ReportGeneratorAsync(Activity activity, Type type){
+    public ReportGeneratorAsync(Activity activity, Type type, String action){
         mActivity = activity;
+        mAction = action;
         mType = type;
     }
 
@@ -59,7 +62,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         long partyId = longs[0];
         StringBuilder sb;
 
-        intent = new Intent(Intent.ACTION_SEND);
+        intent = new Intent(mAction);
 
         switch (mType){
             default:
@@ -119,14 +122,29 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
             UtilsView.alert(mActivity, String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_report)));
             return;
         }
-        intent.setType(rg.getReportType());
-        mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));
 
         if (mType != Type.TEXT) {
             // notify user that we created a file
             DownloadManager downloadManager = (DownloadManager) mActivity.getSystemService(Context.DOWNLOAD_SERVICE);
             downloadManager.addCompletedDownload(mActivity.getString(R.string.msg_report_created_title, mActivity.getString(R.string.app_name)),
                     mActivity.getString(R.string.msg_report_created_desc, rg.getParty().getName()), true, rg.getReportType(), report.getAbsolutePath(), report.length(), true);
+
+            // let know that a new file has been created so that it appears in the computer
+            MediaScannerConnection.scanFile(mActivity, new String[]{report.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                @Override
+                public void onScanCompleted(String s, Uri uri) {
+                    if (Intent.ACTION_VIEW.equalsIgnoreCase(mAction)) {
+                        intent.setDataAndType(uri, rg.getReportType());
+                    } else {
+                        intent.setType(rg.getReportType());
+                    }
+
+                    mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));
+                }
+            });
+        } else {
+            intent.setType(rg.getReportType());
+            mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));
         }
     }
 

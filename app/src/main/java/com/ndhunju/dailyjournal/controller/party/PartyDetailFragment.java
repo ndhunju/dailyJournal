@@ -290,7 +290,20 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                new ReportGeneratorAsync(getActivity(), ReportGeneratorAsync.Type.values()[i])
+                                new ReportGeneratorAsync(getActivity(), ReportGeneratorAsync.Type.values()[i], Intent.ACTION_SEND)
+                                        .execute(mParty.getId());
+                            }
+                        })
+                        .create().show();
+                break;
+
+            case R.id.menu_party_activity_view_report:
+                String[] sendOptions = ReportGeneratorAsync.getStrTypes();
+                new AlertDialog.Builder(getActivity()).setItems(sendOptions,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new ReportGeneratorAsync(getActivity(), ReportGeneratorAsync.Type.values()[i], Intent.ACTION_VIEW)
                                         .execute(mParty.getId());
                             }
                         })
