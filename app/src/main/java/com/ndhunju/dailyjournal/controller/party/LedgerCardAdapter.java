@@ -97,7 +97,7 @@ public class LedgerCardAdapter extends LedgerAdapter {
             }
 
             if (journal.getBalance() != null && showBalance.get()) {
-                balanceTV.setText(UtilsFormat.formatCurrency(journal.getBalance(), getContext()));
+                balanceTV.setText(getContext().getString(R.string.msg_bal, UtilsFormat.formatCurrency(journal.getBalance(), getContext())));
                 balanceTV.setVisibility(View.VISIBLE);
             } else {
                 balanceTV.setVisibility(View.GONE);

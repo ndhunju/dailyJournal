@@ -2,6 +2,7 @@
 <resources>
     <!--messages-->
 
+    <string name="msg_bal">%1$sBAL</string>
     <string name="msg_saved">%1$s saved</string>
     <string name="msg_please">Please %1$s</string>
     <string name="msg_choose">Choose %1$s</string>
