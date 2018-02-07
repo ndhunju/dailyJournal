@@ -84,6 +84,7 @@ public class PartyListDialog extends DialogFragment {
 
 				listener.onDialogBtnClicked(i,
 						OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
+				dismiss();
 			}
 
 			@Override

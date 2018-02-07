@@ -23,12 +23,10 @@ import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
-import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,7 +48,6 @@ public class DailyReportActivity extends AppCompatActivity implements LedgerAdap
     Button findJournalBtn;
     RecyclerView recyclerView;
     LedgerAdapter ledgerAdapter;
-    PartyListDialog partylistdialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,9 +84,9 @@ public class DailyReportActivity extends AppCompatActivity implements LedgerAdap
 
             @Override
             public void onClick(View v) {
-                partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
+                PartyListDialog partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
                 partylistdialog.show(getSupportFragmentManager(), Constants.KEY_PARTY_ID);
-                //the result is delivered to OnDialoguePressedOk()
+                //the result is delivered to onDialogBtnClicked()
             }
         });
 
@@ -126,7 +123,6 @@ public class DailyReportActivity extends AppCompatActivity implements LedgerAdap
                 long partyId = data.getLongExtra(Constants.KEY_PARTY_ID, 0);
                 mParty = mServices.getParty(partyId);
                 partyBtn.setText(mParty.getName());
-                partylistdialog.dismiss();
                 break;
         }
     }

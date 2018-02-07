@@ -53,7 +53,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
 
 
     //Declaring UI Widgets variable
-    private PartyListDialog partylistdialog;
     private EditText amountEt;
     private TextView drTv;
     private TextView crTv;
@@ -151,7 +150,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 DatePickerFragment dpf = DatePickerFragment.newInstance(new Date(tempJournal.getDate()), REQUEST_CHGED_DATE);
                 dpf.setTargetFragment(JournalFragmentNew.this, REQUEST_CHGED_DATE);
                 dpf.show(getActivity().getSupportFragmentManager(), DatePickerFragment.TAG);
-                //the result is delivered to OnDialoguePressedOk()
+                //the result is delivered to onDialogBtnClicked()
             }
         });
 
@@ -160,10 +159,10 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
 
             @Override
             public void onClick(View v) {
-                partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
+                PartyListDialog partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
                 partylistdialog.setTargetFragment(JournalFragmentNew.this, REQUEST_CHGD_PARTY);
                 partylistdialog.show(getActivity().getSupportFragmentManager(), Constants.KEY_PARTY_ID);
-                //the result is delivered to OnDialoguePressedOk()
+                //the result is delivered to onDialogBtnClicked()
             }
         });
 
@@ -403,7 +402,6 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 mParty = mServices.getParty(partyId);
                 partyBtn.setText(mParty.getName());
                 tempJournal.setPartyId(partyId);
-                partylistdialog.dismiss();
                 break;
 
             case REQUEST_CHGED_DATE: //A Date is selected

@@ -176,12 +176,14 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity implem
 
     protected void showEndResultToUser(String message, boolean success) {
         setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
-        UtilsView.alert(getActivity(), message, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            UtilsView.alert(getActivity(), message, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+        }
     }
 
     public Activity getActivity() {

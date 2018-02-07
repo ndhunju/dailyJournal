@@ -108,7 +108,7 @@ public class LedgerCardAdapter extends LedgerAdapter {
 
         @Override
         public void onChanged(ObservableField observableField) {
-            if (observableField.equals(showBalance)) {
+            if (observableField.equals(showBalance) && balanceTV != null) {
                 balanceTV.setVisibility((boolean) observableField.get() ? View.VISIBLE : View.GONE);
             }
         }

@@ -67,9 +67,15 @@ class LedgerRowAdapter extends LedgerAdapter {
             dateCol.setText(UtilsFormat.formatDate(new Date(journal.getDate()), getContext()));
 
             //showNoteCol will be false for smaller devices
-            showNoteCol = getContext().getResources().getBoolean(R.bool.note_col);
-            if(showNoteCol) {noteCol.setText(journal.getNote());}
-            else{noteCol.setVisibility(View.GONE); }
+            if (noteCol != null) {
+                showNoteCol = getContext().getResources().getBoolean(R.bool.note_col);
+                if (showNoteCol) {
+                    noteCol.setVisibility(View.VISIBLE);
+                    noteCol.setText(journal.getNote());
+                } else {
+                    noteCol.setVisibility(View.GONE);
+                }
+            }
 
             formattedAmt = UtilsFormat.formatDecimal(journal.getAmount(), getContext());
 
