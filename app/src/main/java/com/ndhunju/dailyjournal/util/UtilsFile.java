@@ -237,7 +237,12 @@ public class UtilsFile {
 	}
 
     public static String getPublicDownloadDir(){
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        if (!downloadDir.exists()) {
+        	downloadDir.mkdirs();
+		}
+
+		return downloadDir.getAbsolutePath();
     }
 
     public static boolean deleteExternalStoragePublicPicture() {
