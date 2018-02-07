@@ -2,6 +2,7 @@ package com.ndhunju.dailyjournal.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Build;
 
 import java.io.File;
@@ -73,6 +74,28 @@ public class Utils {
 
         return scaledBitmap;
     }
+
+    /**
+     * Resizes passed bitmap. Returned Bitmap object could be same or new depending upon
+     * the method {@code Bitmap.createBitmap} used in this method
+     */
+    public static Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+
+        float scaleWidth = ((float) newWidth) / bm.getWidth();
+        float scaleHeight = ((float) newHeight) / bm.getHeight();
+
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, false);
+
+        return resizedBitmap;
+    }
+
 
     /**
      * We want to decode the smallest bitmap possible over the minimum size.

@@ -30,6 +30,7 @@ import com.ndhunju.dailyjournal.model.Party.Type;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -174,6 +175,7 @@ public class PartyActivity extends AppCompatActivity {
                 Bitmap bitmap;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    bitmap = Utils.getResizedBitmap(bitmap, partyPicIV.getHeight(), partyPicIV.getWidth());
                 } catch (Exception e) { Log.d(TAG, "couldn't load selected image");
                     return;
                 }
