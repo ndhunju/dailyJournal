@@ -2,9 +2,12 @@ package com.ndhunju.dailyjournal.viewPager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -125,6 +128,35 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 
 			case R.id.viewpager_new_picture:
 				getAttachmentAlertDialogOption().show();
+				break;
+
+			case R.id.viewpager_download_picture:
+
+				try{
+				    // copy internal image attachment to download folder
+					File internalImage = new File(attachmentPagerAdapter.getItem(mViewPager.getCurrentItem()).getPath());
+					File toExportImage = new File(UtilsFile.getPublicDownloadDir(), internalImage.getName());
+					toExportImage.createNewFile();
+					FileInputStream picFileIS  = new FileInputStream(internalImage);
+					FileOutputStream toExportImageOS = new FileOutputStream(toExportImage);
+					UtilsZip.copy(picFileIS, toExportImageOS);
+					picFileIS.close();
+					toExportImageOS.close();
+
+					// show it in Downloads app and in notification bar
+					DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+					downloadManager.addCompletedDownload(getString(R.string.app_name), getString(R.string.msg_downloaded, getString(R.string.str_image)),
+							true, "image/jpeg", toExportImage.getAbsolutePath(), toExportImage.length(), true);
+
+					// let know that a new file has been created so that it appears in the computer
+					MediaScannerConnection.scanFile(this, new String[]{toExportImage.getAbsolutePath()}, null, null);
+
+					UtilsView.toast(this, getString(R.string.str_finished));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 				break;
 		}
 

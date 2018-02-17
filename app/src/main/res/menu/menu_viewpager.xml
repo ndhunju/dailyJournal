@@ -7,13 +7,15 @@
         android:id="@+id/viewpager_menu_lock"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_lock_black_48dp_v21"
-        android:title="@string/str_lock"/>
+        android:title="@string/str_lock"
+        android:orderInCategory="2"/>
 
     <item
         android:id="@+id/viewpager_new_picture"
         app:showAsAction="ifRoom|withText"
         android:icon="@drawable/ic_add_to_photos"
         android:title="@string/str_add"
+        android:orderInCategory="1"
                  />
 
     <item
@@ -21,5 +23,14 @@
 		app:showAsAction="ifRoom|withText"
 		android:icon="@android:drawable/ic_delete"
         android:title="@string/str_delete"
+        android:orderInCategory="0"
          />
+
+    <item
+        android:id="@+id/viewpager_download_picture"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_file_download_black_24dp"
+        android:title="@string/str_download"
+        android:orderInCategory="3"
+        />
 </menu>

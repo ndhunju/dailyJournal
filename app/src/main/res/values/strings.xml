@@ -41,6 +41,7 @@
     <string name="str_done">Done</string>
     <string name="str_date">Date</string>
     <string name="str_data">Data</string>
+    <string name="str_image">Image</string>
     <string name="str_start">Start</string>
     <string name="str_00.00">00.00</string>
     <string name="str_tools">Tools</string>
@@ -59,6 +60,7 @@
     <string name="str_minutes">minutes</string>
     <string name="str_pincode">Pincode</string>
     <string name="str_balance">Balance</string>
+    <string name="str_download">Download</string>
     <string name="str_finished">finished</string>
     <string name="str_erase_all">Erase All</string>
     <string name="str_lock_time">Lock Time</string>
