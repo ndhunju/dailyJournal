@@ -23,7 +23,7 @@ public class JournalNewActivity extends NavDrawerActivity {
 				throw new RuntimeException(JournalNewActivity.class.getName() + " must have new journal id - " + Constants.ID_NEW_JOURNAL);
 			}else{
 				getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
-						JournalFragmentNew.newInstance(), JournalFragmentNew.TAG).commit();
+						JournalFragmentNew.newInstance(getIntent().getStringExtra(Constants.KEY_PARTY_ID)), JournalFragmentNew.TAG).commit();
 			}
 		}
 	}

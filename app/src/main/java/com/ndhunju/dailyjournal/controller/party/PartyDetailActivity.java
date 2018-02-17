@@ -2,12 +2,15 @@ package com.ndhunju.dailyjournal.controller.party;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
@@ -59,6 +62,17 @@ public class PartyDetailActivity extends AppCompatActivity {
         // Show the Up button in the action bar.
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FloatingActionButton newJournalFab = (FloatingActionButton) findViewById(R.id.activity_party_detail_fab);
+        newJournalFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newPartyIntent = new Intent(PartyDetailActivity.this, JournalNewActivity.class);
+                newPartyIntent.putExtra(Constants.KEY_PARTY_ID, getIntent().getStringExtra(Constants.KEY_PARTY_ID));
+                startActivity(newPartyIntent);
+            }
+        });
+
     }
 
     @Override

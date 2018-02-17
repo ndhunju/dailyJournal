@@ -73,8 +73,11 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
      *
      * @return
      */
-    public static Fragment newInstance() {
+    public static Fragment newInstance(String partyId) {
         Bundle args = new Bundle();
+        if (partyId != null) {
+            args.putString(Constants.KEY_PARTY_ID, partyId);
+        }
         JournalFragmentNew newJF = new JournalFragmentNew();
         newJF.setArguments(args);
         return newJF;
@@ -100,6 +103,11 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 }
             });
 
+        }
+
+        Bundle args = getArguments();
+        if (args.containsKey(Constants.KEY_PARTY_ID)) {
+            mParty = mServices.getParty(Long.parseLong(getArguments().getString(Constants.KEY_PARTY_ID)));
         }
 
         tempJournal = mServices.getNewJournal();
@@ -165,6 +173,11 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 //the result is delivered to onDialogBtnClicked()
             }
         });
+
+        if (mParty != null) {
+            partyBtn.setText(mParty.getName());
+            tempJournal.setPartyId(mParty.getId());
+        }
 
         drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
         drBtn.setOnClickListener(new OnClickListener() {
