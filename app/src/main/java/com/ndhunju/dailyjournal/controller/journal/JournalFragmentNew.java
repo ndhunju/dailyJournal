@@ -415,7 +415,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                 mParty = mServices.getParty(partyId);
                 partyBtn.setText(mParty.getName());
                 tempJournal.setPartyId(partyId);
-                partylistdialog = (PartyListDialog) getFragmentManager().findFragmentByTag(PartyListDialog.TAG);
+                PartyListDialog partylistdialog = (PartyListDialog) getFragmentManager().findFragmentByTag(PartyListDialog.TAG);
                 if (partylistdialog != null) {
                     partylistdialog.dismiss();
                 }
