@@ -18,6 +18,8 @@ import android.transition.TransitionManager;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ndhunju.dailyjournal.R;
@@ -75,6 +77,11 @@ public class UtilsView {
         }
 
         return true;
+    }
+
+    public static void showKeyboard(EditText editText) {
+        InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 
     public static ProgressDialog createProgressDialog(Activity mActivity, String msg){

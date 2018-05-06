@@ -20,9 +20,9 @@ public class ParseText {
     private Journal mJournal;
 
     //keywords
-    private String[] debits = { "gave", "give", "got"};
-    private String[] credits = { "received", "receive"};
-    private String[] notes = {"for"};
+    private String[] debits = { "gave", "give", "got", "given", "debit"};
+    private String[] credits = { "received", "receive", "credit"};
+    private String[] notes = { "for" };
 
     private HashMap<String, Integer> months;
 
