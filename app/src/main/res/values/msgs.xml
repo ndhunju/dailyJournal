@@ -72,4 +72,9 @@
 
     <string name="msg_attachment_count_zero">There are 0 attachments.</string>
 
+    <!-- TextField. Disclaimer shown to user at app start -->
+    <string name="msg_disclaimer">Thank you for choosing to use %s. We have made every effort to make the application work as intended and free of cost to everyone.
+    However, this is a free application without any warranty, without even the implied warranty of merchantability or fitness for a particular purpose. Make sure you
+    regularly backup the data and export them in other formats like CSV.</string>
+
 </resources>

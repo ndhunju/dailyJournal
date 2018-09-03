@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
@@ -93,7 +94,15 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 
 	}
 
-	private void setupSizeForSummaryPager() {
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (DisclaimerFragmentDialog.shouldShow(getContext())) {
+            getSupportFragmentManager().beginTransaction().add(new DisclaimerFragmentDialog(), null).commit();
+        }
+    }
+
+    private void setupSizeForSummaryPager() {
 
         mSummaryPager.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

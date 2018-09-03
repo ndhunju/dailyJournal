@@ -124,6 +124,8 @@
     <string name="chart_dscrptn_you_owe">that you owe</string>
     <string name="str_no">No</string>
     <string name="str_search">Search</string>
+    <string name="str_exit">Exit</string>
+    <string name="str_disclaimer">Disclaimer</string>
 
     <string name="trans_party_img">transPartyImg</string>
 
