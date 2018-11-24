@@ -102,24 +102,27 @@ public abstract class PartyDetailFragment extends Fragment implements PartyDAO.O
         nameTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_name_tv);
         nameTV.setMovementMethod(new ScrollingMovementMethod());
 
-        newJournalFab = (FloatingActionButton) getActivity().findViewById(R.id.activity_party_detail_fab);
-
         ledgerListView = (RecyclerView) rootView.findViewById(R.id.activity_party_lv);
         ledgerListView.setLayoutManager(new LinearLayoutManager(getContext()));
         ledgerListView.setItemAnimator(UtilsView.getDefaultItemAnimator());
-        ledgerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0 && newJournalFab.getVisibility() == View.VISIBLE) {
-                    // scrolled down, hide fab
-                    newJournalFab.hide();
-                } else if (dy < 0 && newJournalFab.getVisibility() == View.GONE) {
-                    // scrolled up, show fab
-                    newJournalFab.show();
+
+        newJournalFab = (FloatingActionButton) getActivity().findViewById(R.id.activity_party_detail_fab);
+        /** newJournalFab is null when this fragment is hosted by {@link PartyListActivity} */
+        if (newJournalFab != null) {
+            ledgerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 0 && newJournalFab.getVisibility() == View.VISIBLE) {
+                        // scrolled down, hide fab
+                        newJournalFab.hide();
+                    } else if (dy < 0 && newJournalFab.getVisibility() == View.GONE) {
+                        // scrolled up, show fab
+                        newJournalFab.show();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         balanceTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_balance_tv);
 
