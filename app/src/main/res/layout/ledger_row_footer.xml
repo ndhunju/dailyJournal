@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    android:background="@color/blue_mild"
+    android:id="@+id/ledger_row_footer"
+    >
     <TextView
         android:id="@+id/ledger_row_col1"
+        android:text="@string/str_total"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/ledger_row_width"
         android:background="@drawable/cell_shape"
-        android:gravity="center"
         android:padding="3dp"
-        android:text="@string/str_date"
+        android:gravity="center"
+        android:singleLine="true"
+        android:maxLines="1"
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
         android:id="@+id/ledger_row_col2"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/ledger_row_width"
         android:background="@drawable/cell_shape"
-        android:ellipsize="end"
-        android:gravity="left"
+        android:gravity="start"
         android:padding="3dp"
         android:singleLine="true"
-        android:text="@string/str_note"
+        android:maxLines="1"
+        android:visibility="gone"
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
         android:id="@+id/ledger_row_col3"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/ledger_row_width"
         android:background="@drawable/cell_shape"
-        android:gravity="right"
+        android:maxLines="1"
         android:padding="3dp"
-        android:text="@string/str_dr"
+        android:singleLine="true"
+        android:gravity="end"
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
         android:id="@+id/ledger_row_col4"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/ledger_row_width"
         android:background="@drawable/cell_shape"
-        android:gravity="right"
+        android:gravity="end"
         android:padding="3dp"
-        android:text="@string/str_cr"
+        android:singleLine="true"
+        android:maxLines="1"
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
         android:id="@+id/ledger_row_col5"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/ledger_row_balance_width"
         android:background="@drawable/cell_shape"
-        android:gravity="right"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:gravity="end"
         android:padding="3dp"
-        android:text="@string/str_balance"
         android:textSize="@dimen/text_size_medium" />
 </TableRow>

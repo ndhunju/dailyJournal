@@ -13,6 +13,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.LockService;
+import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 /**
@@ -22,7 +23,7 @@ import com.ndhunju.dailyjournal.util.UtilsFormat;
  * in a {@link PartyListActivity}.
  * <p>
  * This activity is mostly just a 'shell' activity containing nothing
- * more than a {@link PartyDetailFragment}.
+ * more than a {@link PartyDetailLedgerRowFragment}.
  */
 public class PartyDetailActivity extends AppCompatActivity {
 
@@ -47,7 +48,22 @@ public class PartyDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putString(Constants.KEY_PARTY_ID, getIntent().getStringExtra(Constants.KEY_PARTY_ID));
             arguments.putInt(Constants.KEY_POS, getIntent().getIntExtra(Constants.KEY_POS, -1));
-            PartyDetailFragment fragment = new PartyDetailFragment();
+
+            PreferenceService ps  = PreferenceService.from(this);
+            int pos = ps.getVal(R.string.key_pref_ledger_view, 0);
+
+            PartyDetailFragment fragment;
+
+            switch(pos) {
+                default:
+                case 0: //Card View
+                    fragment = new PartyDetailLedgerCardFragment();
+                    break;
+                case 1: //Classic View
+                    fragment = new PartyDetailLedgerRowFragment();
+                    break;
+            }
+
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()

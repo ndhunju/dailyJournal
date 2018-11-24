@@ -158,8 +158,11 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
     }
     @Override
     public void onJournalAdded(Journal journal) {
-        // as of 12/23/2016, this callback is less likely to be called because rn there is
-        // no way to add new journal while this adapter is used to show journals
+        // check if it is for current party
+        if (journal.getPartyId() != mParty.getId()) {
+            return;
+        }
+
         if (journal.getDate() >= mJournals.get(mJournals.size()-1).getDate()) {
             // journal with later date added
             journal.setBalance(mJournals.get(mJournals.size()-1).getBalance() + (journal.getType() == Journal.Type.Credit ? -journal.getAmount() : journal.getAmount()));
@@ -176,6 +179,11 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
 
     @Override
     public void onJournalChanged(Journal journal) {
+        // check if it is for current party
+        if (journal.getPartyId() != mParty.getId()) {
+            return;
+        }
+
         int pos;
         // check if Journal's position was set in the tag
         if (journal.getTag() instanceof Integer) {
@@ -219,6 +227,11 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
 
     @Override
     public void onJournalDeleted(Journal journal) {
+        // check if it is for current party
+        if (journal.getPartyId() != mParty.getId()) {
+            return;
+        }
+
         // check if Journal's position was set in the tag
         if (journal.getTag() instanceof Integer) {
             int pos = (int) journal.getTag();
@@ -246,8 +259,8 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
     }
 
     @Override
-    public void onJournalDataSetChanged(long party) {
-        if (mParty.getId() == party){
+    public void onJournalDataSetChanged(long partyId) {
+        if (mParty.getId() == partyId){
             dataSetChanged();
         }
     }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@color/blue_medium"
+    android:id="@+id/ledger_card_footer"
     android:padding="8dp">
 
     <TextView
@@ -28,7 +30,7 @@
                 android:id="@+id/ledger_card_footer_dr_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25.36"
+                tools:text="25.36"
                 android:layout_gravity="right"
                 android:textSize="@dimen/text_size_medium" />
 
@@ -36,7 +38,7 @@
                 android:id="@+id/ledger_card_footer_cr_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="152.36"
+                tools:text="152.36"
                 android:layout_gravity="right"
                 android:textSize="@dimen/text_size_medium" />
 
@@ -44,7 +46,7 @@
                 android:id="@+id/ledger_card_footer_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="152.36"
+                tools:text="152.36"
                 android:layout_gravity="right"
                 android:textSize="@dimen/text_size_medium"
                 android:background="@drawable/top_border"/>

@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -24,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnticipateInterpolator;
 import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
@@ -32,13 +33,11 @@ import com.ndhunju.dailyjournal.database.PartyDAO;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -46,7 +45,7 @@ import java.util.Locale;
  * in two-pane mode (on tablets) or a {@link PartyDetailActivity}
  * on handsets.
  */
-public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, LedgerAdapter.OnItemClickListener {
+public abstract class PartyDetailFragment extends Fragment implements PartyDAO.Observer, LedgerAdapter.OnItemClickListener {
 
     public static final String TAG = PartyDetailFragment.class.getName();
     //Variables
@@ -54,23 +53,18 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
     private Services mServices;
 
     //View Variables
-    private View footerView;
     private TextView nameTV;
     private ImageView picIV;
-    private TableRow headerRow;
     private TextView balanceTV;
     private RecyclerView ledgerListView;
-    private ViewGroup footerViewContainer;
     private LedgerAdapter ledgerAdapter;
-
-
+    private FloatingActionButton newJournalFab;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PartyDetailFragment() {
-    }
+    public PartyDetailFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +89,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_party_detail, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(getLayoutId(), container, false);
 
         //Wire up the widgets view
         rootView.findViewById(R.id.fragment_party_detail_party_card).setOnClickListener(new View.OnClickListener() {
@@ -108,26 +102,32 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
         nameTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_name_tv);
         nameTV.setMovementMethod(new ScrollingMovementMethod());
 
+        newJournalFab = (FloatingActionButton) getActivity().findViewById(R.id.activity_party_detail_fab);
+
         ledgerListView = (RecyclerView) rootView.findViewById(R.id.activity_party_lv);
         ledgerListView.setLayoutManager(new LinearLayoutManager(getContext()));
         ledgerListView.setItemAnimator(UtilsView.getDefaultItemAnimator());
+        ledgerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && newJournalFab.getVisibility() == View.VISIBLE) {
+                    // scrolled down, hide fab
+                    newJournalFab.hide();
+                } else if (dy < 0 && newJournalFab.getVisibility() == View.GONE) {
+                    // scrolled up, show fab
+                    newJournalFab.show();
+                }
+            }
+        });
 
         balanceTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_balance_tv);
-        headerRow = (TableRow)rootView.findViewById(R.id.fragment_party_detail_header_tr);
-        footerViewContainer = (ViewGroup) rootView.findViewById(R.id.fragment_party_detail_footer);
-
-        ((TextView)rootView.findViewById(R.id.activity_party_col_header_dr))
-                .setText(getString(R.string.str_dr));
-
-        ((TextView)rootView.findViewById(R.id.activity_party_col_header_cr))
-                .setText(getString(R.string.str_cr));
-
 
         balanceTV.setSingleLine();
 
-        setPartyViews(mParty);
-        setLedgerListViews();
-        setFooterView(mParty);
+        setPartyView(rootView);
+        setLedgerListView(rootView);
+        setFooterView(rootView);
 
         //Animate the list view but wait until the view is laid out
         ledgerListView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -150,18 +150,16 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
         });
 
         mServices.registerPartyObserver(this);
+        mServices.registerJournalObserver(getLedgerAdapter());
 
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
+    @LayoutRes
+    protected abstract int getLayoutId();
 
-    private void setPartyViews(Party party){
+    protected void setPartyView(ViewGroup root) {
 
-        //make the image circular
         //make the image circular
         if (!TextUtils.isEmpty(mParty.getPicturePath())) {
             RoundedBitmapDrawable bitmapDrawable = RoundedBitmapDrawableFactory.create(
@@ -174,100 +172,37 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
             picIV.setImageResource(R.drawable.default_party_pic);
         }
 
-        nameTV.setText(party.getName());
+        nameTV.setText(mParty.getName());
 
-        balanceTV.setText(UtilsFormat.formatCurrency(party.calculateBalances(), getActivity()));
-        balanceTV.setTextColor(getResources().getColor(party.calculateBalances() < 0 ? R.color.red_medium : R.color.green_medium));
+        balanceTV.setText(UtilsFormat.formatCurrency(mParty.calculateBalances(), getActivity()));
+        balanceTV.setTextColor(getResources().getColor(mParty.calculateBalances() < 0 ? R.color.red_medium : R.color.green_medium));
 
         getActivity().setTitle(mParty.getName());
 
     }
 
-    private void setLedgerListViews() {
-
-        PreferenceService ps  = PreferenceService.from(getActivity());
-        int pos = ps.getVal(R.string.key_pref_ledger_view, 0);
-
-        switch (pos){
-
-            case 0: //Card View
-                ledgerAdapter = new LedgerCardAdapter(getActivity(), mParty);
-                headerRow.setVisibility(View.GONE);
-                break;
-            case 1: //Classic View
-
-                ledgerAdapter = new LedgerRowAdapter(getActivity(), mParty);
-                headerRow.setVisibility(View.VISIBLE);
-                break;
-        }
-
-        ledgerListView.setAdapter(ledgerAdapter);
-        ledgerAdapter.setOnItemClickListener(this);
-        mServices.registerJournalObserver(ledgerAdapter);
-
+    public Party getParty() {
+        return mParty;
     }
 
-    private void setFooterView(Party party){
-
-
-        //remove the old view
-        if(footerView != null) footerViewContainer.removeView(footerView);
-
-        //getInt the type of view user has selected
-        PreferenceService ps  = PreferenceService.from(getActivity());
-        int pos = ps.getVal(R.string.key_pref_ledger_view, 0);
-
-
-        switch (pos){
-
-            case 0: //Card View
-                footerView = getFooterCard(party);
-                break;
-            case 1: //Classic View
-                footerView = getFooterRow(party);
-                break;
-        }
-
-        footerViewContainer.addView(footerView);
+    protected void setLedgerListView(View container) {
     }
 
-    //Add Totals in the footer row
-    private TableRow getFooterRow(Party party) {
-        TableRow footerRow = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.ledger_row, null);
-        TextView col1 = (TextView) footerRow.findViewById(R.id.ledger_row_col1);
-        TextView col2 = (TextView) footerRow.findViewById(R.id.ledger_row_col2);
-        TextView col3 = (TextView) footerRow.findViewById(R.id.ledger_row_col3);
-        TextView col4 = (TextView) footerRow.findViewById(R.id.ledger_row_col4);
-        TextView balCol = (TextView) footerRow.findViewById(R.id.ledger_row_col5);
-
-        col1.setText(getString(R.string.str_total));
-        col2.setText("");
-        col3.setText(UtilsFormat.formatDecimal(party.getDebitTotal(), getActivity()));
-        col4.setText(UtilsFormat.formatDecimal(party.getCreditTotal(), getActivity()));
-        if (balCol != null) {
-            balCol.setText(UtilsFormat.formatCurrency(party.calculateBalances(), getContext()));
-        }
-        addDrawables(getActivity(), col1, col2, col3, col4, balCol);
-        //add common attributes
-        addAttributes(TextUtils.TruncateAt.MARQUEE, col3, col4, balCol);
-        return footerRow;
+    public void setLedgerAdapter(LedgerAdapter ledgerAdapter) {
+        this.ledgerAdapter = ledgerAdapter;
+        this.ledgerAdapter.setOnItemClickListener(this);
+        this.ledgerListView.setAdapter(this.ledgerAdapter);
     }
 
-    private View getFooterCard(Party party) {
-        ViewGroup footerRow = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.ledger_card_footer, null);
-        TextView totalCr = (TextView) footerRow.findViewById(R.id.ledger_card_footer_cr_total);
-        totalCr.setTextColor(ContextCompat.getColor(getContext(), R.color.red_medium));
-        TextView totalDr = (TextView) footerRow.findViewById(R.id.ledger_card_footer_dr_total);
-        totalDr.setTextColor(ContextCompat.getColor(getContext(), R.color.green_medium));
-        TextView totalTV = (TextView) footerRow.findViewById(R.id.ledger_card_footer_total);
-
-        totalCr.setText(String.format(Locale.getDefault(), "%1$s%2$s", UtilsFormat.formatCurrency(party.getCreditTotal(), getActivity()), getString(R.string.str_cr)));
-        totalDr.setText(String.format(Locale.getDefault(), "%1$s%2$s", UtilsFormat.formatCurrency(party.getDebitTotal(), getActivity()), getString(R.string.str_dr)));
-        totalTV.setText(UtilsFormat.formatCurrency(party.calculateBalances(), getContext()));
-
-        addAttributes(TextUtils.TruncateAt.MARQUEE, totalCr, totalDr, totalTV);
-        return footerRow;
+    public LedgerAdapter getLedgerAdapter() {
+        return ledgerAdapter;
     }
+
+    public RecyclerView getLedgerListView() {
+        return ledgerListView;
+    }
+
+    protected abstract void setFooterView(ViewGroup root);
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -330,7 +265,7 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
         }
     }
 
-    private static void addDrawables(Context con, View... view) {
+    public static void addDrawables(Context con, View... view) {
         for (View v : view) {
             if (v == null) return;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -351,8 +286,8 @@ public class PartyDetailFragment extends Fragment implements PartyDAO.Observer, 
         // make sure it's the correct party
         if (party.getId() == mParty.getId()) {
             mParty = party;
-            setPartyViews(mParty);
-            setFooterView(mParty);
+            setPartyView((ViewGroup) getView());
+            setFooterView((ViewGroup) getView());
         }
     }
 
