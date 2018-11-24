@@ -144,7 +144,7 @@ public class NavDrawerActivity extends AppCompatActivity implements AdapterView.
                 startActivity(new Intent(getContext(), ToolsActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
-            case R.drawable.ic_share_black_48dp:
+            case R.drawable.ic_share:
                 //user clicked on Share option
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.msg_share_subject));
