@@ -10,24 +10,49 @@ import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.database.PartyDAO;
+import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /** @see PartyDetailFragment */
-public class PartyDetailLedgerRowFragment extends PartyDetailFragment implements PartyDAO.Observer, LedgerAdapter.OnItemClickListener {
+public class PartyDetailLedgerRowFragment extends PartyDetailFragment implements PartyDAO.Observer, LedgerAdapter.OnItemClickListener, LedgerRowAdapter.Client {
 
     public static final String TAG = PartyDetailLedgerRowFragment.class.getName();
 
-    TableRow headerRow;
+    Set<String> colsToShow;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PreferenceService ps  = PreferenceService.from(getContext());
+        colsToShow = ps.getVal(R.string.key_pref_ledger_row_cols, new HashSet<String>());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
-        headerRow = (TableRow) rootView.findViewById(R.id.fragment_party_detail_header_tr);
-        headerRow.setVisibility(View.VISIBLE);
+        TableRow headerRow = (TableRow) rootView.findViewById(R.id.fragment_party_detail_ledger_row_header);
+        TextView numCol = (TextView) headerRow.findViewById(R.id.ledger_row_num);
+        TextView dateCol = (TextView) headerRow.findViewById(R.id.ledger_row_date);
+        TextView noteCol = (TextView) headerRow.findViewById(R.id.ledger_row_note);
+        TextView drCol = (TextView) headerRow.findViewById(R.id.ledger_row_dr);
+        TextView crCol = (TextView) headerRow.findViewById(R.id.ledger_row_cr);
+        TextView balCol = (TextView) headerRow.findViewById(R.id.ledger_row_balance);
 
-        ((TextView)rootView.findViewById(R.id.activity_party_col_header_dr)).setText(getString(R.string.str_dr));
-        ((TextView)rootView.findViewById(R.id.activity_party_col_header_cr)).setText(getString(R.string.str_cr));
+        addDrawables(getActivity(), numCol, dateCol, noteCol, drCol, crCol, balCol);
+        //add common attributes
+        addAttributes(TextUtils.TruncateAt.MARQUEE, drCol, crCol, balCol);
+
+        // show selected columns only
+        numCol.setVisibility(showNoCol() ? View.VISIBLE : View.GONE);
+        dateCol.setVisibility(showDateCol() ? View.VISIBLE : View.GONE);
+        noteCol.setVisibility(showNoteCol() ? View.VISIBLE : View.GONE);
+        drCol.setVisibility(showDrCol() ? View.VISIBLE : View.GONE);
+        crCol.setVisibility(showCrCol() ? View.VISIBLE : View.GONE);
+        balCol.setVisibility(showBalanceCol() ? View.VISIBLE : View.GONE);
 
         return rootView;
     }
@@ -40,7 +65,7 @@ public class PartyDetailLedgerRowFragment extends PartyDetailFragment implements
     @Override
     protected void setLedgerListView(View container) {
         super.setLedgerListView(container);
-        setLedgerAdapter(new LedgerRowAdapter(getActivity(), getParty()));
+        setLedgerAdapter(new LedgerRowAdapter(getActivity(), this, getParty()));
         getLedgerListView().setHorizontalScrollBarEnabled(true);
         getLedgerListView().setNestedScrollingEnabled(true);
     }
@@ -48,22 +73,58 @@ public class PartyDetailLedgerRowFragment extends PartyDetailFragment implements
     //Add Totals in the footer row
     protected void setFooterView(ViewGroup root) {
         TableRow footerRow = (TableRow) root.findViewById(R.id.ledger_row_footer);
-        TextView col1 = (TextView) footerRow.findViewById(R.id.ledger_row_col1);
-        TextView col2 = (TextView) footerRow.findViewById(R.id.ledger_row_col2);
-        TextView col3 = (TextView) footerRow.findViewById(R.id.ledger_row_col3);
-        TextView col4 = (TextView) footerRow.findViewById(R.id.ledger_row_col4);
-        TextView balCol = (TextView) footerRow.findViewById(R.id.ledger_row_col5);
+        TextView numCol = (TextView) footerRow.findViewById(R.id.ledger_row_num);
+        TextView dateCol = (TextView) footerRow.findViewById(R.id.ledger_row_date);
+        TextView noteCol = (TextView) footerRow.findViewById(R.id.ledger_row_note);
+        TextView drCol = (TextView) footerRow.findViewById(R.id.ledger_row_dr);
+        TextView crCol = (TextView) footerRow.findViewById(R.id.ledger_row_cr);
+        TextView balCol = (TextView) footerRow.findViewById(R.id.ledger_row_balance);
 
-        col1.setText(getString(R.string.str_total));
-        col2.setText("");
-        col3.setText(UtilsFormat.formatDecimal(getParty().getDebitTotal(), getActivity()));
-        col4.setText(UtilsFormat.formatDecimal(getParty().getCreditTotal(), getActivity()));
-        if (balCol != null) {
-            balCol.setText(UtilsFormat.formatCurrency(getParty().calculateBalances(), getContext()));
-        }
-        addDrawables(getActivity(), col1, col2, col3, col4, balCol);
+        // show selected columns only
+        numCol.setVisibility(showNoCol() ? View.VISIBLE : View.GONE);
+        dateCol.setVisibility(showDateCol() ? View.VISIBLE : View.GONE);
+        noteCol.setVisibility(showNoteCol() ? View.VISIBLE : View.GONE);
+        drCol.setVisibility(showDrCol() ? View.VISIBLE : View.GONE);
+        crCol.setVisibility(showCrCol() ? View.VISIBLE : View.GONE);
+        balCol.setVisibility(showBalanceCol() ? View.VISIBLE : View.GONE);
+
+        drCol.setText(UtilsFormat.formatDecimal(getParty().getDebitTotal(), getActivity()));
+        crCol.setText(UtilsFormat.formatDecimal(getParty().getCreditTotal(), getActivity()));
+        balCol.setText(UtilsFormat.formatCurrency(getParty().calculateBalances(), getContext()));
+
+        addDrawables(getActivity(), numCol, dateCol, noteCol, drCol, crCol, balCol);
         //add common attributes
-        addAttributes(TextUtils.TruncateAt.MARQUEE, col3, col4, balCol);
+        addAttributes(TextUtils.TruncateAt.MARQUEE, drCol, crCol, balCol);
+    }
+
+    @Override
+    public boolean showNoCol() {
+        return colsToShow.contains(getContext().getString(R.string.str_num));
+    }
+
+    @Override
+    public boolean showDateCol() {
+        return colsToShow.contains(getContext().getString(R.string.str_date));
+    }
+
+    @Override
+    public boolean showNoteCol() {
+        return colsToShow.contains(getContext().getString(R.string.str_note));
+    }
+
+    @Override
+    public boolean showDrCol() {
+        return colsToShow.contains(getContext().getString(R.string.str_dr));
+    }
+
+    @Override
+    public boolean showCrCol() {
+        return colsToShow.contains(getContext().getString(R.string.str_cr));
+    }
+
+    @Override
+    public boolean showBalanceCol() {
+        return colsToShow.contains(getContext().getString(R.string.str_balance));
     }
 
 }

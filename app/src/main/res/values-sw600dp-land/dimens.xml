@@ -19,6 +19,7 @@
     <dimen name="layout_width">600dp</dimen>
 
     <dimen name="ledger_row_width">250dp</dimen>
+    <dimen name="ledger_row_no_width">70dp</dimen>
     <dimen name="ledger_row_balance_width">300dp</dimen>
 
 </resources>

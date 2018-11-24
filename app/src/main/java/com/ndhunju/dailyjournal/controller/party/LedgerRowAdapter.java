@@ -24,10 +24,12 @@ class LedgerRowAdapter extends LedgerAdapter {
 
     // variable.
     private String formattedAmt; // stores formatted amount. Declared here to prevent memory alloc and dealloc on every bind call
-    private boolean showNoteCol;
+    private Client client;
 
-    public LedgerRowAdapter(Activity activity, Party party) {
+
+    public LedgerRowAdapter(Activity activity, Client client, Party party) {
         super(activity, party);
+        this.client = client;
         setLayoutId(R.layout.ledger_row);
     }
 
@@ -43,6 +45,7 @@ class LedgerRowAdapter extends LedgerAdapter {
     }
 
     class LedgerVH extends LedgerAdapter.LedgerVH implements ObservableField.Observer {
+        TextView numCol;
         TextView dateCol ;
         TextView noteCol ;
         TextView drCol;
@@ -51,31 +54,34 @@ class LedgerRowAdapter extends LedgerAdapter {
 
         public LedgerVH(View convertView) {
             super(convertView);
-            dateCol = (TextView) convertView.findViewById(R.id.ledger_row_col1);
-            noteCol = (TextView) convertView.findViewById(R.id.ledger_row_col2);
-            drCol = (TextView) convertView.findViewById(R.id.ledger_row_col3);
-            crCol = (TextView) convertView.findViewById(R.id.ledger_row_col4);
-            balCol = (TextView) convertView.findViewById(R.id.ledger_row_col5);
-            showBalance.addObserver(this);
+            numCol = (TextView) convertView.findViewById(R.id.ledger_row_num);
+            dateCol = (TextView) convertView.findViewById(R.id.ledger_row_date);
+            noteCol = (TextView) convertView.findViewById(R.id.ledger_row_note);
+            drCol = (TextView) convertView.findViewById(R.id.ledger_row_dr);
+            crCol = (TextView) convertView.findViewById(R.id.ledger_row_cr);
+            balCol = (TextView) convertView.findViewById(R.id.ledger_row_balance);
+
             //apply common settings
             PartyDetailFragment.addAttributes(TextUtils.TruncateAt.END, dateCol, noteCol);
             PartyDetailFragment.addAttributes(TextUtils.TruncateAt.START, drCol, crCol);
+
+            // show selected columns only
+            numCol.setVisibility(client.showNoCol() ? View.VISIBLE : View.GONE);
+            dateCol.setVisibility(client.showDateCol() ? View.VISIBLE : View.GONE);
+            noteCol.setVisibility(client.showNoteCol() ? View.VISIBLE : View.GONE);
+            drCol.setVisibility(client.showDrCol() ? View.VISIBLE : View.GONE);
+            crCol.setVisibility(client.showCrCol() ? View.VISIBLE : View.GONE);
+            balCol.setVisibility(client.showBalanceCol() ? View.VISIBLE : View.GONE);
+            showBalance.set(client.showBalanceCol());
+
+            showBalance.addObserver(this);
         }
 
         public void bind(Journal journal) {
             super.bind(journal);
+            numCol.setText(String.valueOf(getAdapterPosition() + 1));
             dateCol.setText(UtilsFormat.formatDate(new Date(journal.getDate()), getContext()));
-
-            //showNoteCol will be false for smaller devices
-            if (noteCol != null) {
-                showNoteCol = getContext().getResources().getBoolean(R.bool.note_col);
-                if (showNoteCol) {
-                    noteCol.setVisibility(View.VISIBLE);
-                    noteCol.setText(journal.getNote());
-                } else {
-                    noteCol.setVisibility(View.GONE);
-                }
-            }
+            noteCol.setText(journal.getNote());
 
             formattedAmt = UtilsFormat.formatDecimal(journal.getAmount(), getContext());
 
@@ -87,21 +93,34 @@ class LedgerRowAdapter extends LedgerAdapter {
                 drCol.setText("");
             }
 
-            if (balCol != null) {
-                if (journal.getBalance() != null && showBalance.get()) {
-                    balCol.setText(UtilsFormat.formatCurrency(journal.getBalance(), getContext()));
-                    balCol.setVisibility(View.VISIBLE);
-                } else {
-                    balCol.setVisibility(View.GONE);
-                }
+            if (journal.getBalance() != null && showBalance.get()) {
+                balCol.setText(UtilsFormat.formatCurrency(journal.getBalance(), getContext()));
+                balCol.setVisibility(View.VISIBLE);
+            } else {
+                balCol.setVisibility(View.GONE);
             }
         }
 
         @Override
         public void onChanged(ObservableField observableField) {
-            if (observableField.equals(showBalance) && balCol != null) {
+            if (observableField.equals(showBalance)) {
                 balCol.setVisibility((boolean) observableField.get() ? View.VISIBLE : View.GONE);
             }
         }
+    }
+
+    interface Client {
+
+        boolean showNoCol();
+
+        boolean showDateCol();
+
+        boolean showNoteCol();
+
+        boolean showDrCol();
+
+        boolean showCrCol();
+
+        boolean showBalanceCol();
     }
 }

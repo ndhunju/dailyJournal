@@ -13,6 +13,8 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.service.AutoBackupService;
 import com.ndhunju.dailyjournal.util.UtilsDate;
 
+import java.util.Set;
+
 /**
  * Created by dhunju on 10/4/2015.
  * Service class for storing and retrieving user preferences stored on xml file
@@ -108,6 +110,10 @@ public class PreferenceService {
 
     public long getVal(@StringRes int resKeyId, long defaultVal){
         return getVal(getKey(resKeyId), defaultVal);
+    }
+
+    public Set<String> getVal(@StringRes int resKeyId, Set<String> defaultVal) {
+        return getSharedPreference().getStringSet(getKey(resKeyId), defaultVal);
     }
 
     public long getVal(String key, long defaultVal) {

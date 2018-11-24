@@ -4,8 +4,21 @@
     android:layout_height="wrap_content"
     android:background="@color/blue_mild"
     >
+
     <TextView
-        android:id="@+id/ledger_row_col1"
+        android:id="@+id/ledger_row_num"
+        android:text="@string/str_num"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ledger_row_no_width"
+        android:background="@drawable/cell_shape"
+        android:padding="3dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:textSize="@dimen/text_size_medium" />
+
+    <TextView
+        android:id="@+id/ledger_row_date"
         android:text="@string/str_date"
         android:layout_height="wrap_content"
         android:layout_width="@dimen/ledger_row_width"
@@ -17,7 +30,7 @@
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
-        android:id="@+id/ledger_row_col2"
+        android:id="@+id/ledger_row_note"
         android:text="@string/str_note"
         android:layout_height="wrap_content"
         android:layout_width="@dimen/ledger_row_width"
@@ -30,7 +43,7 @@
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
-        android:id="@+id/ledger_row_col3"
+        android:id="@+id/ledger_row_dr"
         android:layout_height="wrap_content"
         android:layout_width="@dimen/ledger_row_width"
         android:text="@string/str_dr"
@@ -42,7 +55,7 @@
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
-        android:id="@+id/ledger_row_col4"
+        android:id="@+id/ledger_row_cr"
         android:layout_height="wrap_content"
         android:layout_width="@dimen/ledger_row_width"
         android:text="@string/str_cr"
@@ -54,7 +67,7 @@
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
-        android:id="@+id/ledger_row_col5"
+        android:id="@+id/ledger_row_balance"
         android:layout_height="wrap_content"
         android:layout_width="@dimen/ledger_row_balance_width"
         android:text="@string/str_balance"

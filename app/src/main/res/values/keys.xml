@@ -17,6 +17,7 @@
     <string name="key_pref_erase_all">Erase All</string>
     <string name="key_pref_erase_journals">Erase Journals</string>
     <string name="key_pref_ledger_view">preferenceLedgerViewFormatLP</string>
+    <string name="key_pref_ledger_row_cols">preferenceLedgerRowColsToShowLP</string>
     <string name="key_pref_dr_choice">preferenceDebitChoiceLP</string>
     <string name="key_pref_cr_choice">preferenceCrChoiceLP</string>
     <string name="key_pref_journal_choice">preferenceJournalChoiceLP</string>

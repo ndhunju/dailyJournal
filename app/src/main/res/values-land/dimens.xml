@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="ledger_row_width">150dp</dimen>
+    <dimen name="ledger_row_no_width">60dp</dimen>
     <dimen name="ledger_row_balance_width">200dp</dimen>
 </resources>

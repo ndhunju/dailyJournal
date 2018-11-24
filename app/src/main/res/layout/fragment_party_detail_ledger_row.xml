@@ -21,72 +21,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TableRow
-                android:id="@+id/fragment_party_detail_header_tr"
+            <include layout="@layout/ledger_row"
+                android:id="@+id/fragment_party_detail_ledger_row_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="@dimen/ledger_row_width"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/cell_header_shape"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/str_num"
-                    android:textSize="@dimen/text_size_medium"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="@dimen/ledger_row_width"
-                    android:background="@drawable/cell_header_shape"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/str_date"
-                    android:textSize="@dimen/text_size_medium" />
-
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="@dimen/ledger_row_width"
-                    android:background="@drawable/cell_header_shape"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/str_note"
-                    android:textSize="@dimen/text_size_medium"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/activity_party_col_header_dr"
-                    android:layout_height="wrap_content"
-                    android:layout_width="@dimen/ledger_row_width"
-                    android:background="@drawable/cell_header_shape"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/str_dr"
-                    android:textSize="@dimen/text_size_medium" />
-
-                <TextView
-                    android:id="@+id/activity_party_col_header_cr"
-                    android:layout_height="wrap_content"
-                    android:layout_width="@dimen/ledger_row_width"
-                    android:background="@drawable/cell_header_shape"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/str_cr"
-                    android:textSize="@dimen/text_size_medium" />
-
-                <TextView
-                    android:id="@+id/activity_party_col_header_balance"
-                    android:layout_height="wrap_content"
-                    android:layout_width="@dimen/ledger_row_balance_width"
-                    android:background="@drawable/cell_header_shape"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/str_balance"
-                    android:textSize="@dimen/text_size_medium" />
-
-            </TableRow>
+                android:layout_marginTop="5dp"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/activity_party_lv"

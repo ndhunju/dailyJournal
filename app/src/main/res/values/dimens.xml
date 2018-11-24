@@ -22,6 +22,7 @@
     <item name="match_parent" type="dimen" format="integer" >-1</item>
 
     <dimen name="ledger_row_width">100dp</dimen>
+    <dimen name="ledger_row_no_width">50dp</dimen>
     <dimen name="ledger_row_balance_width">150dp</dimen>
 
 </resources>
