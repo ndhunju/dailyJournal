@@ -79,6 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
+                        android:hint="@string/str_name"
                         android:inputType="textPersonName"
                         android:textSize="@dimen/text_size_large" />
 

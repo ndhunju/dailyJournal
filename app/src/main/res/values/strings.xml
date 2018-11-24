@@ -41,6 +41,7 @@
     <string name="str_done">Done</string>
     <string name="str_date">Date</string>
     <string name="str_data">Data</string>
+    <string name="str_name">Name</string>
     <string name="str_image">Image</string>
     <string name="str_start">Start</string>
     <string name="str_00.00">00.00</string>
