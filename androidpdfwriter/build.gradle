@@ -2,7 +2,8 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '25.0.3'
+    // each version of the Android Gradle Plugin now has a default version of the build tools.
+    //buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 14

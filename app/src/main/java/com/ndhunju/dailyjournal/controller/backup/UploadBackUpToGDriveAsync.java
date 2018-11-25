@@ -2,13 +2,12 @@ package com.ndhunju.dailyjournal.controller.backup;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.IntentSender;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveResourceClient;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
@@ -20,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by dhunju on 9/24/2015.
@@ -29,18 +29,18 @@ import java.io.OutputStream;
  * class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
-public class UploadBackUpToGDriveAsync extends AsyncTask<DriveApi.DriveContentsResult, Integer, IntentSender> {
+public class UploadBackUpToGDriveAsync extends AsyncTask<DriveFolder, Integer, String> {
 
     private static final String TAG = UploadBackUpToGDriveAsync.class.getSimpleName();
 
     //variables
-    private FinishCallback<IntentSender> mFinishCallback;
-    private GoogleApiClient mGoogleApiClient;
+    private FinishCallback<String> mFinishCallback;
+    private DriveResourceClient mDriveResourceClient;
     private Activity mActivity;
     private ProgressDialog pd;
 
-    public UploadBackUpToGDriveAsync(Activity activity, GoogleApiClient googleApiClient, FinishCallback<IntentSender> resultCallback){
-        mGoogleApiClient = googleApiClient;
+    public UploadBackUpToGDriveAsync(Activity activity, DriveResourceClient driveResourceClient, FinishCallback<String> resultCallback){
+        mDriveResourceClient = driveResourceClient;
         mFinishCallback = resultCallback;
         mActivity = activity;
     }
@@ -58,69 +58,93 @@ public class UploadBackUpToGDriveAsync extends AsyncTask<DriveApi.DriveContentsR
     }
 
     @Override
-    protected IntentSender doInBackground(DriveApi.DriveContentsResult... results) {
+    protected String doInBackground(DriveFolder... results) {
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        final String[] result = {"Fail"};
+
         //Create a new Content in google drive and set a callback
+        DriveFolder parent = results[0];
+        mDriveResourceClient
+                .createContents()
+                .continueWithTask(task -> {
+                    DriveContents contents = task.getResult();
 
-        // Get an output stream for the contents.
-        OutputStream outputStream = results[0].getDriveContents().getOutputStream();
+                    if (contents == null) {
+                        result[0] = "Fail";
+                        return null;
+                    }
 
-        File backUpfile = null;
+                    OutputStream outputStream = contents.getOutputStream();
+
+                    File backUpFile;
+
+                    try {
+                        //Create a new full backup of data into local drive
+                        Services s = Services.getInstance(mActivity);
+                        String filePath = s.createBackUp(UtilsFile.getCacheDir(mActivity));
+                        backUpFile = new File(filePath);
+                        publishProgress(20);
+
+                        InputStream ios = null;
+                        try {
+                            byte[] buffer = new byte[4096];
+                            ios = new FileInputStream(backUpFile);
+                            int read;
+                            while ((read = ios.read(buffer)) != -1) {
+                                outputStream.write(buffer, 0, read);
+                            }
+                        } finally {
+                            try {
+                                if (outputStream != null) outputStream.close();
+                            } catch (IOException ignore) {
+                            }
+
+                            try {
+                                if (ios != null) ios.close();
+                            } catch (IOException ignore) {
+                            }
+                        }
+                        publishProgress(60);
+
+                        //delete the backup file from internal storage
+                        UtilsFile.deleteFile(filePath);
+                        publishProgress(80);
+
+                        // Create the initial metadata - MIME type and title.
+                        // Note that the user will be able to change the title later.
+                        MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                                .setTitle(backUpFile.getName())
+                                .setMimeType(UtilsFile.BACK_FILE_TYPE).build();
+                        publishProgress(90);
+
+                        result[0] = "Success";
+                        return mDriveResourceClient.createFile(parent, metadataChangeSet, contents);
+                    } catch (IOException e1) {
+                        Log.i(TAG, "Unable to write file contents.");
+                        result[0] = "Fail: " + e1.getLocalizedMessage();
+                    }
+
+                    return null;
+
+                })
+                .addOnSuccessListener(mActivity, driveFile -> {
+                    result[0] = "Success";
+                    countDownLatch.countDown();
+                })
+                .addOnFailureListener(mActivity, e -> {
+                    Log.e(TAG, "Unable to create file?", e);
+                    result[0] = "Fail: " + e.getLocalizedMessage();
+                    countDownLatch.countDown();
+                });
 
         try {
-            //Create a new full backup of data into local drive
-            Services s = Services.getInstance(mActivity);
-            String filePath = s.createBackUp(UtilsFile.getCacheDir(mActivity));
-            backUpfile = new File(filePath);
-            publishProgress(20);
-
-            InputStream ios = null;
-            try {
-                byte[] buffer = new byte[4096];
-                ios = new FileInputStream(backUpfile);
-                int read;
-                while ((read = ios.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, read);
-                }
-            } finally {
-                try {
-                    if (outputStream != null) outputStream.close();
-                } catch (IOException ignore) {
-                }
-
-                try {
-                    if (ios != null) ios.close();
-                } catch (IOException ignore) {
-                }
-            }
-            publishProgress(60);
-
-            //delete the backup file from internal storage
-            UtilsFile.deleteFile(filePath);
-            publishProgress(80);
-
-            // Create the initial metadata - MIME type and title.
-            // Note that the user will be able to change the title later.
-            MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                    .setTitle(backUpfile.getName())
-                    .setMimeType(UtilsFile.BACK_FILE_TYPE).build();
-            publishProgress(90);
-
-
-            // Create an intent for the file chooser, and start it.
-            IntentSender intentSender = Drive.DriveApi
-                    .newCreateFileActivityBuilder()
-                    .setInitialMetadata(metadataChangeSet)
-                    .setInitialDriveContents(results[0].getDriveContents())
-                    .setActivityTitle(backUpfile.getName())
-                    .build(mGoogleApiClient);
-            publishProgress(100);
-
-            return intentSender;
-        } catch (IOException e1) {
-            Log.i(TAG, "Unable to write file contents.");
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        return null;
+        return result[0];
     }
 
     @Override
@@ -131,10 +155,10 @@ public class UploadBackUpToGDriveAsync extends AsyncTask<DriveApi.DriveContentsR
     }
 
     @Override
-    protected void onPostExecute(IntentSender intentSender) {
+    protected void onPostExecute(String result) {
         pd.cancel();
         if (mFinishCallback != null) {
-            mFinishCallback.onFinish(intentSender);
+            mFinishCallback.onFinish(result);
         }
     }
 }

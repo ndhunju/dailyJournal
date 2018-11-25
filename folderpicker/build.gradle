@@ -1,12 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 28
+    // each version of the Android Gradle Plugin now has a default version of the build tools.
+    //buildToolsVersion '25.0.3'
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -20,5 +21,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.0.+'
+    compile 'com.android.support:appcompat-v7:28.0.0'
 }
