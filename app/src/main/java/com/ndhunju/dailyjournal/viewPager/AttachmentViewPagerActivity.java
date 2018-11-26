@@ -1,16 +1,21 @@
 package com.ndhunju.dailyjournal.viewPager;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +52,7 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	private static final String TAG = AttachmentViewPagerActivity.class.getSimpleName();
 	private static final int REQUEST_TAKE_PHOTO= 2646;
 	private static final int REQUEST_IMAGE  = 4646;
+	private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
 
 
 	private static final String ISLOCKED_ARG = "isLocked";
@@ -54,6 +60,7 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	private ViewPager mViewPager;
 	private MenuItem menuLockItem;
 	private Services mServices;
+	private Runnable runAfterPermissionGrant;
 	long journalId;
 
 	@Override
@@ -127,40 +134,47 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 				break;
 
 			case R.id.viewpager_new_picture:
-				getAttachmentAlertDialogOption().show();
+				addNewPicture();
 				break;
 
 			case R.id.viewpager_download_picture:
-
-				try{
-				    // copy internal image attachment to download folder
-					File internalImage = new File(attachmentPagerAdapter.getItem(mViewPager.getCurrentItem()).getPath());
-					File toExportImage = new File(UtilsFile.getPublicDownloadDir(), internalImage.getName());
-					toExportImage.createNewFile();
-					FileInputStream picFileIS  = new FileInputStream(internalImage);
-					FileOutputStream toExportImageOS = new FileOutputStream(toExportImage);
-					UtilsZip.copy(picFileIS, toExportImageOS);
-					picFileIS.close();
-					toExportImageOS.close();
-
-					// show it in Downloads app and in notification bar
-					DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-					downloadManager.addCompletedDownload(getString(R.string.app_name), getString(R.string.msg_downloaded, getString(R.string.str_image)),
-							true, "image/jpeg", toExportImage.getAbsolutePath(), toExportImage.length(), true);
-
-					// let know that a new file has been created so that it appears in the computer
-					MediaScannerConnection.scanFile(this, new String[]{toExportImage.getAbsolutePath()}, null, null);
-
-					UtilsView.toast(this, getString(R.string.str_finished));
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
+				downloadPicture();
 				break;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void downloadPicture() {
+
+		if (!checkWriteStoragePermission()) {
+			runAfterPermissionGrant = this::downloadPicture;
+			return;
+		}
+		try {
+			// copy internal image attachment to download folder
+			File internalImage = new File(attachmentPagerAdapter.getItem(mViewPager.getCurrentItem()).getPath());
+			File toExportImage = new File(UtilsFile.getPublicDownloadDir(), internalImage.getName());
+			toExportImage.createNewFile();
+			FileInputStream picFileIS  = new FileInputStream(internalImage);
+			FileOutputStream toExportImageOS = new FileOutputStream(toExportImage);
+			UtilsZip.copy(picFileIS, toExportImageOS);
+			picFileIS.close();
+			toExportImageOS.close();
+
+			// show it in Downloads app and in notification bar
+			DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+			downloadManager.addCompletedDownload(getString(R.string.app_name), getString(R.string.msg_downloaded, getString(R.string.str_image)),
+					true, "image/jpeg", toExportImage.getAbsolutePath(), toExportImage.length(), true);
+
+			// let know that a new file has been created so that it appears in the computer
+			MediaScannerConnection.scanFile(this, new String[]{toExportImage.getAbsolutePath()}, null, null);
+
+			UtilsView.toast(this, getString(R.string.str_finished));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -274,9 +288,14 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		super.onSaveInstanceState(outState);
 	}
 
-	private AlertDialog getAttachmentAlertDialogOption(){
+	private void addNewPicture() {
+		if (!checkWriteStoragePermission()) {
+			runAfterPermissionGrant = this::addNewPicture;
+			return;
+		}
+
 		CharSequence[] options = getResources().getStringArray(R.array.options_attch);
-		return new AlertDialog.Builder(getActivity())
+		AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
 				.setTitle(getString(R.string.str_choose))
 				.setItems(options, new DialogInterface.OnClickListener() {
 					@Override
@@ -296,9 +315,34 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 						}
 					}
 				}).create();
+		alertDialog.show();
 	}
 
 	public Activity getActivity(){
 		return AttachmentViewPagerActivity.this;
+	}
+
+	private boolean checkWriteStoragePermission() {
+		if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				getActivity().requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_WRITE_STORAGE);
+			}
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE) {
+			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				if (runAfterPermissionGrant != null) {
+					runAfterPermissionGrant.run();
+					runAfterPermissionGrant = null;
+				}
+			}
+		}
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 }

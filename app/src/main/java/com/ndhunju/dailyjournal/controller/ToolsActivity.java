@@ -1,10 +1,15 @@
 package com.ndhunju.dailyjournal.controller;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,6 +43,7 @@ import java.util.List;
 public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClickedListener {
 
     private static final int REQUEST_CODE_BACKUP_DIR_PRINTABLE = 1264;
+    private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
 
     RecyclerView recyclerView;
     int columnCount = 2;      // default column count
@@ -235,28 +241,7 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         break;
                     case R.string.str_export_printable:
-                        // show export location options
-                        CharSequence[] options = getResources().getStringArray(R.array.options_export_print_location);
-                        AlertDialog chooseDialog = new AlertDialog.Builder(getContext())
-                                .setTitle(getString(R.string.str_choose))
-                                .setItems(options, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        switch (which) {
-                                            case 0: // Local Storage
-                                                FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
-                                                dpdf.show(getFragmentManager(), FolderPickerDialogFragment.class.getName());
-                                                break;
-
-                                            case 1: // Other Apps
-                                                PartyListFragment.createDialogForSharePartiesReport(getActivity()).show();
-                                                break;
-
-                                        }
-                                    }
-                                }).create();
-
-                        chooseDialog.show();
+                        showExportPrintableOptions();
                         break;
                     case R.string.title_activity_erase:
                         startActivity(new Intent(getContext(), EraseActivity.class));
@@ -269,6 +254,56 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                 }
             }
         }
+    }
+
+    private void showExportPrintableOptions() {
+        if (!checkWriteStoragePermission()) {
+            return;
+        }
+        // show export location options
+        CharSequence[] options = getResources().getStringArray(R.array.options_export_print_location);
+        AlertDialog chooseDialog = new AlertDialog.Builder(getContext())
+                .setTitle(getString(R.string.str_choose))
+                .setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0: // Local Storage
+                                FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
+                                dpdf.show(getFragmentManager(), FolderPickerDialogFragment.class.getName());
+                                break;
+
+                            case 1: // Other Apps
+                                PartyListFragment.createDialogForSharePartiesReport(getActivity()).show();
+                                break;
+
+                        }
+                    }
+                }).create();
+
+        chooseDialog.show();
+    }
+
+
+    private boolean checkWriteStoragePermission() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getActivity().requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_WRITE_STORAGE);
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showExportPrintableOptions();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }

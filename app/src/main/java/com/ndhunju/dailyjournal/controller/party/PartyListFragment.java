@@ -1,12 +1,16 @@
 package com.ndhunju.dailyjournal.controller.party;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -50,10 +54,12 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
     // activated item position. Only used on tablets.
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
     private static final int INVALID_POSITION = -1;
+    private static final int REQUEST_PERMISSIONS_READ_CONTACTS = 2323;
     public static final int REQUEST_PARTY_INFO_CHGD = 135;
 
     // The fragment's current callback object, which is notified of list item clicks.
     private Callbacks mCallbacks = sDummyCallbacks;
+    private Runnable runOnResume;
 
     //List view
     private RecyclerView mPartyLV;
@@ -243,6 +249,15 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (runOnResume != null) {
+            runOnResume.run();
+            runOnResume = null;
+        }
+    }
+
     private void setActivatedPosition(int position) {
         mPartyAdapter.setActivatedItemPos(position);
         mActivatedPosition = position;
@@ -262,30 +277,7 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         switch (item.getItemId()){
 
             case R.id.menu_party_list_activity_import:
-                final List<ImportContacts.Contact> contacts = ImportContacts.getContacts(getActivity());
-                final ArrayList<ImportContacts.Contact> importContacts = new ArrayList<>();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(getString(R.string.msg_choose, getString(R.string.str_contact)));
-                builder.setNegativeButton(getString(android.R.string.cancel), null);
-                builder.setMultiChoiceItems(ImportContacts.getNames(contacts), null,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                                //Add checked contacts into importContacts list
-                                if (b) importContacts.add(contacts.get(i));
-                                else importContacts.remove(contacts.get(i));
-                            }
-                        });
-                builder.setPositiveButton(getString(android.R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                new ImportContactsAsync(getActivity()).execute(importContacts);
-                            }
-                        });
-                AlertDialog selectContactsAD = builder.create();
-                selectContactsAD.show();
+                startImportingContacts();
                 break;
 
             case R.id.menu_party_list_activity_share:
@@ -295,6 +287,56 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSIONS_READ_CONTACTS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // the system may have displayed a permission dialog (in Marshmallow), causing the fragment to go into onPause() state
+                if (this.isResumed()) {
+                    startImportingContacts();
+                } else {
+                    runOnResume = this::startImportingContacts;
+                }
+            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                // user denied permissions to access contacts
+                // do nothing
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void startImportingContacts() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.READ_CONTACTS}, REQUEST_PERMISSIONS_READ_CONTACTS);
+            return;
+        }
+
+        final List<ImportContacts.Contact> contacts = ImportContacts.getContacts(getActivity());
+        final ArrayList<ImportContacts.Contact> importContacts = new ArrayList<>();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.msg_choose, getString(R.string.str_contact)));
+        builder.setNegativeButton(getString(android.R.string.cancel), null);
+        builder.setMultiChoiceItems(ImportContacts.getNames(contacts), null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        //Add checked contacts into importContacts list
+                        if (b) importContacts.add(contacts.get(i));
+                        else importContacts.remove(contacts.get(i));
+                    }
+                });
+        builder.setPositiveButton(getString(android.R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        new ImportContactsAsync(getActivity()).execute(importContacts);
+                    }
+                });
+        AlertDialog selectContactsAD = builder.create();
+        selectContactsAD.show();
     }
 
     public static AlertDialog createDialogForSharePartiesReport(final Activity activity) {
