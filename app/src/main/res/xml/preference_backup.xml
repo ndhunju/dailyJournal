@@ -29,7 +29,8 @@
             android:defaultValue="false"
             android:dependency="@string/key_pref_auto_backup_cb"
             android:key="@string/key_pref_auto_upload_backup_to_gdrive_cb"
-            android:title="@string/str_enable_auto_upload_backup_to_gdrive" />
+            android:title="@string/pref_title_auto_upload_backup_to_gdrive"
+            android:summary="@string/pref_summary_auto_upload_backup_to_gdrive"/>
         <ListPreference
             android:defaultValue="604800000"
             android:dependency="@string/key_pref_auto_backup_cb"

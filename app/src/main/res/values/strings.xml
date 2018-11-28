@@ -93,7 +93,8 @@
     <string name="str_restore_backup_from_auto">Restore From Automatic Backup</string>
     <string name="str_auto_backup">Automatic Backup</string>
     <string name="str_enable_auto_backup">Enable Auto Backup</string>
-    <string name="str_enable_auto_upload_backup_to_gdrive">Auto Upload Backup To Google Drive</string>
+    <string name="pref_title_auto_upload_backup_to_gdrive">Auto Upload Backup To Google Drive</string>
+    <string name="pref_summary_auto_upload_backup_to_gdrive">Enabling this option will upload locally auto created backup file to your Google Drive.</string>
     <string name="str_auto_backup_interval">Auto Backup Interval</string>
     <string name="str_no_thanks">No, thanks</string>
     <string name="str_later">Later</string>

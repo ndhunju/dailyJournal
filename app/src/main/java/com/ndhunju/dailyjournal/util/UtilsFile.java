@@ -333,7 +333,10 @@ public class UtilsFile {
 	public static void copyFile(File from, File to) throws IOException {
 		InputStreamReader fromIsr = new FileReader(from);
 		OutputStreamWriter toOsr = new OutputStreamWriter(new FileOutputStream(to));
+		copy(fromIsr, toOsr);
+	}
 
+	public static void copy(InputStreamReader fromIsr, OutputStreamWriter toOsr) throws IOException {
 		char[] buffer = new char[2048];
 		int c;
 		while ((c = fromIsr.read(buffer)) != -1) {

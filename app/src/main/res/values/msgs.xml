@@ -71,6 +71,15 @@
     <!-- TextField. Shown when a connection with a google service, like Drive, is lost.-->
     <string name="msg_error_google_service">Connection lost with Google Service.</string>
 
+    <!-- Message show to user in native notification when app successfully uploads automatically created backup file to google drive -->
+    <string name="msg_auto_upload_to_g_drive_success">Uploaded automatically created backup file to Google Drive.</string>
+    <!-- Message show to user in native notification when app fails to upload automatically created backup file to google drive -->
+    <string name="msg_auto_upload_to_g_drive_failed">Failed to auto upload automatically created backup file to Google Drive.</string>
+    <!-- Show to user when signing in to google drive fails-->
+    <string name="msg_error_g_drive_user_not_signed_in">Could not sign into Google Drive</string>
+    <!-- Eg. "Enable Auto Backup" option has been disabled. -->
+    <string name="msg_option_disabled"> "%s" option has been disabled.</string>
+
     <string name="msg_attachment_count_zero">There are 0 attachments.</string>
 
     <!-- TextField. Disclaimer shown to user at app start -->

@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationManagerCompat;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.HomeActivity;
+import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 
 /**
  * Created by dhunju on 10/2/2015.
@@ -39,7 +40,7 @@ public class MyNotificationManager {
         mNumNotif = 0;
     }
 
-    private Notification create(String title, String msg, PendingIntent pendingIntent) {
+    public Notification create(String title, String msg, PendingIntent pendingIntent) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext)
                 .setNumber(++mNumNotif)
                 .setSmallIcon(R.drawable.ic_notif_small)
@@ -91,10 +92,37 @@ public class MyNotificationManager {
         Intent intent = new Intent(mContext, HomeActivity.class);
         PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, 0);
         return create(mContext.getString(R.string.app_name)
-                        + "-" +mContext.getString(R.string.str_backup)
+                        + " - " +mContext.getString(R.string.str_backup)
                         , mContext.getString(R.string.msg_finished, interval
                         + " "+ mContext.getString(R.string.str_backup)),
                         notifPI);
+    }
+
+    public Notification createBackupCreationErrorNotif(String interval, String errorMsg){
+        Intent intent = new Intent(mContext, HomeActivity.class);
+        PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, 0);
+        return create(mContext.getString(R.string.app_name)
+                        + " - " +mContext.getString(R.string.str_backup)
+                , mContext.getString(R.string.msg_failed, interval
+                        + " "+ mContext.getString(R.string.str_backup) + errorMsg),
+                notifPI);
+    }
+
+    public Notification createBackupUploadedToGDriveSuccessNotif() {
+        Intent intent = new Intent(mContext, HomeActivity.class);
+        PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, 0);
+        return create(mContext.getString(R.string.app_name) + " - " + mContext.getString(R.string.msg_auto_upload_to_g_drive_success),
+                mContext.getString(R.string.msg_auto_upload_to_g_drive_success),
+                notifPI);
+    }
+
+    public Notification createBackupUploadedToGDriveErrorNotif(String errorMsg) {
+        // notify user about this issue
+        Intent intent = new Intent(mContext, BackupActivity.class);
+        PendingIntent openBackupActivityIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
+        return create(mContext.getString(R.string.app_name) + " - " + mContext.getString(R.string.msg_auto_upload_to_g_drive_failed),
+                errorMsg,
+                openBackupActivityIntent);
     }
 
     /**

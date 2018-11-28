@@ -136,6 +136,11 @@ public class PreferenceService {
         return this;
     }
 
+    public PreferenceService putVal(String key, boolean value) {
+        getSharedPreference().edit().putBoolean(key, value).apply();
+        return this;
+    }
+
 
     public boolean clear(){
         return getSharedPreference().edit().clear().commit();
