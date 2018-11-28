@@ -1,6 +1,7 @@
 package com.ndhunju.dailyjournal.util;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TreeSet;
 
 public class UtilsFormat {
 
@@ -162,6 +164,37 @@ public class UtilsFormat {
         return zeros + nextId;
     }
 
+    public static void printAllLocales() {
+        NumberFormat numberFormat;
+        String formattedAmount;
+        StringBuilder stringBuilder = new StringBuilder();
+        TreeSet<String> set = new TreeSet<>();
+        set.comparator();
+
+        for (Locale locale : NumberFormat.getAvailableLocales()) {
+            try {
+                if (TextUtils.isEmpty(locale.getCountry()) || set.contains(locale.getCountry())) {
+                    continue;
+                }
+                //numberFormat = NumberFormat.getCurrencyInstance(locale);
+                //formattedAmount = numberFormat.format(1);
+                set.add(locale.getCountry());
+
+            } catch (Exception ignore){}
+
+        }
+
+        for (String val : set) {
+            stringBuilder.append("<item>");
+            stringBuilder.append(val);
+            //stringBuilder.append(formattedAmount);
+            stringBuilder.append("</item>");
+            stringBuilder.append("\n");
+        }
+
+
+        System.out.print(stringBuilder);
+    }
 
 
 }
