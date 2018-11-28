@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.ContextCompat;
@@ -37,6 +38,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
     private static final int REQUEST_CODE_PICK_BACKUP = 8489;
     private static final int REQUEST_CODE_BACKUP_DIR = 3561;
     private static final int REQUEST_CODE_BACKUP_COMPLETE = 5465;
+    private static final int REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE = 3943;
 
     private PreferenceService preferenceService;
     private boolean finishOnBackUpSuccess;
@@ -149,6 +151,18 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
         if (key.equals(autoBackUpCB) || key.equals(autoBackUpIntervalPl)) {
             preferenceService.updateAutoBackup();
         }
+
+        // get the key for Auto Upload Backup to Google Drive
+        String autoUploadToGDriveCB = getString(R.string.key_pref_auto_upload_backup_to_gdrive_cb);
+        if (key.equals(autoUploadToGDriveCB)) {
+            boolean enableAutoUploadToGDriveCB = sharedPreferences.getBoolean(key, false);
+            if (enableAutoUploadToGDriveCB) {
+                // check if user is logged into google drive
+                startActivityForResult(new Intent(getActivity(), GoogleDriveSignInActivity.class)
+                        .putExtra(GoogleDriveSignInActivity.BUNDLE_SHOULD_FINISH_ON_SIGN_IN, true),
+                        REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE);
+            }
+        }
     }
 
     @Override
@@ -197,6 +211,15 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                     }
                 } else {
                     getActivity().setResult(Activity.RESULT_CANCELED);
+                }
+                break;
+
+            case REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE:
+                // update the value of this preference based on the result
+                ((CheckBoxPreference) findPreference(getString(R.string.key_pref_auto_upload_backup_to_gdrive_cb))).setChecked(resultCode == Activity.RESULT_OK);
+                if (resultCode != Activity.RESULT_OK) {
+                    // show connecting to msg "Connecting to Google Drive failed"
+                    UtilsView.alert(getActivity(), getString(R.string.msg_connecting_failed, getString(R.string.str_google_drive)));
                 }
                 break;
         }

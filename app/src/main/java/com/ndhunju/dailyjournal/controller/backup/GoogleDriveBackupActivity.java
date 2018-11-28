@@ -1,24 +1,11 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveClient;
 import com.google.android.gms.drive.DriveFolder;
@@ -31,19 +18,13 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.util.UtilsView;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /** Created by ndhunju on 1/15/17.
  * This class encapsulates common operations when dealing with {@link DriveResourceClient}*/
-public abstract class GoogleDriveBackupActivity extends AppCompatActivity {
+public abstract class GoogleDriveBackupActivity extends GoogleDriveSignInActivity {
 
     public static final String TAG = GoogleDriveBackupActivity.class.getSimpleName();
 
-    /** Request code for Google Sign-in */
-    protected static final int REQUEST_CODE_SIGN_IN = 0;
     /** Request code for Opening an item on Google Drive */
     public static final int REQUEST_CODE_OPEN_ITEM = 1189;
 
@@ -54,37 +35,10 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity {
     /** Tracks completion of the drive picker */
     private TaskCompletionSource<DriveId> mOpenItemTaskSource;
 
-    private ProgressDialog connectionPd;
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        connectionPd = new ProgressDialog(getActivity());
-        connectionPd.setMessage(String.format(getString(R.string.msg_connecting), getString(R.string.str_google_drive)));
-        connectionPd.setCanceledOnTouchOutside(true);
-        connectionPd.setIndeterminate(true);
-        connectionPd.setCancelable(true);
-        connectionPd.show();
-
-    }
-
-    /** Starts the sign-in process and initializes the Drive client. */
-    protected void signIn() {
-        Set<Scope> requiredScopes = new HashSet<>(2);
-        requiredScopes.add(Drive.SCOPE_FILE);
-        requiredScopes.add(Drive.SCOPE_APPFOLDER);
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (signInAccount != null && signInAccount.getGrantedScopes().containsAll(requiredScopes)) {
-            initializeDriveClient(signInAccount);
-        } else {
-            GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                            .requestScopes(Drive.SCOPE_FILE)
-                            .requestScopes(Drive.SCOPE_APPFOLDER)
-                            .build();
-            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, signInOptions);
-            startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-        }
+    protected void onSignedIn(GoogleSignInAccount signInAccount) {
+        super.onSignedIn(signInAccount);
+        initializeDriveClient(signInAccount);
     }
 
     /**
@@ -100,36 +54,12 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity {
     /**
      * Called after the user has signed in and the Drive client has been initialized.
      */
-    protected void onDriveClientReady() {
-        if (connectionPd != null) connectionPd.dismiss();
-    }
+    protected void onDriveClientReady() {}
 
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
-            case REQUEST_CODE_SIGN_IN:
-                if (resultCode != RESULT_OK) {
-                    // Sign-in may fail or be cancelled by the user
-                    Log.e(TAG, "Sign-in failed.");
-                    finish();
-                    return;
-                }
-
-                Task<GoogleSignInAccount> getAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
-                if (getAccountTask.isSuccessful()) {
-                    initializeDriveClient(getAccountTask.getResult());
-                } else {
-                    Log.e(TAG, "Sign-in failed.");
-                    Dialog dialog = new AlertDialog.Builder(getActivity())
-                                .setMessage(getString(R.string.common_google_play_services_unknown_issue, getString(R.string.app_name)))
-                                .create();
-
-                    dialog.setOnDismissListener(dialog1 -> finish());
-                    dialog.show();
-                    getActivity().setResult(resultCode);
-                }
-                break;
             case REQUEST_CODE_OPEN_ITEM:
                 if (resultCode == RESULT_OK && data != null) {
                     // User has picked a file from Google Drive
@@ -144,29 +74,6 @@ public abstract class GoogleDriveBackupActivity extends AppCompatActivity {
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
-    }
-
-    protected void showEndResultToUser(String message, boolean success) {
-        setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
-        if (getActivity() != null && !getActivity().isFinishing()) {
-            UtilsView.alert(getActivity(), message, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-        }
-    }
-
-    public Activity getActivity() {
-        return this;
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        signIn();
     }
 
     protected DriveResourceClient getDriveResourceClient() {

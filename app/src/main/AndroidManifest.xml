@@ -109,6 +109,8 @@
         <activity android:name=".controller.DailyReportActivity"
             android:label="@string/title_activity_daily_report"/>
 
+        <activity android:name=".controller.backup.GoogleDriveSignInActivity" />
+
     </application>
 
 </manifest>
