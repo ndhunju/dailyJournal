@@ -4,12 +4,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.service.AutoBackupJobService;
 import com.ndhunju.dailyjournal.controller.service.AutoBackupService;
 import com.ndhunju.dailyjournal.util.UtilsDate;
 
@@ -165,9 +167,14 @@ public class PreferenceService {
             long selectedInterval = getVal(R.string.key_pref_auto_backup_interval_lp,
                     PreferenceService.DEF_AUTO_BACKUP_TIME);
 
-            //set an alarm
-            AlarmManagerWrapper.from(context).setRepeating(UtilsDate.get(selectedInterval),
-                    pendingIntent, selectedInterval);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AutoBackupJobService.schedule(context, UtilsDate.get(selectedInterval).getTimeInMillis(), selectedInterval);
+            } else {
+                //set an alarm
+                AlarmManagerWrapper.from(context).setRepeating(UtilsDate.get(selectedInterval),
+                        pendingIntent, selectedInterval);
+            }
+
             Log.d(TAG, "alarm set for auto backup : " + selectedInterval);
         } else {
             //cancel the alarm

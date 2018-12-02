@@ -27,6 +27,9 @@
             android:name="com.ndhunju.dailyjournal.controller.service.AutoBackupService"
             android:exported="false" />
 
+        <service android:name=".controller.service.AutoBackupJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
         <activity
             android:name=".controller.CompanySettingsActivity"
             android:label="@string/title_activity_company_settings"
