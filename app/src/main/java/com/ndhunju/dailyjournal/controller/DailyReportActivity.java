@@ -34,7 +34,7 @@ import java.util.List;
  * This activity is responsible for showing list of journals for a selected day for a selected party.
  */
 
-public class DailyReportActivity extends AppCompatActivity implements LedgerAdapter.OnItemClickListener, OnDialogBtnClickedListener{
+public class DailyReportActivity extends BaseActivity implements LedgerAdapter.OnItemClickListener, OnDialogBtnClickedListener{
 
     private static final int REQUEST_DATE = 6656;
     private static final int REQUEST_CHGD_PARTY = 456;

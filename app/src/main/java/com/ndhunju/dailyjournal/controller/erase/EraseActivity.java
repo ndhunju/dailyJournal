@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.NavDrawerActivity;
+import com.ndhunju.dailyjournal.service.LockService;
 
 /**
  * Created by ndhunju on 9/4/17.
@@ -23,6 +24,7 @@ public class EraseActivity extends NavDrawerActivity {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
 
-
+        // get user's pin before allowing to erase
+        LockService.showLockScreen(this);
     }
 }

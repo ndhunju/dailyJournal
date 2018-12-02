@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
@@ -25,7 +24,7 @@ import com.ndhunju.dailyjournal.util.UtilsFormat;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link PartyDetailLedgerRowFragment}.
  */
-public class PartyDetailActivity extends AppCompatActivity {
+public class PartyDetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,19 +105,5 @@ public class PartyDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //update pass code time
-        LockService.updatePasscodeTime();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //check pass code
-        LockService.checkPassCode(PartyDetailActivity.this);
     }
 }

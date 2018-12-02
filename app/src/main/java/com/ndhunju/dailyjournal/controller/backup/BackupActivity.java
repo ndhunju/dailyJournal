@@ -13,10 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.BaseActivity;
 
 /** Created by Dhunju on 8/14/2016.
  * This activity groups together tools relevant to backing up. */
-public class BackupActivity extends AppCompatActivity {
+public class BackupActivity extends BaseActivity {
 
     private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
 

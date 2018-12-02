@@ -25,10 +25,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.model.Party.Type;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFile;
@@ -37,7 +37,7 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.io.File;
 
-public class PartyActivity extends AppCompatActivity {
+public class PartyActivity extends BaseActivity {
 
     private static final String TAG = PartyActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE = 123;
@@ -188,18 +188,6 @@ public class PartyActivity extends AppCompatActivity {
                 break;
         }
     }
-
-    @Override
-	protected void onPause() {
-		LockService.updatePasscodeTime();
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-		LockService.checkPassCode(PartyActivity.this);
-		super.onResume();
-	}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

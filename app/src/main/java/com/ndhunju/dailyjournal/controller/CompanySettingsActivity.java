@@ -21,7 +21,7 @@ import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CompanySettingsActivity extends AppCompatActivity implements OnDialogBtnClickedListener {
+public class CompanySettingsActivity extends BaseActivity implements OnDialogBtnClickedListener {
 
     private static final int REQUEST_CHGED_DATE = 656;
 

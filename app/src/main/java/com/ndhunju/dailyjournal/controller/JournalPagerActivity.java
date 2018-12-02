@@ -1,17 +1,15 @@
 package com.ndhunju.dailyjournal.controller;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.LockService;
 
 /**
  * Created by Dhunju on 8/7/2016.
  * This activity is responsible for showing already existing journals in a pager.
  */
-public class JournalPagerActivity extends AppCompatActivity {
+public class JournalPagerActivity extends BaseActivity {
 
     public static final String BUNDLE_JOURNAL_IDS = JournalPagerActivity.class.getSimpleName() + "journalIds";
 
@@ -32,20 +30,6 @@ public class JournalPagerActivity extends AppCompatActivity {
         }
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //check pass code
-        LockService.checkPassCode(JournalPagerActivity.this);
-    }
-
-    @Override
-    protected void onPause() {
-        LockService.updatePasscodeTime();
-        super.onPause();
     }
 
 }

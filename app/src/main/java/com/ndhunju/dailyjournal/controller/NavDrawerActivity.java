@@ -22,13 +22,12 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 /**
  * Created by Dhunju on 6/26/2016.
  */
-public class NavDrawerActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class NavDrawerActivity extends BaseActivity implements AdapterView.OnItemClickListener{
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -96,20 +95,6 @@ public class NavDrawerActivity extends AppCompatActivity implements AdapterView.
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //check pass code
-        LockService.checkPassCode(this);
-    }
-
-    @Override
-    protected void onPause() {
-        LockService.updatePasscodeTime();
-        super.onPause();
     }
 
     @Override

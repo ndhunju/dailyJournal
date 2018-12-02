@@ -12,7 +12,6 @@ import android.view.View;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.NavDrawerActivity;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.LockService;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
@@ -116,20 +115,6 @@ public class PartyListActivity extends NavDrawerActivity implements PartyListFra
                     getString(R.string.trans_party_img)).toBundle();
             ActivityCompat.startActivityForResult(this, detailIntent, PartyListFragment.REQUEST_PARTY_INFO_CHGD, bundle);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //update pass code time
-        LockService.updatePasscodeTime();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //check pass code
-        LockService.checkPassCode(PartyListActivity.this);
     }
 
 }

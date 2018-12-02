@@ -6,7 +6,6 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.NavDrawerActivity;
 import com.ndhunju.dailyjournal.controller.fragment.AppRater;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.dailyjournal.service.LockService;
 
 public class JournalNewActivity extends NavDrawerActivity {
 
@@ -34,14 +33,6 @@ public class JournalNewActivity extends NavDrawerActivity {
 
 		askUserToRate();
 
-		//check pass code
-		LockService.checkPassCode(JournalNewActivity.this);
-	}
-
-	@Override
-	protected void onPause() {
-		LockService.updatePasscodeTime();
-		super.onPause();
 	}
 
 	private void askUserToRate(){

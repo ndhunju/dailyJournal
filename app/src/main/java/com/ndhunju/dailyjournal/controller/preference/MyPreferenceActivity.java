@@ -91,15 +91,7 @@ public class MyPreferenceActivity extends AppCompatPreferenceActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        //Update lock time
-        LockService.updatePasscodeTime();
-    }
-
-    @Override
     protected void onResume() {
-        super.onResume();
 
         //Set the title
         setTitle(getString(R.string.str_preference));
@@ -108,9 +100,7 @@ public class MyPreferenceActivity extends AppCompatPreferenceActivity {
         boolean importOldData = getIntent().getBooleanExtra(Constants.KEY_IMPORT_OLD_DATA, false);
         if (importOldData) new TransferOldDataAsyncTask(MyPreferenceActivity.this).execute();
 
-        //check pass code
-        LockService.checkPassCode(MyPreferenceActivity.this);
-
+        super.onResume();
     }
 
     @Override

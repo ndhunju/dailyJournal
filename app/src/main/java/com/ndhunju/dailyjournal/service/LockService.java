@@ -37,6 +37,15 @@ public class LockService {
         }
     }
 
+    public static void showLockScreen(Activity activity) {
+        boolean isPinCodeEnabled = preferenceService.getVal(R.string.key_pref_pincode_cb, false);
+        if (isPinCodeEnabled) {
+            Intent i = new Intent(activity, LockScreenActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            activity.startActivity(i);
+        }
+    }
+
     /**
      * Checks if the pass code or lock time has expired.
      * if lock time has exceeded, it returns true
