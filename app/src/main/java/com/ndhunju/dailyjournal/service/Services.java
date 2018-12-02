@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.media.MediaScannerConnection;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
@@ -675,10 +676,11 @@ public class Services {
         PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
     }
 
-    /** <b>Note: </b> Caller of this method should soon call
-     * startActivity(new Intent(mActivity, CompanySettingsActivity.class));
-     * to ensure that the company info is valid. **/
-    private void clearCompanyInfo() {
+    public boolean hasValidCompanyInfo() {
+        return !TextUtils.isEmpty(mCompanyName) && mCurrentFinancialYear != null;
+    }
+
+    public void clearCompanyInfo() {
         mCompanyName = null;
         mCurrentFinancialYear = null;
     }

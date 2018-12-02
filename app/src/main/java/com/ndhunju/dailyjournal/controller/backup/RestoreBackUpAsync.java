@@ -70,6 +70,7 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
         try {
             //Delete existing files, objects, database
             Services.getInstance(mActivity).recreateDB();
+            Services.getInstance(mActivity).clearCompanyInfo();
 
             //Get the app folder where the data are stored
             File appFolder = UtilsFile.getAppFolder(mActivity);

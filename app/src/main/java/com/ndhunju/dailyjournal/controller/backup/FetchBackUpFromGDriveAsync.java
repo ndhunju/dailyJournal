@@ -115,6 +115,7 @@ public class FetchBackUpFromGDriveAsync extends AsyncTask<DriveId, Integer, Stri
 
                     //Delete existing objects
                     Services.getInstance(mActivity).recreateDB();
+                    Services.getInstance(mActivity).clearCompanyInfo();
                     publishProgress(50);
 
                     //Get the app folder where the data are stored
