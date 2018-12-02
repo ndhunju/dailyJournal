@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
+import com.ndhunju.dailyjournal.BuildConfig;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.HomeActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
@@ -20,6 +21,7 @@ import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 public class MyNotificationManager {
 
     private static final String TAG = MyNotificationManager.class.getSimpleName();
+    private static final String DEFAULT_CHANNEL_ID = BuildConfig.APPLICATION_ID + ".defaultChannelId"; // must be unique per package
 
     //Variables
     private NotificationManager mNotificationManager;
@@ -41,12 +43,10 @@ public class MyNotificationManager {
     }
 
     public Notification create(String title, String msg, PendingIntent pendingIntent) {
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext, DEFAULT_CHANNEL_ID)
                 .setNumber(++mNumNotif)
                 .setSmallIcon(R.drawable.ic_notif_small)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.
-
-                        ic_notif_large))
+                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
                 .setContentTitle(title)
                 .setContentText(msg)
                 .setContentIntent(pendingIntent)
@@ -57,7 +57,7 @@ public class MyNotificationManager {
     }
 
     public Notification create(int titleResId, int msgResId, PendingIntent pendingIntent) {
-        return new NotificationCompat.Builder(mContext)
+        return new NotificationCompat.Builder(mContext, DEFAULT_CHANNEL_ID)
                 .setNumber(++mNumNotif)
                 .setSmallIcon(R.drawable.ic_notif_small)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
@@ -76,7 +76,7 @@ public class MyNotificationManager {
      * @return
      */
     private NotificationCompat.Builder getBuilder(String title, String msg){
-        return new NotificationCompat.Builder(mContext)
+        return new NotificationCompat.Builder(mContext, DEFAULT_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notif_small)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
                 .setContentTitle(title)
