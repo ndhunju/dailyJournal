@@ -177,8 +177,12 @@ public class PreferenceService {
 
             Log.d(TAG, "alarm set for auto backup : " + selectedInterval);
         } else {
-            //cancel the alarm
-            AlarmManagerWrapper.from(context).cancel(pendingIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AutoBackupJobService.cancel(context);
+            } else {
+                //cancel the alarm
+                AlarmManagerWrapper.from(context).cancel(pendingIntent);
+            }
             Log.d(TAG, "alarm not set for auto backup : ");
         }
     }

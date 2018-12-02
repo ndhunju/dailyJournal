@@ -1,6 +1,7 @@
 package com.ndhunju.dailyjournal.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -37,9 +38,10 @@ public class MyNotificationManager {
     }
 
     private MyNotificationManager(Context context) {
-        mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         mContext = context;
         mNumNotif = 0;
+        mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        addNotificationChannelForOreo(mNotificationManager);
     }
 
     public Notification create(String title, String msg, PendingIntent pendingIntent) {
@@ -81,6 +83,14 @@ public class MyNotificationManager {
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
                 .setContentTitle(title)
                 .setContentText(msg);
+    }
+
+    private void addNotificationChannelForOreo(NotificationManager notificationManager) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(DEFAULT_CHANNEL_ID
+                    , mContext.getString(R.string.notification_channel_name), android.app.NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
     /**
