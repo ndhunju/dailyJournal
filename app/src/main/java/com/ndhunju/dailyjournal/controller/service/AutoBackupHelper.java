@@ -22,9 +22,7 @@ import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.FileInputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -124,9 +122,8 @@ public class AutoBackupHelper {
                     return null;
                 }
 
-                InputStreamReader fromIsr = new FileReader(backUpFileToUpload);
-                OutputStreamWriter toOsr = new OutputStreamWriter(gDriveContents.getOutputStream());
-                UtilsFile.copy(fromIsr, toOsr);
+                File backUpFile = new File(backUpFileDir);
+                UtilsFile.copy(new FileInputStream(backUpFile), gDriveContents.getOutputStream());
 
                 MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                         .setTitle(backUpFileToUpload.getName())

@@ -27,6 +27,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.UUID;
@@ -346,6 +347,28 @@ public class UtilsFile {
 		toOsr.flush();
 		toOsr.close();
 		fromIsr.close();
+	}
+
+	public static void copy(InputStream ios, OutputStream outputStream) {
+		try {
+			byte[] buffer = new byte[4096];
+			int read;
+			while ((read = ios.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, read);
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (outputStream != null) outputStream.close();
+			} catch (IOException ignore) {
+			}
+
+			try {
+				if (ios != null) ios.close();
+			} catch (IOException ignore) {
+			}
+		}
 	}
 
 	public static byte[] read(File file) throws IOException {
