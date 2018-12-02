@@ -13,7 +13,7 @@
             android:entries="@array/currency"
             android:entryValues="@array/currency_val"
             android:key="@string/key_pref_currency"
-            android:title="@string/str_currency"
+            android:title="@string/pref_title_currency"
             android:icon="@drawable/ic_currency"/>
         <ListPreference
             android:defaultValue="0"
