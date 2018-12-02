@@ -199,7 +199,21 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 }
 
                 String selectedFilePath = UtilsFile.getPath(getActivity(), data.getData());
-                new RestoreBackUpAsync(getActivity()).execute(selectedFilePath);
+                if (selectedFilePath != null) {
+                    new RestoreBackUpAsync(getActivity()).execute(selectedFilePath);
+                } else {
+                    String internalCacheFile = UtilsFile.copyDataToInternalCacheFile(getActivity(), data.getData());
+                    if (internalCacheFile != null) {
+                        new RestoreBackUpAsync(getActivity())
+                                // ask to delete the internal cache file after restoring backup
+                                .setAction(RestoreBackUpAsync.Action.DELETE_SOURCE_FILE)
+                                .execute(internalCacheFile);
+                    } else {
+                        // show restore failed error message
+                        msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
+                        UtilsView.alert(getActivity(), msg);
+                    }
+                }
 
                 break;
 

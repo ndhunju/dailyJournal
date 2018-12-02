@@ -875,6 +875,7 @@ public class Services {
             success &= KeyValPersistence.from(mContext).clear();
             success &= PreferenceService.from(mContext).clear();
             success &= UtilsFile.deleteDirectory(UtilsFile.getAppFolder(mContext));
+            success &= UtilsFile.cleanCacheDir(mContext);
             clearCompanyInfo();
             notifyEraseAllListener();
         }catch (Exception e){

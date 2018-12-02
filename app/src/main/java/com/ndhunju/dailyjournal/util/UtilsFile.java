@@ -134,11 +134,11 @@ public class UtilsFile {
     /**
      * Clears up all the content of the Cache Folder excluding the Folder.
      * It is recursive.
-     * @param activity
+     * @param context
      * @return
      */
-	public static boolean cleanCacheDir(Activity activity){
-		File file = activity.getDir(UtilsFile.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
+	public static boolean cleanCacheDir(Context context){
+		File file = context.getDir(UtilsFile.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
 		boolean success = false;
 		try{
 			success = UtilsFile.deleteDirectory(file);
@@ -496,9 +496,25 @@ public class UtilsFile {
             else if (isDownloadsDocument(uri)) {
 
                 contentId = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(contentId));
 
-                return getDataColumn(context, contentUri, null, null);
+				String[] contentUriPrefixesToTry = new String[] {
+						"content://downloads/public_downloads",
+						"content://downloads/my_downloads",
+						"content://downloads/all_downloads"
+				};
+
+				for (String contentUriPrefix : contentUriPrefixesToTry) {
+					Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(contentId));
+					try {
+						String path = getDataColumn(context, contentUri, null, null);
+						if (path != null) {
+							return path;
+						}
+					} catch (Exception ignore) {}
+				}
+
+
+                return null;
             }
             // MediaProvider
             else if (isMediaDocument(uri)) {
@@ -532,6 +548,33 @@ public class UtilsFile {
 
         return null;
     }
+
+    /**
+     * Copies data referenced by {@code uri} into a internal cache file and returns
+     * internal cache file's absolute path.
+     */
+    public static String copyDataToInternalCacheFile(Context context, Uri uri) {
+		String fileName = "copyOfFileWithId-" + DocumentsContract.getDocumentId(uri);
+		File copyToThisFile = new File(getCacheDir(context), fileName);
+		try {
+			// delete old cache file with same name if exists
+			if (copyToThisFile.exists()) {
+				copyToThisFile.delete();
+			}
+
+			if (copyToThisFile.createNewFile()) {
+				// copy the content from Uri to local cahce file
+				InputStream inputStream = context.getContentResolver().openInputStream(uri);
+				OutputStream outputStream = new FileOutputStream(copyToThisFile);
+				UtilsFile.copy(inputStream, outputStream);
+				return copyToThisFile.getAbsolutePath();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
     /**
      * Get the value of the data column for this Uri. This is useful for

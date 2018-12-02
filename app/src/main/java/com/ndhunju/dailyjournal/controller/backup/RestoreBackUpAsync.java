@@ -26,13 +26,20 @@ import java.io.File;
 public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
 
     private static final String TAG = RestoreBackUpAsync.class.getSimpleName();
+    public enum Action {DELETE_SOURCE_FILE}
 
     //variables
     private Activity mActivity;
     private ProgressDialog pd;
+    private Action action;
 
     public RestoreBackUpAsync(Activity context){
         mActivity = context;
+    }
+
+    public RestoreBackUpAsync setAction(Action action) {
+        this.action = action;
+        return this;
     }
 
     @Override
@@ -51,15 +58,14 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
         //End progress bar
         pd.cancel();
         mActivity.setResult(result ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
-        String msg = result ? String.format(mActivity.getString(R.string.msg_restored), mActivity.getString(R.string.str_backup))
-                : String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_failed));
+        String msg = result ? String.format(mActivity.getString(R.string.msg_restored), mActivity.getString(R.string.str_backup)) : String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_failed));
         UtilsView.alert(mActivity, msg);//Display msg
     }
 
     @Override
     protected Boolean doInBackground(String... params) {
 
-        String filePath = params[0];
+        String sourceFilePath = params[0];
 
         try {
             //Delete existing files, objects, database
@@ -72,7 +78,7 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
             UtilsFile.deleteDirectory(appFolder);
 
             //Unzip the files into app folder
-            UtilsZip.unzip(new File(filePath), appFolder);
+            UtilsZip.unzip(new File(sourceFilePath), appFolder);
 
             //load .json and .properties files
             File[] files = appFolder.listFiles();
@@ -81,6 +87,11 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
             //to let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(mActivity, new String[]{appFolder.getAbsolutePath()}
                                             , null, null);
+
+            if (action != null && action == Action.DELETE_SOURCE_FILE) {
+                UtilsFile.deleteFile(sourceFilePath);
+            }
+
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Error creating backup file: " + e.getMessage());
