@@ -26,6 +26,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
+import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
 import com.ndhunju.dailyjournal.service.Services;
@@ -284,6 +285,7 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 
         ShortCut[] allShortCuts = {
                 new NewJournalShortCut(),
+                new PartiesShortCut(),
                 new DailyReportShortCut(),
                 new FindJournalShortCut(),
                 new SearchJournalByNoteShortCut(),
@@ -447,6 +449,22 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
             void onClick() {
                 super.onClick();
                 startActivity(new Intent(getContext(), JournalNewActivity.class).putExtra(Constants.KEY_JOURNAL_ID, Constants.ID_NEW_JOURNAL));
+            }
+        }
+
+        private class PartiesShortCut extends ShortCut {
+
+            PartiesShortCut() {
+                super(UtilsFormat.getPartyFromPref(getContext()).contains(getString(R.string.str_party))
+                        ? R.string.nav_item_party : R.string.nav_item_account,
+                        R.drawable.ic_parties_shortcut);
+            }
+
+            @Override
+            void onClick() {
+                super.onClick();
+                startActivity(new Intent(getContext(), PartyListActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         }
 
