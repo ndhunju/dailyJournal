@@ -22,7 +22,7 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
         ComponentName component = new ComponentName(context, AutoBackupJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, component);
         builder.setMinimumLatency(startTime);
-        builder.setOverrideDeadline(startTime + (1000 * 60 * 10));
+        builder.setOverrideDeadline(1000 * 60 * 10); // +-10 mins
 
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(builder.build());
