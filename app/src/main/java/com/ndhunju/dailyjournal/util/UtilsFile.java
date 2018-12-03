@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.model.Party;
@@ -63,7 +64,7 @@ public class UtilsFile {
 				// Continue only if the File was successfully created
 				if (photoFile != null) {
                     //Send the path of the picture via Intent
-					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,	Uri.fromFile(photoFile));
+					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,	FileProvider.getUriForFile(activity, UtilsFile.getFileSharingAuthority(activity), photoFile));
 					return takePictureIntent;
 				}
 			} catch (Exception ex) {
@@ -197,6 +198,10 @@ public class UtilsFile {
 
 		return partyFolder;
 	}
+
+	public static String getFileSharingAuthority(Context context) {
+	    return context.getPackageName() + ".fileProvider";
+    }
 
     /**
      * Create a temporary image file in public Picture directory. It can be used to save an

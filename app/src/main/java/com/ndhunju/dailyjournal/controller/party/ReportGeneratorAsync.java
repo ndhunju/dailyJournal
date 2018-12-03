@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.content.FileProvider;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
@@ -15,6 +16,7 @@ import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PlainTextReportGenerator;
 import com.ndhunju.dailyjournal.service.report.ReportGenerator;
 import com.ndhunju.dailyjournal.service.report.TextFileReportGenerator;
+import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
 import java.io.File;
@@ -76,7 +78,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 rg.fillPartyInfo(sb);
                 intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
                 intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(report));
+                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mActivity, UtilsFile.getFileSharingAuthority(mActivity), report));
                 break;
             case PDF:
                 rg = new PdfReportGenerator(mActivity, partyId);
@@ -89,7 +91,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 rg.fillPartyInfo(sb);
                 intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
                 intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(report));
+                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mActivity, UtilsFile.getFileSharingAuthority(mActivity), report));
                 break;
             case CSV:
                 rg = new CsvReportGenerator(mActivity, partyId);
@@ -102,7 +104,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 rg.fillPartyInfo(sb);
                 intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
                 intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(report));
+                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mActivity, UtilsFile.getFileSharingAuthority(mActivity), report));
                 break;
             case TEXT:
                 rg = new PlainTextReportGenerator(mActivity, partyId);

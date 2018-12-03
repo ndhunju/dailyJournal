@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+ <external-path
+     name="download"
+     path="Download"/>
+
+ <external-path
+     name="picture"
+     path="Pictures"/>
+
+ <!--<files-path
+     name="appfile"
+     path="app_DailyJournal/"/>
+
+ <cache-path
+     name="cache"
+     path="app_Cache/"/>
+
+ <files-path
+     name="backups"
+     path="app_backups/"/>
+-->
+</paths>

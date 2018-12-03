@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.content.FileProvider;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
@@ -104,7 +105,7 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
             MediaScannerConnection.scanFile(mContext, new String[]{zipFile.getAbsolutePath()}, null, null);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_SUBJECT, mContext.getString(R.string.str_share_report));
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(zipFile));
+            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mContext, UtilsFile.getFileSharingAuthority(mContext), zipFile));
             intent.setType(END_FILE_TYPE);
             mContext.startActivity(intent);
 
