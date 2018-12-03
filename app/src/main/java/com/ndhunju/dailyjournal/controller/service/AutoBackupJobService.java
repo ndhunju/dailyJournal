@@ -21,8 +21,10 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
     public static void schedule(Context context, long startTime, long repeatInterval) {
         ComponentName component = new ComponentName(context, AutoBackupJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, component);
-        builder.setMinimumLatency(startTime);
-        builder.setOverrideDeadline(1000 * 60 * 10); // +-10 mins
+        // delay the job with given minLatencyMillis
+        builder.setMinimumLatency(repeatInterval);
+        // finish the job before passed maxExecutionDelayMillis
+        builder.setOverrideDeadline(repeatInterval + (1000 * 60 * 10)); // can delay up to 10 mins
 
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(builder.build());
@@ -34,12 +36,14 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
     }
 
     private int retryCount;
+    private JobParameters parameters;
 
     @Override
     public boolean onStartJob(JobParameters params) {
         AutoBackupHelper autoBackupHelper = new AutoBackupHelper(this);
         autoBackupHelper.setEventListener(this);
         autoBackupHelper.startBackup();
+        parameters = params;
         return true;
     }
 
@@ -48,6 +52,7 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
         // whether or not you would like JobScheduler to automatically retry your failed job.
         boolean doRetry = retryCount++ < MAX_RETRY;
         if (!doRetry) {
+            // not retrying anymore
             stopForeground(true);
             // schedule another job
             PreferenceService.from(this).updateAutoBackup();
@@ -60,11 +65,10 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
         startForeground(id, notification);
     }
 
-
     @Override
     public void onFinishBackUp() {
+        jobFinished(parameters, false);
         stopForeground(true);
         PreferenceService.from(this).updateAutoBackup(); // schedule another job
-        stopSelf();
     }
 }
