@@ -167,7 +167,7 @@ public class PreferenceService {
             long selectedInterval = getVal(R.string.key_pref_auto_backup_interval_lp,
                     PreferenceService.DEF_AUTO_BACKUP_TIME);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 AutoBackupJobService.schedule(context, UtilsDate.get(selectedInterval).getTimeInMillis(), selectedInterval);
             } else {
                 //set an alarm
@@ -177,7 +177,7 @@ public class PreferenceService {
 
             Log.d(TAG, "alarm set for auto backup : " + selectedInterval);
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 AutoBackupJobService.cancel(context);
             } else {
                 //cancel the alarm

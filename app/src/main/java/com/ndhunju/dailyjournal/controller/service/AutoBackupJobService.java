@@ -10,7 +10,9 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+import com.ndhunju.dailyjournal.service.PreferenceService;
+
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class AutoBackupJobService extends JobService implements AutoBackupHelper.EventListener {
 
     private static final int JOB_ID = 1;
@@ -18,8 +20,9 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
 
     public static void schedule(Context context, long startTime, long repeatInterval) {
         ComponentName component = new ComponentName(context, AutoBackupJobService.class);
-        JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, component)
-                .setPeriodic(repeatInterval);
+        JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, component);
+        builder.setMinimumLatency(startTime);
+        builder.setOverrideDeadline(startTime + (1000 * 60 * 10));
 
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(builder.build());
@@ -43,7 +46,13 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
     @Override
     public boolean onStopJob(JobParameters params) {
         // whether or not you would like JobScheduler to automatically retry your failed job.
-        return retryCount++ < MAX_RETRY;
+        boolean doRetry = retryCount++ < MAX_RETRY;
+        if (!doRetry) {
+            stopForeground(true);
+            // schedule another job
+            PreferenceService.from(this).updateAutoBackup();
+        }
+        return doRetry;
     }
 
     @Override
@@ -55,6 +64,7 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
     @Override
     public void onFinishBackUp() {
         stopForeground(true);
+        PreferenceService.from(this).updateAutoBackup(); // schedule another job
         stopSelf();
     }
 }
