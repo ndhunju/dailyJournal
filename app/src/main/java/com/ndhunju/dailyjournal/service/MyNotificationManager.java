@@ -51,6 +51,7 @@ public class MyNotificationManager {
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
                 .setContentTitle(title)
                 .setContentText(msg)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
@@ -65,6 +66,7 @@ public class MyNotificationManager {
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
                 .setContentTitle(mContext.getString(titleResId))
                 .setContentText(mContext.getString(msgResId))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(mContext.getString(msgResId)))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true).build();
 
@@ -82,7 +84,8 @@ public class MyNotificationManager {
                 .setSmallIcon(R.drawable.ic_notif_small)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_notif_large))
                 .setContentTitle(title)
-                .setContentText(msg);
+                .setContentText(msg)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg));
     }
 
     private void addNotificationChannelForOreo(NotificationManager notificationManager) {
