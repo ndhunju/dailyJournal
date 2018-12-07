@@ -27,6 +27,8 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
         builder.setOverrideDeadline(repeatInterval + (1000 * 60 * 10)); // can delay up to 10 mins
 
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        // when you schedule a job, old job with same id is removed
+        // https://stackoverflow.com/q/45508335/1157458
         jobScheduler.schedule(builder.build());
     }
 

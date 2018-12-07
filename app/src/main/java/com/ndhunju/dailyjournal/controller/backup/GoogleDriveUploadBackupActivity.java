@@ -20,7 +20,7 @@ public class GoogleDriveUploadBackupActivity extends GoogleDriveBackupActivity i
                 })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "No folder selected?", e);
-                    showEndResultToUser(e.getLocalizedMessage(), false);
+                    showEndResultToUser(String.format(getString(R.string.msg_exporting), getString(R.string.str_failed)) + "\n" + e.getLocalizedMessage(), false);
                 });
     }
 

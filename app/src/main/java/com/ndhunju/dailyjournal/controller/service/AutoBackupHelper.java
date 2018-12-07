@@ -16,6 +16,7 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.backup.GoogleDriveSignInActivity;
 import com.ndhunju.dailyjournal.service.MyNotificationManager;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.Services;
@@ -139,6 +140,8 @@ public class AutoBackupHelper {
                 Log.e(TAG, "Unable to create file in google drive - ", exception);
                 // notify user about failure
                 notifyGDriveErrorToUser(exception.getLocalizedMessage());
+                // force user to grant access again
+                GoogleDriveSignInActivity.makeSignInClient(getContext()).revokeAccess();
             });
         }
     }

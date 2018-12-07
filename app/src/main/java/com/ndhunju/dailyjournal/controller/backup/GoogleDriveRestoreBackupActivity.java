@@ -29,7 +29,7 @@ public class GoogleDriveRestoreBackupActivity extends GoogleDriveBackupActivity 
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // show failed error message
-                        showEndResultToUser(String.format(getString(R.string.msg_importing), getString(R.string.str_failed)), false);
+                        showEndResultToUser(String.format(getString(R.string.msg_importing), getString(R.string.str_failed)) + "\n" + e.getLocalizedMessage(), false);
                     }
                 });
     }

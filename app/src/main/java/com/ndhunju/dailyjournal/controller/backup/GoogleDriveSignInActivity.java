@@ -2,6 +2,7 @@ package com.ndhunju.dailyjournal.controller.backup;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,6 +31,14 @@ public class GoogleDriveSignInActivity extends AppCompatActivity {
     /** Pass true for this key to finish this activity upon successful sign in to google drive **/
     public static final String BUNDLE_SHOULD_FINISH_ON_SIGN_IN = "BUNDLE_SHOULD_FINISH_ON_SIGN_IN";
 
+    public static GoogleSignInClient makeSignInClient(Context context) {
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(Drive.SCOPE_FILE)
+                .requestScopes(Drive.SCOPE_APPFOLDER)
+                .build();
+        return GoogleSignIn.getClient(context, signInOptions);
+    }
+
     private ProgressDialog connectionPd;
 
     @Override
@@ -51,16 +60,16 @@ public class GoogleDriveSignInActivity extends AppCompatActivity {
         requiredScopes.add(Drive.SCOPE_FILE);
         requiredScopes.add(Drive.SCOPE_APPFOLDER);
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (signInAccount != null && signInAccount.getGrantedScopes().containsAll(requiredScopes)) {
+        if (signInAccount != null && signInAccount.getGrantedScopes().containsAll(requiredScopes) && !signInAccount.isExpired()) {
             onSignedIn(signInAccount);
         } else {
-            GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestScopes(Drive.SCOPE_FILE)
-                    .requestScopes(Drive.SCOPE_APPFOLDER)
-                    .build();
-            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, signInOptions);
-            startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+            showSignInPage();
         }
+    }
+
+    public void showSignInPage() {
+        GoogleSignInClient googleSignInClient = makeSignInClient(this);
+        startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
     }
 
     protected void onSignedIn(GoogleSignInAccount googleSignInAccount) {

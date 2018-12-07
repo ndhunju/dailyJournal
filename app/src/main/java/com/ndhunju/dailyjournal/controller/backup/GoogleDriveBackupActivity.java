@@ -15,6 +15,7 @@ import com.google.android.gms.drive.OpenFileActivityOptions;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.ndhunju.dailyjournal.R;
@@ -125,6 +126,15 @@ public abstract class GoogleDriveBackupActivity extends GoogleDriveSignInActivit
                             Log.w(TAG, "Unable to send intent", e);
                         }
                         return null;
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (e.toString().contains("user must be signed in")) {
+                            showSignInPage();
+                        } else {
+                            showEndResultToUser(getString(R.string.str_failed) + "\n" + e.getLocalizedMessage(), false);
+                        }
                     }
                 });
         return mOpenItemTaskSource.getTask();
