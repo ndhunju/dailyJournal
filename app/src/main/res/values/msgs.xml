@@ -87,4 +87,7 @@
     However, this is a free application without any warranty, without even the implied warranty of merchantability or fitness for a particular purpose. Make sure you
     regularly backup the data and export them in other formats like CSV.</string>
 
+    <!-- TextField in a dialog. Shown after user has set the pin. -->
+    <string name="msg_pin_code">Please note that if you forget your pin code, you cannot use the app.</string>
+
 </resources>

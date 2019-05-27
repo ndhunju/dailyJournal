@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
+import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.PreferenceService;
@@ -17,6 +18,7 @@ public class SecurityPreferenceFragment extends PreferenceFragment implements Sh
 
     //Constants
     private static final String TAG = SecurityPreferenceFragment.class.getSimpleName();
+    private static final int PIN_PREF_POS = 1; // this position is hard coded and determined from R.xml.preference_security position
 
     //Variables
     private CheckBoxPreference pincodeEnableCB;
@@ -63,13 +65,21 @@ public class SecurityPreferenceFragment extends PreferenceFragment implements Sh
         if (key.equals(getString(R.string.key_pref_pincode_cb))) {
             if (((CheckBoxPreference) findPreference(key)).isChecked()){
                 //Alert user to enter the pin code
-                UtilsView.alert(getActivity(), getString(R.string.msg_please, getString(R.string.sum_pincode_val)));
+                UtilsView.alert(getActivity(), getString(R.string.msg_please, getString(R.string.sum_pincode_val)), (dialogInterface, i) -> {
+                    try {
+                        // auto show the dialog to enter the pin
+                        int positionInListView = PIN_PREF_POS +1 /*for title*/;
+                        ListView list = getView().findViewById(android.R.id.list);
+                        list.performItemClick(list.getChildAt(positionInListView), positionInListView, list.getAdapter().getItemId(positionInListView));
+                    } catch (Exception ignore) {}
+                });
             }
 
         } else if (key.equals(getString(R.string.key_pref_pincode_val_et))) {
             String pinCode = ((EditTextPreference) findPreference(key)).getText();
             try {
                 Integer.valueOf(pinCode);
+                UtilsView.alert(getActivity(), getString(R.string.msg_pin_code));
             } catch (NumberFormatException ex) {
                 //Alert user
                 UtilsView.alert(getActivity(), getString(R.string.msg_is_not_valid, getString(R.string.str_pincode)));
