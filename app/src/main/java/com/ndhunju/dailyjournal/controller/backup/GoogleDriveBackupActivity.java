@@ -2,7 +2,7 @@ package com.ndhunju.dailyjournal.controller.backup;
 
 import android.content.Intent;
 import android.content.IntentSender;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

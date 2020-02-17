@@ -4,7 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.EraseAllAsyncTask;

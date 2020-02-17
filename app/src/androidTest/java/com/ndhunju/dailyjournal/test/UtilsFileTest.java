@@ -1,6 +1,6 @@
 package com.ndhunju.dailyjournal.test;
 
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 

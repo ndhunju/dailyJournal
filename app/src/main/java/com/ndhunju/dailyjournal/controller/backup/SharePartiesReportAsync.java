@@ -5,9 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;

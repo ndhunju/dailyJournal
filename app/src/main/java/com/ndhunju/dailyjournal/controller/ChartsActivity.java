@@ -3,11 +3,13 @@ package com.ndhunju.dailyjournal.controller;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.legacy.app.FragmentPagerAdapter;
+import androidx.legacy.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.ndhunju.dailyjournal.R;
@@ -21,12 +23,12 @@ public class ChartsActivity extends BaseActivity {
     private static final int TOTAL_TABS = 2;
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
+     * {@link FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
 

@@ -22,7 +22,7 @@ import java.util.List;
  * This class uses the JUnit3 syntax for tests.
  * <p/>
  * With the new AndroidJUnit runner you can run both JUnit3 and JUnit4 tests in a single test
- * suite. The {@link android.support.test.internal.runner.AndroidRunnerBuilder} which extends JUnit's
+ * suite. The {@link androidx.test.internal.runner.AndroidRunnerBuilder} which extends JUnit's
  * {@link org.junit.internal.builders.AllDefaultPossibilitiesBuilder} will create a single {@link
  * junit.framework.TestSuite} from all tests and run them.
  * Test class for {@link JsonConverterStream}

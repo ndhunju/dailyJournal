@@ -11,7 +11,7 @@
 
     <include layout="@layout/include_party_detail_card"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_party_lv"
         android:layout_width="match_parent"
         android:layout_height="0dp"

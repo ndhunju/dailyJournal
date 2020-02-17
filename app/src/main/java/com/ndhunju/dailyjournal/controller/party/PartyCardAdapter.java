@@ -2,10 +2,10 @@ package com.ndhunju.dailyjournal.controller.party;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;

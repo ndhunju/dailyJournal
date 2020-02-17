@@ -7,8 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.ndhunju.dailyjournal.BuildConfig;
 import com.ndhunju.dailyjournal.R;
@@ -73,7 +73,7 @@ public class MyNotificationManager {
     }
 
     /**
-     * This methods returns an instance of {@link android.support.v4.app.NotificationCompat.Builder}
+     * This methods returns an instance of {@link androidx.core.app.NotificationCompat.Builder}
      * so that you can add additional options to the builder before creating {@link NotificationCompat}
      * @param title
      * @param msg

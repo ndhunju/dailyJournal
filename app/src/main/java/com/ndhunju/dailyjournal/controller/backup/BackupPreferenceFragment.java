@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.ndhunju.dailyjournal.FinishCallback;

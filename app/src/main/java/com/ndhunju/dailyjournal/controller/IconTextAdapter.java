@@ -2,11 +2,11 @@ package com.ndhunju.dailyjournal.controller;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

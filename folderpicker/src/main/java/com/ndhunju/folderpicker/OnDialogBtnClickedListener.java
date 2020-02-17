@@ -1,8 +1,8 @@
 package com.ndhunju.folderpicker;
 
 import android.content.Intent;
-import android.support.annotation.IntDef;
-import android.support.annotation.IntRange;
+import androidx.annotation.IntDef;
+import androidx.annotation.IntRange;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,10 +1,9 @@
 package com.ndhunju.dailyjournal.service.report;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;

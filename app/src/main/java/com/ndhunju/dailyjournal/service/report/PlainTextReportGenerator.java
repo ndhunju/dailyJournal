@@ -1,7 +1,7 @@
 package com.ndhunju.dailyjournal.service.report;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;

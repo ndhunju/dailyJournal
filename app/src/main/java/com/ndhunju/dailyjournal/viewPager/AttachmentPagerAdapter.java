@@ -1,8 +1,8 @@
 package com.ndhunju.dailyjournal.viewPager;
 
 import android.os.Build;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.core.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;

@@ -2,11 +2,11 @@ package com.ndhunju.dailyjournal.controller.party;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
 import com.ndhunju.dailyjournal.R;

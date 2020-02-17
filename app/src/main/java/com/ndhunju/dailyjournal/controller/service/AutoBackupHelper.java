@@ -2,7 +2,7 @@ package com.ndhunju.dailyjournal.controller.service;
 
 import android.app.Notification;
 import android.content.Context;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

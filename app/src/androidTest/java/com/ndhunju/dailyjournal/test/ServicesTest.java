@@ -1,7 +1,7 @@
 package com.ndhunju.dailyjournal.test;
 
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -32,11 +32,11 @@ import static org.junit.Assert.assertThat;
 
 
 /**
- * JUnit4 Ui Tests for {@link ServicesTest} using the {@link android.support.test.runner.AndroidJUnitRunner}.
+ * JUnit4 Ui Tests for {@link ServicesTest} using the {@link androidx.test.runner.AndroidJUnitRunner}.
  * This class uses the JUnit4 syntax for tests.
  * <p/>
  * With the new AndroidJUnit runner you can run both JUnit3 and JUnit4 tests in a single test
- * suite. The {@link android.support.test.internal.runner.AndroidRunnerBuilder} which extends JUnit's
+ * suite. The {@link androidx.test.internal.runner.AndroidRunnerBuilder} which extends JUnit's
  * {@link org.junit.internal.builders.AllDefaultPossibilitiesBuilder} will create a single {@link
  * junit.framework.TestSuite} from all tests and run them.
  */

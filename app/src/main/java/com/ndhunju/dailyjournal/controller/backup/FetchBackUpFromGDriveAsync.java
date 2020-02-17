@@ -3,7 +3,7 @@ package com.ndhunju.dailyjournal.controller.backup;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.drive.DriveContents;

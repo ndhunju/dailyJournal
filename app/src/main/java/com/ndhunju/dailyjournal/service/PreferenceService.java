@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;

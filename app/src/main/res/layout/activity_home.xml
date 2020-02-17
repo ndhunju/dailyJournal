@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/activity_home_card_view_daily"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,12 +46,12 @@
 
             </LinearLayout>
 
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/activity_home_summary_pager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <android.support.design.widget.TabLayout
+            <com.google.android.material.tabs.TabLayout
                 android:id="@+id/activity_home_tab_dots"
                 android:layout_width="match_parent"
                 android:layout_height="12dp"
@@ -62,10 +62,10 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_home_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

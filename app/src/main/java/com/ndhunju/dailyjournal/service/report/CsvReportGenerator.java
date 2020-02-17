@@ -2,7 +2,7 @@ package com.ndhunju.dailyjournal.service.report;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -12,7 +12,6 @@ import com.ndhunju.dailyjournal.util.UtilsFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 /**
  * Created by dhunju on 9/27/2015.
