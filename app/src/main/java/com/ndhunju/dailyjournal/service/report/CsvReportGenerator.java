@@ -90,6 +90,11 @@ public class CsvReportGenerator extends ReportGenerator<File>{
     }
 
     @Override
+    public void addAttachments(Builder builder) {
+        // Not supported for now
+    }
+
+    @Override
     public String formatDecimal(double amount) {
         // csv file shouldn't have comma between numbers
         return String.valueOf(amount);

@@ -6,8 +6,11 @@ import android.media.MediaScannerConnection;
 import androidx.annotation.Nullable;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.File;
@@ -25,11 +28,12 @@ import crl.android.pdfwriter.StandardFonts;
  */
 public class PdfReportGenerator extends ReportGenerator<File>{
 
-    protected static final int PAGE_HEIGHT = PaperSize.A4_HEIGHT;
-    protected static final int PAGE_WIDTH = PaperSize.A4_WIDTH;
-    protected static final String FILE_EXT = ".pdf";
-    protected static final int DEF_TEXT_SIZE = 12;
-    protected static final int MARGIN = 25;
+    private static final int PAGE_HEIGHT = PaperSize.A4_HEIGHT;
+    private static final int PAGE_WIDTH = PaperSize.A4_WIDTH;
+    private static final String FILE_EXT = ".pdf";
+    private static final int DEF_TEXT_SIZE = 12;
+    private static final int MARGIN = 25;
+    private static final int MARGIN_BETWEEN_IMGS = 15;
 
 
     public PdfReportGenerator(Context context, long partyId) {
@@ -112,6 +116,39 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             return this;
         }
 
+        @Override
+        public ReportGenerator.Builder appendImage(Bitmap bitmap) {
+
+            // Get measurements
+            float maxWidth = PAGE_WIDTH - (2 * MARGIN);
+            float maxHeight = PAGE_HEIGHT - (2 * MARGIN);
+            float widthScale = maxWidth / bitmap.getWidth();
+            float heightScale = maxHeight / bitmap.getHeight();
+            float scaleToUse = Math.min(widthScale, heightScale);
+            int x = (int) (bitmap.getWidth() * scaleToUse);
+            int y = (int) (bitmap.getHeight() * scaleToUse);
+
+            int remainingHeight = PAGE_HEIGHT - currentYPosFromTop - MARGIN_BETWEEN_IMGS - MARGIN;
+            if (remainingHeight < y) {
+                // Image height is more than space left in the page height
+                // So, start new page
+                newPage();
+            }
+
+            pdfWriter.addImage(
+                    currentXPosFromLeft,
+                    PAGE_HEIGHT - currentYPosFromTop - y,
+                    x,
+                    y,
+                    bitmap
+            );
+
+            currentYPosFromTop += y + MARGIN_BETWEEN_IMGS;
+            currentXPosFromLeft = MARGIN;
+
+            return this;
+        }
+
         public String asString() {
             return pdfWriter.asString();
         }
@@ -146,6 +183,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         builder.setTextSize(DEF_TEXT_SIZE);
         makePartySummary(builder);
         makeReport(builder);
+        addAttachments(builder);
 
         // write the report in a file
         try{
@@ -160,7 +198,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             os.write(builder.asString().getBytes("UTF-8"));
             os.close();
 
-            //to let know that a new file has been created so that it appears in the computer
+            // To let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(mContext, new String[]{pdfFile.getAbsolutePath()}, null, null);
             return pdfFile;
 
@@ -168,5 +206,30 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void addAttachments(ReportGenerator.Builder builder) {
+
+        Services mServices = Services.getInstance(mContext);
+
+        // Add "Attachment" Text
+        builder.newLine();
+        builder.appendText(getString(R.string.str_attachment));
+        builder.writeTextLn();
+
+        // Loop through all Journal for this party
+        for (Journal journal: mServices.getJournals(getParty().getId())) {
+            // Add Journal ID
+            builder.appendText(getString(R.string.str_journal) + " " + getString(R.string.str_id) + ": " + journal.getId());
+            builder.writeTextLn();
+
+            // Add each attachment image to the file
+            for (Attachment attachment : mServices.getAttachments(journal.getId())) {
+                Bitmap bitmap = Utils.scaleBitmap(attachment.getPath(), PAGE_WIDTH, PAGE_HEIGHT);
+                builder.appendImage(bitmap);
+            }
+        }
+
     }
 }

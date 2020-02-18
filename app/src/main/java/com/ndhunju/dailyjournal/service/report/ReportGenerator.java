@@ -2,6 +2,8 @@ package com.ndhunju.dailyjournal.service.report;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
+
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import com.ndhunju.dailyjournal.R;
@@ -54,6 +56,15 @@ public abstract class ReportGenerator<T>{
 
         public ReportGenerator.Builder appendText(String string) {
             sb.append(string);
+            return this;
+        }
+
+        /**
+         * Subclass must provide their own implementation if they
+         * support adding image
+         * @param bitmap : bitmap image to add
+         */
+        public ReportGenerator.Builder appendImage(Bitmap bitmap) {
             return this;
         }
 
@@ -181,6 +192,8 @@ public abstract class ReportGenerator<T>{
         builder.appendText(addGapLeft(formatCurrency(balance)));
         builder.writeTextLn();
     }
+
+    public abstract void addAttachments(Builder builder);
 
     /**
      * Invoked when {@link ReportGenerator#getReport(File)} is ready to

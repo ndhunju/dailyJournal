@@ -79,4 +79,9 @@ public class PlainTextReportGenerator extends ReportGenerator<String> {
     public String getReportType() {
         return "text/plain";
     }
+
+    @Override
+    public void addAttachments(Builder builder) {
+        // Not supported for now
+    }
 }

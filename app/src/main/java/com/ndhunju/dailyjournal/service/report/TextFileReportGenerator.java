@@ -68,4 +68,9 @@ public class TextFileReportGenerator extends ReportGenerator<File> {
             return null;
         }
     }
+
+    @Override
+    public void addAttachments(Builder builder) {
+        // Not supported for now
+    }
 }
