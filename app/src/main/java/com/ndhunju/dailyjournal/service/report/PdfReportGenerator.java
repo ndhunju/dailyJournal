@@ -118,6 +118,11 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         @Override
         public ReportGenerator.Builder appendImage(Bitmap bitmap) {
 
+            // Validate args
+            if (bitmap == null) {
+                return this;
+            }
+
             // Get measurements
             float maxWidth = PAGE_WIDTH - (2 * MARGIN);
             float maxHeight = PAGE_HEIGHT - (2 * MARGIN);
@@ -222,6 +227,11 @@ public class PdfReportGenerator extends ReportGenerator<File>{
 
         // Loop through all Journal for this party
         for (Journal journal: mServices.getJournals(getParty().getId())) {
+
+            if (mServices.getAttachments(journal.getId()).size() <= 0) {
+                // There are no attachments for this journal
+                continue;
+            }
             // Add Journal ID
             builder.appendText(getString(R.string.str_journal) + " " + getString(R.string.str_id) + ": " + journal.getId());
             builder.writeTextLn();
