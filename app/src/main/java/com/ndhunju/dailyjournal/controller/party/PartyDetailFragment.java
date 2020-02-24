@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnticipateInterpolator;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
@@ -227,19 +226,16 @@ public abstract class PartyDetailFragment extends Fragment implements PartyDAO.O
             case R.id.menu_party_activity_share:
                 ItemDescriptionAdapter.Item[] options = ReportGeneratorAsync.getStrTypes(getContext());
 
-                // Using ListView as it renders border between items
-                ListView listView = new ListView(getContext());
-                listView.setAdapter(new ItemDescriptionAdapter(getContext(), options));
-                listView.setOnItemClickListener((adapterView, view, optionIndex, id) -> {
-                    new ReportGeneratorAsync(
-                            getActivity(),
-                            ReportGeneratorAsync.Type.values()[optionIndex],
-                            Intent.ACTION_SEND
-                    ).execute(mParty.getId());
-                });
-
                 new AlertDialog.Builder(getContext())
-                        .setView(listView)
+                        .setAdapter(
+                                new ItemDescriptionAdapter(getContext(), options),
+                                (dialogInterface, optionIndex) -> {
+                                    new ReportGeneratorAsync(
+                                            getActivity(),
+                                            ReportGeneratorAsync.Type.values()[optionIndex],
+                                            Intent.ACTION_SEND
+                                    ).execute(mParty.getId());
+                        })
                         .create()
                         .show();
 

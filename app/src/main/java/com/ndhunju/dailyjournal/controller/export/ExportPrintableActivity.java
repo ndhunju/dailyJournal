@@ -145,18 +145,16 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
             // let the user choose the type of printable she wants to export
             ItemDescriptionAdapter.Item[] options = ExportPartiesReportAsync.getStrTypes(activity);
 
-            // Using ListView as it renders border between items
-            ListView listView = new ListView(activity);
-            listView.setAdapter(new ItemDescriptionAdapter(activity, options));
-            listView.setOnItemClickListener((adapterView, view, optionIndex, id) -> {
-                createAllOrSelectPartyDialog(
-                        activity,
-                        dir,
-                        optionIndex);
-            });
+            AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                    .setAdapter(
+                            new ItemDescriptionAdapter(activity, options),
+                            (dialogInterface, optionIndex) -> createAllOrSelectPartyDialog(
+                                    activity,
+                                    dir,
+                                    optionIndex)
+                    ).create();
 
-            new AlertDialog.Builder(activity).setView(listView).create().show();
-
+            alertDialog.show();
         }
 
     }

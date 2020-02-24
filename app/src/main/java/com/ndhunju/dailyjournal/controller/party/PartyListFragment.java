@@ -345,16 +345,15 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         // let the user choose the type of printable she wants to export
         ItemDescriptionAdapter.Item[] options = SharePartiesReportAsync.getStrTypes(activity);
 
-        // Using ListView as it renders border between items
-        ListView listView = new ListView(activity);
-        listView.setAdapter(new ItemDescriptionAdapter(activity, options));
-        listView.setOnItemClickListener((adapterView, view, optionIndex, id) -> {
-            shareAllOrSelectPartyDialog(
-                    activity,
-                    optionIndex);
-        });
-
-        return new AlertDialog.Builder(activity).setView(listView).create();
+        return new AlertDialog.Builder(activity)
+                .setAdapter(
+                        new ItemDescriptionAdapter(activity, options),
+                        (dialogInterface, optionIndex) -> {
+                            shareAllOrSelectPartyDialog(
+                                    activity,
+                                    optionIndex);
+                        })
+                .create();
 
 
     }
