@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.ndhunju.dailyjournal.R;
 
 import androidx.annotation.NonNull;
+import androidx.core.text.HtmlCompat;
 
 public class ItemDescriptionAdapter extends ArrayAdapter<ItemDescriptionAdapter.Item> {
 
@@ -50,7 +51,7 @@ public class ItemDescriptionAdapter extends ArrayAdapter<ItemDescriptionAdapter.
         TextView descriptionTextView = view.findViewById(R.id.tvDesc);
 
         nameTextView.setText(items[position].name);
-        descriptionTextView.setText(items[position].description);
+        descriptionTextView.setText(HtmlCompat.fromHtml(items[position].description, HtmlCompat.FROM_HTML_MODE_COMPACT));
 
 
         return view;

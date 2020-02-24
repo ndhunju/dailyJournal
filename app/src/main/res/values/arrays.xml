@@ -33,7 +33,7 @@
         <item>Share a text file with Journals/Transactions</item>
         <item>Share a PDF file with Journals/Transactions</item>
         <item>Share a PDF file with Journals/Transactions and Attachments.
-            \nNote: Including attachments will take longer and
+            &lt;b>Note:&lt;/b> Including attachments will take longer and
             make file size way bigger.</item>
         <item>Share a CSV file with Journals/Transactions</item>
         <item>Share as Plain Texts with Journal/Transactions</item>
@@ -50,7 +50,7 @@
         <item>Export text file/s with Journals/Transactions</item>
         <item>Export PDF file/s with Journals/Transactions</item>
         <item>Export PDF file/s with Journals/Transactions and Attachments.
-            \nNote: Including attachments will take longer and
+            &lt;b>Note:&lt;/b> Including attachments will take longer and
             make file size way bigger.</item>
         <item>Export a CSV file/s with Journals/Transactions</item>
     </string-array>
@@ -66,7 +66,7 @@
         <item>Export a zipped file containing text file/s with Journals/Transactions</item>
         <item>Export a zipped file containing PDF file/s with Journals/Transactions</item>
         <item>Export a zipped file containing PDF file/s with Journals/Transactions and Attachments.
-            \nNote: Including attachments will take longer and
+            &lt;b>Note:&lt;/b> Including attachments will take longer and
             make file size way bigger.</item>
         <item>Export a zipped file containing CSV file/s with Journals/Transactions</item>
     </string-array>
