@@ -127,6 +127,9 @@
 
         <activity android:name=".controller.backup.GoogleDriveSignInActivity" />
 
+        <activity android:name=".controller.export.ExportPrintableActivity"
+            android:label="@string/str_export_printable"/>
+
     </application>
 
 </manifest>

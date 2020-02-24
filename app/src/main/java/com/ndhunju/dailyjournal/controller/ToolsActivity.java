@@ -2,8 +2,6 @@ package com.ndhunju.dailyjournal.controller;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -21,18 +19,9 @@ import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
-import com.ndhunju.dailyjournal.controller.backup.ExportPartiesReportAsync;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
-import com.ndhunju.dailyjournal.controller.party.PartyListFragment;
-import com.ndhunju.dailyjournal.model.Party;
-import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.util.UtilsFormat;
+import com.ndhunju.dailyjournal.controller.export.ExportPrintableActivity;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.folderpicker.FolderPickerDialogFragment;
-import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ndhunju on 1/7/17.
@@ -40,7 +29,7 @@ import java.util.List;
  * has to offer.
  */
 
-public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClickedListener {
+public class ToolsActivity extends NavDrawerActivity {
 
     private static final int REQUEST_CODE_BACKUP_DIR_PRINTABLE = 1264;
     private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
@@ -63,97 +52,6 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
                 false);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(new ToolsAdapter());
-    }
-
-    @Override
-    public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode) {
-
-        switch (requestCode) {
-
-            case REQUEST_CODE_BACKUP_DIR_PRINTABLE:
-                onBackUpDirForPrintableSelected(getActivity(), data, whichBtn, result);
-                break;
-
-        }
-
-    }
-
-    public static void onBackUpDirForPrintableSelected(final Activity activity, Intent data, int whichBtn, int result) {
-        if (result != Activity.RESULT_OK)
-            UtilsView.toast(activity, activity.getString(R.string.str_failed));
-        if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
-            data.getData();
-            final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-
-            // let the user choose the type of printable she wants to export
-            String[] options = ExportPartiesReportAsync.getStrTypes();
-            new AlertDialog.Builder(activity).setItems(options,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int optionIndex) {
-                            createAllOrSelectPartyDialog(activity, dir, optionIndex);
-                        }
-                    })
-                    .create().show();
-        }
-
-    }
-
-    public static void createAllOrSelectPartyDialog(final Activity activity, final String dir, final int optionIndex) {
-        //Let the user choose the parties
-        final List<Party> parties = Services.getInstance(activity).getParties();
-
-        CharSequence[] options = activity.getResources().getStringArray(R.array.options_export_print);
-        AlertDialog chooseDialog = new AlertDialog.Builder(activity)
-                .setTitle(activity.getString(R.string.str_choose))
-                .setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0: //All parties
-                                new ExportPartiesReportAsync(activity, dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(parties);
-                                break;
-
-                            case 1: //Select parties
-                                createPartySelectDialogToExport(activity, parties, dir, optionIndex).show();
-                                break;
-
-                        }
-                    }
-                }).create();
-
-        chooseDialog.show();
-    }
-
-    public static AlertDialog createPartySelectDialogToExport(final Activity activity, final List<Party> parties, final String dir, final int optionIndex) {
-        final ArrayList<Party> selectedParties = new ArrayList<>();
-
-        // create array of Parties' name
-        String[] allParties = new String[parties.size()];
-        for (int i = 0; i < parties.size(); i++)
-            allParties[i] = parties.get(i).getName();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(activity.getString(R.string.msg_choose, UtilsFormat.getPartyFromPref(activity)));
-        builder.setNegativeButton(activity.getString(android.R.string.cancel), null);
-        builder.setMultiChoiceItems(allParties, null,
-                new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        //Add checked contacts into selectedParties list
-                        if (b) selectedParties.add(parties.get(i));
-                        else selectedParties.remove(parties.get(i));
-                    }
-                });
-        builder.setPositiveButton(activity.getString(android.R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        new ExportPartiesReportAsync(activity, dir, ExportPartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
-                    }
-                });
-
-        return builder.create();
     }
 
     private Activity getActivity() {
@@ -257,31 +155,8 @@ public class ToolsActivity extends NavDrawerActivity implements OnDialogBtnClick
     }
 
     private void showExportPrintableOptions() {
-        if (!checkWriteStoragePermission()) {
-            return;
-        }
-        // show export location options
-        CharSequence[] options = getResources().getStringArray(R.array.options_export_print_location);
-        AlertDialog chooseDialog = new AlertDialog.Builder(getContext())
-                .setTitle(getString(R.string.str_choose))
-                .setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0: // Local Storage
-                                FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
-                                dpdf.show(getFragmentManager(), FolderPickerDialogFragment.class.getName());
-                                break;
-
-                            case 1: // Other Apps
-                                PartyListFragment.createDialogForSharePartiesReport(getActivity()).show();
-                                break;
-
-                        }
-                    }
-                }).create();
-
-        chooseDialog.show();
+        Intent openExportActivity = new Intent(getContext(), ExportPrintableActivity.class);
+        startActivity(openExportActivity);
     }
 
 

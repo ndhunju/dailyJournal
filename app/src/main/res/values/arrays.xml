@@ -16,6 +16,11 @@
         <item>Other Apps</item>
     </string-array>
 
+    <string-array name="options_export_print_location_description">
+        <item>Export transactions to Local Storage</item>
+        <item>Share transactions to Other Apps</item>
+    </string-array>
+
     <string-array name="reminder_intervals">
         <item >Hourly</item>
         <item >Daily</item>

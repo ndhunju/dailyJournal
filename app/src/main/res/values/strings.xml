@@ -18,6 +18,7 @@
     <string name="title_activity_erase">Erase</string>
     <string name="title_activity_start_next_year">Start Next Year</string>
     <string name="title_activity_daily_report">Daily Report</string>
+    <string name="title_activity_export_printables">Export Printables</string>
 
     <!-- Summary -->
     <string name="sum_pincode_val">Enter the pin code</string>

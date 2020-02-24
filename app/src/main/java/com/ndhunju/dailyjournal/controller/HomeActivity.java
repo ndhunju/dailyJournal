@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
+import com.ndhunju.dailyjournal.controller.export.ExportPrintableActivity;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.service.Constants;
@@ -32,17 +33,15 @@ import com.ndhunju.dailyjournal.service.KeyValPersistence;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.folderpicker.FolderPickerDialogFragment;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClickedListener, Services.Listener {
+public class HomeActivity extends NavDrawerActivity implements Services.Listener {
 
 	private static final int REQUEST_CODE_COMPANY_SETTING = 34534;
-    private static final int REQUEST_CODE_BACKUP_DIR_PRINTABLE = 9834;
     private static final int SHORTCUT_COLS_NUM = 3;
 
     // member variables
@@ -175,16 +174,6 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
 			setCompanySettings();
 		}
 	}
-
-    @Override
-    public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode) {
-
-        switch (requestCode) {
-            case REQUEST_CODE_BACKUP_DIR_PRINTABLE:
-                ToolsActivity.onBackUpDirForPrintableSelected(this, data, whichBtn, result);
-                break;
-        }
-    }
 
     @Override
     public void onEraseAll() {
@@ -543,8 +532,7 @@ public class HomeActivity extends NavDrawerActivity implements OnDialogBtnClicke
             @Override
             void onClick() {
                 super.onClick();
-                FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
-                dpdf.show(getFragmentManager(), FolderPickerDialogFragment.class.getName());
+                startActivity(new Intent(getContext(), ExportPrintableActivity.class));
             }
         }
 
