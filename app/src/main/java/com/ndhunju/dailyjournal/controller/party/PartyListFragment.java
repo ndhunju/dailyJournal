@@ -26,8 +26,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.controller.backup.SharePartiesReportAsync;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
@@ -340,15 +342,21 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
     }
 
     public static AlertDialog createDialogForSharePartiesReport(final Activity activity) {
-        String[] options = SharePartiesReportAsync.getStrTypes();
-        return new AlertDialog.Builder(activity).setItems(options,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int optionIndex) {
-                        shareAllOrSelectPartyDialog(activity, optionIndex);
-                    }
-                })
-                .create();
+        // let the user choose the type of printable she wants to export
+        ItemDescriptionAdapter.Item[] options = SharePartiesReportAsync.getStrTypes(activity);
+
+        // Using ListView as it renders border between items
+        ListView listView = new ListView(activity);
+        listView.setAdapter(new ItemDescriptionAdapter(activity, options));
+        listView.setOnItemClickListener((adapterView, view, optionIndex, id) -> {
+            shareAllOrSelectPartyDialog(
+                    activity,
+                    optionIndex);
+        });
+
+        return new AlertDialog.Builder(activity).setView(listView).create();
+
+
     }
 
     public static void shareAllOrSelectPartyDialog(final Activity activity, final int optionIndex) {

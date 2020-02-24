@@ -48,7 +48,6 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         super(context, party, journals);
     }
 
-
     public static class Builder extends ReportGenerator.Builder{
 
         // variables
@@ -183,7 +182,10 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         builder.setTextSize(DEF_TEXT_SIZE);
         makePartySummary(builder);
         makeReport(builder);
-        addAttachments(builder);
+
+        if (shouldAppendAttachments()) {
+            addAttachments(builder);
+        }
 
         // write the report in a file
         try{

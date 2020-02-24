@@ -17,8 +17,40 @@
     </string-array>
 
     <string-array name="options_export_print_location_description">
-        <item>Export transactions to Local Storage</item>
-        <item>Share transactions to Other Apps</item>
+        <item>Export Journals/Transactions to Local Storage</item>
+        <item>Share Journals/Transactions to Other Apps</item>
+    </string-array>
+
+    <string-array name="options_export_print_file_types">
+        <item>File</item>
+        <item>PDF</item>
+        <item>PDF with Attachments</item>
+        <item>CSV</item>
+    </string-array>
+
+    <string-array name="options_export_print_file_types_description">
+        <item>Export text file/s with Journals/Transactions</item>
+        <item>Export PDF file/s with Journals/Transactions</item>
+        <item>Export PDF file/s with Journals/Transactions and Attachments.
+            \nNote: Including attachments will take longer and
+            make file size way bigger.</item>
+        <item>Export a CSV file with Journals/Transactions</item>
+    </string-array>
+
+    <string-array name="options_share_file_types">
+        <item>Zipped File</item>
+        <item>Zipped PDF</item>
+        <item>Zipped PDF with Attachments</item>
+        <item>Zipped CSV</item>
+    </string-array>
+
+    <string-array name="options_share_file_types_description">
+        <item>Export a zipped file containing text file/s with Journals/Transactions</item>
+        <item>Export a zipped file containing PDF file/s with Journals/Transactions</item>
+        <item>Export a zipped file containing PDF file/s with Journals/Transactions and Attachments.
+            \nNote: Including attachments will take longer and
+            make file size way bigger.</item>
+        <item>Export a zipped file containing CSV file/s with Journals/Transactions</item>
     </string-array>
 
     <string-array name="reminder_intervals">

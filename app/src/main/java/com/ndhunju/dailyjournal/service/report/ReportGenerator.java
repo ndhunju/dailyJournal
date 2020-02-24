@@ -36,6 +36,7 @@ public abstract class ReportGenerator<T>{
     protected Party mParty;
     protected Context mContext;
     protected List<Journal> mJournals;
+    private boolean shouldAppendAttachments;
 
     /**
      * This class provides basic building blocks/methods
@@ -113,6 +114,14 @@ public abstract class ReportGenerator<T>{
 
     public String getSubject(){
         return getString(R.string.str_report) + " " + mParty.getName();
+    }
+
+    public boolean shouldAppendAttachments() {
+        return shouldAppendAttachments;
+    }
+
+    public void setShouldAppendAttachments(boolean shouldAppendAttachments) {
+        this.shouldAppendAttachments = shouldAppendAttachments;
     }
 
     /**

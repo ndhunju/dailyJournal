@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import androidx.core.content.FileProvider;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
@@ -30,7 +33,7 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
     private Context mContext;
     private Type mType;
 
-    public static enum Type {ZIPPED_TEXT_FILEs, ZIPPED_PDFs, ZIPPED_CSVs}
+    public enum Type {ZIPPED_TEXT_FILEs, ZIPPED_PDFs, ZIPPED_PDFs_WITH_ATTACHMENTS, ZIPPED_CSVs}
 
     public SharePartiesReportAsync(Context con, Type type){
         mContext = con;
@@ -136,12 +139,31 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
         UtilsView.alert(mContext, resultMsg);
     }
 
-    // helper
-    public static String[] getStrTypes(){
+    //helper
+    public static ItemDescriptionAdapter.Item[] getStrTypes(Context context) {
         SharePartiesReportAsync.Type types[] = SharePartiesReportAsync.Type.values();
-        String[] strTypes = new String[types.length];
-        for(int index=0; index < types.length;index++)
-            strTypes[index] = types[index].name().replace("_", " ");
-        return strTypes;
+
+        String[] strTypes = context.getResources()
+                .getStringArray(R.array.options_share_file_types);
+        String[] strTypesDescriptions = context.getResources()
+                .getStringArray(R.array.options_share_file_types_description);
+
+        if (types.length != strTypes.length) {
+            Log.e(
+                    SharePartiesReportAsync.class.getSimpleName(),
+                    "The length of share parties options does not match with string resource."
+            );
+        }
+
+        ItemDescriptionAdapter.Item[] items = new ItemDescriptionAdapter.Item[types.length];
+
+        for(int index=0; index < types.length; index++) {
+            items[index] = new ItemDescriptionAdapter.Item(
+                    strTypes[index],
+                    strTypesDescriptions[index]
+            );
+        }
+
+        return items;
     }
 }

@@ -143,14 +143,20 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
             final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
 
             // let the user choose the type of printable she wants to export
-            String[] options = ExportPartiesReportAsync.getStrTypes();
-            new AlertDialog.Builder(activity).setItems(
-                    options,
-                    (dialogInterface, optionIndex) -> createAllOrSelectPartyDialog(
-                            activity,
-                            dir,
-                            optionIndex
-                    )).create().show();
+            ItemDescriptionAdapter.Item[] options = ExportPartiesReportAsync.getStrTypes(activity);
+
+            // Using ListView as it renders border between items
+            ListView listView = new ListView(activity);
+            listView.setAdapter(new ItemDescriptionAdapter(activity, options));
+            listView.setOnItemClickListener((adapterView, view, optionIndex, id) -> {
+                createAllOrSelectPartyDialog(
+                        activity,
+                        dir,
+                        optionIndex);
+            });
+
+            new AlertDialog.Builder(activity).setView(listView).create().show();
+
         }
 
     }

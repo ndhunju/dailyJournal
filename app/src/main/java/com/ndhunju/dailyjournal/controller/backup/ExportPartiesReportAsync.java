@@ -3,8 +3,10 @@ package com.ndhunju.dailyjournal.controller.backup;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
@@ -30,7 +32,7 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     private String mPath;           //path to save the report
     private Type mType;
 
-    public static enum Type{FILE, PDF, CSV}
+    public enum Type{FILE, PDF, PDF_WITH_ATTACHMENTS, CSV}
 
     public ExportPartiesReportAsync(Context con, String path, Type type){
         mContext = con;
@@ -63,6 +65,11 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
                     rg = new PdfReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(new File(mPath)) != null;
                     break;
+                case PDF_WITH_ATTACHMENTS:
+                    rg = new PdfReportGenerator(mContext, partyList.get(i));
+                    rg.setShouldAppendAttachments(true);
+                    success &= rg.getReport(new File(mPath)) != null;
+                    break;
                 case CSV:
                     rg = new CsvReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(new File(mPath)) != null;
@@ -90,11 +97,30 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     }
 
     //helper
-    public static String[] getStrTypes(){
+    public static ItemDescriptionAdapter.Item[] getStrTypes(Context context) {
         Type types[] = Type.values();
-        String[] strTypes = new String[types.length];
-        for(int index=0; index < types.length;index++)
-            strTypes[index] = types[index].name();
-        return strTypes;
+
+        String[] strTypes = context.getResources()
+                .getStringArray(R.array.options_export_print_file_types);
+        String[] strTypesDescriptions = context.getResources()
+                .getStringArray(R.array.options_export_print_file_types_description);
+
+        if (types.length != strTypes.length) {
+            Log.e(
+                    ExportPartiesReportAsync.class.getSimpleName(),
+                    "The length of export options does not match with string resource."
+            );
+        }
+
+        ItemDescriptionAdapter.Item[] items = new ItemDescriptionAdapter.Item[types.length];
+
+        for(int index=0; index < types.length; index++) {
+            items[index] = new ItemDescriptionAdapter.Item(
+                    strTypes[index],
+                    strTypesDescriptions[index]
+            );
+        }
+
+        return items;
     }
 }
