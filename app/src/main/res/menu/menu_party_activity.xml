@@ -7,7 +7,7 @@
         android:id="@+id/menu_party_activity_info"
         app:showAsAction="ifRoom|withText"
         android:title="@string/str_information"
-        android:icon="@drawable/ic_report_black_48dp"
+        android:icon="@drawable/ic_info"
         android:orderInCategory="2"
         />
 
