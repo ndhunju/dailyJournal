@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import androidx.core.content.FileProvider;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PlainTextReportGenerator;
@@ -39,7 +42,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
     private ReportGenerator rg;
     private File report;
 
-    enum Type{FILE, PDF, CSV, TEXT}
+    enum Type{FILE, PDF, PDF_WITH_ATTACHMENTS, CSV, TEXT}
 
 
     public ReportGeneratorAsync(Activity activity, Type type, String action){
@@ -65,9 +68,9 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         StringBuilder sb;
 
         intent = new Intent(mAction);
+        boolean shouldAddAttachments = false;
 
-        switch (mType){
-            default:
+        switch (mType) {
             case FILE:
                 rg = new TextFileReportGenerator(mActivity, partyId);
                 report = (File) rg.getReport(null);
@@ -80,8 +83,11 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
                 intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mActivity, UtilsFile.getFileSharingAuthority(mActivity), report));
                 break;
+            case PDF_WITH_ATTACHMENTS:
+                shouldAddAttachments = true;
             case PDF:
                 rg = new PdfReportGenerator(mActivity, partyId);
+                rg.setShouldAppendAttachments(shouldAddAttachments);
                 report = (File) rg.getReport(null);
                 // check if report was successfully generated
                 if (report == null) return false;
@@ -157,5 +163,33 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         for(int index=0; index < types.length;index++)
             strTypes[index] = types[index].name();
         return strTypes;
+    }
+
+    //helper
+    public static ItemDescriptionAdapter.Item[] getStrTypes(Context context) {
+        ReportGeneratorAsync.Type types[] = ReportGeneratorAsync.Type.values();
+
+        String[] strTypes = context.getResources()
+                .getStringArray(R.array.party_detail_share_types);
+        String[] strTypesDescriptions = context.getResources()
+                .getStringArray(R.array.party_detail_share_types_description);
+
+        if (types.length != strTypes.length) {
+            Log.e(
+                    ReportGeneratorAsync.class.getSimpleName(),
+                    "The length of share parties options does not match with string resource."
+            );
+        }
+
+        ItemDescriptionAdapter.Item[] items = new ItemDescriptionAdapter.Item[types.length];
+
+        for(int index=0; index < types.length; index++) {
+            items[index] = new ItemDescriptionAdapter.Item(
+                    strTypes[index],
+                    strTypesDescriptions[index]
+            );
+        }
+
+        return items;
     }
 }

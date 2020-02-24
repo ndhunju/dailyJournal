@@ -21,6 +21,24 @@
         <item>Share Journals/Transactions to Other Apps</item>
     </string-array>
 
+    <string-array name="party_detail_share_types">
+        <item>File</item>
+        <item>PDF</item>
+        <item>PDF with Attachments</item>
+        <item>CSV</item>
+        <item>Text</item>
+    </string-array>
+
+    <string-array name="party_detail_share_types_description">
+        <item>Share a text file with Journals/Transactions</item>
+        <item>Share a PDF file with Journals/Transactions</item>
+        <item>Share a PDF file with Journals/Transactions and Attachments.
+            \nNote: Including attachments will take longer and
+            make file size way bigger.</item>
+        <item>Share a CSV file with Journals/Transactions</item>
+        <item>Share as Plain Texts with Journal/Transactions</item>
+    </string-array>
+
     <string-array name="options_export_print_file_types">
         <item>File</item>
         <item>PDF</item>
@@ -34,7 +52,7 @@
         <item>Export PDF file/s with Journals/Transactions and Attachments.
             \nNote: Including attachments will take longer and
             make file size way bigger.</item>
-        <item>Export a CSV file with Journals/Transactions</item>
+        <item>Export a CSV file/s with Journals/Transactions</item>
     </string-array>
 
     <string-array name="options_share_file_types">
