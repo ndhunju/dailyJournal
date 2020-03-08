@@ -82,43 +82,43 @@ android {
 // compilation classpath and includes them in the final package.
 dependencies {
     // Remote binary dependency
-    implementation 'com.google.firebase:firebase-core:17.2.2'
-    compile 'androidx.appcompat:appcompat:1.0.0'
-    compile 'androidx.annotation:annotation:1.0.0'
-    compile 'androidx.legacy:legacy-support-v4:1.0.0'
-    compile 'com.google.android.gms:play-services-drive:17.0.0'
-    compile 'androidx.legacy:legacy-support-v13:1.0.0'
-    compile 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.3'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-drive:17.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     // local repo downloaded with SDK Manager
-    compile 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.2'
 
-    compile 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
     // Local binary dependency
     //Even though android provides json library, it bring error while using it for JUnit testing
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     //http://tools.android.com/tech-docs/unit-testing-support
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.23.4'
-    androidTestCompile 'androidx.annotation:annotation:1.0.0'
-    androidTestCompile 'androidx.test.ext:junit:1.1.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.23.4'
+    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     // Set this dependency to use JUnit 4 rule
-    androidTestCompile 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     // Set this dependency to build and run Espresso tests
-    androidTestCompile 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     // Set this dependency to build and run UI Automator tests
     //androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     //In order for the Android Plug-in for Gradle to correctly build and run your instrumented
     // unit tests, you must specify the following libraries in the build.gradle file of your
     // Android app module:
     // Set this dependency if you want to use Hamcrest matching
-    androidTestCompile 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     'org.hamcrest:hamcrest-library:1.1'
-    compile 'androidx.cardview:cardview:1.0.0'
-    compile 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     //compile 'com.wnafee:vector-compat:1.0.5'
-    compile project(':folderpicker')
-    compile project(':androidpdfwriter')
+    implementation project(':folderpicker')
+    implementation project(':androidpdfwriter')
 }
 
 // Apply this plugin at the bottom of the build.gradle file: https://developers.google.com/android/guides/google-services-plugin
