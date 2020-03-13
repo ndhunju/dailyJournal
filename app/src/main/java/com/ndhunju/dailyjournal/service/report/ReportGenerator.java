@@ -228,9 +228,9 @@ public abstract class ReportGenerator<T>{
             builder.appendText(getString(R.string.str_note));
             builder.appendText(" : ");
             builder.appendText(journal.getNote());
+            builder.writeTextLn();
         }
     }
-
 
     /**
      * Create report file in public document folder

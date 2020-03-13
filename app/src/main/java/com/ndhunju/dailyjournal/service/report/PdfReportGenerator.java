@@ -38,6 +38,8 @@ public class PdfReportGenerator extends ReportGenerator<File>{
     private static final int DEF_TEXT_SIZE = 12;
     private static final int MARGIN = 25;
     private static final int MARGIN_BETWEEN_IMGS = 15;
+    /* Total number of Characters that can fit in A4 Size paper.*/
+    private static final int CHAR_COUNT_PER_LINE = 70;
 
 
     public PdfReportGenerator(Context context, long partyId) {
@@ -98,11 +100,36 @@ public class PdfReportGenerator extends ReportGenerator<File>{
 
         public Builder appendText(String string) {
             sb.append(string);
+
+            // If total string size is greater than CHAR_COUNT_PER_LINE
+            // break the String and start in new line
+            if (sb.length() > CHAR_COUNT_PER_LINE) {
+                String overflownText = sb.substring(CHAR_COUNT_PER_LINE);
+                sb.setLength(CHAR_COUNT_PER_LINE);
+                sb.trimToSize();
+
+                // If we are breaking a "word", add hyphen
+                if (!Character.isWhitespace(sb.charAt(sb.length() - 1))
+                        && !Character.isWhitespace(overflownText.charAt(0))) {
+                    sb.append("-");
+                }
+                writeTextLn();
+                // Call method recursively
+                appendText(overflownText);
+                return this;
+            }
+
             return this;
         }
 
         public Builder writeTextLn() {
-            pdfWriter.addText(currentXPosFromLeft, PAGE_HEIGHT - currentYPosFromTop, textSize, sb.toString());
+            pdfWriter.addText(
+                    currentXPosFromLeft,
+                    PAGE_HEIGHT - currentYPosFromTop,
+                    textSize,
+                    sb.toString()
+            );
+
             clearString();
             newLine();
             return this;
