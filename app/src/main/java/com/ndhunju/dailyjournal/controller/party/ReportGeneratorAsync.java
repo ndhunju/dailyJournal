@@ -156,16 +156,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         }
     }
 
-    //helper
-    public static String[] getStrTypes(){
-        Type types[] = Type.values();
-        String[] strTypes = new String[types.length];
-        for(int index=0; index < types.length;index++)
-            strTypes[index] = types[index].name();
-        return strTypes;
-    }
-
-    //helper
+    // Helper Method
     public static ItemDescriptionAdapter.Item[] getStrTypes(Context context) {
         ReportGeneratorAsync.Type types[] = ReportGeneratorAsync.Type.values();
 

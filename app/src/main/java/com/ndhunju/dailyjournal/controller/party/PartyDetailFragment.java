@@ -222,40 +222,33 @@ public abstract class PartyDetailFragment extends Fragment implements PartyDAO.O
             case R.id.menu_party_activity_info:
                 startPartyActivity();
                 break;
-
             case R.id.menu_party_activity_share:
-                ItemDescriptionAdapter.Item[] options = ReportGeneratorAsync.getStrTypes(getContext());
-
-                new AlertDialog.Builder(getContext())
-                        .setAdapter(
-                                new ItemDescriptionAdapter(getContext(), options),
-                                (dialogInterface, optionIndex) -> {
-                                    new ReportGeneratorAsync(
-                                            getActivity(),
-                                            ReportGeneratorAsync.Type.values()[optionIndex],
-                                            Intent.ACTION_SEND
-                                    ).execute(mParty.getId());
-                        })
-                        .create()
-                        .show();
-
+                showOptionsForAction(Intent.ACTION_SEND);
                 break;
-
             case R.id.menu_party_activity_view_report:
-                String[] sendOptions = ReportGeneratorAsync.getStrTypes();
-                new AlertDialog.Builder(getActivity()).setItems(sendOptions,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                new ReportGeneratorAsync(getActivity(), ReportGeneratorAsync.Type.values()[i], Intent.ACTION_VIEW)
-                                        .execute(mParty.getId());
-                            }
-                        })
-                        .create().show();
+                showOptionsForAction(Intent.ACTION_VIEW);
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showOptionsForAction(String action) {
+        ItemDescriptionAdapter.Item[] options = ReportGeneratorAsync.getStrTypes(getContext());
+
+        new AlertDialog.Builder(getContext())
+                .setAdapter(
+                        new ItemDescriptionAdapter(getContext(), options),
+                        (dialogInterface, optionIndex) -> {
+                            dialogInterface.dismiss();
+                            new ReportGeneratorAsync(
+                                    getActivity(),
+                                    ReportGeneratorAsync.Type.values()[optionIndex],
+                                    action
+                                    ).execute(mParty.getId());
+                        })
+                .create()
+                .show();
     }
 
     private void startPartyActivity() {
