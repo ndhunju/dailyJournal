@@ -370,6 +370,7 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0: //All parties
+                                //noinspection unchecked
                                 new SharePartiesReportAsync(activity, SharePartiesReportAsync.Type.values()[optionIndex]).execute(parties);
                                 break;
 

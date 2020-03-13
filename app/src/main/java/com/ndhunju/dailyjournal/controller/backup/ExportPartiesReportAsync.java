@@ -76,7 +76,8 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
                     break;
             }
 
-            publishProgress(i / partyList.size());
+            int finishedPercentage = ((i+1) * 100) / partyList.size();
+            publishProgress(finishedPercentage);
         }
         return success;
     }

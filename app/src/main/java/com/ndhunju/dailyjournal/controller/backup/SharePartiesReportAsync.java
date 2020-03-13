@@ -97,7 +97,8 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
                     break;
             }
 
-            publishProgress((int) ((float) i / partyList.size()) * 100);
+            int finishedPercentage = ((i+1) * 100) / partyList.size();
+            publishProgress(finishedPercentage);
         }
 
         try {

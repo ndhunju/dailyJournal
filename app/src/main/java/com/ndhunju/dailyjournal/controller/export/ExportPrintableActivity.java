@@ -169,6 +169,7 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
                 .setItems(options, (dialog, which) -> {
                     switch (which) {
                         case 0: //All parties
+                            //noinspection unchecked
                             new ExportPartiesReportAsync(
                                     activity,
                                     dir,
