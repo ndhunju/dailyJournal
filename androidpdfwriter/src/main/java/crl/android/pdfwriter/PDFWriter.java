@@ -9,6 +9,9 @@ package crl.android.pdfwriter;
 
 import android.graphics.Bitmap;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class PDFWriter {
 
 	private PDFDocument mDocument;
@@ -16,11 +19,11 @@ public class PDFWriter {
 	private Pages mPages;
 	private Page mCurrentPage;
 
-	public PDFWriter() {
+	/*package*/ PDFWriter() {
 		newDocument(PaperSize.A4_WIDTH, PaperSize.A4_HEIGHT);
 	}
 
-	public PDFWriter(int pageWidth, int pageHeight) {
+	/*package*/ PDFWriter(int pageWidth, int pageHeight) {
 		newDocument(pageWidth, pageHeight);
 	}
 	
@@ -41,7 +44,9 @@ public class PDFWriter {
 	public void newPage() {
 		mCurrentPage = mPages.newPage();
 		mDocument.includeIndirectObject(mCurrentPage.getIndirectObject());
-		mPages.render();
+		// Since we are using FileOutputStream to write content to,
+		// below operation needs to be delayed until asString() is called
+		// mPages.render();
 	}
 	
 	public void setCurrentPage(int pageNumber) {
@@ -128,4 +133,14 @@ public class PDFWriter {
 		mPages.render();
 		return mDocument.toPDFString();
 	}
+
+	public long asString(FileOutputStream fileOutputStream) throws IOException {
+		mPages.render();
+		return mDocument.writePdfStringTo(fileOutputStream);
+	}
+
+	public void release() {
+	    mPages.release();
+	    mDocument.release();
+    }
 }

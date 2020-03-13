@@ -8,10 +8,13 @@
 package crl.android.pdfwriter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 
@@ -36,12 +39,15 @@ public class XObjectImage {
 	private int mHeight = -1;
 	private String mName = "";
 	private String mId = "";
-	private String mProcessedImage = "";
+    private ProcessedImage mProcessedImage;
 	
 	public XObjectImage(PDFDocument document, Bitmap bitmap) {
 		mDocument = document;
-		mProcessedImage = processImage(configureBitmap(bitmap));
+		mDocument.addXObjectImage(this);
+		String mProcessedImage = processImage(configureBitmap(bitmap));
 		mId = Indentifiers.generateId(mProcessedImage);
+		// Processed image could also be saved in a file to save memory
+		this.mProcessedImage = new ProcessedImage(mId, mProcessedImage);
 		mName = "/img" + (++mImageCount);
 	}
 	
@@ -59,7 +65,7 @@ public class XObjectImage {
 			" /ColorSpace " + DEVICE_RGB + "\n" +
 			" /Length " + mProcessedImage.length() + "\n"
 		);
-		mIndirectObject.addStreamContent(mProcessedImage);
+		mIndirectObject.addStreamContent(mProcessedImage.getContent());
 	}
 	
 	private Bitmap configureBitmap(Bitmap bitmap) {
@@ -151,5 +157,56 @@ public class XObjectImage {
 	
 	public int getHeight() {
 		return mHeight;		
+	}
+
+	public void release() {
+		mProcessedImage.release();
+	}
+
+    /**
+     * Encapsulates the logic for storing processed image.
+     */
+	static class ProcessedImage {
+		private long length;
+		private String fileName;
+
+		public ProcessedImage(String imageId, String processedImage) {
+
+		    if (processedImage == null) {
+		        return;
+            }
+
+			this.fileName = XObjectImage.class.getName() + imageId;
+			this.length = processedImage.length();
+
+			try {
+                FileOutputStream outputStream = PdfWriterApp.getInstance().openFileOutput(fileName);
+                outputStream.write(processedImage.getBytes());
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public String getContent() {
+			try {
+				FileInputStream inputStream = PdfWriterApp.getInstance().openFileInput(fileName);
+				StringBuilder out = new StringBuilder();
+				Utils.read(inputStream, out);
+				inputStream.close();
+				return out.toString();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return "";
+        }
+
+        public long length() {
+			return length;
+		}
+
+		public void release() {
+			PdfWriterApp.getInstance().deleteFile(fileName);
+		}
 	}
 }

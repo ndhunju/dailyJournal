@@ -156,4 +156,19 @@ public class Page {
 			"Q\n"
 		);
 	}
+
+	public void release() {
+		mIndirectObject.release();
+		mPageContents.release();
+
+		for (IndirectObject indirectObject: mPageFonts) {
+			indirectObject.release();
+		}
+
+		for (XObjectImage xObjectImage: mXObjects) {
+			xObjectImage.release();
+		}
+
+
+	}
 }

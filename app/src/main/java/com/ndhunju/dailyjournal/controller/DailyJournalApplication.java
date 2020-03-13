@@ -15,8 +15,12 @@ import com.ndhunju.dailyjournal.service.Setup;
  */
 public class DailyJournalApplication extends Application {
 
+    private static DailyJournalApplication instance;
     private static Handler sUiThreadHandler;
 
+    public static Application getInstance() {
+        return instance;
+    }
     /**
      * Called when the application is starting, before any activity, service, or receiver objects
      * (excluding content providers) have been created.
@@ -24,6 +28,7 @@ public class DailyJournalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         //Load defaults settings
         Setup.from(getBaseContext()).loadSettings();
         sUiThreadHandler = new Handler(Looper.getMainLooper());

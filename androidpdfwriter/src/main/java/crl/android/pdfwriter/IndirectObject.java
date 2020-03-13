@@ -7,6 +7,9 @@
 
 package crl.android.pdfwriter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class IndirectObject extends Base {
 
 	private EnclosedContent mContent;
@@ -123,4 +126,48 @@ public class IndirectObject extends Base {
 		return render();
 	}
 
+	/**
+	 * This method uses the same logic as in {@link this#render()} but puts the strings in
+	 * {@code fileOutputStream} in the right order
+	 * @param fileOutputStream: Write to this object. Consumer should not close this stream
+	 * @return Total number of bytes written
+	 */
+	@Override
+	public long writePdfStringTo(FileOutputStream fileOutputStream) throws IOException {
+		long totalByteSize = 0;
+		byte[] idBytes = mID.toPDFString().getBytes();
+		fileOutputStream.write(idBytes);
+		totalByteSize += idBytes.length;
+
+		byte[] spaceBytes = " ".getBytes();
+		fileOutputStream.write(spaceBytes);
+		totalByteSize += spaceBytes.length;
+
+		totalByteSize += mContent.preWritePdfStringTo(fileOutputStream);
+
+		// j-a-s-d: this can be performed in inherited classes DictionaryObject and StreamObject
+		if (mDictionaryContent.hasContent()) {
+			totalByteSize += mDictionaryContent.preWritePdfStringTo(fileOutputStream);
+			totalByteSize += mDictionaryContent.writePdfStringTo(fileOutputStream);
+			totalByteSize += mDictionaryContent.postWritePdfStringTo(fileOutputStream);
+			if (mStreamContent.hasContent()) {
+				totalByteSize += mStreamContent.preWritePdfStringTo(fileOutputStream);
+				totalByteSize += mStreamContent.writePdfStringTo(fileOutputStream);
+				totalByteSize += mStreamContent.postWritePdfStringTo(fileOutputStream);
+			}
+		}
+
+		totalByteSize += mContent.writePdfStringTo(fileOutputStream);
+
+		totalByteSize += mContent.postWritePdfStringTo(fileOutputStream);
+
+		return totalByteSize;
+	}
+
+    @Override
+    public void release() {
+        mContent.release();
+        mDictionaryContent.release();
+        mStreamContent.release();
+    }
 }

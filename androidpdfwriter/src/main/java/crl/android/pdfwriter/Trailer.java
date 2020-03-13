@@ -7,6 +7,9 @@
 
 package crl.android.pdfwriter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class Trailer extends Base {
 
 	private int mXRefByteOffset;
@@ -55,13 +58,25 @@ public class Trailer extends Base {
 	}
 	
 	@Override
-	public String toPDFString() {		
+	public String toPDFString() {
 		return render();
+	}
+
+	@Override
+	public long writePdfStringTo(FileOutputStream fileOutputStream) throws IOException {
+		byte[] trailerBytes = toPDFString().getBytes();
+		fileOutputStream.write(trailerBytes);
+		return trailerBytes.length;
 	}
 
 	@Override
 	public void clear() {
 		mXRefByteOffset = 0;
 		mTrailerDictionary = new Dictionary();
+	}
+
+	@Override
+	public void release() {
+		mTrailerDictionary.release();
 	}
 }

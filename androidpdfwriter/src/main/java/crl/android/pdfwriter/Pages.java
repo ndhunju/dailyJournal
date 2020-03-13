@@ -57,4 +57,14 @@ public class Pages {
 			lPage.render(mIndirectObject.getIndirectReference());
 		}
 	}
+
+	public void release() {
+		mIndirectObject.release();
+		mMediaBox.release();
+		mKids.release();
+
+		for (Page page: mPageList) {
+			page.release();
+		}
+	}
 }

@@ -7,6 +7,9 @@
 
 package crl.android.pdfwriter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class CrossReferenceTable extends List {
 
 	private int mObjectNumberStart;
@@ -52,11 +55,29 @@ public class CrossReferenceTable extends List {
 		sb.append("\r\n");
 		sb.append(getObjectsXRefInfo());
 		return sb.toString(); 
-	}	
+	}
+
+	private void render(FileOutputStream fileOutputStream) throws IOException {
+		fileOutputStream.write("xref".getBytes());
+		fileOutputStream.write("\r\n".getBytes());
+		fileOutputStream.write(String.valueOf(mObjectNumberStart).getBytes());
+		fileOutputStream.write(" ".getBytes());
+		fileOutputStream.write(String.valueOf(mList.size()).getBytes());
+		fileOutputStream.write("\r\n".getBytes());
+		fileOutputStream.write(getObjectsXRefInfo().getBytes());
+	}
 	
 	@Override
 	public String toPDFString() {
 		return render();
+	}
+
+	@Override
+	public long writePdfStringTo(FileOutputStream fileOutputStream) throws IOException {
+		String xRefTable = render();
+		byte[] xRefTableBytes = xRefTable.getBytes();
+		fileOutputStream.write(xRefTableBytes);
+		return xRefTableBytes.length;
 	}
 
 	@Override
@@ -66,4 +87,6 @@ public class CrossReferenceTable extends List {
 		mObjectNumberStart = 0;
 	}
 
+	@Override
+	public void release() {}
 }

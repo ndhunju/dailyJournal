@@ -7,6 +7,8 @@
 
 package crl.android.pdfwriter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Body extends List {
@@ -92,7 +94,30 @@ public class Body extends List {
 	public String toPDFString() {
 		return render();
 	}
-	
+
+	@Override
+	public long writePdfStringTo(FileOutputStream fileOutputStream) throws IOException {
+		int x = 0;
+		int offset = mByteOffsetStart;
+		int totalSize = 0;
+		while (x < mObjectsList.size()) {
+			IndirectObject iobj = getObjectByNumberID(++x);
+
+			if (iobj != null) {
+				long iobjSize = iobj.writePdfStringTo(fileOutputStream);
+				byte[] newLineBytes = "\n".getBytes();
+				fileOutputStream.write(newLineBytes);
+				//super.add();
+				iobj.setByteOffset(offset);
+				totalSize += iobjSize + newLineBytes.length;
+				offset += iobjSize + newLineBytes.length;
+			}
+		}
+
+		//renderList(fileOutputStream);
+		return totalSize;
+	}
+
 	@Override
 	public void clear() {
 		super.clear();
@@ -102,4 +127,10 @@ public class Body extends List {
 		mObjectsList = new ArrayList<IndirectObject>();
 	}
 
+    @Override
+    public void release() {
+        for (IndirectObject object: mObjectsList) {
+            object.release();
+        }
+    }
 }

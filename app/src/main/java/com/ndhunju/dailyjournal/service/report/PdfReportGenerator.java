@@ -6,6 +6,7 @@ import android.media.MediaScannerConnection;
 import androidx.annotation.Nullable;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.DailyJournalApplication;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -15,11 +16,12 @@ import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import crl.android.pdfwriter.PDFWriter;
 import crl.android.pdfwriter.PaperSize;
+import crl.android.pdfwriter.PdfWriterApp;
 import crl.android.pdfwriter.StandardFonts;
 
 /**
@@ -30,6 +32,8 @@ public class PdfReportGenerator extends ReportGenerator<File>{
 
     private static final int PAGE_HEIGHT = PaperSize.A4_HEIGHT;
     private static final int PAGE_WIDTH = PaperSize.A4_WIDTH;
+    private static final int IMG_MAX_HEIGHT = PAGE_HEIGHT / 2;
+    private static final int IMG_MAX_WIDTH = PAGE_WIDTH / 2;
     private static final String FILE_EXT = ".pdf";
     private static final int DEF_TEXT_SIZE = 12;
     private static final int MARGIN = 25;
@@ -61,7 +65,9 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             sb = new StringBuilder();
             currentYPosFromTop = MARGIN;
             currentXPosFromLeft = MARGIN;
-            pdfWriter = new PDFWriter(PAGE_WIDTH, PAGE_HEIGHT);
+            pdfWriter = PdfWriterApp
+                    .getInstance(DailyJournalApplication.getInstance())
+                    .newPDFWriter(PAGE_WIDTH, PAGE_HEIGHT);
             pdfWriter.setFont(StandardFonts.COURIER, StandardFonts.COURIER);
         }
 
@@ -129,6 +135,8 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             float widthScale = maxWidth / bitmap.getWidth();
             float heightScale = maxHeight / bitmap.getHeight();
             float scaleToUse = Math.min(widthScale, heightScale);
+            // Only scale down, not scale up to prevent blurring
+            scaleToUse = Math.min(scaleToUse, 1);
             int x = (int) (bitmap.getWidth() * scaleToUse);
             int y = (int) (bitmap.getHeight() * scaleToUse);
 
@@ -155,6 +163,11 @@ public class PdfReportGenerator extends ReportGenerator<File>{
 
         public String asString() {
             return pdfWriter.asString();
+        }
+
+        public void asString(FileOutputStream fileOutputStream) throws IOException {
+            pdfWriter.asString(fileOutputStream);
+            pdfWriter.release();
         }
 
         public byte[] asBytes() {
@@ -201,8 +214,9 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             pdfFile.createNewFile();
 
             // write to file
-            OutputStream os = new FileOutputStream(pdfFile);
-            os.write(builder.asString().getBytes("UTF-8"));
+            FileOutputStream os = new FileOutputStream(pdfFile);
+            //os.write(builder.asString().getBytes("UTF-8"));
+            builder.asString(os);
             os.close();
 
             // To let know that a new file has been created so that it appears in the computer
@@ -233,12 +247,21 @@ public class PdfReportGenerator extends ReportGenerator<File>{
                 continue;
             }
             // Add Journal ID
-            builder.appendText(getString(R.string.str_journal) + " " + getString(R.string.str_id) + ": " + journal.getId());
+            builder.appendText(
+                    getString(R.string.str_journal)
+                    + " "
+                    + getString(R.string.str_id)
+                    + journal.getId()
+            );
             builder.writeTextLn();
 
             // Add each attachment image to the file
             for (Attachment attachment : mServices.getAttachments(journal.getId())) {
-                Bitmap bitmap = Utils.scaleBitmap(attachment.getPath(), PAGE_WIDTH, PAGE_HEIGHT);
+                Bitmap bitmap = Utils.scaleBitmap(
+                        attachment.getPath(),
+                        IMG_MAX_WIDTH,
+                        IMG_MAX_HEIGHT
+                );
                 builder.appendImage(bitmap);
             }
         }

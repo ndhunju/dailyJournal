@@ -7,6 +7,9 @@
 
 package crl.android.pdfwriter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class IndirectIdentifier extends Base {
 
 	private int mNumber;
@@ -42,4 +45,14 @@ public class IndirectIdentifier extends Base {
 	public String toPDFString() {
 		return Integer.toString(mNumber) + " " + Integer.toString(mGeneration);
 	}
+
+	@Override
+	public long writePdfStringTo(FileOutputStream fileOutputStream) throws IOException {
+		byte[] bytes = toPDFString().getBytes();
+		fileOutputStream.write(bytes);
+		return bytes.length;
+	}
+
+	@Override
+	public void release() {}
 }

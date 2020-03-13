@@ -7,6 +7,9 @@
 
 package crl.android.pdfwriter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class Header extends Base {
 
 	private String mVersion;
@@ -35,8 +38,17 @@ public class Header extends Base {
 	}
 
 	@Override
+	public long writePdfStringTo(FileOutputStream fileOutputStream) throws IOException {
+		byte[] bytes = toPDFString().getBytes();
+		fileOutputStream.write(bytes);
+		return bytes.length;
+	}
+
+	@Override
 	public void clear() {
 		setVersion(1, 4);
 	}
 
+	@Override
+	public void release() {}
 }

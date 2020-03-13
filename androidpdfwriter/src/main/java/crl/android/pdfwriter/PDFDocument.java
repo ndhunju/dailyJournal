@@ -7,10 +7,15 @@
 
 package crl.android.pdfwriter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class PDFDocument extends Base {
 
 	private Header mHeader;
 	private Body mBody;
+	private ArrayList<XObjectImage> xObjectImages;
 	private CrossReferenceTable mCRT;
 	private Trailer mTrailer;
 	
@@ -19,6 +24,7 @@ public class PDFDocument extends Base {
 		mBody = new Body();
 		mBody.setByteOffsetStart(mHeader.getPDFStringSize());
 		mBody.setObjectNumberStart(0);
+		xObjectImages = new ArrayList<>();
 		mCRT = new CrossReferenceTable();
 		mTrailer = new Trailer();
 	}
@@ -49,6 +55,16 @@ public class PDFDocument extends Base {
 	public void includeIndirectObject(IndirectObject iobj) {
 		mBody.includeIndirectObject(iobj);
 	}
+
+	public void addXObjectImage(XObjectImage image) {
+		xObjectImages.add(image);
+	}
+
+	public void appendImageToDocuments() {
+		for (XObjectImage xObjectImage: xObjectImages) {
+			xObjectImage.appendToDocument();
+		}
+	}
 	
 	@Override
 	public String toPDFString() {
@@ -68,8 +84,45 @@ public class PDFDocument extends Base {
 		mTrailer.setId(Indentifiers.generateId());
 		return sb.toString() + mCRT.toPDFString() + mTrailer.toPDFString();
 	}
-	
+
 	@Override
+	public long writePdfStringTo(FileOutputStream fileOutputStream) throws IOException {
+		long numOfBytesInHeader = mHeader.writePdfStringTo(fileOutputStream);
+		long numOfBytesInBody = mBody.writePdfStringTo(fileOutputStream);
+
+		// Setup Cross Reference Table
+		mCRT.setObjectNumberStart(mBody.getObjectNumberStart());
+		int x = 0;
+		while (x < mBody.getObjectsCount()) {
+			IndirectObject indirectObject = mBody.getObjectByNumberID(++x);
+			if (indirectObject != null) {
+				mCRT.addObjectXRefInfo(
+						indirectObject.getByteOffset(),
+						indirectObject.getGeneration(),
+						indirectObject.getInUse()
+				);
+			}
+		}
+		long numOfBytesInCRT = mCRT.writePdfStringTo(fileOutputStream);
+
+		// Setup Trailer
+		mTrailer.setObjectsCount(mBody.getObjectsCount());
+		mTrailer.setCrossReferenceTableByteOffset((int) (numOfBytesInHeader + numOfBytesInBody));
+		mTrailer.setId(Indentifiers.generateId());
+		long numOfBytesInTrailer = mTrailer.writePdfStringTo(fileOutputStream);
+
+		return numOfBytesInHeader + numOfBytesInBody + numOfBytesInCRT + numOfBytesInTrailer;
+	}
+
+    @Override
+    public void release() {
+        mHeader.release();
+        mBody.release();
+        mCRT.release();
+        mTrailer.release();
+    }
+
+    @Override
 	public void clear() {
 		mHeader.clear();
 		mBody.clear();
