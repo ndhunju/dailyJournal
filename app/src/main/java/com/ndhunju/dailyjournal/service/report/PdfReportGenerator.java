@@ -164,25 +164,48 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             float scaleToUse = Math.min(widthScale, heightScale);
             // Only scale down, not scale up to prevent blurring
             scaleToUse = Math.min(scaleToUse, 1);
-            int x = (int) (bitmap.getWidth() * scaleToUse);
-            int y = (int) (bitmap.getHeight() * scaleToUse);
+            int finalWidth = (int) (bitmap.getWidth() * scaleToUse);
+            int finalHeight = (int) (bitmap.getHeight() * scaleToUse);
+
 
             int remainingHeight = PAGE_HEIGHT - currentYPosFromTop - MARGIN_BETWEEN_IMGS - MARGIN;
-            if (remainingHeight < y) {
-                // Image height is more than space left in the page height
-                // So, start new page
+            if (remainingHeight < finalHeight) {
+                // Image's height is greater than the space remaining.
+                // Break image into two or more to completely use the space left in the page
+                Bitmap upperPortionOfBitmapThatFits = Bitmap.createBitmap(
+                        bitmap,
+                        0,
+                        0,
+                        bitmap.getWidth(),
+                        remainingHeight
+                );
+
+                Bitmap remainingBitmap = Bitmap.createBitmap(
+                        bitmap,
+                        0,
+                        remainingHeight,
+                        bitmap.getWidth(),
+                        bitmap.getHeight() - remainingHeight
+                );
+
+                // Recursively call this function. It should return immediately since we
+                // are passing bitmap that should fit perfectly in the remaining space
+                appendImage(upperPortionOfBitmapThatFits);
                 newPage();
+                // Recursively call this function.
+                appendImage(remainingBitmap);
+                return this;
             }
 
             pdfWriter.addImage(
                     currentXPosFromLeft,
-                    PAGE_HEIGHT - currentYPosFromTop - y,
-                    x,
-                    y,
+                    PAGE_HEIGHT - currentYPosFromTop - finalHeight,
+                    finalWidth,
+                    finalHeight,
                     bitmap
             );
 
-            currentYPosFromTop += y + MARGIN_BETWEEN_IMGS;
+            currentYPosFromTop += finalHeight + MARGIN_BETWEEN_IMGS;
             currentXPosFromLeft = MARGIN;
 
             return this;
