@@ -169,6 +169,6 @@ public class Page {
 			xObjectImage.release();
 		}
 
-
+		mDocument.release();
 	}
 }

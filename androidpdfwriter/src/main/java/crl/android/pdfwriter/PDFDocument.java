@@ -120,6 +120,10 @@ public class PDFDocument extends Base {
         mBody.release();
         mCRT.release();
         mTrailer.release();
+
+        for (XObjectImage image: xObjectImages) {
+        	image.release();
+		}
     }
 
     @Override

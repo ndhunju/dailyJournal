@@ -182,6 +182,7 @@ public class XObjectImage {
 			try {
                 FileOutputStream outputStream = PdfWriterApp.getInstance().openFileOutput(fileName);
                 outputStream.write(processedImage.getBytes());
+                outputStream.flush();
                 outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();

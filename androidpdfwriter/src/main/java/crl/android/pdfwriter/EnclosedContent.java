@@ -116,7 +116,8 @@ public class EnclosedContent extends Base {
 	}
 
 	public void closeFileOutputStream() throws IOException {
-		if (!mIsFileOutputStreamClosed) {
+		if (!mIsFileOutputStreamClosed && mFileOutputStream != null) {
+			mFileOutputStream.flush();
 			mFileOutputStream.close();
 			mIsFileOutputStreamClosed = true;
 		}
@@ -125,10 +126,10 @@ public class EnclosedContent extends Base {
 	@Override
 	public void clear() {
 		try {
+			closeFileOutputStream();
 			mPdfWriterApp.deleteFile(mId);
 			mFileOutputStream = mPdfWriterApp.openFileOutput(mId);
-			mIsFileOutputStreamClosed = true;
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

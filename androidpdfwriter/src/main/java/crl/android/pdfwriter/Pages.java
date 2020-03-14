@@ -66,5 +66,7 @@ public class Pages {
 		for (Page page: mPageList) {
 			page.release();
 		}
+
+		mDocument.release();
 	}
 }

@@ -71,7 +71,8 @@ public abstract class List extends Base {
 	}
 
 	private void closeFileOutputStream() throws IOException {
-		if (!mIsFileOutStreamClosed) {
+		if (!mIsFileOutStreamClosed && mFileOutputStream != null) {
+			mFileOutputStream.flush();
 			mFileOutputStream.close();
 			mIsFileOutStreamClosed = true;
 		}
