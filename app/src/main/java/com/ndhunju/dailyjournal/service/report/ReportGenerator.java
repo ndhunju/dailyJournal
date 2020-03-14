@@ -120,6 +120,10 @@ public abstract class ReportGenerator<T>{
         return shouldAppendAttachments;
     }
 
+    public boolean shouldAppendJournalId() {
+        return true;
+    }
+
     public void setShouldAppendAttachments(boolean shouldAppendAttachments) {
         this.shouldAppendAttachments = shouldAppendAttachments;
     }
@@ -175,6 +179,9 @@ public abstract class ReportGenerator<T>{
         int no = 1;
         for (Journal journal : mJournals) {
             builder.appendText(addGap(String.valueOf(no++), 3));
+            if (shouldAppendJournalId()) {
+                builder.appendText(addGap(String.valueOf(journal.getId()), 4));
+            }
             builder.appendText(addGap(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)));
             if (journal.getType() == Journal.Type.Debit) {
                 builder.appendText(addGapLeft(formatDecimal(journal.getAmount())));
@@ -195,6 +202,9 @@ public abstract class ReportGenerator<T>{
 
         /**Footer Row **/
         builder.appendText(addGap("", 3));
+        if (shouldAppendJournalId()) {
+            builder.appendText(addGap("", 4));
+        }
         builder.appendText(addGap(R.string.str_total));
         builder.appendText(addGapLeft(formatCurrency(mParty.getDebitTotal())));
         builder.appendText(addGapLeft(formatCurrency(mParty.getCreditTotal())));
@@ -210,6 +220,9 @@ public abstract class ReportGenerator<T>{
      */
     public void onAppendHeader(Builder builder) {
         builder.appendText(addGap(R.string.str_num, 3));
+        if (shouldAppendJournalId()) {
+            builder.appendText(addGap("ID", 4));
+        }
         builder.appendText(addGap(R.string.str_date));
         builder.appendText(addGap(R.string.str_dr));
         builder.appendText(addGap(R.string.str_cr));

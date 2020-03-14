@@ -39,7 +39,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
     private static final int MARGIN = 25;
     private static final int MARGIN_BETWEEN_IMGS = 15;
     /* Total number of Characters that can fit in A4 Size paper.*/
-    private static final int CHAR_COUNT_PER_LINE = 70;
+    private static final int CHAR_COUNT_PER_LINE = 75;
 
 
     public PdfReportGenerator(Context context, long partyId) {
@@ -103,7 +103,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
 
             // If total string size is greater than CHAR_COUNT_PER_LINE
             // break the String and start in new line
-            if (sb.length() > CHAR_COUNT_PER_LINE) {
+            if (sb.length() > CHAR_COUNT_PER_LINE + 1) {
                 String overflownText = sb.substring(CHAR_COUNT_PER_LINE);
                 sb.setLength(CHAR_COUNT_PER_LINE);
                 sb.trimToSize();
@@ -117,6 +117,51 @@ public class PdfReportGenerator extends ReportGenerator<File>{
                 // Call method recursively
                 appendText(overflownText);
                 return this;
+            }
+
+            return this;
+        }
+
+        public Builder appendText(String preText, String text, String posText, int maxWidth) {
+            // Add main text
+            sb.append(text);
+
+            // If total string size is greater than maxWidth
+            // break the String and start in new line
+            if (sb.length() > maxWidth) {
+                // completePostText might have hyphen also
+                String completePostText = posText;
+
+                // If we are breaking a "word", add hyphen
+                if (!Character.isWhitespace(sb.charAt(maxWidth - 1))
+                        && !Character.isWhitespace(sb.charAt(maxWidth))) {
+                    completePostText = "-" + posText;
+                }
+
+                String overflowText = sb.substring(maxWidth - completePostText.length());
+                sb.setLength(sb.length() - overflowText.length());
+                sb.trimToSize();
+
+                // Add completePostText now, main text is already added
+                sb.append(completePostText);
+                writeTextLn();
+                // Add preText. Main text will be added then
+                sb.append(preText);
+                // Call method recursively
+                appendText(preText, overflowText, posText, maxWidth);
+                return this;
+            } else {
+                // Add spaces till the line reach to maxWidth
+                int add = 0;
+                if (maxWidth > sb.length()) {
+                    add = maxWidth - sb.length() - posText.length();
+                }
+
+                for(int i = add; i > 0; i--) {
+                    sb.append(" ");
+                }
+
+                sb.append(posText);
             }
 
             return this;
@@ -251,6 +296,25 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         makePartySummary(builder);
         makeReport(builder);
 
+        // After report is made/rendered,
+        // add notes in separate section
+        int idColWidth = 4;
+        // Hard coding this value to make it same at report/ledger width
+        int noteLineWidth = CHAR_COUNT_PER_LINE - 2;
+        builder.writeTextLn();
+        builder.appendText(getString(R.string.str_notes));
+        builder.writeTextLn();
+        builder.writeTextLn();
+        builder.appendText(addGap(getString(R.string.str_id_only), idColWidth));
+        builder.appendText("", getString(R.string.str_note), addGap("", 0), noteLineWidth);
+        builder.writeTextLn();
+
+        for (Journal journal: mJournals) {
+            builder.appendText(addGap("" + journal.getId(), idColWidth));
+            builder.appendText(addGap("", idColWidth), journal.getNote(), addGap("", 0), noteLineWidth);
+            builder.writeTextLn();
+        }
+
         if (shouldAppendAttachments()) {
             addAttachments(builder);
         }
@@ -277,6 +341,17 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void onAppendNote(ReportGenerator.Builder builder, Journal journal) {
+        //super.onAppendNote(builder, journal);
+        // Don't use super class implementation to add notes
+    }
+
+    @Override
+    public boolean shouldAppendJournalId() {
+        return true;
     }
 
     @Override

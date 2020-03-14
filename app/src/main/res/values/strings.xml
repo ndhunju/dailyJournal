@@ -33,9 +33,11 @@
     <string name="str_cr">Cr. </string>
     <string name="str_dr">Dr. </string>
     <string name="str_id">ID :</string>
+    <string name="str_id_only">ID</string>
     <string name="str_new">New</string>
     <string name="str_lock">Lock</string>
     <string name="str_note">Note</string>
+    <string name="str_notes">Notes</string>
     <string name="str_next">Next</string>
     <string name="str_save">Save</string>
     <string name="str_edit">Edit</string>
