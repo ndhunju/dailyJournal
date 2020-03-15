@@ -102,12 +102,12 @@ public class PDFWriter {
 		mCurrentPage.addImage(fromLeft, fromBottom, xImage.getWidth(), xImage.getHeight(), xImage, transformation);
 	}
 	
-	public void addImage(int fromLeft, int fromBottom, int toLeft, int toBottom, Bitmap bitmap) {
-		addImage(fromLeft, fromBottom, toLeft, toBottom, bitmap, Transformation.DEGREES_0_ROTATION);
+	public void addImage(int fromLeft, int fromBottom, int width, int height, Bitmap bitmap) {
+		addImage(fromLeft, fromBottom, width, height, bitmap, Transformation.DEGREES_0_ROTATION);
 	}
 	
-	public void addImage(int fromLeft, int fromBottom, int toLeft, int toBottom, Bitmap bitmap, String transformation) {
-		mCurrentPage.addImage(fromLeft, fromBottom, toLeft, toBottom, new XObjectImage(mDocument, bitmap), transformation);
+	public void addImage(int fromLeft, int fromBottom, int width, int height, Bitmap bitmap, String transformation) {
+		mCurrentPage.addImage(fromLeft, fromBottom, width, height, new XObjectImage(mDocument, bitmap), transformation);
 	}
 	
 	public void addImageKeepRatio(int fromLeft, int fromBottom, int width, int height, Bitmap bitmap) {
