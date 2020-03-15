@@ -45,7 +45,7 @@ public class UtilsFile {
 
 	//File Extension types
     public static final String ZIP_EXT = ".zip";
-	private static final String IMG_EXT = ".png";
+	public static final String IMG_EXT = ".png";
 	public static final String ZIP_EXT_OLD = ".dj";
 	public static final String BACK_FILE_TYPE = "application/zip";
     private static final String TEMP_IMG_FILE_NAME = "temp" + IMG_EXT;

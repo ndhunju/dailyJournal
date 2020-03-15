@@ -11,8 +11,10 @@ import android.util.Log;
 import androidx.core.content.FileProvider;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.DailyJournalApplication;
 import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.report.AttachmentsReportGenerator;
 import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
 import com.ndhunju.dailyjournal.service.report.ReportGenerator;
@@ -33,7 +35,13 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
     private Context mContext;
     private Type mType;
 
-    public enum Type {ZIPPED_TEXT_FILEs, ZIPPED_PDFs, ZIPPED_PDFs_WITH_ATTACHMENTS, ZIPPED_CSVs}
+    public enum Type {
+        ZIPPED_TEXT_FILEs,
+        ZIPPED_PDFs,
+        ZIPPED_PDFs_WITH_ATTACHMENTS,
+        ZIPPED_CSVs,
+        ZIPPED_IMAGE_ATTACHMENTS
+    }
 
     public SharePartiesReportAsync(Context con, Type type){
         mContext = con;
@@ -87,13 +95,30 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
                 case ZIPPED_TEXT_FILEs:
                     rg = new TextFileReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(toBeZippedFolder) != null;
+                    break;
                 case ZIPPED_PDFs:
                     rg = new PdfReportGenerator(mContext, partyList.get(i));
+                    success &= rg.getReport(toBeZippedFolder) != null;
+                    break;
+                case ZIPPED_PDFs_WITH_ATTACHMENTS:
+                    rg = new PdfReportGenerator(mContext, partyList.get(i));
+                    rg.setShouldAppendAttachments(true);
                     success &= rg.getReport(toBeZippedFolder) != null;
                     break;
                 case ZIPPED_CSVs:
                     rg = new CsvReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(toBeZippedFolder) != null;
+                    break;
+                case ZIPPED_IMAGE_ATTACHMENTS:
+                    rg = new AttachmentsReportGenerator(mContext, partyList.get(i));
+                    // Create Attachments folder
+                    String attachmentFolderName = mContext.getString(R.string.str_attachments);
+                    File rootAttachmentFolder = new File(toBeZippedFolder, attachmentFolderName);
+                    if (!rootAttachmentFolder.exists()) {
+                        success &= rootAttachmentFolder.mkdir();
+                    }
+
+                    success &= rg.getReport(rootAttachmentFolder) != null;
                     break;
             }
 
@@ -102,6 +127,16 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
         }
 
         try {
+            DailyJournalApplication.postOnUiThread(() -> {
+                pd.dismiss();
+                pd = new ProgressDialog(mContext);
+                pd.setCancelable(false);
+                pd.setCanceledOnTouchOutside(false);
+                pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                pd.setMessage(mContext.getString(R.string.msg_zipping));
+                pd.show();
+            });
+
             UtilsZip.zip(toBeZippedFolder, zipFile);
             toBeZippedFolder.delete();
             // let know that a new file has been created so that it appears in the computer

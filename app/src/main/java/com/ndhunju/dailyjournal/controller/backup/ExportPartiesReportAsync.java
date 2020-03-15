@@ -8,6 +8,7 @@ import android.util.Log;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.report.AttachmentsReportGenerator;
 import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
 import com.ndhunju.dailyjournal.service.report.ReportGenerator;
@@ -32,7 +33,7 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     private String mPath;           //path to save the report
     private Type mType;
 
-    public enum Type{FILE, PDF, PDF_WITH_ATTACHMENTS, CSV}
+    public enum Type{FILE, PDF, PDF_WITH_ATTACHMENTS, CSV, ATTACHMENTS}
 
     public ExportPartiesReportAsync(Context con, String path, Type type){
         mContext = con;
@@ -61,6 +62,7 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
                 case FILE:
                     rg = new TextFileReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(new File(mPath)) != null;
+                    break;
                 case PDF:
                     rg = new PdfReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(new File(mPath)) != null;
@@ -73,6 +75,17 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
                 case CSV:
                     rg = new CsvReportGenerator(mContext, partyList.get(i));
                     success &= rg.getReport(new File(mPath)) != null;
+                    break;
+                case ATTACHMENTS:
+                    rg = new AttachmentsReportGenerator(mContext, partyList.get(i));
+                    // Create Attachments folder
+                    String attachmentFolderName = mContext.getString(R.string.str_attachments);
+                    File rootAttachmentFolder = new File(mPath, attachmentFolderName);
+                    if (!rootAttachmentFolder.exists()) {
+                        success &= rootAttachmentFolder.mkdir();
+                    }
+
+                    success &= rg.getReport(rootAttachmentFolder) != null;
                     break;
             }
 

@@ -44,6 +44,7 @@
         <item>PDF</item>
         <item>PDF with Attachments</item>
         <item>CSV</item>
+        <item>Attachments</item>
     </string-array>
 
     <string-array name="options_export_print_file_types_description">
@@ -53,6 +54,7 @@
             &lt;b>Note:&lt;/b> Including attachments will take longer and
             make file size way bigger.</item>
         <item>Export a CSV file/s with Journals/Transactions</item>
+        <item>Export all image attachments</item>
     </string-array>
 
     <string-array name="options_share_file_types">
@@ -60,6 +62,7 @@
         <item>Zipped PDF</item>
         <item>Zipped PDF with Attachments</item>
         <item>Zipped CSV</item>
+        <item>Zipped Image Attachments</item>
     </string-array>
 
     <string-array name="options_share_file_types_description">
@@ -69,6 +72,7 @@
             &lt;b>Note:&lt;/b> Including attachments will take longer and
             make file size way bigger.</item>
         <item>Export a zipped file containing CSV file/s with Journals/Transactions</item>
+        <item>Export a zipped file containing all image attachments</item>
     </string-array>
 
     <string-array name="reminder_intervals">
