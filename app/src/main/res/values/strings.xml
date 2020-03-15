@@ -70,6 +70,7 @@
     <string name="str_lock_time">Lock Time</string>
     <string name="str_preference">Preference</string>
     <string name="str_attachment"> Attachment</string>
+    <string name="str_attachments"> Attachments</string>
     <string name="str_pick_a_date">Pick a Date</string>
     <string name="str_information">Information</string>
     <string name="str_add_shortcut">Add Shortcut</string>

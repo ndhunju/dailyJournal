@@ -197,7 +197,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         }
 
         @Override
-        public ReportGenerator.Builder appendImage(Bitmap bitmap) {
+        public ReportGenerator.Builder appendImage(Bitmap bitmap, int topMargin) {
 
             // Validate args
             if (bitmap == null) {
@@ -205,19 +205,27 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             }
 
             // Get measurements
-            float maxWidth = PAGE_WIDTH - (2 * MARGIN);
-            float maxHeight = PAGE_HEIGHT - (2 * MARGIN);
-            float widthScale = maxWidth / bitmap.getWidth();
-            float heightScale = maxHeight / bitmap.getHeight();
+            float maxAvailableWidth = PAGE_WIDTH - (2 * MARGIN);
+            float maxAvailableHeight = PAGE_HEIGHT - (2 * MARGIN);
+            float widthScale = maxAvailableWidth / bitmap.getWidth();
+            float heightScale = maxAvailableHeight / bitmap.getHeight();
             float scaleToUse = Math.min(widthScale, heightScale);
             // Only scale down, not scale up to prevent blurring
             scaleToUse = Math.min(scaleToUse, 1);
             int finalWidth = (int) (bitmap.getWidth() * scaleToUse);
             int finalHeight = (int) (bitmap.getHeight() * scaleToUse);
 
+            int remainingHeight = PAGE_HEIGHT
+                    - currentYPosFromTop
+                    - topMargin
+                    - MARGIN;
 
-            int remainingHeight = PAGE_HEIGHT - currentYPosFromTop - MARGIN_BETWEEN_IMGS - MARGIN;
-            if (remainingHeight < finalHeight) {
+            if (remainingHeight < 0) {
+                newPage();
+                // topMargin = 0 since starting a new page
+                appendImage(bitmap, 0);
+                return this;
+            } else if (remainingHeight < finalHeight) {
                 // Image's height is greater than the space remaining.
                 // Break image into two or more to completely use the space left in the page
                 Bitmap upperPortionOfBitmapThatFits = Bitmap.createBitmap(
@@ -231,29 +239,29 @@ public class PdfReportGenerator extends ReportGenerator<File>{
                 Bitmap remainingBitmap = Bitmap.createBitmap(
                         bitmap,
                         0,
-                        remainingHeight,
+                        upperPortionOfBitmapThatFits.getHeight(),
                         bitmap.getWidth(),
-                        bitmap.getHeight() - remainingHeight
+                        bitmap.getHeight() - upperPortionOfBitmapThatFits.getHeight()
                 );
 
                 // Recursively call this function. It should return immediately since we
                 // are passing bitmap that should fit perfectly in the remaining space
-                appendImage(upperPortionOfBitmapThatFits);
+                appendImage(upperPortionOfBitmapThatFits, topMargin);
                 newPage();
                 // Recursively call this function.
-                appendImage(remainingBitmap);
+                appendImage(remainingBitmap, 0);
                 return this;
             }
 
-            pdfWriter.addImage(
-                    currentXPosFromLeft,
-                    PAGE_HEIGHT - currentYPosFromTop - finalHeight,
-                    finalWidth,
-                    finalHeight,
-                    bitmap
-            );
+            int fromLeft = currentXPosFromLeft;
+            int yPosFromBottom = PAGE_HEIGHT - currentYPosFromTop;
+            // In PDF, the origin is at bottom left. fromBottom = y coordinate from origin.
+            // y starts from 0 at origin and increases as it goes closer to the top
+            int fromBottom = yPosFromBottom - topMargin - finalHeight;
 
-            currentYPosFromTop += finalHeight + MARGIN_BETWEEN_IMGS;
+            pdfWriter.addImage(fromLeft, fromBottom, finalWidth, finalHeight, bitmap);
+
+            currentYPosFromTop = PAGE_HEIGHT - fromBottom;
             currentXPosFromLeft = MARGIN;
 
             return this;
@@ -360,13 +368,15 @@ public class PdfReportGenerator extends ReportGenerator<File>{
     }
 
     @Override
-    public void addAttachments(ReportGenerator.Builder builder) {
+    public void addAttachments(ReportGenerator.Builder builder0) {
 
+        PdfReportGenerator.Builder builder = (Builder) builder0;
         Services mServices = Services.getInstance(mContext);
 
         // Add "Attachment" Text
-        builder.newLine();
-        builder.appendText(getString(R.string.str_attachment));
+        builder.writeTextLn();
+        builder.writeTextLn();
+        builder.appendText(getString(R.string.str_attachments));
         builder.writeTextLn();
 
         // Loop through all Journal for this party
@@ -376,6 +386,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
                 // There are no attachments for this journal
                 continue;
             }
+            builder.writeTextLn();
             // Add Journal ID
             builder.appendText(
                     getString(R.string.str_journal)
@@ -386,14 +397,18 @@ public class PdfReportGenerator extends ReportGenerator<File>{
             builder.writeTextLn();
 
             // Add each attachment image to the file
-            for (Attachment attachment : mServices.getAttachments(journal.getId())) {
+            List<Attachment> attachments = mServices.getAttachments(journal.getId());
+            for (int i = 0; i < attachments.size(); i++) {
                 Bitmap bitmap = Utils.scaleBitmap(
-                        attachment.getPath(),
+                        attachments.get(i).getPath(),
                         IMG_MAX_WIDTH,
                         IMG_MAX_HEIGHT
                 );
-                builder.appendImage(bitmap);
+                // Add topMargin starting from second image only
+                builder.appendImage(bitmap, i == 0 ? 0 : MARGIN_BETWEEN_IMGS);
             }
+
+            builder.writeTextLn();
         }
 
     }

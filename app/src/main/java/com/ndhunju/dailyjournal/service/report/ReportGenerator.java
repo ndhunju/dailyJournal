@@ -65,7 +65,7 @@ public abstract class ReportGenerator<T>{
          * support adding image
          * @param bitmap : bitmap image to add
          */
-        public ReportGenerator.Builder appendImage(Bitmap bitmap) {
+        public ReportGenerator.Builder appendImage(Bitmap bitmap, int topMargin) {
             return this;
         }
 
