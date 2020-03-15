@@ -3,6 +3,8 @@ package com.ndhunju.dailyjournal.service.report;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
+import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
 
 import com.ndhunju.dailyjournal.R;
@@ -133,8 +135,8 @@ public class PdfReportGenerator extends ReportGenerator<File>{
                 String completePostText = posText;
 
                 // If we are breaking a "word", add hyphen
-                if (!Character.isWhitespace(sb.charAt(maxWidth - 1))
-                        && !Character.isWhitespace(sb.charAt(maxWidth))) {
+                if (!Character.isWhitespace(sb.charAt(maxWidth - 1 - posText.length()))
+                        && !Character.isWhitespace(sb.charAt(maxWidth - posText.length()))) {
                     completePostText = "-" + posText;
                 }
 
@@ -164,6 +166,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
                 sb.append(posText);
             }
 
+            writeTextLn();
             return this;
         }
 
@@ -307,12 +310,14 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         builder.writeTextLn();
         builder.appendText(addGap(getString(R.string.str_id_only), idColWidth));
         builder.appendText("", getString(R.string.str_note), addGap("", 0), noteLineWidth);
-        builder.writeTextLn();
 
         for (Journal journal: mJournals) {
+            if (TextUtils.isEmpty(journal.getNote())) {
+                continue;
+            }
+
             builder.appendText(addGap("" + journal.getId(), idColWidth));
             builder.appendText(addGap("", idColWidth), journal.getNote(), addGap("", 0), noteLineWidth);
-            builder.writeTextLn();
         }
 
         if (shouldAppendAttachments()) {
