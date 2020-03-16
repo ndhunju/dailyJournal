@@ -69,18 +69,24 @@ public class UtilsZip {
     public static void unzip(File zipFile, File directoryToUnzip) throws IOException {
         ZipFile zfile = new ZipFile(zipFile.getAbsolutePath());
         Enumeration<? extends ZipEntry> entries = zfile.entries();
+        //Log.d("unzip", "Directory path: " + directoryToUnzip.getAbsolutePath());
+        //Log.d("unzip", "Directory canonical path: " + directoryToUnzip.getCanonicalPath());
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
             File file = new File(directoryToUnzip, entry.getName());
+            String canonicalPath = file.getCanonicalPath();
+            //Log.d("unzip", "Canonical Path-" + canonicalPath);
+            if (!canonicalPath.startsWith(directoryToUnzip.getCanonicalPath())) {
+                // SecurityException
+                throw new IOException("Unexpected directory path");
+            }
+
             if (entry.isDirectory()) {
                 file.mkdirs();
             } else {
                 file.getParentFile().mkdirs();
-                InputStream in = zfile.getInputStream(entry);
-                try {
+                try (InputStream in = zfile.getInputStream(entry)) {
                     copy(in, file);
-                } finally {
-                    in.close();
                 }
             }
         }
