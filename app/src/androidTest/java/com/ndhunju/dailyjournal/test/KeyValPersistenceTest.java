@@ -1,17 +1,21 @@
 package com.ndhunju.dailyjournal.test;
 
-import android.test.InstrumentationTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
-
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
 
 import org.junit.Before;
+import org.junit.Test;
+
+import androidx.test.filters.SmallTest;
+
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by dhunju on 10/28/2015.
  * Test class for {@link KeyValPersistence}
  */
-public class KeyValPersistenceTest extends InstrumentationTestCase{
+public class KeyValPersistenceTest {
 
     KeyValPersistence keyValPersistence;
     String key = "key";
@@ -22,6 +26,7 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         keyValPersistence.clear();
     }
 
+    @Test
     @SmallTest
     public void testPutStringCorrectlyInsertsAndRetrievesVal() throws Exception {
         //arrange
@@ -35,6 +40,7 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         assertEquals(val, keyValPersistence.get(key, def));
     }
 
+    @Test
     @SmallTest
     public void testPutLongCorrectlyInsertsAndRetrievesVal() throws Exception {
         //arrange
@@ -48,6 +54,7 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         assertEquals(val, keyValPersistence.getLong(key, def));
     }
 
+    @Test
     @SmallTest
     public void testPutIntCorrectlyInsertsAndRetrievesVal() throws Exception {
         //arrange
@@ -61,6 +68,7 @@ public class KeyValPersistenceTest extends InstrumentationTestCase{
         assertEquals(val, keyValPersistence.getInt(key, def));
     }
 
+    @Test
     @SmallTest
     public void testPutBooleanCorrectlyInsertsAndRetrievesVal() throws Exception {
         //arrange

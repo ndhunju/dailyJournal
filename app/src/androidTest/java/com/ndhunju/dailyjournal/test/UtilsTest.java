@@ -6,6 +6,7 @@ import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Services;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by dhunju on 10/28/2015.
@@ -17,6 +18,9 @@ public class UtilsTest {
      * Helper method to fill database with arbitrary data
      */
     public static void fillDatabase(Services services){
+
+        services.setCompanyName("Test Company");
+        services.forceSetFinancialYear(new Date(System.currentTimeMillis()));
 
         //Initialize instances here to reuse the objects
         Attachment newAttachment = new Attachment(0);

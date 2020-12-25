@@ -1,9 +1,10 @@
 package com.ndhunju.dailyjournal.test;
 
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.filters.SmallTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
 
 import com.ndhunju.dailyjournal.controller.HomeActivity;
 import com.ndhunju.dailyjournal.model.Attachment;
@@ -28,45 +29,24 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 /**
  * JUnit4 Ui Tests for {@link ServicesTest} using the {@link androidx.test.runner.AndroidJUnitRunner}.
  * This class uses the JUnit4 syntax for tests.
- * <p/>
- * With the new AndroidJUnit runner you can run both JUnit3 and JUnit4 tests in a single test
- * suite. The {@link androidx.test.internal.runner.AndroidRunnerBuilder} which extends JUnit's
- * {@link org.junit.internal.builders.AllDefaultPossibilitiesBuilder} will create a single {@link
- * junit.framework.TestSuite} from all tests and run them.
  */
 @RunWith(AndroidJUnit4.class)
-public class ServicesTest extends AndroidTestCase {
+public class ServicesTest {
 
     public Services services;
 
-
-    /**
-     * A JUnit {@link Rule @Rule} to launch your activity under test. This is a replacement
-     * for {@link android.test.ActivityInstrumentationTestCase2}.
-     * <p/>
-     * Rules are interceptors which are executed for each test method and will run before
-     * any of your setup code in the {@link Before @Before} method.
-     * <p/>
-     * {@link ActivityTestRule} will create and launch of the activity for you and also expose
-     * the activity under test. To getInt a reference to the activity you can use
-     * the {@link ActivityTestRule#getActivity()} method.
-     */
-    @Rule
-    public ActivityTestRule<HomeActivity> mActivityRule = new ActivityTestRule<>(HomeActivity.class);
-
-    @Override
-    public void setUp() {
-    }
-
     @Before
     public void createService() {
-        services = Services.getInstance(mActivityRule.getActivity());
+        services = Services.getInstance(ApplicationProvider.getApplicationContext());
         services.eraseAll();
     }
 

@@ -57,7 +57,7 @@ android {
             assets.srcDirs += ['src/main/assets', 'src/main/assets/']
             java.srcDirs += ['src/main/java']
         }
-        androidTest.setRoot('androidTest')
+        androidTest.setRoot('src/androidTest')
     }
 
     lintOptions {

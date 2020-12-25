@@ -1,8 +1,6 @@
 package com.ndhunju.dailyjournal.test;
 
 import android.content.Context;
-import android.test.InstrumentationTestCase;
-import android.test.suitebuilder.annotation.LargeTest;
 
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -17,16 +15,18 @@ import org.junit.Before;
 
 import java.util.List;
 
+import androidx.test.filters.LargeTest;
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * This class uses the JUnit3 syntax for tests.
  * <p/>
- * With the new AndroidJUnit runner you can run both JUnit3 and JUnit4 tests in a single test
- * suite. The {@link androidx.test.internal.runner.AndroidRunnerBuilder} which extends JUnit's
- * {@link org.junit.internal.builders.AllDefaultPossibilitiesBuilder} will create a single {@link
- * junit.framework.TestSuite} from all tests and run them.
  * Test class for {@link JsonConverterString}
  */
-public class JsonConverterStringTest extends InstrumentationTestCase{
+public class JsonConverterStringTest {
 
     public Context targetCtx;
     public Context testCtx;
@@ -34,10 +34,10 @@ public class JsonConverterStringTest extends InstrumentationTestCase{
 
     @Before
     public void setUp(){
-        targetCtx = getInstrumentation().getTargetContext();
+        targetCtx = InstrumentationRegistry.getInstrumentation().getTargetContext();
         jc = JsonConverterString.getInstance(targetCtx);
         //testCtx has limited privilege; it can't open DB nor create file
-        testCtx = getInstrumentation().getContext();
+        testCtx = InstrumentationRegistry.getInstrumentation().getContext();
 
     }
 
@@ -83,7 +83,7 @@ public class JsonConverterStringTest extends InstrumentationTestCase{
         Journal testJournal = services.getJournals(testParty.getId()).get(0);
         assertEquals("Journal is not ordered by date", 1442866589969l, testJournal.getDate());
         assertEquals("Journal note doesn't match", "test notes", testJournal.getNote());
-        assertEquals("Journal amount doesn't match", 552.0, testJournal.getAmount());
+        assertEquals("Journal amount doesn't match", 552.0, testJournal.getAmount(), 0);
         assertEquals("Journal type doesn't match", Journal.Type.Credit, testJournal.getType());
         assertEquals("Journal created/added date doesn't match", 1443212184956l, testJournal.getCreatedDate());
         assertEquals("Journal's total attachment doesn't match", 0, services.getAttachmentPaths(testJournal.getId()).size());

@@ -1,36 +1,31 @@
 package com.ndhunju.dailyjournal.test;
 
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.filters.MediumTest;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.MediumTest;
 
-import com.ndhunju.dailyjournal.controller.HomeActivity;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Analytics;
 import com.ndhunju.dailyjournal.service.Services;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by dhunju on 10/27/2015.
  */
 @RunWith(AndroidJUnit4.class)
-public class AnalyticsTest extends AndroidTestCase{
+public class AnalyticsTest {
 
     public Analytics analytics;
 
-    @Rule
-    public ActivityTestRule<HomeActivity> mActivity = new ActivityTestRule<HomeActivity>(HomeActivity.class);
-
     @Before
     public void setUp() throws Exception {
-        super.setUp();
 
-        Services services = Services.getInstance(mActivity.getActivity());
+        Services services = Services.getInstance(ApplicationProvider.getApplicationContext());
         analytics = Analytics.from(services.getContext());
 
         services.eraseAll();
@@ -54,8 +49,8 @@ public class AnalyticsTest extends AndroidTestCase{
 
         //Assert
         for(int pos= 0 ; pos < limit ; pos++){
-            assertEquals("", expectedTopCrAmtOfParties[pos], crParties[pos].getCreditTotal());
-            assertEquals("", expectedTopDrAmtOfParties[pos], drParties[pos].getDebitTotal());
+            assertEquals((float) expectedTopCrAmtOfParties[pos], (float) crParties[pos].getCreditTotal(), 0);
+            assertEquals((float) expectedTopDrAmtOfParties[pos], (float) drParties[pos].getDebitTotal(), 0);
         }
     }
 
@@ -75,8 +70,8 @@ public class AnalyticsTest extends AndroidTestCase{
 
         //Assert
         for(int pos= 0 ; pos < limit ; pos++){
-            assertEquals("Negative balance mismatch", expectedTopNegativeBalOfParties[pos], crPartyData.parties[pos].calculateBalances());
-            assertEquals("Positive balance mismatch", expectedTopPositiveBalOfParties[pos], drPartyData.parties[pos].calculateBalances());
+            assertEquals("Negative balance mismatch", expectedTopNegativeBalOfParties[pos], crPartyData.parties[pos].calculateBalances(), 0);
+            assertEquals("Positive balance mismatch", expectedTopPositiveBalOfParties[pos], drPartyData.parties[pos].calculateBalances(), 0);
             assertEquals("Party Name for Negative balance mismatch", expectedTopNegativeBalPartyNames[pos], crPartyData.parties[pos].getName());
             assertEquals("Party Name for Positive balance mismatch", expectedTopPositiveBalPartyNames[pos], drPartyData.parties[pos].getName());
         }

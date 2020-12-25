@@ -1,8 +1,6 @@
 package com.ndhunju.dailyjournal.test;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import android.test.InstrumentationTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
 
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
@@ -21,7 +19,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
-public class UtilsFileTest extends InstrumentationTestCase{
+public class UtilsFileTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -48,7 +46,9 @@ public class UtilsFileTest extends InstrumentationTestCase{
         assertThat(testStrId, equalTo("0000000008"));
     }
 
-    @SmallTest
+    // New Android's implementation does not throw exception at all
+    // https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/text/format/DateFormat.java
+    // Search for format(CharSequence inFormat, Calendar inDate) where the core logic is
     public void passingIncorrectFormatForDateThrowsNullPointerException(){
         //Arrange
         String dateFormat = "illegalFormat";

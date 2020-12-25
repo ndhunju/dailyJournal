@@ -44,11 +44,7 @@ public class UtilsFormat {
     }
 
     public static String formatDate(Date date, String format){
-        try{
-            return DateFormat.format(format, date).toString();
-        }catch (Exception ex){
-            throw new IllegalArgumentException("Make sure format is correct");
-        }
+        return DateFormat.format(format, date).toString();
     }
 
     /**

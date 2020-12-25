@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import androidx.recyclerview.widget.RecyclerView;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
-import android.test.ViewAsserts;
-import android.test.suitebuilder.annotation.LargeTest;
-import android.test.suitebuilder.annotation.MediumTest;
-import android.view.View;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.filters.LargeTest;
+import androidx.test.filters.MediumTest;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,11 +29,19 @@ import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
- * Functional test across multiple Activities. Tests {@link PartyDetailActivity},  {@link PartyActivity}
- * and {@link JournalNewActivity}.
+ * Functional test across multiple Activities. Tests {@link PartyDetailActivity},
+ * {@link PartyActivity} and {@link JournalNewActivity}.
  */
-public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<PartyDetailActivity> {
+public class PartyDetailActivityTest {
 
     public static final int TIME_OUT = 5000;
 
@@ -39,57 +50,57 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
     Services services;
     long testPartyId;
 
-    public PartyDetailActivityTest() {
-        super(PartyDetailActivity.class);
-    }
+    ActivityScenario<PartyDetailActivity> activityScenario;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        services = Services.getInstance(mPartyDetailActivity);
-
+    @Before
+    public void setUp() {
+        services = Services.getInstance(ApplicationProvider.getApplicationContext());
         //Clear old data
         services.eraseAll();
         //fill with new data
         UtilsTest.fillDatabase(services);
 
-        //getInt existing party id
         testPartyId = services.getParties().get(0).getId();
-
-        //pass mock {@link Intent} to the activity before calling getActivity()
-        Intent sendIntent = new Intent(getInstrumentation().getTargetContext(), PartyDetailActivity.class);
+        Intent sendIntent = new Intent(
+                getInstrumentation().getTargetContext(),
+                PartyDetailActivity.class
+        );
         sendIntent.putExtra(Constants.KEY_PARTY_ID, String.valueOf(testPartyId));
-        setActivityIntent(sendIntent);
+        activityScenario = ActivityScenario.launch(sendIntent);
+        activityScenario.onActivity(activity -> {
+            mPartyDetailActivity = activity;
+        });
 
-        setActivityInitialTouchMode(true);
-        mPartyDetailActivity = getActivity();
         mInstrumentation = getInstrumentation();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
+    @After
+    public void tearDown() throws Exception { }
 
     /**
      * Tests the preconditions of this test fixture.
      */
+    @Test
     @MediumTest
     public void testPreconditions() {
         assertNotNull("mPartyDetailActivity is null", mPartyDetailActivity);
     }
 
+    @Test
     @MediumTest
     public void testActionBarButtonsExists() {
-        View mainActivityDecorView = mPartyDetailActivity.getWindow().getDecorView();
-        ViewAsserts.assertOnScreen(mainActivityDecorView, mPartyDetailActivity.findViewById(R.id.menu_party_activity_info));
-        ViewAsserts.assertOnScreen(mainActivityDecorView, mPartyDetailActivity.findViewById(R.id.menu_party_activity_share));
+        Espresso.onView(ViewMatchers.withId(R.id.menu_party_activity_info))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.menu_party_activity_share))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
     /**
-     * Test when Click Option Menu Information, goes to {@link PartyActivity}PartyActivity, users changes the name,
-     * press backs button, activity result passed to previous activity, new name is reflected in the {@link PartyDetailActivity}
+     * Test when Click Option Menu Information, goes to {@link PartyActivity}PartyActivity,
+     * users changes the name, press backs button, activity result passed to previous activity,
+     * new name is reflected in the {@link PartyDetailActivity}
      */
+    @Test
     @LargeTest
     public void testChangingNameInPartyActivityIsReflected() {
 
@@ -107,7 +118,8 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
         //getInstrumentation().invokeMenuActionSync(mPartyDetailActivity, R.id.menu_party_activity_info, 0);
 
         //Or // Click ActionBar
-        TouchUtils.clickView(this, mPartyDetailActivity.findViewById(R.id.menu_party_activity_info));
+        Espresso.onView(ViewMatchers.withId(R.id.menu_party_activity_info))
+                .perform(ViewActions.click());
 
         // Wait for the ActivityMonitor to be launched, Instrumentation will then return the mock ActivityResult, getInt a reference to it
         final PartyActivity partyActivity = (PartyActivity) mInstrumentation.waitForMonitorWithTimeout(activityMonitor, TIME_OUT);
@@ -142,6 +154,7 @@ public class PartyDetailActivityTest extends ActivityInstrumentationTestCase2<Pa
      * Tests that when a journal is changed in {@Link JournalNewActivity}, it is reflected in
      * {@Link PartyDetailActivity}
      */
+    @Test
     @LargeTest
     public void testChangingJournalAmtInJournalActivityIsReflected(){
 

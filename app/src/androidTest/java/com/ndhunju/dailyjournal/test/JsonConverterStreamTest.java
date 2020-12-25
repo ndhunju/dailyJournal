@@ -1,9 +1,6 @@
 package com.ndhunju.dailyjournal.test;
 
 import android.content.Context;
-import android.test.InstrumentationTestCase;
-import android.test.suitebuilder.annotation.LargeTest;
-import android.test.suitebuilder.annotation.MediumTest;
 
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -15,19 +12,23 @@ import com.ndhunju.dailyjournal.util.UtilsZip;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.util.List;
+
+import androidx.test.filters.LargeTest;
+import androidx.test.filters.MediumTest;
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This class uses the JUnit3 syntax for tests.
  * <p/>
- * With the new AndroidJUnit runner you can run both JUnit3 and JUnit4 tests in a single test
- * suite. The {@link androidx.test.internal.runner.AndroidRunnerBuilder} which extends JUnit's
- * {@link org.junit.internal.builders.AllDefaultPossibilitiesBuilder} will create a single {@link
- * junit.framework.TestSuite} from all tests and run them.
  * Test class for {@link JsonConverterStream}
  */
-public class JsonConverterStreamTest extends InstrumentationTestCase{
+public class JsonConverterStreamTest {
 
     public Context targetCtx;
     public Context testCtx;
@@ -36,10 +37,10 @@ public class JsonConverterStreamTest extends InstrumentationTestCase{
     @Before
     public void setUp(){
         //It seems getTargetContext() does not return  App's context since database is not effected
-        targetCtx = getInstrumentation().getTargetContext();
+        targetCtx = InstrumentationRegistry.getInstrumentation().getTargetContext();
         jc = JsonConverterStream.getInstance(targetCtx);
         //testCtx has limited privilege; it can't open DB nor create file
-        testCtx = getInstrumentation().getContext();
+        testCtx = InstrumentationRegistry.getInstrumentation().getContext();
     }
 
     @After
@@ -51,6 +52,7 @@ public class JsonConverterStreamTest extends InstrumentationTestCase{
      * All test methods must have test prefix in JUnit3
      * @throws Exception
      */
+    @Test
     @LargeTest
     public void testReadFromJSONCorrectlyInsertsData() throws Exception {
         //Arrange
@@ -75,8 +77,8 @@ public class JsonConverterStreamTest extends InstrumentationTestCase{
         Party testParty = partyList.get(0);
         assertEquals("Party's name is not in alphabetical order", "Bikesh Dhunju", testParty.getName());
         assertEquals("Party's phone number doesn't match", "201-284-1641", testParty.getPhone());
-        assertEquals("Party's debit balance doesn't match", 555.0, testParty.getDebitTotal());
-        assertEquals("Party's credit balance doesn't match", 552.0, testParty.getCreditTotal());
+        assertEquals("Party's debit balance doesn't match", 555.0, testParty.getDebitTotal(), 0);
+        assertEquals("Party's credit balance doesn't match", 552.0, testParty.getCreditTotal(), 0);
         assertEquals("Party's type doesn't match" , Party.Type.Debtors, testParty.getType());
         assertEquals("Party's total journal number doesn't match", 2, services.getJournals(testParty.getId()).size());
 
@@ -84,13 +86,14 @@ public class JsonConverterStreamTest extends InstrumentationTestCase{
         Journal testJournal = services.getJournals(testParty.getId()).get(0);
         assertEquals("Journal is not ordered by date", 1442866589969l, testJournal.getDate());
         assertEquals("Journal note doesn't match", "test notes", testJournal.getNote());
-        assertEquals("Journal amount doesn't match", 552.0, testJournal.getAmount());
+        assertEquals("Journal amount doesn't match", 552.0, testJournal.getAmount(), 0);
         assertEquals("Journal type doesn't match", Journal.Type.Credit, testJournal.getType());
         assertEquals("Journal created/added date doesn't match", 1443212184956l, testJournal.getCreatedDate());
         assertEquals("Journal's total attachment doesn't match", 0, services.getAttachmentPaths(testJournal.getId()).size());
 
     }
 
+    @Test
     @MediumTest
     public void testWriteToJSONCorrectlyWritesToFile() throws Exception {
         //Arrange
