@@ -38,6 +38,8 @@
     <color name="primary_dark_material_light">#f356195f</color>
     <color name="black">#000000</color>
     <color name="colorBackground">#f4f4f4</color>
+    <!-- Set 1E for alpha value which is 30% -->
+    <color name="translucent">#1E000000</color>
 
     <color name="icon_tint">@color/grey_400</color>
     <color name="icon_tint_menu">@color/grey_800</color>

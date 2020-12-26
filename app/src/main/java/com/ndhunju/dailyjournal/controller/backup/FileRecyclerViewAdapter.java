@@ -70,7 +70,15 @@ public class FileRecyclerViewAdapter
         public void onBind(File file) {
             this.file = file;
             title.setText(file.getName());
-            description.setText(file.getDriveId());
+            description.setText(description
+                    .getContext()
+                    .getString(
+                            R.string.msg_modified,
+                            file.getModifiedTime() != null
+                                    ? file.getModifiedTime().toString()
+                                    : file.getCreatedTime()
+                    )
+            );
         }
 
         @Override

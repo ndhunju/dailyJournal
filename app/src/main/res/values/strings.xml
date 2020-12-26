@@ -94,6 +94,8 @@
     <string name="str_format">Format</string>
     <string name="pref_title_currency">Currency (Select country code)</string>
     <string name="str_add">Add</string>
+    <!-- Header for screen that lets user pick/select a backup file to restore -->
+    <string name="str_select_backup_file_to_restore">Select File to Restore</string>
     <string name="str_restore_backup_from_auto">Restore From Automatic Backup</string>
     <string name="str_auto_backup">Automatic Backup</string>
     <string name="str_enable_auto_backup">Enable Auto Backup</string>

@@ -8,6 +8,7 @@
     <string name="msg_choose">Choose %1$s</string>
     <string name="msg_failed">%1$s failed.</string>
     <string name="msg_deleted">%1$s deleted</string>
+    <string name="msg_modified">Modified: %s</string>
     <string name="msg_restored">%1$s restored</string>
     <string name="msg_finished">%1$s finished.</string>
     <string name="msg_saved_in">Saved in %1$s .</string>
@@ -70,7 +71,13 @@
     <string name="msg_begin_next_year_step_update_year">Start %s financial year.</string>
     <!-- TextField. Shown when a connection with a google service, like Drive, is lost.-->
     <string name="msg_error_google_service">Connection lost with Google Service.</string>
+    <!-- TextField. Shown when a connection query to google drive service for files fails.-->
+    <string name="msg_error_google_drive_query_fail">Unable to get list of files.</string>
 
+    <!-- Message shown to user when app is requesting sign in to google services -->
+    <string name="msg_requesting_sign_in">Requesting sign in…</string>
+    <!-- Message shown to user when app is loading files from google drive -->
+    <string name="msg_loading_files">Loading files…</string>
     <!-- Message show to user in native notification when app successfully uploads automatically created backup file to google drive -->
     <string name="msg_auto_upload_to_g_drive_success">Uploaded automatically created backup file to Google Drive.</string>
     <!-- Message show to user in native notification when app fails to upload automatically created backup file to google drive -->
