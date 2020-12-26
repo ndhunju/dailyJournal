@@ -92,6 +92,7 @@ local.properties
 build/
 .idea/workspace.xml
 google-services.json
+credential_client_secret.json
 
 android-support-v7-appcompat
 app/build.gradle

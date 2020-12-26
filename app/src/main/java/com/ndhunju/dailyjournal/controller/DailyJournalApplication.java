@@ -6,6 +6,8 @@ import android.os.Looper;
 
 import com.ndhunju.dailyjournal.service.Setup;
 
+import androidx.multidex.MultiDexApplication;
+
 /**
  * Created by dhunju on 10/7/2015.
  * Base class for those who need to maintain global application state. You can provide your own
@@ -13,7 +15,7 @@ import com.ndhunju.dailyjournal.service.Setup;
  * cause that class to be instantiated for you when the process for your application/package is
  * created.
  */
-public class DailyJournalApplication extends Application {
+public class DailyJournalApplication extends MultiDexApplication {
 
     private static DailyJournalApplication instance;
     private static Handler sUiThreadHandler;

@@ -75,7 +75,8 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        startActivity(new Intent(getActivity(), GoogleDriveRestoreBackupActivity.class));
+                                        startActivity(new Intent(getActivity(), GoogleDriveRestApiActivity.class));
+//                                        startActivity(new Intent(getActivity(), GoogleDriveRestoreBackupActivity.class));
                                     }
                                 }, null);
                         return true;
