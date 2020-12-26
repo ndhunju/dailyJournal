@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -28,13 +29,13 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.common.collect.Sets;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +43,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * The main {@link Activity} for the Drive REST API functionality.
  */
 public class GoogleDriveRestApiActivity
-        extends AppCompatActivity
+        extends BaseActivity
         implements FileRecyclerViewAdapter.OnFileSelectListener {
 
     // Constants
@@ -63,6 +64,10 @@ public class GoogleDriveRestApiActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_drive);
+
+        // Setup Toolbar
+        setSupportActionBar(findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Wire views
         progressContainer = findViewById(R.id.progress_container);
@@ -207,6 +212,17 @@ public class GoogleDriveRestApiActivity
                             .setMessage(result)
                             .create().show();
                 }).execute(file);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private Context getContext() {

@@ -2,10 +2,14 @@ package com.ndhunju.dailyjournal.controller.service;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.api.client.http.ByteArrayContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -53,7 +57,13 @@ public class DriveServiceHelper {
      */
     public Task<FileList> queryFiles() {
         return Tasks.call(mExecutor, () ->
-                mDriveService.files().list().setSpaces("drive").execute());
+                mDriveService
+                        .files()
+                        .list()
+                        // Request to return createdTime, modifiedTime, id and name
+                        .setFields("files(createdTime,modifiedTime,id,name)")
+                        .setSpaces("drive")
+                        .execute());
     }
 
 }
