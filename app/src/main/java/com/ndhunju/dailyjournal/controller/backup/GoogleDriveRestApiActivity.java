@@ -1,7 +1,6 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,34 +9,21 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Scope;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.model.File;
-import com.google.common.collect.Sets;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.RecyclerView;
+import com.ndhunju.dailyjournal.controller.service.GoogleSignInHelper;
 
 /**
  * The main {@link Activity} for the Drive REST API functionality.
@@ -172,47 +158,6 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
 
     public Context getContext() {
         return this;
-    }
-
-    /**
-     * Helper class that groups relevant objects like {@link Scope} and provides helper methods
-     */
-    static class GoogleSignInHelper {
-
-        public static final GoogleSignInHelper INSTANCE = new GoogleSignInHelper();
-
-        public static GoogleSignInHelper get() {
-            return INSTANCE;
-        }
-
-        Scope[] requiredScopes = { new Scope(DriveScopes.DRIVE_FILE) };
-
-        private GoogleSignInHelper() {}
-
-        public GoogleSignInOptions buildGoogleSigInOptions() {
-            GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder(
-                    GoogleSignInOptions.DEFAULT_SIGN_IN
-            ).requestEmail();
-
-            for (Scope scope: requiredScopes) {
-                builder.requestScopes(scope);
-            }
-
-            return builder.build();
-        }
-
-        public Set<Scope> requiredScopesAsSet() {
-            return Sets.newHashSet(requiredScopes);
-        }
-
-        public List<String> requiredScopesAsStringList() {
-            List<String> scopes = new ArrayList<>();
-            for (Scope scope: requiredScopes) {
-                scopes.add(scope.toString());
-            }
-
-            return scopes;
-        }
     }
 
 }
