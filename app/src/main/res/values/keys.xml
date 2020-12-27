@@ -12,6 +12,8 @@
     <string name="key_pref_rate_ps">preferenceKeyRateAppPS</string>
     <string name="key_pref_backup_google_drive">preferenceKeyBackupGoogleDrive</string>
     <string name="key_pref_restore_google_drive">preferenceKeyRestoreGoogleDrive</string>
+    <string name="key_pref_backup_google_drive_in_house">preferenceKeyBackupGoogleDriveInHouse</string>
+    <string name="key_pref_restore_google_drive_in_house">preferenceKeyRestoreGoogleDriveInHouse</string>
     <string name="key_pref_backup_local_storage">preferenceKeyBackupLocalStorage</string>
     <string name="key_pref_restore_local_storage">preferenceKeyRestoreLocalStorage</string>
     <string name="key_pref_restore_auto_backup">preferenceKeyRestoreAutoBackup</string>

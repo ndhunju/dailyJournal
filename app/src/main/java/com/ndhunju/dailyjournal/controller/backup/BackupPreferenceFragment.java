@@ -75,12 +75,33 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        startActivity(new Intent(getActivity(), GoogleDriveRestApiActivity.class));
-//                                        startActivity(new Intent(getActivity(), GoogleDriveRestoreBackupActivity.class));
+                                        startActivity(new Intent(getActivity(), GoogleDriveRestoreBackupActivity.class));
                                     }
                                 }, null);
                         return true;
                     }
+                });
+
+        // Create Backup in Google Drive using REST API library
+        findPreference(getString(R.string.key_pref_backup_google_drive_in_house))
+                .setOnPreferenceClickListener(preference -> {
+                    startActivityForResult(new Intent(
+                            getActivity(),
+                            GoogleDriveRestApiUploadBackupActivity.class
+                    ), REQUEST_CODE_BACKUP_COMPLETE);
+                    return true;
+                });
+
+        // Restore Backup form Google Drive using REST API library
+        findPreference(getString(R.string.key_pref_restore_google_drive_in_house))
+                .setOnPreferenceClickListener(preference -> {
+                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
+                            (dialogInterface, i) -> startActivity(
+                                    new Intent(
+                                            getActivity(),
+                                            GoogleDriveRestApiRestoreBackupActivity.class)
+                            ), null);
+                    return true;
                 });
 
         findPreference(getString(R.string.key_pref_backup_local_storage))
