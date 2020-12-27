@@ -1,5 +1,6 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,12 +74,21 @@ public class FileRecyclerViewAdapter
             description.setText(description
                     .getContext()
                     .getString(
-                            R.string.msg_modified,
-                            file.getModifiedTime() != null
-                                    ? file.getModifiedTime().toString()
-                                    : file.getCreatedTime()
+                            R.string.msg_file_description,
+                            // Relative date
+                            DateUtils.getRelativeDateTimeString(
+                                    description.getContext(),
+                                    file.getModifiedTime() != null
+                                            ? file.getModifiedTime().getValue()
+                                            : file.getCreatedTime().getValue(),
+                                    0,
+                                    0,
+                                    0
+                            ).toString(),
+                            // Size of file in MB
+                            file.getSize() != null ? String.valueOf(file.getSize()/1048576) : "(N/A)"
                     )
-            );
+             );
         }
 
         @Override

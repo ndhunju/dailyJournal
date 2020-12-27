@@ -6,6 +6,7 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,7 +66,9 @@ public class DriveServiceHelper {
                         .files()
                         .list()
                         // Request to return createdTime, modifiedTime, id and name
-                        .setFields("files(createdTime,modifiedTime,id,name)")
+                        .setFields("files(createdTime,modifiedTime,id,name,size)")
+                        // Return only backup files, filtering out folders
+                        .setQ("mimeType='" + UtilsFile.BACK_FILE_TYPE +"'")
                         .setSpaces("drive")
                         .execute());
     }

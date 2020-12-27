@@ -8,7 +8,6 @@
     <string name="msg_choose">Choose %1$s</string>
     <string name="msg_failed">%1$s failed.</string>
     <string name="msg_deleted">%1$s deleted</string>
-    <string name="msg_modified">Modified: %s</string>
     <string name="msg_restored">%1$s restored</string>
     <string name="msg_finished">%1$s finished.</string>
     <string name="msg_saved_in">Saved in %1$s .</string>
@@ -78,6 +77,8 @@
     <string name="msg_requesting_sign_in">Requesting sign in…</string>
     <!-- Message shown to user when app is loading files from google drive -->
     <string name="msg_loading_files">Loading files…</string>
+    <!-- Shonw in text field is used to display file information to user -->
+    <string name="msg_file_description">Modified: %s \nSize: %s MB</string>
     <!-- Message show to user in native notification when app successfully uploads automatically created backup file to google drive -->
     <string name="msg_auto_upload_to_g_drive_success">Uploaded automatically created backup file to Google Drive.</string>
     <!-- Message show to user in native notification when app fails to upload automatically created backup file to google drive -->
