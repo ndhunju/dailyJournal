@@ -26,6 +26,19 @@ public class UtilsZip {
      * @throws IOException
      */
     public static void zip(File directoryToZip, File finalZipFile) throws IOException {
+        zip(directoryToZip, finalZipFile, null);
+    }
+    /**
+     * Zips passed File/Directory and writes the zipped content into passed finalZipFile
+     * @param directoryToZip
+     * @param finalZipFile
+     * @throws IOException
+     */
+    public static void zip(
+            File directoryToZip,
+            File finalZipFile,
+            ProgressListener progressListener
+    ) throws IOException {
         URI base = directoryToZip.toURI();
         Deque<File> queue = new LinkedList<>();
         queue.push(directoryToZip);
@@ -35,9 +48,13 @@ public class UtilsZip {
         try {
             zout = new ZipOutputStream(out);
             res = zout;
+            File[] files;
+            int fileIndex = 0;
             while (!queue.isEmpty()) {
                 directoryToZip = queue.pop();
-                for (File kid : directoryToZip.listFiles()) {
+                files = directoryToZip.listFiles();
+                for (File kid : files) {
+                    fileIndex++;
                     String name = base.relativize(kid.toURI()).getPath();
                     if (kid.isDirectory()) {
                         queue.push(kid);
@@ -45,6 +62,11 @@ public class UtilsZip {
                         zout.putNextEntry(new ZipEntry(name));
                     } else {
                         zout.putNextEntry(new ZipEntry(name));
+                        ProgressListener.publishProgress(
+                                progressListener,
+                                (float) fileIndex / files.length,
+                                name
+                        );
                         copy(kid, zout);
                         zout.closeEntry();
                     }

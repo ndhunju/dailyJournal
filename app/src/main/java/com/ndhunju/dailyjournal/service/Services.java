@@ -22,6 +22,7 @@ import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.json.JsonConverter;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
+import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsZip;
@@ -97,12 +98,20 @@ public class Services {
         loadCompanyInfoFromPreferences();
     }
 
+    public String createBackUp(@NonNull String dir) throws IOException {
+        return createBackUp(dir, null);
+    }
+
     /**
      * Creates a backup file of existing data along with attachments.
      * @return : absolute path of the backup file.
      * @throws IOException
      */
-    public String createBackUp(@NonNull String dir) throws IOException {
+    public String createBackUp(
+            @NonNull String dir,
+            ProgressListener progressListener
+    ) throws IOException {
+
         //1.Create JSON with latest data
         JsonConverterString converter = JsonConverterString.getInstance(mContext);
         converter.createJSONFile();
@@ -127,7 +136,7 @@ public class Services {
         zipFile.createNewFile();
 
         //3 zip the directory file into zipFile
-        UtilsZip.zip(directoryToZip, zipFile);
+        UtilsZip.zip(directoryToZip, zipFile, progressListener);
 
         //let know that a new file has been created so that it appears in the computer
         MediaScannerConnection.scanFile(mContext,

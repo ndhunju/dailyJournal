@@ -11,7 +11,6 @@ import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.IOException;
@@ -112,18 +111,29 @@ public class UploadBackUpToGDriveRestApiAsync extends AsyncTask<Void, Integer, S
             try {
                 // Create a new full backup of data into local drive
                 Services s = Services.getInstance(activity);
-                String filePath = s.createBackUp(UtilsFile.getCacheDir(activity));
+                String filePath = s.createBackUp(
+                        UtilsFile.getCacheDir(activity),
+                        (percentage, message) -> {
+                            publishProgress(
+                                    percentage,
+                                    activity.getString(R.string.msg_copying, message)
+                            );
+                        }
+                );
                 localBackUpFile = new java.io.File(filePath);
-                publishProgress(50);
 
-                // Metadata for the backfile in Google Drive
+                publishProgress(
+                        SHOW_INDETERMINATE_PROGRESS,
+                        activity.getString(
+                                R.string.msg_creating,
+                                activity.getString(R.string.str_backup)
+                        )
+                );
+
+                // Metadata for the backup file in Google Drive
                 File metaData = new File()
                         .setName(localBackUpFile.getName())
                         .setMimeType(UtilsFile.BACK_FILE_TYPE);
-
-                publishProgress(90);
-
-                result[0] = "Success";
 
                 // Save the local backupFile in Google Drive
                 return driveServiceHelper.saveFile(
@@ -164,6 +174,30 @@ public class UploadBackUpToGDriveRestApiAsync extends AsyncTask<Void, Integer, S
         } else {
             pd.setIndeterminate(false);
             pd.setProgress(values[0]);
+        }
+    }
+
+    private long lastProgressUpdate;
+
+    private void publishProgress(float percentage, String message) {
+        Log.d(TAG, "progress percentage = [" + percentage + "], message = [" + message + "]");
+        if (activityRef.get() != null) {
+            // Update progress only every 1 second
+            if (System.currentTimeMillis() - lastProgressUpdate < 1000) {
+                return;
+            }
+
+            lastProgressUpdate = System.currentTimeMillis();
+            activityRef.get().runOnUiThread(() -> {
+                if (percentage == SHOW_INDETERMINATE_PROGRESS) {
+                    pd.setIndeterminate(true);
+                } else {
+                    pd.setIndeterminate(false);
+                    pd.setProgress((int) percentage);
+                }
+
+                pd.setMessage(message);
+            });
         }
     }
 

@@ -99,5 +99,6 @@
     <string name="msg_pin_code">Please note that if you forget your pin code, you cannot use the app.</string>
 
     <string name="msg_zipping">Creating a zip file…</string>
+    <string name="msg_copying">Copying %s…</string>
 
 </resources>
