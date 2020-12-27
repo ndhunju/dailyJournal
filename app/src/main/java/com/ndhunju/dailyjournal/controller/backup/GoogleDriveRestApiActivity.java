@@ -24,6 +24,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 import com.ndhunju.dailyjournal.controller.service.GoogleSignInHelper;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
 /**
  * The main {@link Activity} for the Drive REST API functionality.
@@ -36,7 +37,7 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
 
     // Member Variables
     private final GoogleSignInHelper googleSignInHelper = GoogleSignInHelper.get();
-    protected DriveServiceHelper mDriveServiceHelper;
+    private DriveServiceHelper mDriveServiceHelper;
 
     // View Variables
     private ViewGroup progressContainer;
@@ -154,6 +155,10 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public DriveServiceHelper getDriveServiceHelper() {
+        return mDriveServiceHelper;
     }
 
     public Context getContext() {

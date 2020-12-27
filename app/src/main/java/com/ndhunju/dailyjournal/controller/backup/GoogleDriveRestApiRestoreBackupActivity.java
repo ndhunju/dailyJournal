@@ -25,8 +25,7 @@ public class GoogleDriveRestApiRestoreBackupActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        setContentView(R.layout.activity_google_drive);
+        setContentView(R.layout.activity_google_drive_rest_restore);
         super.onCreate(savedInstanceState);
 
         // Setup recycler view
@@ -47,11 +46,11 @@ public class GoogleDriveRestApiRestoreBackupActivity
      * Queries the Drive REST API for files visible to this app and lists them in the content view.
      */
     private void queryForBackupFiles() {
-        if (mDriveServiceHelper != null) {
+        if (getDriveServiceHelper() != null) {
             Log.d(TAG, "Querying for backup files.");
             showProgress(true, getString(R.string.msg_loading_files));
 
-            mDriveServiceHelper.queryFiles()
+            getDriveServiceHelper().queryFiles()
                     .addOnSuccessListener(fileList -> {
                         showProgress(false, null);
                         fileAdapter.setFileList(fileList.getFiles());
@@ -78,7 +77,7 @@ public class GoogleDriveRestApiRestoreBackupActivity
     public void onFileSelect(File file) {
         new FetchBackUpFromGDriveRestApiAsync(
                 GoogleDriveRestApiRestoreBackupActivity.this,
-                mDriveServiceHelper,
+                getDriveServiceHelper(),
                 result -> {
                     new AlertDialog.Builder(getContext())
                             .setMessage(result)
