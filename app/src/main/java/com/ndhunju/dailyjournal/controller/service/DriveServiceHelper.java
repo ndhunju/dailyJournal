@@ -2,7 +2,7 @@ package com.ndhunju.dailyjournal.controller.service;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.api.client.http.ByteArrayContent;
+import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
@@ -10,6 +10,8 @@ import com.google.api.services.drive.model.FileList;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -19,6 +21,8 @@ import androidx.core.util.Pair;
  * A utility for performing read/write operations on Drive files via the REST API
  */
 public class DriveServiceHelper {
+
+    private static final String APP_ROOT_FOLDER = "Daily Journal Plus";
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
     private final Drive mDriveService;
 
@@ -64,6 +68,77 @@ public class DriveServiceHelper {
                         .setFields("files(createdTime,modifiedTime,id,name)")
                         .setSpaces("drive")
                         .execute());
+    }
+
+    /**
+     * Returns a pre-defined folder, {@link this#APP_ROOT_FOLDER}, that this app can use
+     * to store backup files or any other files.
+     */
+    public Task<File> getAppFolder() {
+        return Tasks.call(mExecutor, () -> {
+            // First, check if app folder was already created
+            List<File> fileList = mDriveService
+                    .files()
+                    .list()
+                    .setFields("files(id,name)")
+                    .setSpaces("drive")
+                    .execute()
+                    .getFiles();
+
+            for (File file: fileList) {
+                if (Objects.equals(file.getName(), APP_ROOT_FOLDER)) {
+                    return file;
+                }
+            }
+
+            // Second, create the app folder since it is not found
+            File folderMetaData = new File()
+                    .setName(APP_ROOT_FOLDER)
+                    .setMimeType("application/vnd.google-apps.folder");
+
+            return mDriveService
+                    .files()
+                    .create(folderMetaData)
+                    .setFields("id")
+                    .execute();
+        });
+    }
+
+    /**
+     * Creates a File in google drive inside {@code insideFolder} folder with name {@code fileName}
+     * of type, {@code mimeType}
+     * @param insideFolder
+     * @param fileName
+     * @param mimeType
+     * @return
+     */
+    public Task<File> createFile(File insideFolder, String fileName, String mimeType) {
+        return Tasks.call(mExecutor, () -> {
+
+            File metadata = new File()
+                    .setParents(Collections.singletonList(insideFolder.getId()))
+                    .setMimeType(mimeType)
+                    .setName(fileName);
+
+            File googleFile = mDriveService.files().create(metadata).execute();
+            if (googleFile == null) {
+                throw new IOException("File creation failed.");
+            }
+
+            return googleFile;
+        });
+    }
+
+    /**
+     * Updates the file identified by {@code fileId} with the given {@code updatedMetadata}
+     * and {@code content}.
+     */
+    public Task<Void> saveFile(String fileId, File updatedMetadata, FileContent content) {
+        return Tasks.call(mExecutor, () -> {
+            // Update the metadata and contents.
+            mDriveService.files().update(fileId, updatedMetadata, content).execute();
+            return null;
+        });
     }
 
 }

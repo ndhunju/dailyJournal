@@ -85,6 +85,20 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
     }
 
     /**
+     * Shows {@code message} to the user in a dialog. When user acknowledges the message, finishes
+     * current activity and passes {@code success} to previous activity.
+     */
+    protected void showEndResultToUser(String message, boolean success) {
+        setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            UtilsView.alert(getActivity(), message, (dialog, which) -> {
+                setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+                finish();
+            });
+        }
+    }
+
+    /**
      * Starts a sign-in activity using {@link #REQUEST_CODE_SIGN_IN}.
      */
     protected void requestSignIn() {
@@ -162,6 +176,10 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
     }
 
     public Context getContext() {
+        return this;
+    }
+
+    public Activity getActivity() {
         return this;
     }
 
