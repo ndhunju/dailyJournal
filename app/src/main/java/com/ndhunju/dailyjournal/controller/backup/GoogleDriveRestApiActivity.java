@@ -42,9 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 /**
  * The main {@link Activity} for the Drive REST API functionality.
  */
-public class GoogleDriveRestApiActivity
-        extends BaseActivity
-        implements FileRecyclerViewAdapter.OnFileSelectListener {
+public abstract class GoogleDriveRestApiActivity extends BaseActivity {
 
     // Constants
     private static final String TAG = GoogleDriveRestApiActivity.class.getSimpleName();
@@ -52,8 +50,7 @@ public class GoogleDriveRestApiActivity
 
     // Member Variables
     private final GoogleSignInHelper googleSignInHelper = GoogleSignInHelper.get();
-    private DriveServiceHelper mDriveServiceHelper;
-    private FileRecyclerViewAdapter fileAdapter;
+    protected DriveServiceHelper mDriveServiceHelper;
 
     // View Variables
     private ViewGroup progressContainer;
@@ -63,7 +60,6 @@ public class GoogleDriveRestApiActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_google_drive);
 
         // Setup Toolbar
         setSupportActionBar(findViewById(R.id.toolbar));
@@ -73,13 +69,6 @@ public class GoogleDriveRestApiActivity
         progressContainer = findViewById(R.id.progress_container);
         progressBar = findViewById(R.id.progress_circular);
         messageView = findViewById(R.id.message);
-
-        // Setup recycler view
-        RecyclerView fileRecyclerView = findViewById(R.id.file_list);
-        fileRecyclerView.addItemDecoration(
-                new DividerItemDecoration(getContext(), LinearLayout.VERTICAL)
-        );
-        fileRecyclerView.setAdapter(fileAdapter = new FileRecyclerViewAdapter());
 
         // Authenticate user if not already.
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
@@ -93,7 +82,7 @@ public class GoogleDriveRestApiActivity
         }
     }
 
-    private void showProgress(boolean showProgress, String message) {
+    protected void showProgress(boolean showProgress, String message) {
         if (showProgress) {
             progressContainer.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.VISIBLE);
@@ -111,7 +100,7 @@ public class GoogleDriveRestApiActivity
     /**
      * Starts a sign-in activity using {@link #REQUEST_CODE_SIGN_IN}.
      */
-    private void requestSignIn() {
+    protected void requestSignIn() {
         Log.d(TAG, "Requesting sign-in");
         showProgress(true, getString(R.string.msg_requesting_sign_in));
 
@@ -163,55 +152,11 @@ public class GoogleDriveRestApiActivity
         onSignedInToGoogleDrive(googleDriveService);
     }
 
-    private void onSignedInToGoogleDrive(Drive googleDriveService) {
+    protected void onSignedInToGoogleDrive(Drive googleDriveService) {
         showProgress(false, null);
         // The DriveServiceHelper encapsulates all REST API and SAF functionality.
         // Its instantiation is required before handling any onClick actions.
         mDriveServiceHelper = new DriveServiceHelper(googleDriveService);
-        queryForBackupFiles();
-    }
-
-    /**
-     * Queries the Drive REST API for files visible to this app and lists them in the content view.
-     */
-    private void queryForBackupFiles() {
-        if (mDriveServiceHelper != null) {
-            Log.d(TAG, "Querying for backup files.");
-            showProgress(true, getString(R.string.msg_loading_files));
-
-            mDriveServiceHelper.queryFiles()
-                    .addOnSuccessListener(fileList -> {
-                        showProgress(false, null);
-                        fileAdapter.setFileList(fileList.getFiles());
-                        fileAdapter.setOnFileSelectListener(this);
-                    })
-                    .addOnFailureListener(exception -> {
-                        Log.e(TAG, "Unable to query files.", exception);
-                        if (exception instanceof UserRecoverableAuthIOException
-                                || exception instanceof UserRecoverableAuthException) {
-                            // User might have revoked access, request Sign In again
-                            requestSignIn();
-                        } else {
-                            showProgress(
-                                    false,
-                                    getString(R.string.msg_error_google_drive_query_fail) +
-                                            "\n(" + exception.getLocalizedMessage() + ")"
-                            );
-                        }
-                    });
-        }
-    }
-
-    @Override
-    public void onFileSelect(File file) {
-        new FetchBackUpFromGDriveRestApiAsync(
-                GoogleDriveRestApiActivity.this,
-                mDriveServiceHelper,
-                result -> {
-                    new AlertDialog.Builder(GoogleDriveRestApiActivity.this)
-                            .setMessage(result)
-                            .create().show();
-                }).execute(file);
     }
 
     @Override
@@ -225,7 +170,7 @@ public class GoogleDriveRestApiActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private Context getContext() {
+    public Context getContext() {
         return this;
     }
 
