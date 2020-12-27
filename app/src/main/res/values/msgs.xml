@@ -3,6 +3,7 @@
     <!--messages-->
 
     <string name="msg_bal">%1$sBAL</string>
+    <string name="msg_fail">Fail: %s.</string>
     <string name="msg_saved">%1$s saved</string>
     <string name="msg_please">Please %1$s</string>
     <string name="msg_choose">Choose %1$s</string>
@@ -14,6 +15,7 @@
     <string name="msg_creating">Creating %1$s …</string>
     <string name="msg_deleting">Deleting %1$s …</string>
     <string name="msg_report">Report for %1$s …</string>
+    <string name="msg_uploading">Uploading %1$s …</string>
     <string name="msg_exporting">%1$s exporting… </string>
     <string name="msg_downloaded">%1$s downloaded</string>
     <string name="msg_importing">%1$s importing… </string>
@@ -79,6 +81,9 @@
     <string name="msg_loading_files">Loading files…</string>
     <!-- Shonw in text field is used to display file information to user -->
     <string name="msg_file_description">Modified: %s \nSize: %s MB</string>
+    <string name="msg_error_google_drive_app_folder">Unable to get App Folder in Google Drive.</string>
+    <string name="msg_error_google_drive_backup_file">Unable to create backup file in Google Drive.</string>
+    <string name="msg_google_drive_creating_backup_file">Creating backup file in Google Drive…</string>
     <!-- Message show to user in native notification when app successfully uploads automatically created backup file to google drive -->
     <string name="msg_auto_upload_to_g_drive_success">Uploaded automatically created backup file to Google Drive.</string>
     <!-- Message show to user in native notification when app fails to upload automatically created backup file to google drive -->

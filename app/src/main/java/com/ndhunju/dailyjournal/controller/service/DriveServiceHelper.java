@@ -1,11 +1,17 @@
 package com.ndhunju.dailyjournal.controller.service;
 
+import android.app.Activity;
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.IOException;
@@ -17,6 +23,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import androidx.core.util.Pair;
+
+import static com.ndhunju.dailyjournal.util.ProgressListener.SHOW_INDETERMINATE_PROGRESS_PERCENTAGE;
 
 /**
  * A utility for performing read/write operations on Drive files via the REST API
@@ -71,6 +79,86 @@ public class DriveServiceHelper {
                         .setQ("mimeType='" + UtilsFile.BACK_FILE_TYPE +"'")
                         .setSpaces("drive")
                         .execute());
+    }
+
+    public Task<Void> createBackup(Activity activity, ProgressListener progressListener) {
+        return getAppFolder().continueWithTask(getAppFolderTask -> {
+
+            // Get app folder first to store the backup file
+            File appFolder = getAppFolderTask.getResult();
+
+            if (appFolder == null) {
+                throw new RuntimeException(activity.getString(
+                        R.string.msg_fail,
+                        activity.getString(R.string.msg_error_google_drive_app_folder))
+                );
+            }
+
+            progressListener.onProgress(
+                    20,
+                    activity.getString(R.string.msg_google_drive_creating_backup_file)
+            );
+
+            return createFile(
+                    appFolder,
+                    UtilsFile.getZipFileName(),
+                    UtilsFile.BACK_FILE_TYPE
+            );
+
+        }).continueWithTask(createFileTask -> {
+            // Create a new file in Google Drive to store backup
+            File file = createFileTask.getResult();
+
+            if (file == null) {
+                throw new RuntimeException(activity.getString(
+                        R.string.msg_fail,
+                        activity.getString(R.string.msg_error_google_drive_backup_file))
+                );
+            }
+
+            java.io.File localBackUpFile;
+
+            try {
+                progressListener.onProgress(30, activity.getString(R.string.msg_zipping));
+                // Create a new full backup of data into local drive
+                Services services = Services.getInstance(activity);
+                String filePath = services.createBackUp(
+                        UtilsFile.getCacheDir(activity),
+                        (percentage, message) -> {
+                            progressListener.onProgress(
+                                    30 + (percentage / 2),
+                                    activity.getString(R.string.msg_copying, message)
+                            );
+                        }
+                );
+
+                localBackUpFile = new java.io.File(filePath);
+
+                progressListener.onProgress(90, null);
+                progressListener.onProgress(
+                        SHOW_INDETERMINATE_PROGRESS_PERCENTAGE,
+                        activity.getString(
+                                R.string.msg_uploading,
+                                activity.getString(R.string.str_backup)
+                        )
+                );
+
+                // Metadata for the backup file in Google Drive
+                File metaData = new File()
+                        .setName(localBackUpFile.getName())
+                        .setMimeType(UtilsFile.BACK_FILE_TYPE);
+
+                // Save the local backupFile in Google Drive
+                return saveFile(
+                        file.getId(),
+                        metaData,
+                        new FileContent(UtilsFile.BACK_FILE_TYPE, localBackUpFile)
+                );
+            } catch (IOException e1) {
+                Log.i("createBackup", "Unable to write file appFolder.");
+                throw e1;
+            }
+        });
     }
 
     /**

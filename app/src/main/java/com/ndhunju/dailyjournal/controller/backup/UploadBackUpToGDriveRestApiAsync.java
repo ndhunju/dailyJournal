@@ -11,6 +11,7 @@ import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.CountDownLatch;
 
 /**
+ * @deprecated Use {@link DriveServiceHelper#createBackup(Activity, ProgressListener)}
  * Created by dhunju on 12/26/2020.
  * This class is a child class of {@link AsyncTask} that creates
  * back up in temp folder, uploads it to google drive and
