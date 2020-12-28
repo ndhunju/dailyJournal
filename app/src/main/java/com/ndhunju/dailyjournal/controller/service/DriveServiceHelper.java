@@ -1,6 +1,7 @@
 package com.ndhunju.dailyjournal.controller.service;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
@@ -10,6 +11,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.UtilsFile;
@@ -22,6 +24,7 @@ import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.LongDef;
 import androidx.core.util.Pair;
 
 import static com.ndhunju.dailyjournal.util.ProgressListener.SHOW_INDETERMINATE_PROGRESS_PERCENTAGE;
@@ -230,6 +233,21 @@ public class DriveServiceHelper {
             mDriveService.files().update(fileId, updatedMetadata, content).execute();
             return null;
         });
+    }
+
+    private static final String KEY_LAST_OPERATION = "KEY_GOOGLE_SERVICE_LAST_OPERATION";
+    public static final long OPERATION_STATUS_FAIL = -1;
+    public static final long OPERATION_STATUS_UNKNOWN = 0;
+    public static final long OPERATION_STATUS_SUCCESS = 1;
+    @LongDef({OPERATION_STATUS_SUCCESS, OPERATION_STATUS_UNKNOWN, OPERATION_STATUS_FAIL})
+    @interface OperationStatus {}
+
+    public static void setLastOperationStatus(Context context, @OperationStatus long status) {
+        PreferenceService.from(context).putVal(KEY_LAST_OPERATION, status);
+    }
+
+    public static long getLastOperationStatus(Context context) {
+        return PreferenceService.from(context).getVal(KEY_LAST_OPERATION, OPERATION_STATUS_UNKNOWN);
     }
 
 }

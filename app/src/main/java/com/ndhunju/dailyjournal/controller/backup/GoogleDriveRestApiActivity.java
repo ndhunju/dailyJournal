@@ -16,6 +16,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -26,6 +28,8 @@ import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 import com.ndhunju.dailyjournal.controller.service.GoogleSignInHelper;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
+import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
+
 /**
  * The main {@link Activity} for the Drive REST API functionality.
  */
@@ -34,6 +38,7 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
     // Constants
     private static final String TAG = GoogleDriveRestApiActivity.class.getSimpleName();
     private static final int REQUEST_CODE_SIGN_IN = 1;
+    private static final int REQUEST_CODE_ERROR_RESOLUTION = 2;
 
     // Member Variables
     private final GoogleSignInHelper googleSignInHelper = GoogleSignInHelper.get();
@@ -57,15 +62,33 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
         progressBar = findViewById(R.id.progress_circular);
         messageView = findViewById(R.id.message);
 
-        // Authenticate user if not already.
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-        if (signInAccount != null
-                && signInAccount
-                .getGrantedScopes()
-                .containsAll(googleSignInHelper.requiredScopesAsSet())) {
-            onSignedInToGoogleAccount(signInAccount);
-        } else {
-            requestSignIn();
+        int googleServiceStatus = GoogleApiAvailability.getInstance()
+                .isGooglePlayServicesAvailable(this);
+        switch (googleServiceStatus) {
+            case ConnectionResult.SERVICE_MISSING:
+            case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+            case ConnectionResult.API_UNAVAILABLE:
+            case ConnectionResult.SERVICE_DISABLED:
+                GoogleApiAvailability.getInstance().getErrorDialog(
+                        this,
+                        googleServiceStatus,
+                        REQUEST_CODE_ERROR_RESOLUTION
+                ).show();
+                break;
+            case ConnectionResult.SUCCESS:
+                // Authenticate user if not already.
+                GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
+                if (signInAccount != null
+                        && !signInAccount.isExpired()
+                        && (signInAccount.getGrantedScopes()
+                                         .containsAll(googleSignInHelper.requiredScopesAsSet()))
+                        && (DriveServiceHelper.getLastOperationStatus(this)
+                            != OPERATION_STATUS_FAIL)) {
+                    onSignedInToGoogleAccount(signInAccount);
+                } else {
+                    requestSignIn();
+                }
+                break;
         }
     }
 
@@ -118,6 +141,23 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
             case REQUEST_CODE_SIGN_IN:
                 if (resultCode == Activity.RESULT_OK && resultData != null) {
                     handleSignInResult(resultData);
+                } else {
+                    DriveServiceHelper.setLastOperationStatus(this, OPERATION_STATUS_FAIL);
+                    showEndResultToUser(
+                            getString(R.string.msg_error_g_drive_user_not_signed_in),
+                            false
+                    );
+                }
+                break;
+            case REQUEST_CODE_ERROR_RESOLUTION:
+                if (resultCode == Activity.RESULT_OK) {
+                    requestSignIn();
+                } else {
+                    DriveServiceHelper.setLastOperationStatus(this, OPERATION_STATUS_FAIL);
+                    showEndResultToUser(
+                            getString(R.string.msg_error_g_drive_user_not_signed_in),
+                            false
+                    );
                 }
                 break;
         }
@@ -131,8 +171,18 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
      */
     private void handleSignInResult(Intent result) {
         GoogleSignIn.getSignedInAccountFromIntent(result)
-                .addOnSuccessListener(this::onSignedInToGoogleAccount)
-                .addOnFailureListener(exception -> Log.e(TAG, "Failed sign in.", exception));
+                .addOnSuccessListener(googleSignInAccount -> {
+                    DriveServiceHelper.setLastOperationStatus(getContext(), OPERATION_STATUS_SUCCESS);
+                    onSignedInToGoogleAccount(googleSignInAccount);
+                })
+                .addOnFailureListener(exception -> {
+                    Log.e(TAG, "Failed sign in.", exception);
+                    DriveServiceHelper.setLastOperationStatus(this, OPERATION_STATUS_FAIL);
+                    showEndResultToUser(
+                            getString(R.string.msg_error_g_drive_user_not_signed_in),
+                            false
+                    );
+                });
     }
 
     private void onSignedInToGoogleAccount(GoogleSignInAccount googleAccount) {

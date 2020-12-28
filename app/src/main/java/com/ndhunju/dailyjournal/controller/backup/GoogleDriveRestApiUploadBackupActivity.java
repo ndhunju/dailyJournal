@@ -6,9 +6,12 @@ import android.util.Log;
 
 import com.google.api.services.drive.Drive;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
+import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_SUCCESS;
 import static com.ndhunju.dailyjournal.util.ProgressListener.SHOW_INDETERMINATE_PROGRESS_PERCENTAGE;
 
 public class GoogleDriveRestApiUploadBackupActivity extends GoogleDriveRestApiActivity {
@@ -58,19 +61,24 @@ public class GoogleDriveRestApiUploadBackupActivity extends GoogleDriveRestApiAc
                         });
                     }
             ).addOnSuccessListener(aVoid -> runOnUiThread(() -> {
-                onFinish("Success");
+                pd.dismiss();
+                DriveServiceHelper.setLastOperationStatus(getContext(), OPERATION_STATUS_SUCCESS);
+                onFinish(true, null);
             })).addOnFailureListener(e -> runOnUiThread(() -> {
-                onFinish("Failed: " + e.getLocalizedMessage());
+                pd.dismiss();
+                DriveServiceHelper.setLastOperationStatus(this, OPERATION_STATUS_FAIL);
+                onFinish(false, e.getLocalizedMessage());
             }));
         }
     }
 
-    public void onFinish(String result) {
-        boolean success = result != null && result.contains("Success");
+    public void onFinish(boolean success, String message) {
         // Format the message
-        String msg = String.format(getString(R.string.msg_exporting), success
-                ? getString(R.string.str_finished) : getString(R.string.str_failed));
-        showEndResultToUser(msg, success);
+        String resultMsg = String.format(
+                getString(R.string.msg_exporting),
+                success ? getString(R.string.str_finished) : getString(R.string.str_failed)
+        );
+        showEndResultToUser(resultMsg + "\n" + (message != null ? message : ""), success);
     }
 
     private ProgressDialog showProgressDialog() {
