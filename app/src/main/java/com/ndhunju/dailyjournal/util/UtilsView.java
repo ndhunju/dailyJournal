@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import androidx.annotation.ColorInt;
@@ -23,6 +24,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
+import com.ndhunju.dailyjournal.service.Services;
+
+import java.util.Date;
 
 /**
  * Created by dhunju on 9/24/2015.
@@ -66,6 +71,29 @@ public class UtilsView {
                 .setPositiveButton(android.R.string.ok, OkListener)
                 .setCancelable(false)
                 .create().show();
+    }
+
+    public static void showAlertDialogForInvalidJournalDate(Context context, long date) {
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.str_alert)
+                .setMessage(context.getString(
+                        R.string.msg_date_not_in_range,
+                        UtilsFormat.formatDate(new Date(date), context),
+                        UtilsFormat.formatDate(
+                                Services.getInstance(context).getFinancialYear(),
+                                context
+                        ),
+                        UtilsFormat.getJournalFromPref(context),
+                        context.getString(
+                                R.string.pref_allow_out_of_range_journal_entry,
+                                UtilsFormat.getJournalFromPref(context)
+                        )
+                ))
+                .setPositiveButton(android.R.string.ok, null)
+                .setNeutralButton(R.string.str_preference, (dialogInterface, i) -> {
+                    context.startActivity(new Intent(context, MyPreferenceActivity.class));
+                })
+                .show();
     }
 
     public static boolean showResult(Activity activity, int resultCode){

@@ -28,5 +28,6 @@
     <string name="key_pref_item_rate_app">preferenceItemRateApp</string>
     <string name="key_pref_item_format">preferenceItemFormat</string>
     <string name="key_pref_item_security">preferenceItemSecurity</string>
+    <string name="key_pref_allow_out_of_range_entry">preferenceKeyAllowOutOfRangeDateEntry</string>
 
 </resources>

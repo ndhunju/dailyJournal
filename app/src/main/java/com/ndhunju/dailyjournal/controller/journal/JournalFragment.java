@@ -203,9 +203,9 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
             @Override
             public void onClick(View v) {
 
-				// check if the selected date is within current financial year
-				if (!mServices.isWithinFinancialYear(mJournal.getDate())) {
-					UtilsView.alert(getActivity(), getString(R.string.msg_date_not_in_range, UtilsFormat.formatDate(mServices.getFinancialYear(), getContext())));
+				// Check if the selected date is allowed
+				if (!mServices.isAllowedDateForJournal(mJournal.getDate())) {
+					UtilsView.showAlertDialogForInvalidJournalDate(getContext(), mJournal.getDate());
                     return;
 				}
 

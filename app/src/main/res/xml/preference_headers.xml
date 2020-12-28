@@ -18,4 +18,10 @@
         <!-- key/value pairs can be included as arguments for the fragment. -->
         <extra android:name="someKey" android:value="someHeaderValue" />
     </Preference>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/key_pref_allow_out_of_range_entry"
+        />
+
+
 </PreferenceScreen>

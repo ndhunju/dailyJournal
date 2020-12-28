@@ -621,7 +621,23 @@ public class Services {
     }
 
     // declare calendar outside the scope of isWithinFinancialYear() so that we initialize it only once
-    private Calendar calendar = Calendar.getInstance();
+    private final Calendar calendar = Calendar.getInstance();
+
+    /**
+     * Whether passed {@code date} for a Journal is allowed or not based on user's preference
+     * or if it is within the current financial year
+     */
+    public boolean isAllowedDateForJournal(long date) {
+        boolean isOutOfRangeEntryAllowed = PreferenceService
+                .from(mContext)
+                .getVal(R.string.key_pref_allow_out_of_range_entry, false);
+
+        if (isOutOfRangeEntryAllowed) {
+            return true;
+        }
+
+        return isWithinFinancialYear(date);
+    }
 
     public boolean isWithinFinancialYear(long date) {
 

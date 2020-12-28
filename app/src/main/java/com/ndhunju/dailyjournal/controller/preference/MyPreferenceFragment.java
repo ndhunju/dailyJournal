@@ -3,10 +3,12 @@ package com.ndhunju.dailyjournal.controller.preference;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.PreferenceService;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 import androidx.annotation.Nullable;
 
@@ -74,6 +76,19 @@ public class MyPreferenceFragment extends PreferenceFragment {
                             .setTransition(TRANSIT_FRAGMENT_OPEN).commit();
                     return true;
                 });
+
+        // Setup correct title and summary for "Allow out of range Journal entry"
+        Preference allowOutOfRangeEntryPref = findPreference(
+                getString(R.string.key_pref_allow_out_of_range_entry)
+        );
+        allowOutOfRangeEntryPref.setTitle(getString(
+                R.string.pref_allow_out_of_range_journal_entry,
+                UtilsFormat.getJournalFromPref(getContext())
+        ));
+        allowOutOfRangeEntryPref.setSummary(getString(
+                R.string.pref_summary_allow_out_of_range_journal_entry,
+                UtilsFormat.getJournalFromPref(getContext())
+        ));
     }
 
     @Override

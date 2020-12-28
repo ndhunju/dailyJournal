@@ -54,8 +54,10 @@
     <string name="msg_todays_date">For Today (%1$s)</string>
     <!-- Eg. Financial year is already set to 3-Sept-2017 -->
     <string name="msg_financial_year_set">Financial year is already set to %s.</string>
-    <!-- Eg. Selected date is not in the range of current financial year, 3-Sept-2017 -->f
-    <string name="msg_date_not_in_range">Selected date is not in the range of current financial year, %s</string>
+    <!-- Eg. Selected date (%1$s=12/28/20) is not in the range of current financial year, %2$s=3-Sept-2017.
+     To enter %3$s=Journal with out of range date, enable "%4$s=Allow out of range Journal Entry" in the Preference. -->
+    <string name="msg_date_not_in_range">Selected date (%1$s) is not in the range of current financial year, %2$s.
+        \n\nTo enter %3$s with out of range date, enable \"%4$s\" in the Preference.</string>
 
     <!-- TextField. Show at the top of list of step that will be performed -->
     <string name="msg_next_year_steps">Following operations will be performed, one at a time. </string>
