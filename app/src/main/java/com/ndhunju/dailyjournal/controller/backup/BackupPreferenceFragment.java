@@ -28,7 +28,7 @@ import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
  */
 public class BackupPreferenceFragment extends PreferenceFragment implements OnDialogBtnClickedListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public static final String TAG = PreferenceFragment.class.getSimpleName();
+    public static final String TAG = BackupPreferenceFragment.class.getSimpleName();
     public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
     public static final String KEY_FINISH_ON_BACKUP_SUCCESS = TAG + ".KEY_FINISH_ON_BACKUP_SUCCESS";
 

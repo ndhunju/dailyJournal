@@ -2,14 +2,19 @@ package com.ndhunju.dailyjournal.controller.preference;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.view.View;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.PreferenceService;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by dhunju on 10/9/2015.
  */
 public class FormatPreferenceFragment extends PreferenceFragment {
+
+    public static final String TAG = FormatPreferenceFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,5 +26,11 @@ public class FormatPreferenceFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preference_format);
 
         getActivity().setTitle(getString(R.string.str_format));
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.setBackgroundColor(getContext().getColor(R.color.colorBackground));
     }
 }

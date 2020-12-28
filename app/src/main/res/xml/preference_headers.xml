@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
-    <header android:fragment="com.ndhunju.dailyjournal.controller.preference.FormatPreferenceFragment"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
         android:title="@string/str_format"
+        android:key="@string/key_pref_item_format"
         android:icon="@drawable/ic_label_outline_black_48dp"
         />
-    <header
-        android:id="@+id/preference_header_rate"
-        android:icon="@drawable/ic_stars_black_48dp"
+    <Preference
         android:title="@string/str_rate"
+        android:key="@string/key_pref_item_rate_app"
+        android:icon="@drawable/ic_stars_black_48dp"
         />
-    <header
-        android:fragment="com.ndhunju.dailyjournal.controller.preference.SecurityPreferenceFragment"
+    <Preference
+        android:title="@string/str_security"
+        android:key="@string/key_pref_item_security"
         android:icon="@drawable/ic_security_black_48dp"
-        android:title="@string/str_security" >
+        >
         <!-- key/value pairs can be included as arguments for the fragment. -->
         <extra android:name="someKey" android:value="someHeaderValue" />
-    </header>
-
-</preference-headers>
+    </Preference>
+</PreferenceScreen>

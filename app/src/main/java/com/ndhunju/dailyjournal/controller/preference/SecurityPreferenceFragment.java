@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
+import android.view.View;
 import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsView;
+
+import androidx.annotation.Nullable;
 
 /**
  * Sub class of {@link PreferenceFragment} for handling Security Preferences
@@ -17,7 +20,7 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 public class SecurityPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     //Constants
-    private static final String TAG = SecurityPreferenceFragment.class.getSimpleName();
+    public static final String TAG = SecurityPreferenceFragment.class.getSimpleName();
     private static final int PIN_PREF_POS = 1; // this position is hard coded and determined from R.xml.preference_security position
 
     //Variables
@@ -45,6 +48,12 @@ public class SecurityPreferenceFragment extends PreferenceFragment implements Sh
         ((EditTextPreference)findPreference(getString(R.string.key_pref_pincode_time_et)))
                 .setDialogTitle(getString(R.string.str_minutes));
 
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.setBackgroundColor(getContext().getColor(R.color.colorBackground));
     }
 
     @Override

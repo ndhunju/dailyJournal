@@ -5,22 +5,18 @@
     android:layout_margin="0dp"
     android:orientation="vertical"
     android:padding="0dp">
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            style="@style/ActionBarStyle"
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            />
+        <include layout="@layout/toolbar"/>
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ListView
-        android:id="@id/android:list"
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 </LinearLayout>
