@@ -179,10 +179,14 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
         if (key.equals(autoUploadToGDriveCB)) {
             boolean enableAutoUploadToGDriveCB = sharedPreferences.getBoolean(key, false);
             if (enableAutoUploadToGDriveCB) {
-                // check if user is logged into google drive
-                startActivityForResult(new Intent(getActivity(), GoogleDriveSignInActivity.class)
-                        .putExtra(GoogleDriveSignInActivity.BUNDLE_SHOULD_FINISH_ON_SIGN_IN, true),
-                        REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE);
+                // Check if user is logged into google drive using REST api
+                startActivityForResult(
+                        new Intent(getActivity(), GoogleDriveRestApiActivity.class).putExtra(
+                                GoogleDriveRestApiActivity.BUNDLE_SHOULD_FINISH_ON_SIGN_IN,
+                                true
+                        ),
+                        REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE
+                );
             }
         }
     }

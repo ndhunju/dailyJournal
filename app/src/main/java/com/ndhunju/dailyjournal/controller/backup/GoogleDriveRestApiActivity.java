@@ -14,9 +14,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.services.drive.Drive;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
@@ -39,6 +36,8 @@ public class GoogleDriveRestApiActivity extends BaseActivity {
     private static final String TAG = GoogleDriveRestApiActivity.class.getSimpleName();
     private static final int REQUEST_CODE_SIGN_IN = 1;
     private static final int REQUEST_CODE_ERROR_RESOLUTION = 2;
+    /** Pass true for this key to finish this activity upon successful sign in to google drive **/
+    public static final String BUNDLE_SHOULD_FINISH_ON_SIGN_IN = "BUNDLE_SHOULD_FINISH_ON_SIGN_IN";
 
     // Member Variables
     private final GoogleSignInHelper googleSignInHelper = GoogleSignInHelper.get();
@@ -69,33 +68,21 @@ public class GoogleDriveRestApiActivity extends BaseActivity {
         connectionPd.setCancelable(true);
         connectionPd.show();
 
-        int googleServiceStatus = GoogleApiAvailability.getInstance()
-                .isGooglePlayServicesAvailable(this);
-        switch (googleServiceStatus) {
-            case ConnectionResult.SERVICE_MISSING:
-            case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
-            case ConnectionResult.API_UNAVAILABLE:
-            case ConnectionResult.SERVICE_DISABLED:
-                GoogleApiAvailability.getInstance().getErrorDialog(
-                        this,
-                        googleServiceStatus,
-                        REQUEST_CODE_ERROR_RESOLUTION
-                ).show();
-                break;
-            case ConnectionResult.SUCCESS:
-                // Authenticate user if not already.
-                GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-                if (signInAccount != null
-                        && !signInAccount.isExpired()
-                        && (signInAccount.getGrantedScopes()
-                                         .containsAll(googleSignInHelper.requiredScopesAsSet()))
-                        && (DriveServiceHelper.getLastOperationStatus(this)
-                            != OPERATION_STATUS_FAIL)) {
-                    onSignedInToGoogleAccount(signInAccount);
-                } else {
-                    requestSignIn();
-                }
-                break;
+        Pair<GoogleSignInAccount, Integer> googleAccountAndConnectionResult
+                = GoogleSignInHelper.get().getLastSignedInAccountAndConnectionResult(getContext());
+
+        if (googleAccountAndConnectionResult.second == ConnectionResult.SUCCESS) {
+            if (googleAccountAndConnectionResult.first != null) {
+                onSignedInToGoogleAccount(googleAccountAndConnectionResult.first);
+            } else {
+                requestSignIn();
+            }
+        } else {
+            GoogleApiAvailability.getInstance().getErrorDialog(
+                    this,
+                    googleAccountAndConnectionResult.second,
+                    REQUEST_CODE_ERROR_RESOLUTION
+            ).show();
         }
     }
 
@@ -191,20 +178,9 @@ public class GoogleDriveRestApiActivity extends BaseActivity {
 
     private void onSignedInToGoogleAccount(GoogleSignInAccount googleAccount) {
         Log.d(TAG, "Sign in successful");
-        // Use the authenticated account to sign in to the Drive service.
-        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
-                this,
-                googleSignInHelper.requiredScopesAsStringList()
+        onSignedInToGoogleDrive(
+                googleSignInHelper.signInToGoogleDrive(googleAccount, getContext())
         );
-
-        credential.setSelectedAccount(googleAccount.getAccount());
-        Drive googleDriveService = new Drive.Builder(
-                AndroidHttp.newCompatibleTransport(),
-                new AndroidJsonFactory(),
-                credential
-        ).setApplicationName(getString(R.string.app_name)).build();
-
-        onSignedInToGoogleDrive(googleDriveService);
     }
 
     protected void onSignedInToGoogleDrive(Drive googleDriveService) {

@@ -13,7 +13,9 @@ import androidx.annotation.RequiresApi;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-public class AutoBackupJobService extends JobService implements AutoBackupHelper.EventListener {
+public class AutoBackupJobService
+        extends JobService
+        implements AutoBackupWithRestApiHelper.EventListener {
 
     private static final int JOB_ID = 1;
     private static final int MAX_RETRY = 3;
@@ -42,7 +44,7 @@ public class AutoBackupJobService extends JobService implements AutoBackupHelper
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        AutoBackupHelper autoBackupHelper = new AutoBackupHelper(this);
+        AutoBackupWithRestApiHelper autoBackupHelper = new AutoBackupWithRestApiHelper(this);
         autoBackupHelper.setEventListener(this);
         autoBackupHelper.startBackup();
         parameters = params;

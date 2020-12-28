@@ -9,13 +9,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Scope;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.common.collect.Sets;
+import com.ndhunju.dailyjournal.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
@@ -58,7 +64,24 @@ public class GoogleSignInHelper {
         );
     }
 
-    public Pair<GoogleSignInAccount, Integer> getLastSignedGoogleSigInAccountAndConnectionResult(
+    @NonNull
+    public Drive signInToGoogleDrive(GoogleSignInAccount googleSignInAccount, Context context) {
+        // Use the authenticated account to sign in to the Drive service.
+        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
+                context,
+                requiredScopesAsStringList()
+        );
+
+        credential.setSelectedAccount(googleSignInAccount.getAccount());
+
+        return new Drive.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new AndroidJsonFactory(),
+                credential
+        ).setApplicationName(context.getString(R.string.app_name)).build();
+    }
+
+    public Pair<GoogleSignInAccount, Integer> getLastSignedInAccountAndConnectionResult(
             Context context
     ) {
 

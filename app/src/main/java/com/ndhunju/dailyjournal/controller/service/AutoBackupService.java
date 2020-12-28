@@ -9,7 +9,9 @@ import android.os.IBinder;
  * Created by dhunju on 10/6/2015.
  * This Background service create backup in default
  */
-public class AutoBackupService extends Service implements AutoBackupHelper.EventListener {
+public class AutoBackupService
+        extends Service
+        implements AutoBackupWithRestApiHelper.EventListener {
 
     private static final String TAG = AutoBackupService.class.getSimpleName();
 
@@ -20,7 +22,7 @@ public class AutoBackupService extends Service implements AutoBackupHelper.Event
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        AutoBackupHelper autoBackupHelper = new AutoBackupHelper(this);
+        AutoBackupWithRestApiHelper autoBackupHelper = new AutoBackupWithRestApiHelper(this);
         autoBackupHelper.setEventListener(this);
         autoBackupHelper.startBackup();
         return super.onStartCommand(intent, flags, startId);

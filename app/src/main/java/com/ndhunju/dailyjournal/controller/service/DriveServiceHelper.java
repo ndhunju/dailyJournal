@@ -1,6 +1,5 @@
 package com.ndhunju.dailyjournal.controller.service;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -25,9 +24,11 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import androidx.annotation.LongDef;
+import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 
 import static com.ndhunju.dailyjournal.util.ProgressListener.SHOW_INDETERMINATE_PROGRESS_PERCENTAGE;
+import static com.ndhunju.dailyjournal.util.ProgressListener.publishProgress;
 
 /**
  * A utility for performing read/write operations on Drive files via the REST API
@@ -84,22 +85,23 @@ public class DriveServiceHelper {
                         .execute());
     }
 
-    public Task<Void> createBackup(Activity activity, ProgressListener progressListener) {
+    public Task<Void> createBackup(Context context, @Nullable ProgressListener progressListener) {
         return getAppFolder().continueWithTask(getAppFolderTask -> {
 
             // Get app folder first to store the backup file
             File appFolder = getAppFolderTask.getResult();
 
             if (appFolder == null) {
-                throw new RuntimeException(activity.getString(
+                throw new RuntimeException(context.getString(
                         R.string.msg_fail,
-                        activity.getString(R.string.msg_error_google_drive_app_folder))
-                );
+                        context.getString(R.string.msg_error_google_drive_app_folder)
+                ));
             }
 
-            progressListener.onProgress(
+            publishProgress(
+                    progressListener,
                     20,
-                    activity.getString(R.string.msg_google_drive_creating_backup_file)
+                    context.getString(R.string.msg_google_drive_creating_backup_file)
             );
 
             return createFile(
@@ -113,36 +115,43 @@ public class DriveServiceHelper {
             File file = createFileTask.getResult();
 
             if (file == null) {
-                throw new RuntimeException(activity.getString(
+                throw new RuntimeException(context.getString(
                         R.string.msg_fail,
-                        activity.getString(R.string.msg_error_google_drive_backup_file))
-                );
+                        context.getString(R.string.msg_error_google_drive_backup_file)
+                ));
             }
 
             java.io.File localBackUpFile;
 
             try {
-                progressListener.onProgress(30, activity.getString(R.string.msg_zipping));
+                publishProgress(
+                        progressListener,
+                        30,
+                        context.getString(R.string.msg_zipping)
+                );
+
                 // Create a new full backup of data into local drive
-                Services services = Services.getInstance(activity);
+                Services services = Services.getInstance(context);
                 String filePath = services.createBackUp(
-                        UtilsFile.getCacheDir(activity),
+                        UtilsFile.getCacheDir(context),
                         (percentage, message) -> {
                             progressListener.onProgress(
+                                    // Cap lower limit to 30
                                     30 + (percentage / 2),
-                                    activity.getString(R.string.msg_copying, message)
+                                    context.getString(R.string.msg_copying, message)
                             );
                         }
                 );
 
                 localBackUpFile = new java.io.File(filePath);
 
-                progressListener.onProgress(90, null);
-                progressListener.onProgress(
+                publishProgress(progressListener, 90, null);
+                publishProgress(
+                        progressListener,
                         SHOW_INDETERMINATE_PROGRESS_PERCENTAGE,
-                        activity.getString(
+                        context.getString(
                                 R.string.msg_uploading,
-                                activity.getString(R.string.str_backup)
+                                context.getString(R.string.str_backup)
                         )
                 );
 
@@ -201,10 +210,6 @@ public class DriveServiceHelper {
     /**
      * Creates a File in google drive inside {@code insideFolder} folder with name {@code fileName}
      * of type, {@code mimeType}
-     * @param insideFolder
-     * @param fileName
-     * @param mimeType
-     * @return
      */
     public Task<File> createFile(File insideFolder, String fileName, String mimeType) {
         return Tasks.call(mExecutor, () -> {
