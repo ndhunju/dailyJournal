@@ -108,6 +108,10 @@
         <activity android:name="com.ndhunju.dailyjournal.controller.ToolsActivity"
             android:label="@string/str_tools"/>
 
+        <activity android:name=".controller.backup.GoogleDriveRestApiActivity"
+            android:screenOrientation="locked"
+            android:label="@string/str_backup"/>
+
         <activity android:name=".controller.backup.GoogleDriveRestApiRestoreBackupActivity"
             android:screenOrientation="locked"
             android:label="@string/str_restore_backup_from_google_drive"/>

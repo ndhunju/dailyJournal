@@ -1,21 +1,17 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -28,12 +24,16 @@ import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 import com.ndhunju.dailyjournal.controller.service.GoogleSignInHelper;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.util.Pair;
+
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
+import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_SUCCESS;
 
 /**
  * The main {@link Activity} for the Drive REST API functionality.
  */
-public abstract class GoogleDriveRestApiActivity extends BaseActivity {
+public class GoogleDriveRestApiActivity extends BaseActivity {
 
     // Constants
     private static final String TAG = GoogleDriveRestApiActivity.class.getSimpleName();
@@ -45,22 +45,29 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
     private DriveServiceHelper mDriveServiceHelper;
 
     // View Variables
-    private ViewGroup progressContainer;
-    private ProgressBar progressBar;
-    private TextView messageView;
+    private ProgressDialog connectionPd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Setup Toolbar
-        setSupportActionBar(findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         // Wire views
-        progressContainer = findViewById(R.id.progress_container);
-        progressBar = findViewById(R.id.progress_circular);
-        messageView = findViewById(R.id.message);
+        connectionPd = new ProgressDialog(getActivity());
+        connectionPd.setMessage(String.format(
+                getString(R.string.msg_connecting),
+                getString(R.string.str_google_drive)
+        ));
+        connectionPd.setCanceledOnTouchOutside(true);
+        connectionPd.setIndeterminate(true);
+        connectionPd.setCancelable(true);
+        connectionPd.show();
 
         int googleServiceStatus = GoogleApiAvailability.getInstance()
                 .isGooglePlayServicesAvailable(this);
@@ -94,16 +101,14 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
 
     protected void showProgress(boolean showProgress, String message) {
         if (showProgress) {
-            progressContainer.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            messageView.setText(message);
+            connectionPd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            connectionPd.setMessage(message);
+            connectionPd.show();
         } else if (!TextUtils.isEmpty(message)) {
-            progressContainer.setVisibility(View.VISIBLE);
-            messageView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
-            messageView.setText(message);
+            connectionPd.setProgressDrawable(null);
+            connectionPd.setMessage(message);
         } else {
-            progressContainer.setVisibility(View.GONE);
+            connectionPd.dismiss();
         }
     }
 
@@ -128,8 +133,7 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
         Log.d(TAG, "Requesting sign-in");
         showProgress(true, getString(R.string.msg_requesting_sign_in));
 
-        GoogleSignInOptions signInOptions = GoogleSignInHelper.get().buildGoogleSigInOptions();
-        GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
+        GoogleSignInClient client = GoogleSignInHelper.get().getGoogleSigInClient(this);
 
         // The result of the sign-in Intent is handled in onActivityResult.
         startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
@@ -205,6 +209,13 @@ public abstract class GoogleDriveRestApiActivity extends BaseActivity {
 
     protected void onSignedInToGoogleDrive(Drive googleDriveService) {
         showProgress(false, null);
+
+        if (getIntent().getBooleanExtra(BUNDLE_SHOULD_FINISH_ON_SIGN_IN, false)) {
+            setResult(RESULT_OK);
+            finish();
+            return;
+        }
+
         // The DriveServiceHelper encapsulates all REST API and SAF functionality.
         // Its instantiation is required before handling any onClick actions.
         mDriveServiceHelper = new DriveServiceHelper(googleDriveService);

@@ -167,8 +167,10 @@ public class PreferenceService {
             long selectedInterval = getVal(R.string.key_pref_auto_backup_interval_lp,
                     PreferenceService.DEF_AUTO_BACKUP_TIME);
 
+            selectedInterval = 1000 * 30;
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                AutoBackupJobService.schedule(context, UtilsDate.get(selectedInterval).getTimeInMillis(), selectedInterval);
+                AutoBackupJobService.schedule(context, UtilsDate.get(selectedInterval).getTimeInMillis(), selectedInterval + (1000 * 60));
             } else {
                 //set an alarm
                 AlarmManagerWrapper.from(context).setRepeating(UtilsDate.get(selectedInterval),
