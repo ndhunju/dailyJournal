@@ -102,8 +102,20 @@ public class AutoBackupWithRestApiHelper {
         if (googleSignInAccountAndConnectionResult.first != null) {
             onSignedInToGoogleAccount(googleSignInAccountAndConnectionResult.first);
         } else {
-            Log.i(TAG, "User not signed into google drive.");
-            notifyGDriveErrorToUser(getString(R.string.msg_error_g_drive_user_not_signed_in));
+            GoogleSignInHelper.get()
+                    .getGoogleSigInClient(getContext())
+                    .silentSignIn()
+                    .addOnSuccessListener(
+                            // Attempt Sign In again
+                            googleSignInAccount -> signInToGoogleDrive()
+                    )
+                    .addOnFailureListener(e -> {
+                        Log.i(TAG, "User not signed into google drive.");
+                        notifyGDriveErrorToUser(
+                                getString(R.string.msg_error_g_drive_user_not_signed_in)
+                                + "(" + e.getLocalizedMessage() + ")"
+                        );
+                    });
         }
     }
 
