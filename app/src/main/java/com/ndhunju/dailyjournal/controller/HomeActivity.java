@@ -26,6 +26,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
 import com.ndhunju.dailyjournal.controller.export.ExportPrintableActivity;
+import com.ndhunju.dailyjournal.controller.fragment.AppRater;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.service.Constants;
@@ -142,6 +143,8 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         if (mRefreshNeeded) {
            refreshHomeView();
         }
+
+        askUserToRate();
     }
 
     int currentSummaryIndex;
@@ -179,6 +182,20 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
     public void onEraseAll() {
         mRefreshNeeded = true;
         ((ShortCutAdapter) mRecyclerView.getAdapter()).clearSelectedShortCuts();
+    }
+
+    private void askUserToRate(){
+        // Ask users to rate the app after they have used for 20 times
+        AppRater rater = new AppRater(HomeActivity.this);
+        rater.setLaunchesBeforePrompt(20);
+        rater.setPhrases(
+                R.string.msg_rate_title,
+                R.string.msg_rate_body,
+                R.string.str_rate,
+                R.string.str_later,
+                R.string.str_no_thanks
+        );
+        rater.show();
     }
 
     private class SummaryPagerAdapter extends PagerAdapter {

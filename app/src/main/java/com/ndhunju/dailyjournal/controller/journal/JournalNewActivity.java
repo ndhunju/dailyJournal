@@ -26,21 +26,4 @@ public class JournalNewActivity extends NavDrawerActivity {
 			}
 		}
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		askUserToRate();
-
-	}
-
-	private void askUserToRate(){
-		//ask users to rate the app
-		AppRater rater = new AppRater(JournalNewActivity.this);
-		rater.setLaunchesBeforePrompt(20);
-		rater.setPhrases(R.string.msg_rate_title, R.string.msg_rate_body, R.string.str_rate,
-				R.string.str_later, R.string.str_no_thanks);
-		rater.show();
-	}
 }
