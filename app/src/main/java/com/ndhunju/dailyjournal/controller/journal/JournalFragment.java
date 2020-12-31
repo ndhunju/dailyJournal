@@ -207,6 +207,14 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 				if (!mServices.isAllowedDateForJournal(mJournal.getDate())) {
 					UtilsView.showAlertDialogForInvalidJournalDate(getContext(), mJournal.getDate());
                     return;
+				} else if (mServices.shouldShowAlertForPassingFinancialYearDate(
+						mJournal.getDate()
+				)) {
+					UtilsView.showAlertDialogForFutureJournalDate(
+							getContext(),
+							mJournal.getDate()
+					);
+					return;
 				}
 
                 try{

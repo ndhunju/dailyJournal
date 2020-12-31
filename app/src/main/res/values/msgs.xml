@@ -59,6 +59,18 @@
     <string name="msg_date_not_in_range">Selected date (%1$s) is not in the range of current financial year, %2$s.
         \n\nTo enter %3$s with out of range date, enable \"%4$s\" in the Preference.</string>
 
+    <!--
+    Eg. Selected date (%1$s=12/28/20) has passed your current financial year (%2$s=12/25/19) by %3$d=3 day/s.
+
+        Please use \"%4$s=Start Next Year\" tool to start next financial year. This way, you have backup of
+        current financial year. Also, app will take less space in the phone and work faster.
+     -->
+    <string name="msg_date_passed_financial_year_range">
+        Selected date (%1$s) has passed your current financial year (%2$s) by %3$d day/s.
+        \n\nPlease use \"%4$s\" tool to start next financial year. This way, you have backup of
+        current financial year. Also, app will take less space in the phone and work faster.
+    </string>
+
     <!-- TextField. Show at the top of list of step that will be performed -->
     <string name="msg_next_year_steps">Following operations will be performed, one at a time. </string>
     <!-- TextField. Eg. Backup current (Sept-4-2017) year's data -->

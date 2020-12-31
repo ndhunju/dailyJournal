@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.StartNextYearActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.service.Services;
 
@@ -92,6 +93,30 @@ public class UtilsView {
                 .setPositiveButton(android.R.string.ok, null)
                 .setNeutralButton(R.string.str_preference, (dialogInterface, i) -> {
                     context.startActivity(new Intent(context, MyPreferenceActivity.class));
+                })
+                .show();
+    }
+
+    /**
+     * Shows an alert dialog with a message to user for using a {@code date} that has passed
+     * current financial year date.
+     */
+    public static void showAlertDialogForFutureJournalDate(Context context, long date) {
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.str_alert)
+                .setMessage(context.getString(
+                        R.string.msg_date_passed_financial_year_range,
+                        UtilsFormat.formatDate(new Date(date), context),
+                        UtilsFormat.formatDate(
+                                Services.getInstance(context).getFinancialYear(),
+                                context
+                        ),
+                        Services.getInstance(context).numOfDaySinceCurrentFinancialYear(date),
+                        context.getString(R.string.title_activity_start_next_year)
+                ))
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.title_activity_start_next_year, (dialogInterface, i)-> {
+                    context.startActivity(new Intent(context, StartNextYearActivity.class));
                 })
                 .show();
     }

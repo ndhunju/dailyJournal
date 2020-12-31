@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.media.MediaScannerConnection;
 import androidx.annotation.NonNull;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.R;
@@ -45,6 +46,7 @@ public class Services {
     // Constants
     private static final String KEY_COMPANY_NAME = "KEY_COMPANY_NAME";
     private static final String KEY_FINANCIAL_YEAR = "KEY_FINANCIAL_YEAR";
+    private static final String KEY_LAST_PASSED_DATE_ALERT_SHOWN = "KEY_LAST_PASSED_DATE_ALERT_SHOWN";
     private static final String FILE_COMPANY_INFO = "info.properties";
 
     //Variables
@@ -655,6 +657,62 @@ public class Services {
 
         return (year == startYear && dayOfYear >= startDayOfYear)
                 || (year == endYear && dayOfYear < endDayOfYear);
+
+    }
+
+    /**
+     * Returns true if {@code time} has passed current financial year period as returned by
+     * {@link this#getFinancialYear()} and last time this function return true has passed a day.
+     */
+    public boolean shouldShowAlertForPassingFinancialYearDate(long time) {
+
+        long lastShownTime = PreferenceService.from(mContext).getVal(
+                KEY_LAST_PASSED_DATE_ALERT_SHOWN,
+                0
+        );
+
+        long timeElapsed = (System.currentTimeMillis() - lastShownTime);
+
+        // Check if it's been more than a day since this function was called and returned true
+        if (timeElapsed > DateUtils.DAY_IN_MILLIS
+                // Check if param, date, has passed current financial year
+                &&  mServices.numOfDaySinceCurrentFinancialYear(time) > 0) {
+            // Store current time when this function returned true
+            PreferenceService.from(mContext).putVal(
+                    KEY_LAST_PASSED_DATE_ALERT_SHOWN,
+                    System.currentTimeMillis()
+            );
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the number of days that {@code time} has passed current financial year time.
+     */
+    public int numOfDaySinceCurrentFinancialYear(long time) {
+
+        calendar.setTime(getFinancialYear());
+
+        calendar.add(Calendar.YEAR, 1);
+        int endDayOfFinancialYear = calendar.get(Calendar.DAY_OF_YEAR);
+        int endYearOfFinancialYear = calendar.get(Calendar.YEAR);
+
+        calendar.setTimeInMillis(time);
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+        int year = calendar.get(Calendar.YEAR);
+
+        boolean isInTheFuture = year >= endYearOfFinancialYear && dayOfYear > endDayOfFinancialYear;
+
+        if (isInTheFuture) {
+            int yearsInTheFuture = year - endYearOfFinancialYear;
+            int daysInTheFuture = yearsInTheFuture * 365;
+            daysInTheFuture += dayOfYear - endDayOfFinancialYear;
+            return daysInTheFuture;
+        } else {
+            return -1;
+        }
 
     }
 

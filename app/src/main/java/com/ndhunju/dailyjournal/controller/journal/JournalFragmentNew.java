@@ -254,6 +254,14 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                             tempJournal.getDate()
                     );
                     return;
+                } else if (mServices.shouldShowAlertForPassingFinancialYearDate(
+                        tempJournal.getDate()
+                )) {
+                    UtilsView.showAlertDialogForFutureJournalDate(
+                            getContext(),
+                            tempJournal.getDate()
+                    );
+                    return;
                 }
 
                 mServices.updateNewJournal(tempJournal);
