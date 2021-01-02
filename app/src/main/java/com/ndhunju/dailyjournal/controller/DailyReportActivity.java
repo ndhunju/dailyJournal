@@ -19,6 +19,7 @@ import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
 import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.Utils;
@@ -103,6 +104,12 @@ public class DailyReportActivity extends BaseActivity implements LedgerAdapter.O
         Services.getInstance(this).registerJournalObserver(ledgerAdapter);
         recyclerView.setAdapter(ledgerAdapter);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("DailyReport");
     }
 
     @Override

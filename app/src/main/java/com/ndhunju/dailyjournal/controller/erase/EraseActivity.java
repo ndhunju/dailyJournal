@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.NavDrawerActivity;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.LockService;
 
 /**
@@ -26,5 +27,11 @@ public class EraseActivity extends NavDrawerActivity {
 
         // get user's pin before allowing to erase
         LockService.showLockScreen(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("Erase");
     }
 }

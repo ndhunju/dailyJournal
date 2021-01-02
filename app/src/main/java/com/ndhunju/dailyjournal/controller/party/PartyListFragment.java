@@ -32,6 +32,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.controller.backup.SharePartiesReportAsync;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
 import com.ndhunju.dailyjournal.service.Services;
@@ -279,10 +280,12 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         switch (item.getItemId()){
 
             case R.id.menu_party_list_activity_import:
+                AnalyticsService.INSTANCE.logEvent("didClickOnImportContacts");
                 startImportingContacts();
                 break;
 
             case R.id.menu_party_list_activity_share:
+                AnalyticsService.INSTANCE.logEvent("didClickOnShareReportInPartyList");
                 // let the user choose the type of report she wants to share
                 createDialogForSharePartiesReport(getActivity()).show();
                 break;

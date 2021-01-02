@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -84,6 +85,12 @@ public class StartNextYearActivity extends BaseActivity {
             mStepsContainer.addView(step.getCheckBox());
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("StartNextYear");
     }
 
     private void onStepsFinished() {

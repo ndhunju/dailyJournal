@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Setup;
 
 import androidx.multidex.MultiDexApplication;
@@ -34,6 +35,10 @@ public class DailyJournalApplication extends MultiDexApplication {
         //Load defaults settings
         Setup.from(getBaseContext()).loadSettings();
         sUiThreadHandler = new Handler(Looper.getMainLooper());
+
+        // Initialize AnalyticsService
+        AnalyticsService.INSTANCE.setup(this);
+        AnalyticsService.INSTANCE.logAppOpenEvent();
     }
 
     /**

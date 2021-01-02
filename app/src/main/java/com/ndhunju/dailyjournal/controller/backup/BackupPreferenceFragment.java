@@ -14,6 +14,7 @@ import android.text.TextUtils;
 
 import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.UtilsFile;
@@ -156,6 +157,7 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
         //block the previous view
         getView().setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        AnalyticsService.INSTANCE.logScreenViewEvent("BackupPreference");
     }
 
     @Override

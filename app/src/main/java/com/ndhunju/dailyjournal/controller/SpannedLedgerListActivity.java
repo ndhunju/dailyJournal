@@ -16,6 +16,7 @@ import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
 import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
 import com.ndhunju.dailyjournal.model.Journal;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
@@ -96,6 +97,12 @@ public class SpannedLedgerListActivity extends BaseActivity implements OnDialogB
         Services.getInstance(this).registerJournalObserver(ledgerAdapter);
         recyclerView.setAdapter(ledgerAdapter);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("SpannedLedgerList");
     }
 
     @Override

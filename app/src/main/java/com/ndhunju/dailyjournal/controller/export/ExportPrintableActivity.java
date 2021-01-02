@@ -16,6 +16,7 @@ import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.controller.backup.ExportPartiesReportAsync;
 import com.ndhunju.dailyjournal.controller.party.PartyListFragment;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -50,6 +51,12 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
         listView = findViewById(R.id.export_printable_option_list_view);
 
         setupExportPrintablesOptions();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("ExportPrintable");
     }
 
     private void setupExportPrintablesOptions() {

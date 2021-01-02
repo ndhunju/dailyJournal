@@ -10,6 +10,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,12 @@ public class GoogleDriveRestApiRestoreBackupActivity
                 new DividerItemDecoration(getContext(), LinearLayout.VERTICAL)
         );
         fileRecyclerView.setAdapter(fileAdapter = new FileRecyclerViewAdapter());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("DriveRestApiRestoreBackup");
     }
 
     @Override

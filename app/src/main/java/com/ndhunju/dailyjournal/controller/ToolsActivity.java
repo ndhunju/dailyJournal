@@ -21,6 +21,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
 import com.ndhunju.dailyjournal.controller.export.ExportPrintableActivity;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
 /**
@@ -52,6 +53,12 @@ public class ToolsActivity extends NavDrawerActivity {
                 false);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(new ToolsAdapter());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("Tools");
     }
 
     private Activity getActivity() {

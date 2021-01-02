@@ -26,6 +26,7 @@ import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
 import com.ndhunju.dailyjournal.service.ParseText;
@@ -304,6 +305,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
                         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                         // Start the activity, the intent will be populated with the speech text
                         startActivityForResult(intent, REQUEST_CODE_SPEECH);
+                        AnalyticsService.INSTANCE.logEvent("didClickOnMicInNewJournal");
                     }
                 });
 
@@ -318,6 +320,7 @@ public class JournalFragmentNew extends Fragment implements OnDialogBtnClickedLi
     public void onResume() {
         super.onResume();
         getActivity().setTitle(UtilsFormat.getJournalFromPref(getActivity()));
+        AnalyticsService.INSTANCE.logScreenViewEvent("NewJournal");
     }
 
 

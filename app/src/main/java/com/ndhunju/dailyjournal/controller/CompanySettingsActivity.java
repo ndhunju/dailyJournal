@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -92,6 +93,12 @@ public class CompanySettingsActivity extends BaseActivity implements OnDialogBtn
         }
         dateBtn.setText(UtilsFormat.formatDate(financialYear, this));
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("CompanySettings");
     }
 
     @Override

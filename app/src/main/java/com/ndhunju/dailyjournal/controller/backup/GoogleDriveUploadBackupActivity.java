@@ -4,10 +4,17 @@ import android.util.Log;
 
 import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 
 /** Created by ndhunju on 9/2/17.
  * This class is responsible for creating a backup file and uploading it to the google drive.*/
 public class GoogleDriveUploadBackupActivity extends GoogleDriveBackupActivity implements FinishCallback<String> {
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("DriveUploadBackup");
+    }
 
     @Override
     protected void onDriveClientReady() {

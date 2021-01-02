@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.backup.TransferOldDataAsyncTask;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class MyPreferenceActivity extends BaseActivity {
         // Check if this activity was called to import the old data ( data saved by v3.1)
         boolean importOldData = getIntent().getBooleanExtra(Constants.KEY_IMPORT_OLD_DATA, false);
         if (importOldData) new TransferOldDataAsyncTask(MyPreferenceActivity.this).execute();
+
+        AnalyticsService.INSTANCE.logScreenViewEvent("Preference");
 
         super.onResume();
     }

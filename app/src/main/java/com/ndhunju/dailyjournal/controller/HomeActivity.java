@@ -29,6 +29,7 @@ import com.ndhunju.dailyjournal.controller.export.ExportPrintableActivity;
 import com.ndhunju.dailyjournal.controller.fragment.AppRater;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
 import com.ndhunju.dailyjournal.service.Services;
@@ -145,6 +146,7 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         }
 
         askUserToRate();
+        AnalyticsService.INSTANCE.logScreenViewEvent("Home");
     }
 
     int currentSummaryIndex;

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.api.services.drive.Drive;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,6 +21,12 @@ public class GoogleDriveRestApiUploadBackupActivity extends GoogleDriveRestApiAc
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_google_drive_rest_upload);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("DriveRestApiUploadBackup");
     }
 
     @Override

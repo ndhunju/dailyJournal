@@ -9,11 +9,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 /** Created by ndhunju on 9/2/17.
  * This class is responsible for restoring a backup from google drive.*/
 public class GoogleDriveRestoreBackupActivity extends GoogleDriveBackupActivity implements FinishCallback<String> {
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("DriveRestoreBackup");
+    }
 
     @Override
     protected void onDriveClientReady() {

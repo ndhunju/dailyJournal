@@ -22,6 +22,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
 /**
@@ -131,6 +132,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
                 break;
             case R.drawable.ic_share:
                 //user clicked on Share option
+                AnalyticsService.INSTANCE.logAppShareEvent();
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.msg_share_subject));
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.msg_share_body) + " "

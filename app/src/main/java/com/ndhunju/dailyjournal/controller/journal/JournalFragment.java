@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.model.Journal;
@@ -274,6 +275,12 @@ public class JournalFragment extends Fragment implements OnDialogBtnClickedListe
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		AnalyticsService.INSTANCE.logScreenViewEvent("Journal");
 	}
 
 	/**

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.PieChartFrag;
 import com.ndhunju.dailyjournal.service.Analytics;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 
 import java.util.Locale;
 
@@ -84,7 +85,13 @@ public class ChartsActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-     /**
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsService.INSTANCE.logScreenViewEvent("Charts");
+    }
+
+    /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
