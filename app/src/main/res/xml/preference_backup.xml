@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/str_google_drive">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="@string/str_google_drive"
+        app:iconSpaceReserved="false"
+        >
         <Preference
             android:icon="@drawable/ic_cloud_upload_black_24dp"
             android:key="@string/key_pref_backup_google_drive"
@@ -10,7 +14,10 @@
             android:key="@string/key_pref_restore_google_drive"
             android:title="@string/str_restore_backup_from_google_drive" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/str_google_drive_in_house">
+    <PreferenceCategory
+        android:title="@string/str_google_drive_in_house"
+        app:iconSpaceReserved="false"
+        >
         <Preference
             android:icon="@drawable/ic_cloud_upload_black_24dp"
             android:key="@string/key_pref_backup_google_drive_in_house"
@@ -20,7 +27,10 @@
             android:key="@string/key_pref_restore_google_drive_in_house"
             android:title="@string/str_restore_backup_from_google_drive" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/str_local_storage">
+    <PreferenceCategory
+        android:title="@string/str_local_storage"
+        app:iconSpaceReserved="false"
+        >
         <Preference
             android:icon="@drawable/ic_file_upload_black_24dp"
             android:key="@string/key_pref_backup_local_storage"
@@ -30,26 +40,36 @@
             android:key="@string/key_pref_restore_local_storage"
             android:title="@string/str_restore_backup_from_local_storage" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/str_auto_backup">
+    <PreferenceCategory
+        android:title="@string/str_auto_backup"
+        app:iconSpaceReserved="false"
+        >
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/key_pref_auto_backup_cb"
-            android:title="@string/str_enable_auto_backup" />
+            android:title="@string/str_enable_auto_backup"
+            app:iconSpaceReserved="false"
+            />
         <CheckBoxPreference
             android:defaultValue="false"
             android:dependency="@string/key_pref_auto_backup_cb"
             android:key="@string/key_pref_auto_upload_backup_to_gdrive_cb"
             android:title="@string/pref_title_auto_upload_backup_to_gdrive"
-            android:summary="@string/pref_summary_auto_upload_backup_to_gdrive"/>
+            android:summary="@string/pref_summary_auto_upload_backup_to_gdrive"
+            app:iconSpaceReserved="false"
+            />
         <ListPreference
             android:defaultValue="604800000"
             android:dependency="@string/key_pref_auto_backup_cb"
             android:entries="@array/reminder_intervals"
             android:entryValues="@array/reminder_intervals_val"
             android:key="@string/key_pref_auto_backup_interval_lp"
-            android:title="@string/str_auto_backup_interval" />
+            android:title="@string/str_auto_backup_interval"
+            app:iconSpaceReserved="false"
+            />
         <Preference android:key="@string/key_pref_restore_auto_backup"
             android:title="@string/str_restore_backup_from_auto"
+            app:iconSpaceReserved="false"
             />
     </PreferenceCategory>
 </PreferenceScreen>

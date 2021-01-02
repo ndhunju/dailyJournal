@@ -79,7 +79,10 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
             switch (which) {
                 case 0: // Local Storage
                     FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
-                    dpdf.show(getFragmentManager(), FolderPickerDialogFragment.class.getName());
+                    dpdf.show(
+                            getSupportFragmentManager(),
+                            FolderPickerDialogFragment.class.getName()
+                    );
                     break;
 
                 case 1: // Other Apps

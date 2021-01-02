@@ -1,7 +1,6 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
 import android.Manifest;
-import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.MenuItem;
 
 import com.ndhunju.dailyjournal.R;
@@ -30,7 +31,7 @@ public class BackupActivity extends BaseActivity {
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getFragmentManager().beginTransaction().add(R.id.content_frame,
+        getSupportFragmentManager().beginTransaction().add(R.id.content_frame,
                 new BackupPreferenceFragment(), BackupPreferenceFragment.TAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();

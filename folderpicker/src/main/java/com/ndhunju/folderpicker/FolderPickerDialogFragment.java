@@ -3,14 +3,14 @@ package com.ndhunju.folderpicker;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresPermission;
+import androidx.fragment.app.DialogFragment;
+
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -28,7 +28,7 @@ import java.util.List;
  * pick a folder to save a file. It returns select folder's
  * absolute path via callbacks
  */
-public class FolderPickerDialogFragment extends DialogFragment{
+public class FolderPickerDialogFragment extends DialogFragment {
 
     //Constants
     private static final String KEY_REQUEST_CODE = "keyRequestCode";
@@ -51,7 +51,10 @@ public class FolderPickerDialogFragment extends DialogFragment{
      * @return
      * @NonNull
      */
-    public static FolderPickerDialogFragment newInstance(@NonNull String initAbsoluteDir, int requestCode){
+    public static FolderPickerDialogFragment newInstance(
+            @NonNull String initAbsoluteDir,
+            int requestCode
+    ){
         FolderPickerDialogFragment instance = new FolderPickerDialogFragment();
         Bundle args = new Bundle();
         args.putString(KEY_CURRENT_DIR, initAbsoluteDir);

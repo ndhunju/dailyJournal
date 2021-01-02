@@ -1,15 +1,15 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import androidx.core.content.ContextCompat;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.PreferenceFragmentCompat;
+
 import android.text.TextUtils;
 
 import com.ndhunju.dailyjournal.FinishCallback;
@@ -27,7 +27,9 @@ import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
  * This fragment allows users to create/restore backup from Google drive/Local Storage
  * as well as set Automatic Backup and erase all data
  */
-public class BackupPreferenceFragment extends PreferenceFragment implements OnDialogBtnClickedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class BackupPreferenceFragment
+        extends PreferenceFragmentCompat
+        implements OnDialogBtnClickedListener, OnSharedPreferenceChangeListener {
 
     public static final String TAG = BackupPreferenceFragment.class.getSimpleName();
     public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
@@ -44,43 +46,45 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
     private PreferenceService preferenceService;
     private boolean finishOnBackUpSuccess;
 
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
-        //Without this android creates default xml file
-        getPreferenceManager().setSharedPreferencesName(PreferenceService.DEF_NAME_SHARED_PREFERENCE);
+        // Without this android creates default xml file
+        getPreferenceManager().setSharedPreferencesName(
+                PreferenceService.DEF_NAME_SHARED_PREFERENCE
+        );
 
         addPreferencesFromResource(R.xml.preference_backup);
 
-        //load the preference file
+        if (getActivity() == null) {
+            return;
+        }
+
+        // Load the preference file
         preferenceService = PreferenceService.from(getActivity());
-        finishOnBackUpSuccess = getActivity().getIntent().getBooleanExtra(KEY_FINISH_ON_BACKUP_SUCCESS, false);
+        finishOnBackUpSuccess = getActivity().getIntent().getBooleanExtra(
+                KEY_FINISH_ON_BACKUP_SUCCESS,
+                false
+        );
 
 
         findPreference(getString(R.string.key_pref_backup_google_drive))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        startActivityForResult(new Intent(getActivity(), GoogleDriveUploadBackupActivity.class), REQUEST_CODE_BACKUP_COMPLETE);
-                        return true;
-                    }
+                .setOnPreferenceClickListener(preference -> {
+                    startActivityForResult(
+                            new Intent(getActivity(), GoogleDriveUploadBackupActivity.class),
+                            REQUEST_CODE_BACKUP_COMPLETE
+                    );
+                    return true;
                 });
 
         findPreference(getString(R.string.key_pref_restore_google_drive))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        UtilsView.alert(getActivity(), getString(R.string.warning_restore),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        startActivity(new Intent(getActivity(), GoogleDriveRestoreBackupActivity.class));
-                                    }
-                                }, null);
-                        return true;
-                    }
+                .setOnPreferenceClickListener(preference -> {
+                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
+                            (dialogInterface, i) -> startActivity(new Intent(
+                                    getContext(),
+                                    GoogleDriveRestoreBackupActivity.class)
+                            ), null);
+                    return true;
                 });
 
         // Create Backup in Google Drive using REST API library
@@ -106,56 +110,46 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 });
 
         findPreference(getString(R.string.key_pref_backup_local_storage))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR);
-                        dpdf.setTargetFragment(BackupPreferenceFragment.this, 0);
-                        dpdf.show(getFragmentManager(), TAG);
-                        return true;
-                    }
+                .setOnPreferenceClickListener(preference -> {
+                    FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(
+                            null,
+                            REQUEST_CODE_BACKUP_DIR
+                    );
+                    dpdf.setTargetFragment(BackupPreferenceFragment.this, 0);
+                    dpdf.show(getParentFragmentManager(), TAG);
+                    return true;
                 });
 
         findPreference(getString(R.string.key_pref_restore_local_storage))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        UtilsView.alert(getActivity(), getString(R.string.warning_restore),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                        intent.setType(UtilsFile.BACK_FILE_TYPE);
-                                        startActivityForResult(intent, REQUEST_CODE_PICK_BACKUP);
-                                    }
-                                }, null);
-                        return true;
-                    }
-                });
+                .setOnPreferenceClickListener((preference -> {
+                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
+                            (dialogInterface, i) -> {
+                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                intent.setType(UtilsFile.BACK_FILE_TYPE);
+                                startActivityForResult(intent, REQUEST_CODE_PICK_BACKUP);
+                            }, null);
+                    return true;
+                }));
 
         findPreference(getString(R.string.key_pref_restore_auto_backup))
-                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        UtilsView.alert(getActivity(), getString(R.string.warning_restore),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int pos) {
-                                        new AutoBackupAlertDialog(getActivity())
-                                                .create().show();
-                                    }
-                                }, null);
-                        return  true;
-                    }
+                .setOnPreferenceClickListener(preference -> {
+                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
+                            (dialogInterface, pos) -> new AutoBackupAlertDialog(getActivity())
+                                    .create().show(), null);
+                    return  true;
                 });
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //block the previous view
-        getView().setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
+        if (getView() != null && getContext() != null) {
+            // Block the previous view
+            getView().setBackgroundColor(
+                    ContextCompat.getColor(getContext(), android.R.color.white)
+            );
+        }
+
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         AnalyticsService.INSTANCE.logScreenViewEvent("BackupPreference");
     }
@@ -163,7 +157,8 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
     @Override
     public void onPause() {
         super.onPause();
-        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        getPreferenceManager().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -196,11 +191,15 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         String msg = "";
-        getActivity().setResult(resultCode);
+        if (getActivity() != null) {
+            getActivity().setResult(resultCode);
+        }
+
         switch (requestCode) {
 
             //Currently this feature is disabled. User needs some technical knowledge to use this
-            case REQUEST_CODE_PICK_JSON:     //Called when the user has picked a json file to restore data from
+            case REQUEST_CODE_PICK_JSON:
+                // Called when the user has picked a json file to restore data from
                 if (resultCode != Activity.RESULT_OK) {
                     msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
                     UtilsView.alert(getActivity(), msg);
@@ -230,7 +229,10 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                 if (selectedFilePath != null) {
                     new RestoreBackUpAsync(getActivity()).execute(selectedFilePath);
                 } else {
-                    String internalCacheFile = UtilsFile.copyDataToInternalCacheFile(getActivity(), data.getData());
+                    String internalCacheFile = UtilsFile.copyDataToInternalCacheFile(
+                            getActivity(),
+                            data.getData()
+                    );
                     if (internalCacheFile != null) {
                         new RestoreBackUpAsync(getActivity())
                                 // ask to delete the internal cache file after restoring backup
@@ -258,10 +260,18 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
 
             case REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE:
                 // update the value of this preference based on the result
-                ((CheckBoxPreference) findPreference(getString(R.string.key_pref_auto_upload_backup_to_gdrive_cb))).setChecked(resultCode == Activity.RESULT_OK);
+                ((CheckBoxPreference) findPreference(
+                        getString(R.string.key_pref_auto_upload_backup_to_gdrive_cb))
+                ).setChecked(resultCode == Activity.RESULT_OK);
                 if (resultCode != Activity.RESULT_OK) {
                     // show connecting to msg "Connecting to Google Drive failed"
-                    UtilsView.alert(getActivity(), getString(R.string.msg_connecting_failed, getString(R.string.str_google_drive)));
+                    UtilsView.alert(
+                            getActivity(),
+                            getString(
+                                    R.string.msg_connecting_failed,
+                                    getString(R.string.str_google_drive)
+                            )
+                    );
                 }
                 break;
         }
@@ -288,19 +298,18 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
                                 resultMsg = String.format(getString(R.string.msg_finished), getString(R.string.str_backup));
                                 resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
                                 //Display the result
-                                UtilsView.alert(getActivity(), resultMsg, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (finishOnBackUpSuccess) {
-                                            getActivity().finish();
-                                        }
+                                UtilsView.alert(getActivity(), resultMsg, (dialog, which) -> {
+                                    if (finishOnBackUpSuccess) {
+                                        getActivity().finish();
                                     }
                                 });
                             } else {
-                                getActivity().setResult(Activity.RESULT_CANCELED);
-                                resultMsg = String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
-                                //Display the result
-                                UtilsView.alert(getActivity(), resultMsg);
+                                if (getActivity() != null) {
+                                    getActivity().setResult(Activity.RESULT_CANCELED);
+                                    resultMsg = String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
+                                    // Display the result
+                                    UtilsView.alert(getActivity(), resultMsg);
+                                }
                             }
 
                         }
@@ -313,7 +322,12 @@ public class BackupPreferenceFragment extends PreferenceFragment implements OnDi
     }
 
     private void setBackupSuccessResult() {
-        getActivity().setResult(Activity.RESULT_OK, new Intent().putExtra(KEY_BACKUP_RESULT, true));
+        if (getActivity() != null) {
+            getActivity().setResult(
+                    Activity.RESULT_OK,
+                    new Intent().putExtra(KEY_BACKUP_RESULT, true)
+            );
+        }
     }
 
 }
