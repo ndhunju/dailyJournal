@@ -19,7 +19,7 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     // each version of the Android Gradle Plugin now has a default version of the build tools.
     //buildToolsVersion '25.0.3'
 
@@ -27,7 +27,7 @@ android {
         // The values in defaultConfig override those in the manifest file.
         applicationId "com.ndhunju.dailyjournalplus"
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
