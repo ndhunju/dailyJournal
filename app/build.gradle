@@ -2,6 +2,7 @@
 // to the top-level build tasks and makes the android {...} element available to specify
 // Android-specific build options.
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 buildscript {
 
@@ -12,7 +13,9 @@ buildscript {
 
     dependencies {
         classpath 'com.google.gms:google-services:4.3.4'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.20"
     }
+
 }
 
 android {
