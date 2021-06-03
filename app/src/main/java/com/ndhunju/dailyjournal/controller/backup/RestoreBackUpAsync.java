@@ -32,6 +32,7 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
     private Activity mActivity;
     private ProgressDialog pd;
     private Action action;
+    private Exception ex;
 
     public RestoreBackUpAsync(Activity context){
         mActivity = context;
@@ -58,7 +59,14 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
         //End progress bar
         pd.cancel();
         mActivity.setResult(result ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
-        String msg = result ? String.format(mActivity.getString(R.string.msg_restored), mActivity.getString(R.string.str_backup)) : String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_failed));
+        String msg = result
+                ? String.format(mActivity.getString(R.string.msg_restored), mActivity.getString(R.string.str_backup))
+                : String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_failed));
+
+        if (ex != null) {
+            msg += "\n\n(" + ex.getMessage() + ")";
+        }
+
         UtilsView.alert(mActivity, msg);//Display msg
     }
 
@@ -95,7 +103,8 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
 
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error creating backup file: " + e.getMessage());
+            this.ex = e;
+            Log.e(TAG, "Error restoring backup file: " + e.getMessage());
             return false;
         }
     }

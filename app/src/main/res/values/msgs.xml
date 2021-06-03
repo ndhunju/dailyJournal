@@ -120,4 +120,6 @@
     <string name="msg_zipping">Creating a zip file…</string>
     <string name="msg_copying">Copying %s…</string>
 
+    <string name="msg_error_locating_file">Could not locate the file. Please try moving the file to the internal storage.</string>
+
 </resources>

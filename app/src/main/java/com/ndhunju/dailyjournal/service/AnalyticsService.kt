@@ -26,6 +26,12 @@ object AnalyticsService {
         firebase?.logEvent(name, null)
     }
 
+    fun logEvent(name: String, info: String) {
+        val bundle = Bundle()
+        bundle.putString("Info", info)
+        firebase?.logEvent(name, bundle)
+    }
+
     fun logAppOpenEvent() {
         firebase?.logEvent(Event.APP_OPEN, null)
     }

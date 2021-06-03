@@ -241,6 +241,14 @@ public class BackupPreferenceFragment
                     } else {
                         // show restore failed error message
                         msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
+                        msg += "\n" + getString(R.string.msg_error_locating_file);
+                        msg += "\n\n(" + data.getDataString() + ")";
+
+                        AnalyticsService.INSTANCE.logEvent(
+                                "failedLocalBackupRestore",
+                                "data=" + data.getDataString()
+                        );
+
                         UtilsView.alert(getActivity(), msg);
                     }
                 }
