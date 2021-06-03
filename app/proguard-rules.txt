@@ -1,1 +1,6 @@
--dontwarn com.google.android.gms.** 
+-dontwarn com.google.android.gms.**
+
+# Fix for dailyLimitExceededUnreg error for production app (https://stackoverflow.com/q/58378312)
+-keep class * extends com.google.api.client.json.GenericJson { *; }
+-keep class com.google.api.services.drive.** { *; }
+-keepclassmembers class * { @com.google.api.client.util.Key <fields>; }
