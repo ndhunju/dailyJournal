@@ -38,10 +38,12 @@ public class GoogleSignInHelper {
     }
 
     Scope[] requiredScopes = {
+            // See https://github.com/vaquarkhan/Scoot-mobile-app/blob/master/ScootAppSource/com/google/android/gms/auth/api/signin/GoogleSignInOptions.java
 //            GoogleSignInOptions.zat, // openId
 //            GoogleSignInOptions.zar, // profile
             // Without email, gives "IllegalArgumentException: the name must not be empty: null"
-            GoogleSignInOptions.zas, // email
+            /** See {@link GoogleSignInOptions.Builder#requestEmail()} to know which var is for email */
+            GoogleSignInOptions.zab, // email
             new Scope(DriveScopes.DRIVE_FILE)
     };
 
