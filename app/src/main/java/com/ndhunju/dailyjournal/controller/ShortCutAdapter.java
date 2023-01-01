@@ -29,12 +29,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 
-class ShortCutAdapter extends RecyclerView.Adapter<ShortCutAdapter.ShortCutVH> {
+public class ShortCutAdapter extends RecyclerView.Adapter<ShortCutAdapter.ShortCutVH> {
 
-    // Constants
+    // Static Variables
     static final int SHORTCUT_COLS_NUM = 3;
-    final String PREF_KEY_SAVED_SHORTCUT = "PREF_KEY_SAVED_SHORTCUT";
-    final String SAVED_SHORTCUT_DELIMITER = ";";
+    static final String PREF_KEY_SAVED_SHORTCUT = "PREF_KEY_SAVED_SHORTCUT";
+    static final String SAVED_SHORTCUT_DELIMITER = ";";
+    static final String DEFAULT_SHORTCUTS =
+            ShortCut.getPrefVal(NewJournalShortCut.class) + SAVED_SHORTCUT_DELIMITER +
+            ShortCut.getPrefVal(PartiesShortCut.class) + SAVED_SHORTCUT_DELIMITER +
+            ShortCut.getPrefVal(BackupShortCut.class);
+
+    /**
+     * Writes {@link ShortCutAdapter#DEFAULT_SHORTCUTS} to persistence storage.
+     * Note: It will override existing values.
+     */
+    static public void putDefaultShortCutsToPersistence(Context context) {
+        KeyValPersistence keyValPersistence = KeyValPersistence.from(context);
+        keyValPersistence.putString(PREF_KEY_SAVED_SHORTCUT, DEFAULT_SHORTCUTS);
+    }
 
     // Member Variables
     final Context context;
@@ -153,12 +166,16 @@ class ShortCutAdapter extends RecyclerView.Adapter<ShortCutAdapter.ShortCutVH> {
         String mPrefVal;
 
         ShortCut(int stringResId, int iconResId) {
-            mPrefVal = this.getClass().getSimpleName();
+            mPrefVal = getPrefVal(this.getClass());
             mStringResId = stringResId;
             mIconResId = iconResId;
         }
 
         void onClick() {
+        }
+
+        static String getPrefVal(Class<? extends ShortCut> klass) {
+            return klass.getSimpleName();
         }
 
     }

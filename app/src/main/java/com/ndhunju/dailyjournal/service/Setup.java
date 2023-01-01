@@ -2,6 +2,8 @@ package com.ndhunju.dailyjournal.service;
 
 import android.content.Context;
 
+import com.ndhunju.dailyjournal.controller.ShortCutAdapter;
+
 /**
  * Created by dhunju on 10/4/2015.
  * This class holds settings or things that needs to be initialized
@@ -11,7 +13,7 @@ public class Setup {
 
     public static final String KEY_APP_START_TOTAL = Constants.APP_PREFIX + "noOfTimesAppStarted";
 
-    private KeyValPersistence mKeyVal;
+    private final KeyValPersistence mKeyVal;
     private static Setup mSetup;
     private Context mContext;
 
@@ -36,6 +38,7 @@ public class Setup {
 
     private void onAppStartFirstTime(){
         setUpBackUpReminder();
+        setUpDefaultShortCuts();
     }
 
     private void incrementAppStartTimes(){
@@ -46,6 +49,10 @@ public class Setup {
         //Check the preference for reminder
         PreferenceService preferenceService = PreferenceService.from(mContext);
         preferenceService.updateAutoBackup();
+    }
+
+    private void setUpDefaultShortCuts() {
+        ShortCutAdapter.putDefaultShortCutsToPersistence(mContext);
     }
 
 }
