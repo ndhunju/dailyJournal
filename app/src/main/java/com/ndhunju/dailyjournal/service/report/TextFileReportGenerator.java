@@ -10,6 +10,7 @@ import com.ndhunju.dailyjournal.util.UtilsFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by ndhunju on 12/27/16.
@@ -56,7 +57,7 @@ public class TextFileReportGenerator extends ReportGenerator<File> {
 
             // write to file
             OutputStream os = new FileOutputStream(textFile);
-            os.write(builder.asString().getBytes("UTF-8"));
+            os.write(builder.asString().getBytes(StandardCharsets.UTF_8));
             os.close();
 
             //to let know that a new file has been created so that it appears in the computer

@@ -12,6 +12,7 @@ import com.ndhunju.dailyjournal.util.UtilsFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by dhunju on 9/27/2015.
@@ -44,7 +45,10 @@ public class CsvReportGenerator extends ReportGenerator<File>{
 
     @Override
     public void onAppendHeader(Builder builder) {
-        builder.appendText(addGap(R.string.str_num, 3));
+        builder.appendText(addGap(R.string.str_num));
+        if (shouldAppendJournalId()) {
+            builder.appendText(addGap(getString(R.string.str_id_only)));
+        }
         builder.appendText(addGap(R.string.str_date));
         builder.appendText(addGap(R.string.str_dr));
         builder.appendText(addGap(R.string.str_cr));
@@ -76,7 +80,7 @@ public class CsvReportGenerator extends ReportGenerator<File>{
 
             // write to file
             OutputStream os = new FileOutputStream(cvsFile);
-            os.write(builder.asString().getBytes("UTF-8"));
+            os.write(builder.asString().getBytes(StandardCharsets.UTF_8));
             os.close();
 
             //to let know that a new file has been created so that it appears in the computer
