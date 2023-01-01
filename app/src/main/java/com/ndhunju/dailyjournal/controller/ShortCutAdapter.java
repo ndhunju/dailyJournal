@@ -25,16 +25,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 
-class ShortCutAdapter extends RecyclerView.Adapter {
+class ShortCutAdapter extends RecyclerView.Adapter<ShortCutAdapter.ShortCutVH> {
 
+    // Constants
     static final int SHORTCUT_COLS_NUM = 3;
     final String PREF_KEY_SAVED_SHORTCUT = "PREF_KEY_SAVED_SHORTCUT";
     final String SAVED_SHORTCUT_DELIMITER = ";";
-    final Context context;
 
+    // Member Variables
+    final Context context;
     ShortCut[] allShortCuts = {
             new NewJournalShortCut(),
             new PartiesShortCut(),
@@ -79,8 +82,9 @@ class ShortCutAdapter extends RecyclerView.Adapter {
         context.startActivity(intent);
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ShortCutVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ShortCutVH(LayoutInflater.from(getContext()).inflate(
                 R.layout.item_activity_home,
                 parent,
@@ -89,7 +93,7 @@ class ShortCutAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ShortCutVH holder, int position) {
         ((ShortCutVH) holder).bind(position);
     }
 
@@ -118,7 +122,10 @@ class ShortCutAdapter extends RecyclerView.Adapter {
             itemIcon = (ImageView) itemView.findViewById(R.id.item_home_activity_icon);
 
             int margin = UtilsView.dpToPx(getContext(), 5);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(itemSize - 2 * margin, itemSize - 2 * margin);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    itemSize - 2 * margin,
+                    itemSize - 2 * margin
+            );
             params.setMargins(margin, margin, margin, margin);
             itemView.setLayoutParams(params);
 
@@ -138,7 +145,7 @@ class ShortCutAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class ShortCut {
+    private static class ShortCut {
         @StringRes
         int mStringResId;
         @DrawableRes
@@ -213,7 +220,8 @@ class ShortCutAdapter extends RecyclerView.Adapter {
         @Override
         void onClick() {
             super.onClick();
-            startActivity(new Intent(getContext(), JournalNewActivity.class).putExtra(Constants.KEY_JOURNAL_ID, Constants.ID_NEW_JOURNAL));
+            startActivity(new Intent(getContext(), JournalNewActivity.class)
+                    .putExtra(Constants.KEY_JOURNAL_ID, Constants.ID_NEW_JOURNAL));
         }
     }
 
