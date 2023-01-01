@@ -126,5 +126,6 @@
     <string name="msg_backup_now">Would you like to upload backup to the Google Drive now?</string>
     <string name="msg_permission_granted">Thank you for granting the permission. Please try again now.</string>
     <string name="msg_permission_not_granted">App requires permission to manage files to create and restore backup in the device.</string>
+    <string name="msg_permission_read_not_granted">App requires read permission to show the images that you can add here from your device.</string>
 
 </resources>

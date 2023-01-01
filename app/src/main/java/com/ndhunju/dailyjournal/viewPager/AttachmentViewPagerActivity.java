@@ -52,6 +52,7 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	private static final String TAG = AttachmentViewPagerActivity.class.getSimpleName();
 	private static final int REQUEST_TAKE_PHOTO= 2646;
 	private static final int REQUEST_IMAGE  = 4646;
+	private static final int REQUEST_PERMISSIONS_READ_MEDIA_IMAGES = 2322;
 	private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
 
 
@@ -292,7 +293,8 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	}
 
 	private void addNewPicture() {
-		if (!checkWriteStoragePermission()) {
+
+		if (!checkReadImagePermission()) {
 			runAfterPermissionGrant = this::addNewPicture;
 			return;
 		}
@@ -300,22 +302,19 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		CharSequence[] options = getResources().getStringArray(R.array.options_attch);
 		AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
 				.setTitle(getString(R.string.str_choose))
-				.setItems(options, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Intent i = null;
-						switch (which) {
-							case 0: //Take Picture using installed camera app
-								Intent takePictureIntent = UtilsFile.getPictureFromCam(getActivity());
-								startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-								break;
+				.setItems(options, (dialog, which) -> {
+					Intent i = null;
+					switch (which) {
+						case 0: //Take Picture using installed camera app
+							Intent takePictureIntent = UtilsFile.getPictureFromCam(getActivity());
+							startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+							break;
 
-							case 1: //Select image from the storage
-								i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-								startActivityForResult(i, REQUEST_IMAGE);
-								break;
+						case 1: //Select image from the storage
+							i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+							startActivityForResult(i, REQUEST_IMAGE);
+							break;
 
-						}
 					}
 				}).create();
 		alertDialog.show();
@@ -325,12 +324,50 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		return AttachmentViewPagerActivity.this;
 	}
 
-	private boolean checkWriteStoragePermission() {
-		if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				getActivity().requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_WRITE_STORAGE);
+	private boolean checkReadImagePermission() {
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			if (ActivityCompat.checkSelfPermission(
+					getActivity(),
+					Manifest.permission.READ_MEDIA_IMAGES
+			) != PackageManager.PERMISSION_GRANTED) {
+				UtilsView.alert(
+						getActivity(),
+						getString(R.string.msg_permission_read_not_granted),
+						(dialog, which) -> {
+							// Ask for permission
+							getActivity().requestPermissions(
+									new String[] {Manifest.permission.READ_MEDIA_IMAGES},
+									REQUEST_PERMISSIONS_READ_MEDIA_IMAGES
+							);
+						},
+						(dialog, which) -> dialog.dismiss()
+				);
+
+				// Permission not granted yet
+				return false;
 			}
-			return false;
+		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			if (ActivityCompat.checkSelfPermission(
+					getActivity(),
+					Manifest.permission.WRITE_EXTERNAL_STORAGE
+			) != PackageManager.PERMISSION_GRANTED) {
+				UtilsView.alert(
+						getActivity(),
+						getString(R.string.msg_permission_read_not_granted),
+						(dialog, which) -> {
+							// Ask for permission
+							getActivity().requestPermissions(
+									new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+									REQUEST_PERMISSIONS_WRITE_STORAGE
+							);
+						},
+						(dialog, which) -> dialog.dismiss()
+				);
+
+				// Permission not granted yet
+				return false;
+			}
 		}
 
 		return true;
@@ -338,7 +375,8 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE) {
+		if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE
+				|| requestCode == REQUEST_PERMISSIONS_READ_MEDIA_IMAGES) {
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				if (runAfterPermissionGrant != null) {
 					runAfterPermissionGrant.run();
