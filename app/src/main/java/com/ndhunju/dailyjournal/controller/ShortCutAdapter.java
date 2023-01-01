@@ -206,9 +206,10 @@ public class ShortCutAdapter extends RecyclerView.Adapter<ShortCutAdapter.ShortC
                     .setTitle(R.string.str_select_shortcut)
                     .setMultiChoiceItems(shortCutsName, selectedShortCut, (dialog, which, isChecked) -> {
                         if (isChecked) {
-                            // add newly selected at first
-                            selectedShortCuts.add(0, allShortCuts[which]);
-                            notifyItemInserted(0);
+                            // add newly selected at last
+                            int lastIndex = selectedShortCuts.size() - 1;
+                            selectedShortCuts.add(lastIndex, allShortCuts[which]);
+                            notifyItemInserted(lastIndex);
                         } else {
                             for (int i = 0; i < selectedShortCuts.size(); i++) {
                                 if (selectedShortCuts.get(i).equals(allShortCuts[which])) {
