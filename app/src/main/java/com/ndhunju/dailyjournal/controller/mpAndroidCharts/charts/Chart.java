@@ -223,17 +223,10 @@ public abstract class Chart<T extends ChartData<? extends DataSet<? extends Entr
         setWillNotDraw(false);
         // setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
-        if (android.os.Build.VERSION.SDK_INT < 11)
-            mAnimator = new ChartAnimator();
-        else
-            mAnimator = new ChartAnimator(new AnimatorUpdateListener() {
-
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    // ViewCompat.postInvalidateOnAnimation(Chart.this);
-                    postInvalidate();
-                }
-            });
+        mAnimator = new ChartAnimator(animation -> {
+            // ViewCompat.postInvalidateOnAnimation(Chart.this);
+            postInvalidate();
+        });
 
         // initialize the utils
         Utils.init(getContext());

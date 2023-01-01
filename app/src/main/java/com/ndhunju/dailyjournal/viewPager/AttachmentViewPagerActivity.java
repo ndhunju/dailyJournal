@@ -179,10 +179,10 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode){
+		switch (requestCode) {
 			case REQUEST_TAKE_PHOTO: //Picture was taken from the Camera App
 
-				if(!UtilsView.showResult(getActivity(), resultCode)){
+				if (!UtilsView.showResult(getActivity(), resultCode)) {
 					return;
 				}
 
@@ -195,14 +195,14 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 				File tempPicFile = UtilsFile.createExternalStoragePublicPicture();
 				File internalPicFile = UtilsFile.createImageFile(getActivity());
 
-				try{
-					FileInputStream picFileIS  = new FileInputStream(tempPicFile);
+				try {
+					FileInputStream picFileIS = new FileInputStream(tempPicFile);
 					FileOutputStream internalFileOS = new FileOutputStream(internalPicFile);
 					UtilsZip.copy(picFileIS, internalFileOS);
 					picFileIS.close();
 					internalFileOS.close();
 					//deleting this file works fine. May be files in public folder can be deleted
-					String log = tempPicFile.delete()? "Temp pic file deleted" : "Temp file NOT deleted";
+					String log = tempPicFile.delete() ? "Temp pic file deleted" : "Temp file NOT deleted";
 					Log.d(TAG, log);
 
 				} catch (IOException e) {
@@ -220,7 +220,7 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 			case REQUEST_IMAGE:  //Image was picked from the storage
 
 				//if not image is selected data is null even tho result code is OK
-				if(!UtilsView.showResult(getActivity(), resultCode)){
+				if (!UtilsView.showResult(getActivity(), resultCode)) {
 					return;
 				}
 
@@ -229,7 +229,8 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 				Bitmap bitmap;
 				try {
 					bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-				} catch (Exception e) { Log.d(TAG, "couldn't load selected image");
+				} catch (Exception e) {
+					Log.d(TAG, "couldn't load selected image");
 					return;
 				}
 
@@ -245,6 +246,8 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 				}).execute(bitmap);
 
 				break;
+			default:
+				super.onActivityResult(requestCode, resultCode, data);
 		}
 
 	}

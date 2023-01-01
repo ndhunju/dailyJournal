@@ -147,20 +147,16 @@ public class UtilsView {
         return pd;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static void performTransition(int viewGroupId, Activity activity){
+        //For example, the framework does not support animating changes to ListView
+        // objects, so you should not try to animate them during a transition.
+        Transition transition = TransitionInflater.from(activity)
+                .inflateTransition(R.transition.transition_fade_set);
+        transition.setDuration(500);
+        // Start recording changes to the view hierarchy
+        TransitionManager.beginDelayedTransition((ViewGroup) activity
+                .findViewById(viewGroupId), transition);
 
-        if(Utils.isKitKat()) {
-            //For example, the framework does not support animating changes to ListView
-            // objects, so you should not try to animate them during a transition.
-            Transition transition = TransitionInflater.from(activity)
-                    .inflateTransition(R.transition.transition_fade_set);
-            transition.setDuration(500);
-            // Start recording changes to the view hierarchy
-            TransitionManager.beginDelayedTransition((ViewGroup) activity
-                    .findViewById(viewGroupId), transition);
-
-        }
     }
 
     public static void setMenuIconTint(Menu menu, @ColorInt int tint) {

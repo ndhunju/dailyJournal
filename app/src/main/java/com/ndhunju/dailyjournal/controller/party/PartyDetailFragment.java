@@ -270,11 +270,7 @@ public abstract class PartyDetailFragment extends Fragment implements PartyDAO.O
     public static void addDrawables(Context con, View... view) {
         for (View v : view) {
             if (v == null) return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                v.setBackground(ContextCompat.getDrawable(con, R.drawable.cell_header_shape));
-            } else {
-                v.setBackgroundDrawable(ContextCompat.getDrawable(con, R.drawable.cell_header_shape));
-            }
+            v.setBackground(ContextCompat.getDrawable(con, R.drawable.cell_header_shape));
         }
     }
 

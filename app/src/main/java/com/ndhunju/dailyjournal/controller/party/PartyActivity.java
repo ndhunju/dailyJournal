@@ -193,6 +193,9 @@ public class PartyActivity extends BaseActivity {
                 partyPicIV.setImageDrawable(Drawable.createFromPath(mParty.getPicturePath()));
                 partyPicIV.invalidate();
                 break;
+
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

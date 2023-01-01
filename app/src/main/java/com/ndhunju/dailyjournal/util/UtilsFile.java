@@ -484,7 +484,7 @@ public class UtilsFile {
     public static String getPath(final Context context, final Uri uri) {
 
         // DocumentProvider
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
             String contentId;
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {

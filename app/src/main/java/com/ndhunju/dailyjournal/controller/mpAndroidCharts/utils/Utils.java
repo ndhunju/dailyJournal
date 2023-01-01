@@ -475,10 +475,7 @@ public abstract class Utils {
      */
     @SuppressLint("NewApi")
     public static void postInvalidateOnAnimation(View view) {
-        if (Build.VERSION.SDK_INT >= 16)
-            view.postInvalidateOnAnimation();
-        else
-            view.postInvalidateDelayed(10);
+        view.postInvalidateDelayed(10);
     }
 
     public static int getMinimumFlingVelocity() {

@@ -129,11 +129,7 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
                 mSummaryPager.setLayoutParams(params);
 
                 // remove this GlobalLayoutListener
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mSummaryPager.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    mSummaryPager.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
+                mSummaryPager.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
     }

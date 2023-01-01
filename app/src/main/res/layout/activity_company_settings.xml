@@ -30,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:hint="@string/hint_company_name"
-                android:ems="10"/>
+                android:ems="10"
+                android:autofillHints="" />
 
 
             <TextView

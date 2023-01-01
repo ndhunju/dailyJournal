@@ -38,11 +38,7 @@ class AttachmentPagerAdapter extends PagerAdapter {
                     // make sure PhotoView is laid out so that its dimensions are measured
                     if (ViewCompat.isLaidOut(photoView)) {
                         photoView.setImageBitmap(Utils.scaleBitmap(mAttachments.get(position).getPath(), photoView.getWidth(), photoView.getHeight()));
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                            photoView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        } else {
-                            photoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
+                        photoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 }
             });

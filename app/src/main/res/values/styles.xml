@@ -56,12 +56,7 @@
         <item name="android:background">@drawable/button_warning</item>
     </style>
 
-    <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">@style/ButtonBar</item>
-        <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
-    </style>
+    <style name="FullscreenTheme" parent="android:Theme.NoTitleBar"></style>
 
     <!-- Backward-compatible version of ?android:attr/buttonBarStyle -->
     <style name="ButtonBar">
@@ -78,5 +73,7 @@
     <style name="Underline">
         <item name="android:background">@drawable/buttom_border</item>
     </style>
+
+    <style name="FullscreenActionBarStyle"></style>
 
 </resources>

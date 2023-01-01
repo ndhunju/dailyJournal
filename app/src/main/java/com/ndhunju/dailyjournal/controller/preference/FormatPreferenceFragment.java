@@ -1,5 +1,6 @@
 package com.ndhunju.dailyjournal.controller.preference;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.view.View;
@@ -8,6 +9,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by dhunju on 10/9/2015.
@@ -31,6 +33,6 @@ public class FormatPreferenceFragment extends PreferenceFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.setBackgroundColor(getContext().getColor(R.color.colorBackground));
+        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.colorBackground));
     }
 }

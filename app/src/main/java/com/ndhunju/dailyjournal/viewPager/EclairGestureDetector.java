@@ -15,11 +15,9 @@
  *******************************************************************************/
 package com.ndhunju.dailyjournal.viewPager;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.view.MotionEvent;
 
-@TargetApi(5)
 public class EclairGestureDetector extends CupcakeGestureDetector {
 	private static final int INVALID_POINTER_ID = -1;
 	private int mActivePointerId = INVALID_POINTER_ID;

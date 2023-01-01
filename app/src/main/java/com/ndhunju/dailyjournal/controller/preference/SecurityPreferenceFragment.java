@@ -13,6 +13,7 @@ import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 /**
  * Sub class of {@link PreferenceFragment} for handling Security Preferences
@@ -53,7 +54,7 @@ public class SecurityPreferenceFragment extends PreferenceFragment implements Sh
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.setBackgroundColor(getContext().getColor(R.color.colorBackground));
+        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.colorBackground));
     }
 
     @Override

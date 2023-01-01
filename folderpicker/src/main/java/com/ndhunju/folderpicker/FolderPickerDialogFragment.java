@@ -203,7 +203,11 @@ public class FolderPickerDialogFragment extends DialogFragment {
                                     mCurrentDir += "/" + newDirName;
                                     updateDirectory();
                                 } else {
-                                    Toast.makeText(getActivity(), getString(R.string.str_failed), Toast.LENGTH_SHORT);
+                                    Toast.makeText(
+                                            getActivity(),
+                                            getString(R.string.str_failed),
+                                            Toast.LENGTH_SHORT
+                                    ).show();
                                 }
                             }
                         }).setNegativeButton(android.R.string.cancel, null).show();

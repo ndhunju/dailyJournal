@@ -162,7 +162,7 @@ public class MyNotificationManager {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pendingIntent = PendingIntent
-                .getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                .getActivity(mContext, 0, intent, getFlags(PendingIntent.FLAG_UPDATE_CURRENT));
 
         NotificationCompat.Builder builder = MyNotificationManager.from(mContext)
                 .getBuilder(mContext.getString(R.string.str_auto_backup),

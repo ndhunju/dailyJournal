@@ -479,9 +479,6 @@ public abstract class PieRadarChartBase<T extends ChartData<? extends DataSet<? 
     @SuppressLint("NewApi")
     public void spin(int durationmillis, float fromangle, float toangle, Easing.EasingOption easing) {
 
-        if (android.os.Build.VERSION.SDK_INT < 11)
-            return;
-
         setRotationAngle(fromangle);
 
         ObjectAnimator spinAnimator = ObjectAnimator.ofFloat(this, "rotationAngle", fromangle,

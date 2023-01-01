@@ -83,11 +83,11 @@ public class MyPreferenceFragment extends PreferenceFragment {
         );
         allowOutOfRangeEntryPref.setTitle(getString(
                 R.string.pref_allow_out_of_range_journal_entry,
-                UtilsFormat.getJournalFromPref(getContext())
+                UtilsFormat.getJournalFromPref(getActivity())
         ));
         allowOutOfRangeEntryPref.setSummary(getString(
                 R.string.pref_summary_allow_out_of_range_journal_entry,
-                UtilsFormat.getJournalFromPref(getContext())
+                UtilsFormat.getJournalFromPref(getActivity())
         ));
     }
 
