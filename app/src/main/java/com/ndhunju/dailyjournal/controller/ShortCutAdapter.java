@@ -51,17 +51,7 @@ public class ShortCutAdapter extends RecyclerView.Adapter<ShortCutAdapter.ShortC
 
     // Member Variables
     final Context context;
-    ShortCut[] allShortCuts = {
-            new NewJournalShortCut(),
-            new PartiesShortCut(),
-            new DailyReportShortCut(),
-            new FindJournalShortCut(),
-            new SearchJournalByNoteShortCut(),
-            new ExportPrintableShortCut(),
-            new BackupShortCut(),
-            new ChartsShortCut(),
-            new EraseShortcut()
-    };
+    ShortCut[] allShortCuts;
 
     List<ShortCut> selectedShortCuts = new ArrayList<>();
     KeyValPersistence keyValPersistence;
@@ -69,6 +59,18 @@ public class ShortCutAdapter extends RecyclerView.Adapter<ShortCutAdapter.ShortC
     /*package*/ ShortCutAdapter(Context context) {
         this.context = context;
         keyValPersistence = KeyValPersistence.from(getContext());
+
+        allShortCuts = new ShortCut[]{
+                new NewJournalShortCut(),
+                new PartiesShortCut(),
+                new DailyReportShortCut(),
+                new FindJournalShortCut(),
+                new SearchJournalByNoteShortCut(),
+                new ExportPrintableShortCut(),
+                new BackupShortCut(),
+                new ChartsShortCut(),
+                new EraseShortcut()
+        };
 
         // retrieve saved shortcuts in order from preferences
         String savedShortCuts = keyValPersistence.get(PREF_KEY_SAVED_SHORTCUT, "");
