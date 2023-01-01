@@ -183,9 +183,10 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
     }
 
     private void askUserToRate(){
-        // Ask users to rate the app after they have used for 20 times
+        // Ask users to rate the app after they have used for 11 times
         AppRater rater = new AppRater(HomeActivity.this);
-        rater.setLaunchesBeforePrompt(20);
+        rater.setLaunchesBeforePrompt(11);
+        rater.setLaunchesBeforeRePrompt(7);
         rater.setPhrases(
                 R.string.msg_rate_title,
                 R.string.msg_rate_body,

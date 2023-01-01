@@ -62,6 +62,7 @@ public class AppRater {
     private String mPackageName;
     private int mDaysBeforePrompt;
     private int mLaunchesBeforePrompt;
+    private int mLaunchesBeforeRePrompt;
     private String mTargetUri;
     private String mText_title;
     private String mText_explanation;
@@ -97,6 +98,7 @@ public class AppRater {
         mPackageName = packageName;
         mDaysBeforePrompt = DEFAULT_DAYS_BEFORE_PROMPT;
         mLaunchesBeforePrompt = DEFAULT_LAUNCHES_BEFORE_PROMPT;
+        mLaunchesBeforeRePrompt = DEFAULT_LAUNCHES_BEFORE_PROMPT;
         mTargetUri = DEFAULT_TARGET_URI;
         mText_title = DEFAULT_TEXT_TITLE;
         mText_explanation = DEFAULT_TEXT_EXPLANATION;
@@ -125,6 +127,14 @@ public class AppRater {
      */
     public void setLaunchesBeforePrompt(final int launches) {
         mLaunchesBeforePrompt = launches;
+    }
+
+    /**
+     * Sets how often users must have launched the app (i.e. called AppRater.show()) before showing
+     * the prompt again after user has clicked on "Later" button
+     */
+    public void setLaunchesBeforeRePrompt(int mLaunchesBeforeRePrompt) {
+        this.mLaunchesBeforeRePrompt = mLaunchesBeforeRePrompt;
     }
 
     /**
@@ -290,6 +300,13 @@ public class AppRater {
         }
     }
 
+    private void setLaunchCount(SharedPreferences.Editor editor, int count) {
+        if (editor != null) {
+            editor.putLong(mPreference_launchCount, count);
+            savePreferences(editor);
+        }
+    }
+
     private void buttonNowClick(SharedPreferences.Editor editor, DialogInterface dialog, Context context) {
         setDontShow(editor);
         closeDialog(dialog);
@@ -298,6 +315,10 @@ public class AppRater {
 
     private void buttonLaterClick(SharedPreferences.Editor editor, DialogInterface dialog, long firstLaunchTime) {
         setFirstLaunchTime(editor, firstLaunchTime + DateUtils.DAY_IN_MILLIS); // remind again later (but wait at least 24 hours)
+        // Set mPreference_launchCount's value such that it takes mLaunchesBeforeRePrompt times
+        // to reach mLaunchesBeforePrompt when we show the prompt again
+        int newCount = mLaunchesBeforePrompt - mLaunchesBeforeRePrompt;
+        setLaunchCount(editor, newCount);
         closeDialog(dialog);
     }
 
