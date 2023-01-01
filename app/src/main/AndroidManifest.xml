@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ndhunju.dailyjournal"
     android:versionCode="37"
     android:versionName="4.1.0" >
 
@@ -48,7 +47,8 @@
             android:label="@string/title_activity_company_settings"
             />
 
-        <activity android:name="com.ndhunju.dailyjournal.controller.HomeActivity" >
+        <activity android:name="com.ndhunju.dailyjournal.controller.HomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW"/>
