@@ -1,6 +1,11 @@
 package com.ndhunju.dailyjournal.controller.service;
 
+import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
+
 import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -20,11 +25,6 @@ import com.ndhunju.dailyjournal.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
-
-import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
 
 /**
  * Helper class that groups relevant objects like {@link Scope} and provides helper methods
