@@ -24,7 +24,7 @@ import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
-import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
+import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;

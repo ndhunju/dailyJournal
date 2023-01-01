@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
-import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
+import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;

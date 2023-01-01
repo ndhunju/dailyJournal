@@ -33,7 +33,7 @@ import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.util.UtilsZip;
-import com.ndhunju.folderpicker.PermissionManager;
+import com.ndhunju.folderpicker.library.PermissionManager;
 
 import java.io.File;
 import java.io.FileInputStream;

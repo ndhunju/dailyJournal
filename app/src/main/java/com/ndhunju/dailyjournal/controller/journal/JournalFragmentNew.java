@@ -35,7 +35,7 @@ import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.viewPager.AttachmentViewPagerActivity;
-import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
+import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 import java.util.Calendar;
 import java.util.Date;

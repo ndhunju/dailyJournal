@@ -1,38 +1,26 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.preference.CheckBoxPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-
-import android.os.Environment;
-import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.ndhunju.dailyjournal.BuildConfig;
-import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.folderpicker.FolderPickerDialogFragment;
-import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
+import com.ndhunju.folderpicker.library.FolderPickerDialogFragment;
+import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
-import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
+import androidx.core.content.ContextCompat;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 /**
  * Created by dhunju on 10/8/2015.

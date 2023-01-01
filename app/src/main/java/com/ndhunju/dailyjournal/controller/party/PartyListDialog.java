@@ -22,7 +22,7 @@ import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
+import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 public class PartyListDialog extends DialogFragment {
 
