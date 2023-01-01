@@ -1,17 +1,26 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import android.os.Environment;
+import android.provider.Settings;
 import android.text.TextUtils;
 
+import com.ndhunju.dailyjournal.BuildConfig;
 import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
@@ -34,6 +43,7 @@ public class BackupPreferenceFragment
     public static final String TAG = BackupPreferenceFragment.class.getSimpleName();
     public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
     public static final String KEY_FINISH_ON_BACKUP_SUCCESS = TAG + ".KEY_FINISH_ON_BACKUP_SUCCESS";
+    private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
 
 
     //Request codes with random values
@@ -111,6 +121,11 @@ public class BackupPreferenceFragment
 
         findPreference(getString(R.string.key_pref_backup_local_storage))
                 .setOnPreferenceClickListener(preference -> {
+
+                    if (!checkWriteStoragePermission()) {
+                        return true; // consume click
+                    }
+
                     FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(
                             null,
                             REQUEST_CODE_BACKUP_DIR
@@ -122,20 +137,33 @@ public class BackupPreferenceFragment
 
         findPreference(getString(R.string.key_pref_restore_local_storage))
                 .setOnPreferenceClickListener((preference -> {
-                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
+
+                    if (!checkWriteStoragePermission()) {
+                        return true; // consume click
+                    }
+
+                    UtilsView.alert(
+                            getActivity(),
+                            getString(R.string.warning_restore),
                             (dialogInterface, i) -> {
                                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                                 intent.setType(UtilsFile.BACK_FILE_TYPE);
                                 startActivityForResult(intent, REQUEST_CODE_PICK_BACKUP);
-                            }, null);
+                            },
+                            null
+                    );
                     return true;
                 }));
 
         findPreference(getString(R.string.key_pref_restore_auto_backup))
                 .setOnPreferenceClickListener(preference -> {
-                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
+                    UtilsView.alert(
+                            getActivity(),
+                            getString(R.string.warning_restore),
                             (dialogInterface, pos) -> new AutoBackupAlertDialog(getActivity())
-                                    .create().show(), null);
+                                    .create().show(),
+                            null
+                    );
                     return  true;
                 });
     }
@@ -336,6 +364,50 @@ public class BackupPreferenceFragment
                     new Intent().putExtra(KEY_BACKUP_RESULT, true)
             );
         }
+    }
+
+    private boolean checkWriteStoragePermission() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                return true;
+            }
+            // Request manage all files permission at runtime
+            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+            return false;
+        } else if (
+                // Check WRITE_EXTERNAL_STORAGE permission for Android OS older than R
+                ActivityCompat.checkSelfPermission(
+                        requireActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // Request WRITE_EXTERNAL_STORAGE permission for Android OS between M and R
+                requireActivity().requestPermissions(
+                        new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSIONS_WRITE_STORAGE
+                );
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults
+    ) {
+        if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission granted, resume the action? or let user do it again?
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }
