@@ -33,6 +33,7 @@ import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.util.UtilsZip;
+import com.ndhunju.folderpicker.PermissionManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -149,8 +150,22 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 
 	private void downloadPicture() {
 
-		if (!checkWriteStoragePermission()) {
+		if (!PermissionManager.INSTANCE.canSaveImageOnDownloadsFolder(getActivity())) {
 			runAfterPermissionGrant = this::downloadPicture;
+
+			UtilsView.alert(
+					getActivity(),
+					getString(R.string.msg_permission_write_not_granted),
+					(dialog, which) -> {
+						// Ask for permission
+						PermissionManager.INSTANCE.askPermissionForSavingImageOnDownloadsFolder(
+								getActivity(),
+								REQUEST_PERMISSIONS_WRITE_STORAGE
+						);
+					},
+					(dialog, which) -> dialog.dismiss()
+			);
+
 			return;
 		}
 
@@ -439,7 +454,7 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		return true;
 	}
 
-	private boolean checkWriteStoragePermission() {
+	private boolean checkImageWritePermission() {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 			// Storing image to the "Downloads" folder worked without
@@ -473,7 +488,11 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+	public void onRequestPermissionsResult(
+			int requestCode,
+			@NonNull String[] permissions,
+			@NonNull int[] grantResults
+	) {
 		if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE
 				|| requestCode == REQUEST_PERMISSIONS_READ_MEDIA_IMAGES
 				|| requestCode == REQUEST_PERMISSIONS_CAMERA) {
