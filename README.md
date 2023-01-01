@@ -1,5 +1,5 @@
-# Daily Journal
-Link <a>https://goo.gl/vPGa66</a>
+# Daily Journal Plus
+Link <a>https://dailyjournal.page.link/6SuK</a>
 </br><img src="graphics/+v2.1/feature_graphic.png" width="80%"></br>
 
 Mission Statement: To provide small businesses (that cannot afford accounting software) a means to manage their transactions in the easiest way possible. 

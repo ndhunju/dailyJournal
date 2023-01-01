@@ -2,7 +2,7 @@
 <resources>
     <string name="date_format" >MM/dd/yy</string>
 
-    <string name="link_app">https://goo.gl/08Jb14</string>
+    <string name="link_app">https://dailyjournal.page.link/app</string>
 
     <item name="activity_tools_column_count" type="integer">2</item>
 </resources>
