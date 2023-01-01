@@ -359,7 +359,7 @@ public class BackupPreferenceFragment
                     } else {
                         UtilsView.alert(
                                 getContext(),
-                                getString(R.string.msg_permission_not_granted)
+                                getString(R.string.msg_permission_manage_file_not_granted)
                         );
                     }
                 }
@@ -432,7 +432,7 @@ public class BackupPreferenceFragment
 
             UtilsView.alert(
                     getContext(),
-                    getString(R.string.msg_permission_not_granted),
+                    getString(R.string.msg_permission_manage_file_not_granted),
                     (dialog, which) -> {
                         AnalyticsService.INSTANCE
                                 .logEvent("didClickOnOkToGrantFilePermission");
@@ -461,7 +461,7 @@ public class BackupPreferenceFragment
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 UtilsView.alert(
                         getContext(),
-                        getString(R.string.msg_permission_not_granted),
+                        getString(R.string.msg_permission_manage_file_not_granted),
                         // Pressed Positive Button
                         (dialog, which) -> {
                             AnalyticsService.INSTANCE
@@ -502,7 +502,7 @@ public class BackupPreferenceFragment
             } else {
                 UtilsView.alert(
                         getContext(),
-                        getString(R.string.msg_permission_not_granted)
+                        getString(R.string.msg_permission_manage_file_not_granted)
                 );
             }
         }

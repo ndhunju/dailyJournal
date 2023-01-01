@@ -153,10 +153,16 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 			runAfterPermissionGrant = this::downloadPicture;
 			return;
 		}
+
 		try {
-			// copy internal image attachment to download folder
-			File internalImage = new File(attachmentPagerAdapter.getItem(mViewPager.getCurrentItem()).getPath());
-			File toExportImage = new File(UtilsFile.getPublicDownloadDir(), internalImage.getName());
+			// Copy internal image attachment to download folder
+			File internalImage = new File(
+					attachmentPagerAdapter.getItem(mViewPager.getCurrentItem()).getPath()
+			);
+			File toExportImage = new File(
+					UtilsFile.getPublicDownloadDir(),
+					internalImage.getName()
+			);
 			toExportImage.createNewFile();
 			FileInputStream picFileIS  = new FileInputStream(internalImage);
 			FileOutputStream toExportImageOS = new FileOutputStream(toExportImage);
@@ -165,12 +171,27 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 			toExportImageOS.close();
 
 			// show it in Downloads app and in notification bar
-			DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-			downloadManager.addCompletedDownload(getString(R.string.app_name), getString(R.string.msg_downloaded, getString(R.string.str_image)),
-					true, "image/jpeg", toExportImage.getAbsolutePath(), toExportImage.length(), true);
+			DownloadManager downloadManager = (DownloadManager) getSystemService(
+					Context.DOWNLOAD_SERVICE
+			);
+			downloadManager.addCompletedDownload(
+					// OS is using this title to name the downloaded image file
+					internalImage.getName(),
+					getString(R.string.msg_saved, getString(R.string.str_image)),
+					true,
+					"image/jpeg",
+					toExportImage.getAbsolutePath(),
+					toExportImage.length(),
+					true
+			);
 
-			// let know that a new file has been created so that it appears in the computer
-			MediaScannerConnection.scanFile(this, new String[]{toExportImage.getAbsolutePath()}, null, null);
+			// Let know that a new file has been created so that it appears in the computer
+			MediaScannerConnection.scanFile(
+					this,
+					new String[]{toExportImage.getAbsolutePath()},
+					null,
+					null
+			);
 
 			UtilsView.toast(this, getString(R.string.str_finished));
 
@@ -400,6 +421,39 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 				UtilsView.alert(
 						getActivity(),
 						getString(R.string.msg_permission_read_not_granted),
+						(dialog, which) -> {
+							// Ask for permission
+							getActivity().requestPermissions(
+									new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+									REQUEST_PERMISSIONS_WRITE_STORAGE
+							);
+						},
+						(dialog, which) -> dialog.dismiss()
+				);
+
+				// Permission not granted yet
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private boolean checkWriteStoragePermission() {
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			// Storing image to the "Downloads" folder worked without
+			// getting an image on Tiramisu (33)
+			return true;
+		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			// Keep the existing logic for Android M and above
+			if (ActivityCompat.checkSelfPermission(
+					getActivity(),
+					Manifest.permission.WRITE_EXTERNAL_STORAGE
+			) != PackageManager.PERMISSION_GRANTED) {
+				UtilsView.alert(
+						getActivity(),
+						getString(R.string.msg_permission_write_not_granted),
 						(dialog, which) -> {
 							// Ask for permission
 							getActivity().requestPermissions(

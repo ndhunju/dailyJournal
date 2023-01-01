@@ -30,7 +30,7 @@
         android:id="@+id/viewpager_download_picture"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_file_download_black_24dp"
-        android:title="@string/str_download"
+        android:title="@string/str_save"
         android:orderInCategory="3"
         />
 </menu>
