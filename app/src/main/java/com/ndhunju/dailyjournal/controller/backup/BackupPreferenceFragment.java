@@ -46,7 +46,6 @@ public class BackupPreferenceFragment
     public static final String TAG = BackupPreferenceFragment.class.getSimpleName();
     public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
     public static final String KEY_FINISH_ON_BACKUP_SUCCESS = TAG + ".KEY_FINISH_ON_BACKUP_SUCCESS";
-    private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
     public static final String KEY_MSG = ".KEY_MSG";
     public static final String MSG_AUTO_BACKUP_FAILED = ".MSG_AUTO_BACKUP_FAILED";
 
@@ -58,7 +57,6 @@ public class BackupPreferenceFragment
     private static final int REQUEST_CODE_BACKUP_DIR = 3561;
     private static final int REQUEST_CODE_BACKUP_COMPLETE = 5465;
     private static final int REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE = 3943;
-    private static final int REQUEST_CODE_MANAGE_FILES_PERMISSIONS = 3944;
 
     private PreferenceService preferenceService;
     private CheckBoxPreference autoUploadBackupToGDriveCB;
@@ -131,10 +129,6 @@ public class BackupPreferenceFragment
         findPreference(getString(R.string.key_pref_backup_local_storage))
                 .setOnPreferenceClickListener(preference -> {
 
-                    if (!checkWriteStoragePermission()) {
-                        return true; // consume click
-                    }
-
                     FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(
                             null,
                             REQUEST_CODE_BACKUP_DIR
@@ -146,10 +140,6 @@ public class BackupPreferenceFragment
 
         findPreference(getString(R.string.key_pref_restore_local_storage))
                 .setOnPreferenceClickListener((preference -> {
-
-                    if (!checkWriteStoragePermission()) {
-                        return true; // consume click
-                    }
 
                     UtilsView.alert(
                             getActivity(),
@@ -346,27 +336,8 @@ public class BackupPreferenceFragment
                     );
                 }
                 break;
-
-            case REQUEST_CODE_MANAGE_FILES_PERMISSIONS:
-                // Although, user granted the permission, resultCode == RESULT_CANCELLED
-                // so can't use result code to check if (resultCode == Activity.RESULT_OK)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    if (Environment.isExternalStorageManager()) {
-                        UtilsView.alert(
-                                getContext(),
-                                getString(R.string.msg_permission_granted)
-                        );
-                    } else {
-                        UtilsView.alert(
-                                getContext(),
-                                getString(R.string.msg_permission_manage_file_not_granted)
-                        );
-                    }
-                }
-                break;
         }
     }
-
 
     @Override
     public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode) {
@@ -378,31 +349,34 @@ public class BackupPreferenceFragment
                 if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
                     data.getData();
                     String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-                    new BackUpAsyncTask(getActivity(), new FinishCallback<String>() {
-                        @Override
-                        public void onFinish(String filePath) {
-                            boolean success = !TextUtils.isEmpty(filePath);
-                            String resultMsg;
-                            if (success) {
-                                setBackupSuccessResult();
-                                resultMsg = String.format(getString(R.string.msg_finished), getString(R.string.str_backup));
-                                resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
-                                //Display the result
-                                UtilsView.alert(getActivity(), resultMsg, (dialog, which) -> {
-                                    if (finishOnBackUpSuccess) {
-                                        getActivity().finish();
-                                    }
-                                });
-                            } else {
-                                if (getActivity() != null) {
-                                    getActivity().setResult(Activity.RESULT_CANCELED);
-                                    resultMsg = String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
-                                    // Display the result
-                                    UtilsView.alert(getActivity(), resultMsg);
+                    new BackUpAsyncTask(getActivity(), filePath -> {
+                        boolean success = !TextUtils.isEmpty(filePath);
+                        String resultMsg;
+                        if (success) {
+                            setBackupSuccessResult();
+                            resultMsg = String.format(
+                                    getString(R.string.msg_finished),
+                                    getString(R.string.str_backup)
+                            );
+                            resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
+                            //Display the result
+                            UtilsView.alert(getActivity(), resultMsg, (dialog, which) -> {
+                                if (finishOnBackUpSuccess) {
+                                    getActivity().finish();
                                 }
+                            });
+                        } else {
+                            if (getActivity() != null) {
+                                getActivity().setResult(Activity.RESULT_CANCELED);
+                                resultMsg = String.format(
+                                        getString(R.string.msg_failed),
+                                        getString(R.string.str_backup)
+                                );
+                                // Display the result
+                                UtilsView.alert(getActivity(), resultMsg);
                             }
-
                         }
+
                     }).execute(dir);
                 }
                 break;
@@ -418,95 +392,6 @@ public class BackupPreferenceFragment
                     new Intent().putExtra(KEY_BACKUP_RESULT, true)
             );
         }
-    }
-
-    /**
-     * Returns true if the app has write storage permission.
-     */
-    private boolean checkWriteStoragePermission() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                return true;
-            }
-
-            UtilsView.alert(
-                    getContext(),
-                    getString(R.string.msg_permission_manage_file_not_granted),
-                    (dialog, which) -> {
-                        AnalyticsService.INSTANCE
-                                .logEvent("didClickOnOkToGrantFilePermission");
-                        // Request manage all files permission at runtime
-                        Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                        startActivityForResult(
-                                new Intent(ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri),
-                                REQUEST_CODE_MANAGE_FILES_PERMISSIONS
-                        );
-                    },
-                    (dialog, which) -> {
-                        AnalyticsService.INSTANCE
-                                .logEvent("didClickOnCancelToGrantFilePermission");
-                        dialog.dismiss();
-                    }
-            );
-
-            return false;
-        } else if (
-                // Check WRITE_EXTERNAL_STORAGE permission for Android OS older than R
-                ActivityCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                UtilsView.alert(
-                        getContext(),
-                        getString(R.string.msg_permission_manage_file_not_granted),
-                        // Pressed Positive Button
-                        (dialog, which) -> {
-                            AnalyticsService.INSTANCE
-                                    .logEvent("didClickOnOkToGrantFilePermission");
-                            // Request WRITE_EXTERNAL_STORAGE permission for Android OS >= M and <R
-                            requireActivity().requestPermissions(
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    REQUEST_PERMISSIONS_WRITE_STORAGE
-                            );
-                        },
-                        // Pressed Negative Button
-                        (dialog, which) -> {
-                            AnalyticsService.INSTANCE
-                                    .logEvent("didClickOnCancelToGrantFilePermission");
-                            dialog.dismiss();
-                        }
-                );
-            }
-
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(
-            int requestCode,
-            @NonNull String[] permissions,
-            @NonNull int[] grantResults
-    ) {
-        if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                UtilsView.alert(
-                        getContext(),
-                        getString(R.string.msg_permission_granted)
-                );
-            } else {
-                UtilsView.alert(
-                        getContext(),
-                        getString(R.string.msg_permission_manage_file_not_granted)
-                );
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }

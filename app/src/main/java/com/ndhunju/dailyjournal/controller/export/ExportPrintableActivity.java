@@ -1,11 +1,8 @@
 package com.ndhunju.dailyjournal.controller.export;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -90,28 +87,6 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
             }
         });
     }
-
-    private boolean checkWriteStoragePermission() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getActivity().requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_WRITE_STORAGE);
-            }
-            return false;
-        }
-
-        return true;
-    }
-
-    // After user grants permission, resume what user clicked on
-//    @Override
-////    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-////        if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE) {
-////            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-////                showExportPrintableOptions();
-////            }
-////        }
-////        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-////    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
