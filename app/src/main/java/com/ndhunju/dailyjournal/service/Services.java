@@ -140,9 +140,15 @@ public class Services {
         //3 zip the directory file into zipFile
         UtilsZip.zip(directoryToZip, zipFile, progressListener);
 
-        //let know that a new file has been created so that it appears in the computer
-        MediaScannerConnection.scanFile(mContext,
-                new String[]{backupFolder.getAbsolutePath(), zipFile.getAbsolutePath()}, null, null);
+        // Let know that a new file has been created so that it appears in the computer
+        // Note: Files created in Downloads folder is shown in Downloads type. But in other
+        // places, you have to go inside the "Internal Storage" or "SD Card" folder and find it
+        MediaScannerConnection.scanFile(
+                mContext,
+                new String[]{backupFolder.getAbsolutePath(), zipFile.getAbsolutePath()},
+                new String[]{UtilsFile.BACK_FILE_TYPE},
+                null
+        );
 
         Log.i("BackUp", "Backup file created");
 
