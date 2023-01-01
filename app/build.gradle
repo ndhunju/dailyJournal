@@ -4,6 +4,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+configurations {
+    all {
+        exclude module: 'httpclient'
+        exclude module: 'commons-logging'
+    }
+}
+
 buildscript {
 
     repositories {
@@ -98,9 +105,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation 'com.google.api-client:google-api-client:1.31.1'
-    implementation('com.google.api-client:google-api-client-android:1.22.0') {
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-    }
+    implementation('com.google.api-client:google-api-client-android:1.22.0')
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     implementation 'com.google.apis:google-api-services-drive:v3-rev20201130-1.31.0'
 
