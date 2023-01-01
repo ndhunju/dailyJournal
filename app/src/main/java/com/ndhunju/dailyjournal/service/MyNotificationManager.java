@@ -14,6 +14,7 @@ import com.ndhunju.dailyjournal.BuildConfig;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.HomeActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
+import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment;
 
 /**
  * Created by dhunju on 10/2/2015.
@@ -132,15 +133,23 @@ public class MyNotificationManager {
     public Notification createBackupUploadedToGDriveErrorNotif(String errorMsg) {
         // notify user about this issue
         Intent intent = new Intent(mContext, BackupActivity.class);
+        intent.putExtra(
+                BackupPreferenceFragment.KEY_MSG,
+                BackupPreferenceFragment.MSG_AUTO_BACKUP_FAILED
+        );
         PendingIntent openBackupActivityIntent = PendingIntent.getActivity(
                 mContext,
                 0,
                 intent,
                 getFlags(0)
         );
-        return create(mContext.getString(R.string.app_name) + " - " + mContext.getString(R.string.msg_auto_upload_to_g_drive_failed),
+        return create(
+                mContext.getString(R.string.app_name)
+                        + " - "
+                        + mContext.getString(R.string.msg_auto_upload_to_g_drive_failed),
                 errorMsg,
-                openBackupActivityIntent);
+                openBackupActivityIntent
+        );
     }
 
     /**

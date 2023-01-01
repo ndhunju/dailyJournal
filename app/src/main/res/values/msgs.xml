@@ -122,4 +122,7 @@
 
     <string name="msg_error_locating_file">Could not locate the file. Please try moving the file to the internal storage.</string>
 
+    <string name="msg_auto_backup_re_enable">Auto Backup failed and it was disabled. Would you like to re-enable Auto Backup?</string>
+    <string name="msg_backup_now">Would you like to upload backup to the Google Drive now?</string>
+
 </resources>

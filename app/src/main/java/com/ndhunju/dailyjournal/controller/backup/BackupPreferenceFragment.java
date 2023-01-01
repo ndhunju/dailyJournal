@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import android.os.Environment;
@@ -44,6 +45,9 @@ public class BackupPreferenceFragment
     public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
     public static final String KEY_FINISH_ON_BACKUP_SUCCESS = TAG + ".KEY_FINISH_ON_BACKUP_SUCCESS";
     private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
+    public static final String KEY_MSG = ".KEY_MSG";
+    public static final String MSG_AUTO_BACKUP_FAILED = ".MSG_AUTO_BACKUP_FAILED";
+
 
 
     //Request codes with random values
@@ -54,6 +58,8 @@ public class BackupPreferenceFragment
     private static final int REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE = 3943;
 
     private PreferenceService preferenceService;
+    private CheckBoxPreference autoUploadBackupToGDriveCB;
+    private Preference gDriveRestBackupPref;
     private boolean finishOnBackUpSuccess;
 
     @Override
@@ -98,8 +104,8 @@ public class BackupPreferenceFragment
                 });
 
         // Create Backup in Google Drive using REST API library
-        findPreference(getString(R.string.key_pref_backup_google_drive_in_house))
-                .setOnPreferenceClickListener(preference -> {
+        gDriveRestBackupPref = findPreference(getString(R.string.key_pref_backup_google_drive_in_house));
+        gDriveRestBackupPref.setOnPreferenceClickListener(preference -> {
                     startActivityForResult(new Intent(
                             getActivity(),
                             GoogleDriveRestApiUploadBackupActivity.class
@@ -166,6 +172,27 @@ public class BackupPreferenceFragment
                     );
                     return  true;
                 });
+
+        autoUploadBackupToGDriveCB = findPreference(
+                getString(R.string.key_pref_auto_upload_backup_to_gdrive_cb)
+        );
+
+        // If user came to this fragment after clicking on a push notification for auto backup
+        // failure, then ask user if they want to re-enable it if not already enabled
+        Intent intent = getActivity().getIntent();
+        if (MSG_AUTO_BACKUP_FAILED.equals(intent.getStringExtra(KEY_MSG))
+                && !autoUploadBackupToGDriveCB.isChecked()
+        ) {
+            UtilsView.alert(
+                    getContext(),
+                    getString(R.string.msg_auto_backup_re_enable),
+                    (dialog, which) -> autoUploadBackupToGDriveCB.performClick(),
+                    (dialog, which) -> dialog.dismiss());
+
+            // We just want to ask once. So clear the value for INTENT_MSG
+            intent.putExtra(KEY_MSG, (String) null);
+        }
+
     }
 
     @Override
@@ -296,10 +323,16 @@ public class BackupPreferenceFragment
 
             case REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE:
                 // update the value of this preference based on the result
-                ((CheckBoxPreference) findPreference(
-                        getString(R.string.key_pref_auto_upload_backup_to_gdrive_cb))
-                ).setChecked(resultCode == Activity.RESULT_OK);
-                if (resultCode != Activity.RESULT_OK) {
+                autoUploadBackupToGDriveCB.setChecked(resultCode == Activity.RESULT_OK);
+                if (resultCode == Activity.RESULT_OK) {
+                    // Ask if user would like to back up now.
+                    UtilsView.alert(
+                            getContext(),
+                            getString(R.string.msg_backup_now),
+                            (dialog, which) -> gDriveRestBackupPref.performClick(),
+                            (dialog, which) -> dialog.dismiss()
+                    );
+                } else {
                     // show connecting to msg "Connecting to Google Drive failed"
                     UtilsView.alert(
                             getActivity(),
