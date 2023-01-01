@@ -72,10 +72,6 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
 
         listView.setOnItemClickListener((adapterView, view, which, id) -> {
 
-            if (!checkWriteStoragePermission()) {
-                return;
-            }
-
             switch (which) {
                 case 0: // Local Storage
                     FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
@@ -178,7 +174,7 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
                 .setTitle(activity.getString(R.string.str_choose))
                 .setItems(options, (dialog, which) -> {
                     switch (which) {
-                        case 0: //All parties
+                        case 0: // All parties
                             //noinspection unchecked
                             new ExportPartiesReportAsync(
                                     activity,
@@ -187,7 +183,7 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
                             ).execute(parties);
                             break;
 
-                        case 1: //Select parties
+                        case 1: // Select parties
                             createPartySelectDialogToExport(
                                     activity,
                                     parties,
