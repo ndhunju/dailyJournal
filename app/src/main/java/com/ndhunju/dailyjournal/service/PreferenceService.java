@@ -158,8 +158,12 @@ public class PreferenceService {
         String reminderCbKey = context.getString(R.string.key_pref_auto_backup_cb);
 
         Intent intent = new Intent(context, AutoBackupService.class);
-        PendingIntent pendingIntent = PendingIntent.getService(context, 0,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getService(
+                context,
+                0,
+                intent,
+                getFlagsForPendingIntent()
+        );
 
         //check if reminder Checkbox is enabled or not
         if (getSharedPreference().getBoolean(reminderCbKey, true)) {
@@ -185,6 +189,19 @@ public class PreferenceService {
             }
             Log.d(TAG, "alarm not set for auto backup : ");
         }
+    }
+
+    /**
+     * Returns appropriate flags based on which Android OS is the app running on.
+     */
+    public int getFlagsForPendingIntent() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            // For OS M or greater, need to pass FLAG_IMMUTABLE to prevent crash
+            return PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        } else {
+            return PendingIntent.FLAG_UPDATE_CURRENT;
+        }
+
     }
 
     /**

@@ -103,7 +103,7 @@ public class MyNotificationManager {
      */
     public Notification createBackupCreatedNotif(String interval){
         Intent intent = new Intent(mContext, HomeActivity.class);
-        PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, 0);
+        PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, getFlags(0));
         return create(mContext.getString(R.string.app_name)
                         + " - " +mContext.getString(R.string.str_backup)
                         , mContext.getString(R.string.msg_finished, interval
@@ -113,7 +113,7 @@ public class MyNotificationManager {
 
     public Notification createBackupCreationErrorNotif(String interval, String errorMsg){
         Intent intent = new Intent(mContext, HomeActivity.class);
-        PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, 0);
+        PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, getFlags(0));
         return create(mContext.getString(R.string.app_name)
                         + " - " +mContext.getString(R.string.str_backup)
                 , mContext.getString(R.string.msg_failed, interval
@@ -123,7 +123,7 @@ public class MyNotificationManager {
 
     public Notification createBackupUploadedToGDriveSuccessNotif() {
         Intent intent = new Intent(mContext, HomeActivity.class);
-        PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, 0);
+        PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, getFlags(0));
         return create(mContext.getString(R.string.app_name) + " - " + mContext.getString(R.string.msg_auto_upload_to_g_drive_success),
                 mContext.getString(R.string.msg_auto_upload_to_g_drive_success),
                 notifPI);
@@ -132,7 +132,12 @@ public class MyNotificationManager {
     public Notification createBackupUploadedToGDriveErrorNotif(String errorMsg) {
         // notify user about this issue
         Intent intent = new Intent(mContext, BackupActivity.class);
-        PendingIntent openBackupActivityIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
+        PendingIntent openBackupActivityIntent = PendingIntent.getActivity(
+                mContext,
+                0,
+                intent,
+                getFlags(0)
+        );
         return create(mContext.getString(R.string.app_name) + " - " + mContext.getString(R.string.msg_auto_upload_to_g_drive_failed),
                 errorMsg,
                 openBackupActivityIntent);
@@ -170,6 +175,19 @@ public class MyNotificationManager {
 
     public void nukeAll() {
         NotificationManagerCompat.from(mContext).cancelAll();
+    }
+
+    /**
+     * Returns appropriate flags based on which Android OS is the app running on.
+     */
+    public int getFlags(int flags) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            // For OS M or greater, need to pass FLAG_IMMUTABLE to prevent crash
+            return flags | PendingIntent.FLAG_IMMUTABLE;
+        } else {
+            return PendingIntent.FLAG_UPDATE_CURRENT;
+        }
+
     }
 
 
