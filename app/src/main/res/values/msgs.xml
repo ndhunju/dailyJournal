@@ -35,8 +35,6 @@
     <string name="msg_rate_body">Do you like this app? Please rate our app on Google Play. Thanks for your support!</string>
     <string name="msg_share_subject">Try Daily Journal App</string>
 
-    <!-- title passed to DownloadManager after creating a report. %1$s is name of the app. -->
-    <string name="msg_report_created_title">%1$s app created a report.</string>
     <!-- title passed to DownloadManager after creating multiple reports. %1$s is name of the app. -->
     <string name="msg_reports_created_title">%1$s app created reports.</string>
     <!-- description passed to DownloadManager after creating a report. %1$s is name of the Party/Account-->

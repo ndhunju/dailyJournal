@@ -81,7 +81,13 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 rg.fillPartyInfo(sb);
                 intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
                 intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
-                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mActivity, UtilsFile.getFileSharingAuthority(mActivity), report));
+                intent.putExtra(
+                        Intent.EXTRA_STREAM,
+                        FileProvider.getUriForFile(
+                                mActivity,
+                                UtilsFile.getFileSharingAuthority(mActivity),
+                                report)
+                );
                 break;
             case PDF_WITH_ATTACHMENTS:
                 shouldAddAttachments = true;
@@ -97,7 +103,14 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 rg.fillPartyInfo(sb);
                 intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
                 intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
-                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mActivity, UtilsFile.getFileSharingAuthority(mActivity), report));
+                intent.putExtra(
+                        Intent.EXTRA_STREAM,
+                        FileProvider.getUriForFile(
+                                mActivity,
+                                UtilsFile.getFileSharingAuthority(mActivity),
+                                report
+                        )
+                );
                 break;
             case CSV:
                 rg = new CsvReportGenerator(mActivity, partyId);
@@ -110,7 +123,14 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 rg.fillPartyInfo(sb);
                 intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
                 intent.putExtra(Intent.EXTRA_SUBJECT, rg.getSubject());
-                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mActivity, UtilsFile.getFileSharingAuthority(mActivity), report));
+                intent.putExtra(
+                        Intent.EXTRA_STREAM,
+                        FileProvider.getUriForFile(
+                                mActivity,
+                                UtilsFile.getFileSharingAuthority(mActivity),
+                                report
+                        )
+                );
                 break;
             case TEXT:
                 rg = new PlainTextReportGenerator(mActivity, partyId);
@@ -133,23 +153,38 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
 
         if (mType != Type.TEXT) {
             // notify user that we created a file
-            DownloadManager downloadManager = (DownloadManager) mActivity.getSystemService(Context.DOWNLOAD_SERVICE);
-            downloadManager.addCompletedDownload(mActivity.getString(R.string.msg_report_created_title, mActivity.getString(R.string.app_name)),
-                    mActivity.getString(R.string.msg_report_created_desc, rg.getParty().getName()), true, rg.getReportType(), report.getAbsolutePath(), report.length(), true);
+            DownloadManager downloadManager = (DownloadManager) mActivity.getSystemService(
+                    Context.DOWNLOAD_SERVICE
+            );
+            downloadManager.addCompletedDownload(
+                    // Set title to same as file name as on OS 33,
+                    // title name is used for file name
+                    report.getName(),
+                    mActivity.getString(R.string.msg_report_created_desc, rg.getParty().getName()),
+                    true,
+                    rg.getReportType(),
+                    report.getAbsolutePath(),
+                    report.length(),
+                    true
+            );
 
             // let know that a new file has been created so that it appears in the computer
-            MediaScannerConnection.scanFile(mActivity, new String[]{report.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
-                @Override
-                public void onScanCompleted(String s, Uri uri) {
-                    if (Intent.ACTION_VIEW.equalsIgnoreCase(mAction)) {
-                        intent.setDataAndType(uri, rg.getReportType());
-                    } else {
-                        intent.setType(rg.getReportType());
-                    }
+            MediaScannerConnection.scanFile(
+                    mActivity,
+                    new String[]{report.getAbsolutePath()},
+                    null,
+                    (s, uri) -> {
+                        if (Intent.ACTION_VIEW.equalsIgnoreCase(mAction)) {
+                            intent.setDataAndType(uri, rg.getReportType());
+                        } else {
+                            intent.setType(rg.getReportType());
+                        }
 
-                    mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));
-                }
-            });
+                        mActivity.startActivity(Intent.createChooser(
+                                intent,
+                                mActivity.getString(R.string.str_choose))
+                        );
+                    });
         } else {
             intent.setType(rg.getReportType());
             mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.str_choose)));

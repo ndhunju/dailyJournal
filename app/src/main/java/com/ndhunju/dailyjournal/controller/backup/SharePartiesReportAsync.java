@@ -81,7 +81,12 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
             e.printStackTrace();
         }
 
-        File zipFile = new File(destinationFolder, mContext.getString(R.string.str_share_report) + UtilsFile.getZipFileName());
+        File zipFile = new File(
+                destinationFolder,
+                mContext.getString(R.string.str_report)
+                        + "-"
+                        + UtilsFile.getZipFileName()
+        );
 
         try {
             zipFile.createNewFile();
@@ -139,18 +144,43 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
 
             UtilsZip.zip(toBeZippedFolder, zipFile);
             toBeZippedFolder.delete();
-            // let know that a new file has been created so that it appears in the computer
-            MediaScannerConnection.scanFile(mContext, new String[]{zipFile.getAbsolutePath()}, null, null);
+            // Let know that a new file has been created so that it appears in the computer
+            MediaScannerConnection.scanFile(
+                    mContext,
+                    new String[]{zipFile.getAbsolutePath()},
+                    null,
+                    null
+            );
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_SUBJECT, mContext.getString(R.string.str_share_report));
-            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(mContext, UtilsFile.getFileSharingAuthority(mContext), zipFile));
+            intent.putExtra(
+                    Intent.EXTRA_STREAM,
+                    FileProvider.getUriForFile(
+                            mContext,
+                            UtilsFile.getFileSharingAuthority(mContext),
+                            zipFile)
+            );
             intent.setType(END_FILE_TYPE);
             mContext.startActivity(intent);
 
-            // notify user that we created a file
-            DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
-            downloadManager.addCompletedDownload(mContext.getString(R.string.msg_reports_created_title, mContext.getString(R.string.app_name)),
-                    mContext.getString(R.string.msg_reports_created_title, mContext.getString(R.string.app_name)), true, END_FILE_TYPE, zipFile.getAbsolutePath(), zipFile.length(), true);
+            // Notify user that we created a file
+            DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(
+                    Context.DOWNLOAD_SERVICE
+            );
+            downloadManager.addCompletedDownload(
+                    // Set title to same as file name as on OS 33,
+                    // title name is used for file name
+                    zipFile.getName(),
+                    mContext.getString(
+                            R.string.msg_reports_created_title,
+                            mContext.getString(R.string.app_name)
+                    ),
+                    true,
+                    END_FILE_TYPE,
+                    zipFile.getAbsolutePath(),
+                    zipFile.length(),
+                    true
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
