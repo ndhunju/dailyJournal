@@ -32,6 +32,8 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.folderpicker.FolderPickerDialogFragment;
 import com.ndhunju.folderpicker.OnDialogBtnClickedListener;
 
+import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
+
 /**
  * Created by dhunju on 10/8/2015.
  * This fragment allows users to create/restore backup from Google drive/Local Storage
@@ -56,6 +58,7 @@ public class BackupPreferenceFragment
     private static final int REQUEST_CODE_BACKUP_DIR = 3561;
     private static final int REQUEST_CODE_BACKUP_COMPLETE = 5465;
     private static final int REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE = 3943;
+    private static final int REQUEST_CODE_MANAGE_FILES_PERMISSIONS = 3944;
 
     private PreferenceService preferenceService;
     private CheckBoxPreference autoUploadBackupToGDriveCB;
@@ -343,6 +346,24 @@ public class BackupPreferenceFragment
                     );
                 }
                 break;
+
+            case REQUEST_CODE_MANAGE_FILES_PERMISSIONS:
+                // Although, user granted the permission, resultCode == RESULT_CANCELLED
+                // so can't use result code to check if (resultCode == Activity.RESULT_OK)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        UtilsView.alert(
+                                getContext(),
+                                getString(R.string.msg_permission_granted)
+                        );
+                    } else {
+                        UtilsView.alert(
+                                getContext(),
+                                getString(R.string.msg_permission_not_granted)
+                        );
+                    }
+                }
+                break;
         }
     }
 
@@ -399,15 +420,36 @@ public class BackupPreferenceFragment
         }
     }
 
+    /**
+     * Returns true if the app has write storage permission.
+     */
     private boolean checkWriteStoragePermission() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
                 return true;
             }
-            // Request manage all files permission at runtime
-            Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-            startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+
+            UtilsView.alert(
+                    getContext(),
+                    getString(R.string.msg_permission_not_granted),
+                    (dialog, which) -> {
+                        AnalyticsService.INSTANCE
+                                .logEvent("didClickOnOkToGrantFilePermission");
+                        // Request manage all files permission at runtime
+                        Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                        startActivityForResult(
+                                new Intent(ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri),
+                                REQUEST_CODE_MANAGE_FILES_PERMISSIONS
+                        );
+                    },
+                    (dialog, which) -> {
+                        AnalyticsService.INSTANCE
+                                .logEvent("didClickOnCancelToGrantFilePermission");
+                        dialog.dismiss();
+                    }
+            );
+
             return false;
         } else if (
                 // Check WRITE_EXTERNAL_STORAGE permission for Android OS older than R
@@ -417,12 +459,28 @@ public class BackupPreferenceFragment
                 ) != PackageManager.PERMISSION_GRANTED
         ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // Request WRITE_EXTERNAL_STORAGE permission for Android OS between M and R
-                requireActivity().requestPermissions(
-                        new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_PERMISSIONS_WRITE_STORAGE
+                UtilsView.alert(
+                        getContext(),
+                        getString(R.string.msg_permission_not_granted),
+                        // Pressed Positive Button
+                        (dialog, which) -> {
+                            AnalyticsService.INSTANCE
+                                    .logEvent("didClickOnOkToGrantFilePermission");
+                            // Request WRITE_EXTERNAL_STORAGE permission for Android OS >= M and <R
+                            requireActivity().requestPermissions(
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    REQUEST_PERMISSIONS_WRITE_STORAGE
+                            );
+                        },
+                        // Pressed Negative Button
+                        (dialog, which) -> {
+                            AnalyticsService.INSTANCE
+                                    .logEvent("didClickOnCancelToGrantFilePermission");
+                            dialog.dismiss();
+                        }
                 );
             }
+
             return false;
         }
 
@@ -437,7 +495,15 @@ public class BackupPreferenceFragment
     ) {
         if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // permission granted, resume the action? or let user do it again?
+                UtilsView.alert(
+                        getContext(),
+                        getString(R.string.msg_permission_granted)
+                );
+            } else {
+                UtilsView.alert(
+                        getContext(),
+                        getString(R.string.msg_permission_not_granted)
+                );
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
