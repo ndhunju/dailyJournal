@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import android.util.Log;
 
@@ -53,23 +55,25 @@ public class UtilsFile {
 	//Variables
 	private static String appDir;
 
+	@Nullable
 	public static Intent getPictureFromCam(Activity activity){
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		// Ensure that there's a camera activity to handle the intent
-		if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-			// Create the File where the photo should go
-			File photoFile = null;
-			try {
-				photoFile = createExternalStoragePublicPicture();
-				// Continue only if the File was successfully created
-				if (photoFile != null) {
-                    //Send the path of the picture via Intent
-					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,	FileProvider.getUriForFile(activity, UtilsFile.getFileSharingAuthority(activity), photoFile));
-					return takePictureIntent;
-				}
-			} catch (Exception ex) {
-				Log.i("Picture from camera", "Error occurred while creating the File.");
-			}
+		// Create the File where the photo should go
+		File photoFile = null;
+		try {
+			photoFile = createExternalStoragePublicPicture();
+			// Send the path of the picture via Intent
+			takePictureIntent.putExtra(
+					MediaStore.EXTRA_OUTPUT,
+					FileProvider.getUriForFile(
+							activity,
+							UtilsFile.getFileSharingAuthority(activity),
+							photoFile
+					)
+			);
+			return Intent.createChooser(takePictureIntent, null);
+		} catch (Exception ex) {
+			Log.i("Picture from camera", "Error occurred while creating the File.");
 		}
 		return null;
 	}

@@ -54,6 +54,7 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	private static final int REQUEST_IMAGE  = 4646;
 	private static final int REQUEST_PERMISSIONS_READ_MEDIA_IMAGES = 2322;
 	private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
+	private static final int REQUEST_PERMISSIONS_CAMERA = 2324;
 
 
 	private static final String ISLOCKED_ARG = "isLocked";
@@ -294,25 +295,18 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 
 	private void addNewPicture() {
 
-		if (!checkReadImagePermission()) {
-			runAfterPermissionGrant = this::addNewPicture;
-			return;
-		}
-
 		CharSequence[] options = getResources().getStringArray(R.array.options_attch);
 		AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
 				.setTitle(getString(R.string.str_choose))
 				.setItems(options, (dialog, which) -> {
 					Intent i = null;
 					switch (which) {
-						case 0: //Take Picture using installed camera app
-							Intent takePictureIntent = UtilsFile.getPictureFromCam(getActivity());
-							startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+						case 0: // Take Picture using installed camera app
+							takePicture();
 							break;
 
 						case 1: //Select image from the storage
-							i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-							startActivityForResult(i, REQUEST_IMAGE);
+							attachImage();
 							break;
 
 					}
@@ -320,8 +314,59 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		alertDialog.show();
 	}
 
+	/**
+	 * Initiates the process for taking a picture from the device's camera
+	 * given the permission is granted. If not, requests the permissions first.
+	 */
+	private void takePicture() {
+
+		if (!checkCameraPermission()) {
+			runAfterPermissionGrant = this::takePicture;
+			return;
+		}
+
+		Intent takePictureIntent = UtilsFile.getPictureFromCam(getActivity());
+		startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+	}
+
+
+	/**
+	 * Initiates the process for attaching an image from the device's storage
+	 * given the permission is granted. If not, requests the permissions first.
+	 */
+	private void attachImage() {
+
+		if (!checkReadImagePermission()) {
+			runAfterPermissionGrant = this::attachImage;
+			return;
+		}
+
+		Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		startActivityForResult(i, REQUEST_IMAGE);
+	}
+
 	public Activity getActivity(){
 		return AttachmentViewPagerActivity.this;
+	}
+
+	private boolean checkCameraPermission() {
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			if (ActivityCompat.checkSelfPermission(
+					getActivity(),
+					Manifest.permission.CAMERA
+			) != PackageManager.PERMISSION_GRANTED) {
+				// Ask for permission
+				getActivity().requestPermissions(
+						new String[]{Manifest.permission.CAMERA},
+						REQUEST_PERMISSIONS_CAMERA
+				);
+				// Permission not granted yet
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private boolean checkReadImagePermission() {
@@ -376,7 +421,8 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE
-				|| requestCode == REQUEST_PERMISSIONS_READ_MEDIA_IMAGES) {
+				|| requestCode == REQUEST_PERMISSIONS_READ_MEDIA_IMAGES
+				|| requestCode == REQUEST_PERMISSIONS_CAMERA) {
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				if (runAfterPermissionGrant != null) {
 					runAfterPermissionGrant.run();
