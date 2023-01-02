@@ -28,9 +28,11 @@ public abstract class ReportGenerator<T>{
     protected static final String DEFAULT_GAP_CHAR = " " ;
 
     // format variables
-    protected int mColumnSize = DEFAULT_COL_SIZE; //abstract size for a column
-    protected String mColumnSeparator = DEFAULT_COL_SEPARATOR; //column divider
-    protected String mGapChar = DEFAULT_GAP_CHAR ; //similar to padding concept
+    protected int mColumnSize = DEFAULT_COL_SIZE; // Abstract size for a column
+    protected int mNumColumnSize = 3; // Size for Number column
+    protected int mIdColumnSize = 4; // Size for ID column
+    protected String mColumnSeparator = DEFAULT_COL_SEPARATOR; // Column divider
+    protected String mGapChar = DEFAULT_GAP_CHAR ; // Similar to padding concept
 
     // model variables
     protected Party mParty;
@@ -45,6 +47,8 @@ public abstract class ReportGenerator<T>{
     public static class Builder {
 
         StringBuilder sb;
+        int currentLineWidth = 0;
+        int highestLineWidth = 0;
 
         public Builder() {
             sb = new StringBuilder();
@@ -52,11 +56,16 @@ public abstract class ReportGenerator<T>{
 
         public ReportGenerator.Builder newLine() {
             sb.append(ReportGenerator.newLine());
+            if (highestLineWidth < currentLineWidth) {
+                highestLineWidth = currentLineWidth;
+            }
+            currentLineWidth = 0;
             return this;
         }
 
         public ReportGenerator.Builder appendText(String string) {
             sb.append(string);
+            currentLineWidth += string.length();
             return this;
         }
 
@@ -74,7 +83,7 @@ public abstract class ReportGenerator<T>{
          * a line.
          */
         public ReportGenerator.Builder writeTextLn() {
-            sb.append(ReportGenerator.newLine());
+            newLine();
             return this;
         }
 
@@ -168,7 +177,8 @@ public abstract class ReportGenerator<T>{
     }
 
     /**
-     * This method encapsulates teh logic for making the report/ledger for {@link ReportGenerator#mParty}
+     * This method encapsulates the logic for making
+     * the report/ledger for {@link ReportGenerator#mParty}
      */
     public void makeReport(Builder builder){
         /**Header Row **/
@@ -178,19 +188,29 @@ public abstract class ReportGenerator<T>{
         double balance = 0;
         int no = 1;
         for (Journal journal : mJournals) {
-            builder.appendText(addGap(String.valueOf(no++), 3));
+            // Number Column
+            builder.appendText(addGap(String.valueOf(no++), mNumColumnSize));
             if (shouldAppendJournalId()) {
-                builder.appendText(addGap(String.valueOf(journal.getId()), 4));
+                // ID Column
+                builder.appendText(addGap(String.valueOf(journal.getId()), mIdColumnSize));
             }
+            // Date Column
             builder.appendText(addGap(UtilsFormat.formatDate(new Date(journal.getDate()), mContext)));
+
             if (journal.getType() == Journal.Type.Debit) {
+                // Debit Column
                 builder.appendText(addGapLeft(formatDecimal(journal.getAmount())));
+                // Credit Column which is empty
                 builder.appendText(addGapLeft(""));
+                // Balance Column
                 balance += journal.getAmount();
                 builder.appendText(addGapLeft(formatDecimal(balance)));
             } else {
+                // Debit Column which is empty
                 builder.appendText(addGapLeft(""));
+                // Credit Column
                 builder.appendText(addGapLeft(formatDecimal(journal.getAmount())));
+                // Balance Column
                 balance -= journal.getAmount();
                 builder.appendText(addGapLeft(formatDecimal(balance)));
             }
@@ -219,9 +239,9 @@ public abstract class ReportGenerator<T>{
      * append header in the report.
      */
     public void onAppendHeader(Builder builder) {
-        builder.appendText(addGap(R.string.str_num, 3));
+        builder.appendText(addGap(R.string.str_num, mNumColumnSize));
         if (shouldAppendJournalId()) {
-            builder.appendText(addGap("ID", 4));
+            builder.appendText(addGap("ID", mIdColumnSize));
         }
         builder.appendText(addGap(R.string.str_date));
         builder.appendText(addGap(R.string.str_dr));
