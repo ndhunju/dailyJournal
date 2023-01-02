@@ -48,11 +48,11 @@ class ImportContactsView : LinearLayout {
     private fun initView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
 
         val view: View = LayoutInflater.from(context).inflate(
-            R.layout.fragment_import_contacts_list,
+            R.layout.view_import_contacts,
             this
         )
 
-        searchContactsET = view.findViewById(R.id.layout_import_contacts_search_et)
+        searchContactsET = view.findViewById(R.id.view_import_contacts_search_et)
         searchContactsET.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 importContactsAdapter.filter(s) //filter the list below
@@ -62,16 +62,16 @@ class ImportContactsView : LinearLayout {
             override fun afterTextChanged(s: Editable) {}
         })
 
-        contactsRv = view.findViewById(R.id.layout_import_contacts_list)
+        contactsRv = view.findViewById(R.id.view_import_contacts_list)
         contactsRv.layoutManager = LinearLayoutManager(getContext())
 
         importContactsAdapter = ImportContactsAdapter(view.context)
         contactsRv.adapter = importContactsAdapter
 
         // Select All button
-        view.findViewById<View>(R.id.layout_import_contacts_select_all_btn)
+        view.findViewById<View>(R.id.view_import_contacts_select_all_btn)
             .setOnClickListener { v: View? ->
-                // TODO
+                importContactsAdapter.selectAllFilteredItems()
             }
     }
 

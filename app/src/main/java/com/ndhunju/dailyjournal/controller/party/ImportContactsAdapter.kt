@@ -77,6 +77,19 @@ class ImportContactsAdapter(
         notifyDataSetChanged()
     }
 
+    /**
+     * Selects all filtered items.
+     */
+    fun selectAllFilteredItems() {
+        if (inFilterMode) {
+            selectedContacts.addAll(filteredContacts)
+        } else {
+            selectedContacts.addAll(contacts)
+        }
+
+        notifyDataSetChanged()
+    }
+
     fun setActivatedItemPos(pos: Int) {
         activatedItemPos = pos
         notifyItemChanged(pos)
