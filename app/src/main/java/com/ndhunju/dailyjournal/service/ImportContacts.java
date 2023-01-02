@@ -10,6 +10,8 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
@@ -27,8 +29,8 @@ public class ImportContacts {
 
     //Sub class to hold basic details of a contact
     public static class Contact{
-        public String id;
-        public String name;
+        @NonNull public String id;
+        @NonNull public String name;
         public boolean hasPhoneNum;
 
         Contact(String id, String name, boolean hasPhoneNum){

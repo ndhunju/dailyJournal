@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
@@ -307,40 +306,46 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
             } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // user denied permissions to access contacts
                 // do nothing
+                AnalyticsService.INSTANCE.logEvent("didDenyPermissionToReadContacts");
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void startImportingContacts() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.READ_CONTACTS}, REQUEST_PERMISSIONS_READ_CONTACTS);
+
+        if (getActivity() == null) {
+            return;
+        }
+
+        if (ActivityCompat.checkSelfPermission(
+                getActivity(),
+                Manifest.permission.READ_CONTACTS
+        ) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[] {Manifest.permission.READ_CONTACTS},
+                    REQUEST_PERMISSIONS_READ_CONTACTS
+            );
             return;
         }
 
         final List<ImportContacts.Contact> contacts = ImportContacts.getContacts(getActivity());
-        final ArrayList<ImportContacts.Contact> importContacts = new ArrayList<>();
+
+        ImportContactsView importContactsView = new ImportContactsView(getContext());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.msg_choose, getString(R.string.str_contact)));
         builder.setNegativeButton(getString(android.R.string.cancel), null);
-        builder.setMultiChoiceItems(ImportContacts.getNames(contacts), null,
-                new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        //Add checked contacts into importContacts list
-                        if (b) importContacts.add(contacts.get(i));
-                        else importContacts.remove(contacts.get(i));
-                    }
-                });
-        builder.setPositiveButton(getString(android.R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        new ImportContactsAsync(getActivity()).execute(importContacts);
-                    }
-                });
+        builder.setView(importContactsView);
+        builder.setPositiveButton(
+                getString(android.R.string.ok),
+                (dialogInterface, i) -> new ImportContactsAsync(getActivity()).execute(
+                        importContactsView.getSelectedContacts()
+                )
+        );
+
         AlertDialog selectContactsAD = builder.create();
+        importContactsView.setContacts(contacts);
         selectContactsAD.show();
     }
 
