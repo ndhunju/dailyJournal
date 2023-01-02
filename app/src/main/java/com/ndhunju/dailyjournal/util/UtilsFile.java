@@ -513,8 +513,13 @@ public class UtilsFile {
 				};
 
 				for (String contentUriPrefix : contentUriPrefixesToTry) {
-					Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(contentId));
 					try {
+						// Put inside try block prevent NumberFormatException: For input string:
+						// raw:/storage/emulated/0/Download/dailyJournal-1-2-2021-15-03-31.zip"
+						Uri contentUri = ContentUris.withAppendedId(
+								Uri.parse(contentUriPrefix),
+								Long.parseLong(contentId)
+						);
 						String path = getDataColumn(context, contentUri, null, null);
 						if (path != null) {
 							return path;
