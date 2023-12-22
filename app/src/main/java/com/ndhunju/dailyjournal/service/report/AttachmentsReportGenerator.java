@@ -7,12 +7,14 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsZip;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class AttachmentsReportGenerator extends ReportGenerator<File> {
         // super.getReport(folder);
 
         // copy images
-        try{
+        try {
             // Create a new unique file inside the folder if exists.
             // Otherwise in public download folder
             String selectedFolderPath = (folder != null && folder.exists())
@@ -80,11 +82,22 @@ public class AttachmentsReportGenerator extends ReportGenerator<File> {
                         }
                     }
 
-                    FileInputStream picFileIS  = new FileInputStream(new File(attachment.getPath()));
-                    FileOutputStream toExportImageOS = new FileOutputStream(attachmentFile);
-                    UtilsZip.copy(picFileIS, toExportImageOS);
-                    picFileIS.close();
-                    toExportImageOS.close();
+                    try {
+                        // Catch FileNotFoundException: app_DailyJournal/.attachments/e011516f-b99e-4b51-a65a-6aed8a111c60.png:
+                        // So that app continues with next attachment
+                        FileInputStream picFileIS = new FileInputStream(attachment.getPath());
+                        FileOutputStream toExportImageOS = new FileOutputStream(attachmentFile);
+                        UtilsZip.copy(picFileIS, toExportImageOS);
+                        picFileIS.close();
+                        toExportImageOS.close();
+                    } catch (FileNotFoundException ex) {
+                        // That attachment file doesn't exist, delete it from database too.
+                        services.deleteAttachment(attachment);
+                        AnalyticsService.INSTANCE.logEvent("didNotFindFileAttachment");
+                        ex.printStackTrace();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 // to let know that a new file has been created so that it appears in the computer

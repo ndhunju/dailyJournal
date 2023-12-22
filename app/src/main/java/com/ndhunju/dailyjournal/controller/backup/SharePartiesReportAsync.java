@@ -20,11 +20,13 @@ import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
 import com.ndhunju.dailyjournal.service.report.ReportGenerator;
 import com.ndhunju.dailyjournal.service.report.TextFileReportGenerator;
 import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.util.UtilsZip;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /** Created by ndhunju on 2/4/18.*/
@@ -68,7 +70,12 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
         ReportGenerator rg;
         boolean success = true;
         File destinationFolder = new File(UtilsFile.getPublicDownloadDir());
-        File toBeZippedFolder = new File(destinationFolder, mContext.getString(R.string.str_share_report));
+        File toBeZippedFolder = new File(
+                destinationFolder,
+                mContext.getString(R.string.str_share_report)
+                        + "-"
+                        + UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT_FOR_FILE)
+        );
 
         try {
             if (!toBeZippedFolder.exists()) {
