@@ -79,7 +79,8 @@ public class UtilsFile {
 	}
 	
 	/**
-	 * Returns a folder that will store app data.
+	 *  @deprecated Instead use {@link #getAppFolder(Context)}  </i>
+	 * 	Returns a folder that will store app data.
 	 *  <b>NOTE:</b> <i>Since Android 4.4+, an app cannot delete files created in SD card
 	 * Thus while deleting a party, it's respective attachment files
 	 * cannot be deleted even though it was created by the app. Instead use
@@ -87,6 +88,7 @@ public class UtilsFile {
 	 * @param hide
 	 * @return
      * Use this method to export files to SD Card later if users want.
+	 *
 	 */
 	public static File getAppFolder(boolean hide) {
 		// Create an app folder
