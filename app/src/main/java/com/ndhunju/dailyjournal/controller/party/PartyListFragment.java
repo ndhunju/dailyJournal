@@ -405,16 +405,21 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         builder.setTitle(activity.getString(R.string.msg_choose, UtilsFormat.getPartyFromPref(activity)));
         builder.setNegativeButton(activity.getString(android.R.string.cancel), null);
         builder.setMultiChoiceItems(allParties, null,
-                (dialogInterface, i, b) -> {
-                    // Add checked contacts into selectedParties list
-                    if (b) selectedParties.add(parties.get(i));
-                    else selectedParties.remove(parties.get(i));
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        // Add checked contacts into selectedParties list
+                        if (b) selectedParties.add(parties.get(i));
+                        else selectedParties.remove(parties.get(i));
+                    }
                 });
         builder.setPositiveButton(activity.getString(android.R.string.ok),
-                (dialogInterface, i) -> new SharePartiesReportAsync(
-                        activity,
-                        SharePartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties)
-        );
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        new SharePartiesReportAsync(activity, SharePartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
+                    }
+                });
 
         return builder.create();
     }
