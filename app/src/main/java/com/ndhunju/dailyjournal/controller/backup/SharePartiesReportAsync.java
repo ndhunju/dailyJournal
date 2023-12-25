@@ -69,9 +69,11 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
         List<Party> partyList = parties[0];
         ReportGenerator rg;
         boolean success = true;
-        File destinationFolder = new File(UtilsFile.getPublicDownloadDir());
+        // We want to delete this folder once we zip it.
+        // But OS is blocking delete operation on Downloads folder.
+        // So use app folder to store the attachments and to zip.
         File toBeZippedFolder = new File(
-                destinationFolder,
+                UtilsFile.getAppFolder(mContext),
                 mContext.getString(R.string.str_share_report)
                         + "-"
                         + UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT_FOR_FILE)
@@ -89,7 +91,7 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
         }
 
         File zipFile = new File(
-                destinationFolder,
+                UtilsFile.getPublicDownloadDir(),
                 mContext.getString(R.string.str_report)
                         + "-"
                         + UtilsFile.getZipFileName()
@@ -150,8 +152,8 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
             });
 
             UtilsZip.zip(toBeZippedFolder, zipFile);
-            // TODO: This operation is being blocked by OS. This doesn't work on public Downloads
-            // folder neither it is working on App's private folder. See commit 7cff16bad87e1d417
+            // Turns out we need to empty the directory before calling delete on the directory.
+            UtilsFile.deleteDirectory(toBeZippedFolder);
             toBeZippedFolder.delete();
             // Let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(
