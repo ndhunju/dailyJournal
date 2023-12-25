@@ -12,7 +12,7 @@ import com.ndhunju.dailyjournal.util.UtilsView;
 /**
  * Created by dhunju on 9/24/2015.
  * * This class is a child class of {@link AsyncTask} that erases
- * all journal data by calling {@link Services#eraseAllJournals()}. This
+ * all journal data by calling {@link Services#eraseAllJournalsAndResetPartyBalance()}. This
  * class displays Progress dialog before starting the operation
  * and notifies user once the operation is completed
  */
@@ -38,7 +38,7 @@ public class EraseJournalsAsyncTask extends AsyncTask<Void,Integer,Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         Services services = Services.getInstance(mActivity);
-        return services.eraseAllJournals();
+        return services.eraseAllJournalsAndResetPartyBalance();
     }
 
     @Override

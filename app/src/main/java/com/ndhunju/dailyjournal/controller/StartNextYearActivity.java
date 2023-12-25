@@ -58,20 +58,17 @@ public class StartNextYearActivity extends BaseActivity {
         nextFinancialYear.setTime(mServices.getFinancialYear());
         nextFinancialYear.add(Calendar.YEAR, 1);
 
-        mStepsContainer = (ViewGroup) findViewById(R.id.next_year_steps_container);
+        mStepsContainer = findViewById(R.id.next_year_steps_container);
 
-        mNextButton = (Button) findViewById(R.id.activity_next_year_next_btn);
-        mNextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mNextButton.getText().equals(getString(R.string.str_done))) {
-                    finish();
-                } else if (hasNextStep()) {
-                    mNextButton.setText(getString(R.string.str_next));
-                    nextStep().run();
-                } else {
-                    mNextButton.setText(getString(R.string.str_done));
-                }
+        mNextButton = findViewById(R.id.activity_next_year_next_btn);
+        mNextButton.setOnClickListener(v -> {
+            if (mNextButton.getText().equals(getString(R.string.str_done))) {
+                finish();
+            } else if (hasNextStep()) {
+                mNextButton.setText(getString(R.string.str_next));
+                nextStep().run();
+            } else {
+                mNextButton.setText(getString(R.string.str_done));
             }
         });
 
@@ -141,15 +138,17 @@ public class StartNextYearActivity extends BaseActivity {
         @Override
         public void run() {
             super.run();
-            UtilsView.alert(getActivity(), getString(R.string.msg_begin_next_year_step_backup_start_msg),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivityForResult(new Intent(getActivity(), BackupActivity.class)
-                                            .putExtra(BackupPreferenceFragment.KEY_FINISH_ON_BACKUP_SUCCESS, true)
-                                    , REQUEST_CODE_BACKUP_COMPLETE);
-                        }
-                    });
+            UtilsView.alert(
+                    getActivity(),
+                    getString(R.string.msg_begin_next_year_step_backup_start_msg),
+                    (dialog, which) -> startActivityForResult(
+                            new Intent(getActivity(), BackupActivity.class).putExtra(
+                                            BackupPreferenceFragment.KEY_FINISH_ON_BACKUP_SUCCESS,
+                                            true
+                                    )
+                            , REQUEST_CODE_BACKUP_COMPLETE
+                    )
+            );
         }
     }
 

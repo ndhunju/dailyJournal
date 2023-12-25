@@ -922,6 +922,22 @@ public class Services {
         return true;
     }
 
+    public boolean recreateAttachmentsDB() {
+        return dropAttachmentTable() && createAttachmentDB();
+    }
+
+    private boolean dropAttachmentTable() {
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        db.execSQL(DailyJournalContract.AttachmentColumns.SQL_DROP_ENTRIES_ATTACHMENTS);
+        return true;
+    }
+
+    private boolean createAttachmentDB() {
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        db.execSQL(DailyJournalContract.AttachmentColumns.SQL_CREATE_ENTRIES_ATTACHMENTS);
+        return true;
+    }
+
 
     /**
      * Creates tables in the database
@@ -976,11 +992,15 @@ public class Services {
         return success;
     }
 
-    public boolean eraseAllJournals() {
+    /**
+     * @see Services#eraseAllJournalsOnly()
+     */
+    public boolean eraseAllJournalsAndResetPartyBalance() {
         boolean success = true;
         try {
             success &= recreateJournalDB();
-            success &= eraseAllAttachments();
+            success &= recreateAttachmentsDB();
+            success &= eraseAllAttachmentFiles();
             success &= partyDAO.resetDrCrBalance() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -988,23 +1008,37 @@ public class Services {
         return success;
     }
 
+    /**
+     * This one is similar to {@link Services#eraseAllJournalsAndResetPartyBalance()}
+     * but unlike that this one carries over the balances for the party. This is
+     * specifically designed to be used for starting a new year in the app.
+     */
     public boolean eraseAllJournalsOnly() {
         boolean success = true;
         try {
             success &= recreateJournalDB();
-            success &= eraseAllAttachments();
+            success &= recreateAttachmentsDB();
+            success &= eraseAllAttachmentFiles();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return success;
     }
 
-    public boolean eraseAllAttachments() {
+    public boolean eraseAllAttachmentFiles() {
         boolean success = true;
-        for (File attch : UtilsFile.getAttachmentFolder(UtilsFile.getAppFolder(getContext()), true).listFiles()) {
+        File[] files = UtilsFile.getAttachmentFolder(
+                UtilsFile.getAppFolder(getContext()),
+                true
+        ).listFiles();
+
+        if (files == null) return false;
+
+        for (File attch : files) {
             // make sure it is a file. Could be party folder
             if (attch.isFile()) success &= UtilsFile.deleteFile(attch.getAbsolutePath());
         }
+
         return success;
     }
 
