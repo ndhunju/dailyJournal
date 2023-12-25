@@ -92,22 +92,17 @@ public abstract class PartyDetailFragment extends Fragment implements PartyDAO.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(getLayoutId(), container, false);
 
-        //Wire up the widgets view
-        rootView.findViewById(R.id.fragment_party_detail_party_card).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startPartyActivity();
-            }
-        });
-        picIV = (ImageView) rootView.findViewById(R.id.fragment_party_detail_circle_iv);
-        nameTV = (TextView) rootView.findViewById(R.id.fragment_party_detail_name_tv);
-        nameTV.setMovementMethod(new ScrollingMovementMethod());
+        // Wire up the widgets view
+        rootView.findViewById(R.id.fragment_party_detail_party_card)
+                .setOnClickListener(v -> startPartyActivity());
+        picIV = rootView.findViewById(R.id.fragment_party_detail_circle_iv);
+        nameTV = rootView.findViewById(R.id.fragment_party_detail_name_tv);
 
-        ledgerListView = (RecyclerView) rootView.findViewById(R.id.activity_party_lv);
+        ledgerListView = rootView.findViewById(R.id.activity_party_lv);
         ledgerListView.setLayoutManager(new LinearLayoutManager(getContext()));
         ledgerListView.setItemAnimator(UtilsView.getDefaultItemAnimator());
 
-        newJournalFab = (FloatingActionButton) getActivity().findViewById(R.id.activity_party_detail_fab);
+        newJournalFab = getActivity().findViewById(R.id.activity_party_detail_fab);
         /** newJournalFab is null when this fragment is hosted by {@link PartyListActivity} */
         if (newJournalFab != null) {
             ledgerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
