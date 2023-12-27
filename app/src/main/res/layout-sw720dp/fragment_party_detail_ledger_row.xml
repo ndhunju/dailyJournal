@@ -28,69 +28,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"/>
 
-            <TableRow
+
+            <include layout="@layout/ledger_row"
+                android:id="@+id/fragment_party_detail_ledger_row_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/fragment_party_detail_header_tr"
-                android:layout_marginTop="5dp">
-                <TextView
-                    android:text="@string/str_num"
-                    android:layout_height="wrap_content"
-                    android:layout_width="55dp"
-                    android:gravity="center"
-                    android:background="@drawable/cell_header_shape"
-                    android:padding="5dp"
-                    android:textSize="@dimen/text_size_medium"
-                    />
-                <TextView
-                    android:text="@string/str_date"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="@dimen/text_size_medium"
-                    android:background="@drawable/cell_header_shape"
-                    android:padding="5dp"
-                    />
-                <TextView
-                    android:text="@string/str_note"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:background="@drawable/cell_header_shape"
-                    android:textSize="@dimen/text_size_medium"
-                    />
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:id="@+id/activity_party_col_header_dr"
-                    android:layout_weight="1"
-                    android:text="@string/str_dr"
-                    android:padding="5dp"
-                    android:gravity="center"
-                    android:background="@drawable/cell_header_shape"
-                    android:textSize="@dimen/text_size_medium"/>
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:id="@+id/activity_party_col_header_cr"
-                    android:layout_weight="1"
-                    android:text="@string/str_cr"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:background="@drawable/cell_header_shape"
-                    android:textSize="@dimen/text_size_medium"/>
-            </TableRow>
+                android:layout_marginTop="5dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/activity_party_lv"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                tools:listitem="@layout/ledger_row"/>
 
-            <FrameLayout
-                android:id="@+id/fragment_party_detail_footer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:layout_height="15dp"/>
+            <include layout="@layout/ledger_row_footer"/>
 
         </LinearLayout>
 
