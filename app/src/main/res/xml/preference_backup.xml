@@ -2,19 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
-        android:title="@string/str_google_drive"
-        app:iconSpaceReserved="false"
-        >
-        <Preference
-            android:icon="@drawable/ic_cloud_upload_black_24dp"
-            android:key="@string/key_pref_backup_google_drive"
-            android:title="@string/str_create_backup_in_google_drive" />
-        <Preference
-            android:icon="@drawable/ic_cloud_download_black_24dp"
-            android:key="@string/key_pref_restore_google_drive"
-            android:title="@string/str_restore_backup_from_google_drive" />
-    </PreferenceCategory>
-    <PreferenceCategory
         android:title="@string/str_google_drive_in_house"
         app:iconSpaceReserved="false"
         >
@@ -25,6 +12,19 @@
         <Preference
             android:icon="@drawable/ic_cloud_download_black_24dp"
             android:key="@string/key_pref_restore_google_drive_in_house"
+            android:title="@string/str_restore_backup_from_google_drive" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/str_google_drive"
+        app:iconSpaceReserved="false"
+        >
+        <Preference
+            android:icon="@drawable/ic_cloud_upload_black_24dp"
+            android:key="@string/key_pref_backup_google_drive"
+            android:title="@string/str_create_backup_in_google_drive" />
+        <Preference
+            android:icon="@drawable/ic_cloud_download_black_24dp"
+            android:key="@string/key_pref_restore_google_drive"
             android:title="@string/str_restore_backup_from_google_drive" />
     </PreferenceCategory>
     <PreferenceCategory

@@ -72,26 +72,6 @@ public class BackupPreferenceFragment
                 false
         );
 
-
-        findPreference(getString(R.string.key_pref_backup_google_drive))
-                .setOnPreferenceClickListener(preference -> {
-                    startActivityForResult(
-                            new Intent(getActivity(), GoogleDriveUploadBackupActivity.class),
-                            REQUEST_CODE_BACKUP_COMPLETE
-                    );
-                    return true;
-                });
-
-        findPreference(getString(R.string.key_pref_restore_google_drive))
-                .setOnPreferenceClickListener(preference -> {
-                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
-                            (dialogInterface, i) -> startActivity(new Intent(
-                                    getContext(),
-                                    GoogleDriveRestoreBackupActivity.class)
-                            ), null);
-                    return true;
-                });
-
         // Create Backup in Google Drive using REST API library
         gDriveRestBackupPref = findPreference(getString(R.string.key_pref_backup_google_drive_in_house));
         gDriveRestBackupPref.setOnPreferenceClickListener(preference -> {
@@ -110,6 +90,25 @@ public class BackupPreferenceFragment
                                     new Intent(
                                             getActivity(),
                                             GoogleDriveRestApiRestoreBackupActivity.class)
+                            ), null);
+                    return true;
+                });
+
+        findPreference(getString(R.string.key_pref_backup_google_drive))
+                .setOnPreferenceClickListener(preference -> {
+                    startActivityForResult(
+                            new Intent(getActivity(), GoogleDriveUploadBackupActivity.class),
+                            REQUEST_CODE_BACKUP_COMPLETE
+                    );
+                    return true;
+                });
+
+        findPreference(getString(R.string.key_pref_restore_google_drive))
+                .setOnPreferenceClickListener(preference -> {
+                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
+                            (dialogInterface, i) -> startActivity(new Intent(
+                                    getContext(),
+                                    GoogleDriveRestoreBackupActivity.class)
                             ), null);
                     return true;
                 });
