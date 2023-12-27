@@ -143,6 +143,11 @@ public class PreferenceService {
         return this;
     }
 
+    public PreferenceService putVal(@StringRes int resKeyId, Set<String> val) {
+        getSharedPreference().edit().putStringSet(getKey(resKeyId), val).apply();
+        return this;
+    }
+
 
     public boolean clear(){
         return getSharedPreference().edit().clear().commit();

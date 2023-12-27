@@ -11,7 +11,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import com.ndhunju.dailyjournal.ObservableField
 import com.ndhunju.dailyjournal.R
 import com.ndhunju.dailyjournal.database.IPartyDAO
-import com.ndhunju.dailyjournal.service.PreferenceService
 import com.ndhunju.dailyjournal.util.UtilsFormat
 
 /**
@@ -31,8 +30,6 @@ class PartyDetailLedgerRowFragment :
         const val WIDTH_DELTA: Int = 10
     }
     
-    var colsToShow: Set<String> = hashSetOf()
-
     // Width for each column that can be observed for changes
     private val _numColWidth = ObservableField(0F)
     private val _dateColWidth = ObservableField(0F)
@@ -40,14 +37,6 @@ class PartyDetailLedgerRowFragment :
     private val _drColWidth = ObservableField(0F)
     private val _crColWidth = ObservableField(0F)
     private val _balColWidth = ObservableField(0F)
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val context = context ?: return
-        val ps = PreferenceService.from(context)
-        colsToShow = ps.getVal(R.string.key_pref_ledger_row_cols, HashSet())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -234,27 +223,27 @@ class PartyDetailLedgerRowFragment :
     }
 
     override fun showNoCol(): Boolean {
-        return colsToShow.contains(getString(R.string.str_num))
+        return true
     }
 
     override fun showDateCol(): Boolean {
-        return colsToShow.contains(getString(R.string.str_date))
+        return true
     }
 
     override fun showNoteCol(): Boolean {
-        return colsToShow.contains(getString(R.string.str_note))
+        return true
     }
 
     override fun showDrCol(): Boolean {
-        return colsToShow.contains(getString(R.string.str_dr))
+        return true
     }
 
     override fun showCrCol(): Boolean {
-        return colsToShow.contains(getString(R.string.str_cr))
+        return true
     }
 
     override fun showBalanceCol(): Boolean {
-        return colsToShow.contains(getString(R.string.str_balance))
+        return true
     }
 
     override fun getNumColWidth(): ObservableField<Float> {
