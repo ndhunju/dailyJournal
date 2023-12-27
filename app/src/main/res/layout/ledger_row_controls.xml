@@ -188,30 +188,36 @@
             android:textSize="@dimen/text_size_medium"
             app:drawableLeftCompat="@drawable/ic_baseline_arrow_right_24"/>
 
-        <TextView
-            android:id="@+id/ledger_row_balance_right"
-            android:layout_height="wrap_content"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="3dp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:textSize="@dimen/text_size_medium"
-            app:drawableRightCompat="@drawable/ic_baseline_arrow_left_24"/>
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/ledger_row_balance_right"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="3dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:textSize="@dimen/text_size_medium"
+                app:drawableRightCompat="@drawable/ic_baseline_arrow_left_24"/>
+
+            <TextView
+                android:id="@+id/ledger_row_balance_increase"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="3dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:textSize="@dimen/text_size_medium"
+                app:drawableRightCompat="@drawable/ic_baseline_arrow_right_24"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <TextView
-        android:id="@+id/ledger_row_balance_increase"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:padding="3dp"
-        android:gravity="center"
-        android:singleLine="true"
-        android:maxLines="1"
-        android:textSize="@dimen/text_size_medium"
-        app:drawableLeftCompat="@drawable/ic_baseline_arrow_right_24"/>
 
 </TableRow>
