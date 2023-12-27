@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blue_mild"
+    >
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ledger_row_num"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ledger_row_no_width"
+        android:background="@drawable/cell_shape"
+        android:padding="3dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/ledger_row_num_right"
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/ledger_row_no_width"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableRightCompat="@drawable/ic_baseline_arrow_left_24" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ledger_row_date"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ledger_row_width"
+        android:background="@drawable/cell_shape"
+        android:padding="3dp"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/ledger_row_date_left"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableLeftCompat="@drawable/ic_baseline_arrow_right_24"/>
+
+        <TextView
+            android:id="@+id/ledger_row_date_right"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableRightCompat="@drawable/ic_baseline_arrow_left_24"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ledger_row_note"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ledger_row_width"
+        android:background="@drawable/cell_shape"
+        android:padding="3dp"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/ledger_row_note_left"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableLeftCompat="@drawable/ic_baseline_arrow_right_24"/>
+
+        <TextView
+            android:id="@+id/ledger_row_note_right"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableRightCompat="@drawable/ic_baseline_arrow_left_24"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ledger_row_dr"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ledger_row_width"
+        android:background="@drawable/cell_shape"
+        android:padding="3dp"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/ledger_row_dr_left"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableLeftCompat="@drawable/ic_baseline_arrow_right_24"/>
+
+        <TextView
+            android:id="@+id/ledger_row_dr_right"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableRightCompat="@drawable/ic_baseline_arrow_left_24"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ledger_row_cr"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ledger_row_width"
+        android:background="@drawable/cell_shape"
+        android:padding="3dp"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/ledger_row_cr_left"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableLeftCompat="@drawable/ic_baseline_arrow_right_24"/>
+
+        <TextView
+            android:id="@+id/ledger_row_cr_right"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableRightCompat="@drawable/ic_baseline_arrow_left_24"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ledger_row_balance"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ledger_row_width"
+        android:background="@drawable/cell_shape"
+        android:padding="3dp"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/ledger_row_balance_left"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableLeftCompat="@drawable/ic_baseline_arrow_right_24"/>
+
+        <TextView
+            android:id="@+id/ledger_row_balance_right"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_medium"
+            app:drawableRightCompat="@drawable/ic_baseline_arrow_left_24"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
+        android:id="@+id/ledger_row_balance_increase"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:padding="3dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:textSize="@dimen/text_size_medium"
+        app:drawableLeftCompat="@drawable/ic_baseline_arrow_right_24"/>
+
+</TableRow>

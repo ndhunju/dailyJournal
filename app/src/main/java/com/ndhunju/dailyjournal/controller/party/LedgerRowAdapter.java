@@ -23,8 +23,9 @@ import java.util.Date;
 class LedgerRowAdapter extends LedgerAdapter {
 
     // variable.
-    private String formattedAmt; // stores formatted amount. Declared here to prevent memory alloc and dealloc on every bind call
-    private Client client;
+    // Stores formatted amount. Declared here to prevent memory alloc and dealloc on every bind call
+    private String formattedAmt;
+    private final Client client;
 
 
     public LedgerRowAdapter(Activity activity, Client client, Party party) {
@@ -46,8 +47,8 @@ class LedgerRowAdapter extends LedgerAdapter {
 
     class LedgerVH extends LedgerAdapter.LedgerVH implements ObservableField.Observer {
         TextView numCol;
-        TextView dateCol ;
-        TextView noteCol ;
+        TextView dateCol;
+        TextView noteCol;
         TextView drCol;
         TextView crCol;
         TextView balCol;
@@ -61,11 +62,18 @@ class LedgerRowAdapter extends LedgerAdapter {
             crCol = (TextView) convertView.findViewById(R.id.ledger_row_cr);
             balCol = (TextView) convertView.findViewById(R.id.ledger_row_balance);
 
-            //apply common settings
+            setWidth(numCol, client.getNumColWidth());
+            setWidth(dateCol, client.getDateColWidth());
+            setWidth(noteCol, client.getNoteColWidth());
+            setWidth(drCol, client.getDrColWidth());
+            setWidth(crCol, client.getCrColWidth());
+            setWidth(balCol, client.getBalColWidth());
+
+            // Apply common settings
             PartyDetailFragment.addAttributes(TextUtils.TruncateAt.END, dateCol, noteCol);
             PartyDetailFragment.addAttributes(TextUtils.TruncateAt.START, drCol, crCol);
 
-            // show selected columns only
+            // Show selected columns only
             numCol.setVisibility(client.showNoCol() ? View.VISIBLE : View.GONE);
             dateCol.setVisibility(client.showDateCol() ? View.VISIBLE : View.GONE);
             noteCol.setVisibility(client.showNoteCol() ? View.VISIBLE : View.GONE);
@@ -75,11 +83,17 @@ class LedgerRowAdapter extends LedgerAdapter {
             showBalance.set(client.showBalanceCol());
 
             showBalance.addObserver(this);
+            client.getNumColWidth().addObserver(this);
+            client.getDateColWidth().addObserver(this);
+            client.getNoteColWidth().addObserver(this);
+            client.getDrColWidth().addObserver(this);
+            client.getCrColWidth().addObserver(this);
+            client.getBalColWidth().addObserver(this);
         }
 
         public void bind(Journal journal) {
             super.bind(journal);
-            numCol.setText(String.valueOf(getAdapterPosition() + 1));
+            numCol.setText(String.valueOf(getAbsoluteAdapterPosition() + 1));
             dateCol.setText(UtilsFormat.formatDate(new Date(journal.getDate()), getContext()));
             noteCol.setText(journal.getNote());
 
@@ -105,22 +119,46 @@ class LedgerRowAdapter extends LedgerAdapter {
         public void onChanged(ObservableField observableField) {
             if (observableField.equals(showBalance)) {
                 balCol.setVisibility((boolean) observableField.get() ? View.VISIBLE : View.GONE);
+            } else if (observableField.equals(client.getNumColWidth())) {
+                setWidth(numCol, client.getNumColWidth());
+            } else if (observableField.equals(client.getDateColWidth())) {
+                setWidth(dateCol, client.getDateColWidth());
+            } else if (observableField.equals(client.getNoteColWidth())) {
+                setWidth(noteCol, client.getNoteColWidth());
+            } else if (observableField.equals(client.getDrColWidth())) {
+                setWidth(drCol, client.getDrColWidth());
+            } else if (observableField.equals(client.getCrColWidth())) {
+                setWidth(crCol, client.getCrColWidth());
+            } else if (observableField.equals(client.getBalColWidth())) {
+                setWidth(balCol, client.getBalColWidth());
             }
         }
     }
 
+    /**
+     * Helper method to set the width of the passed view to the value stored by observableField
+     */
+    public static void setWidth(View view, ObservableField<Float> observableField) {
+        float width = observableField.get();
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.width = (int) width;
+        view.setLayoutParams(layoutParams);
+    }
+
+
+
     interface Client {
-
         boolean showNoCol();
-
         boolean showDateCol();
-
         boolean showNoteCol();
-
         boolean showDrCol();
-
         boolean showCrCol();
-
         boolean showBalanceCol();
+        ObservableField<Float> getNumColWidth();
+        ObservableField<Float> getDateColWidth();
+        ObservableField<Float> getNoteColWidth();
+        ObservableField<Float> getDrColWidth();
+        ObservableField<Float> getCrColWidth();
+        ObservableField<Float> getBalColWidth();
     }
 }

@@ -2,21 +2,9 @@ package com.ndhunju.dailyjournal.controller.party;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.LayoutRes;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +16,17 @@ import android.view.animation.AnticipateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.database.PartyDAO;
@@ -89,6 +88,7 @@ public abstract class PartyDetailFragment extends Fragment implements PartyDAO.O
     }
 
     @Override
+    @NonNull
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(getLayoutId(), container, false);
 
