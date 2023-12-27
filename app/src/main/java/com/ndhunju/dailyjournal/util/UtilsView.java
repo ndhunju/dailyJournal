@@ -91,6 +91,13 @@ public class UtilsView {
                         )
                 ))
                 .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(
+                        R.string.title_activity_start_next_year,
+                        (dialog, which) -> context.startActivity(new Intent(
+                                context,
+                                StartNextYearActivity.class
+                        ))
+                )
                 .setNeutralButton(R.string.str_preference, (dialogInterface, i) -> {
                     context.startActivity(new Intent(context, MyPreferenceActivity.class));
                 })
