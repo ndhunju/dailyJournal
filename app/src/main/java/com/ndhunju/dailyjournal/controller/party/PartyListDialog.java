@@ -16,13 +16,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 public class PartyListDialog extends DialogFragment {
 
@@ -72,19 +72,23 @@ public class PartyListDialog extends DialogFragment {
 			public void onItemClick(View view, int position, long id) {
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, partyAdapter.getItem(position).getId());
-				OnDialogBtnClickedListener listener = null;
-				if (getTargetFragment() instanceof OnDialogBtnClickedListener) {
-					listener = (OnDialogBtnClickedListener) getTargetFragment();
-				} else if (getActivity() instanceof OnDialogBtnClickedListener) {
-					listener = (OnDialogBtnClickedListener) getActivity();
+				OnDatePickerDialogBtnClickedListener listener = null;
+				if (getTargetFragment() instanceof OnDatePickerDialogBtnClickedListener) {
+					listener = (OnDatePickerDialogBtnClickedListener) getTargetFragment();
+				} else if (getActivity() instanceof OnDatePickerDialogBtnClickedListener) {
+					listener = (OnDatePickerDialogBtnClickedListener) getActivity();
 				}
 
 				if (listener == null) {
 					return;
 				}
 
-				listener.onDialogBtnClicked(i,
-						OnDialogBtnClickedListener.BUTTON_NEUTRAL, Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
+				listener.onDialogBtnClicked(
+						i,
+						OnDatePickerDialogBtnClickedListener.BUTTON_NEUTRAL,
+						Activity.RESULT_OK,
+						getArguments().getInt(Constants.KEY_REQUEST_CODE)
+				);
 				dismiss();
 			}
 
@@ -106,17 +110,20 @@ public class PartyListDialog extends DialogFragment {
 				Intent i = new Intent();
 				i.putExtra(Constants.KEY_PARTY_ID, addedParty.getId());
 
-				OnDialogBtnClickedListener listener = null;
-				if (getTargetFragment() instanceof  OnDialogBtnClickedListener) {
-					listener = (OnDialogBtnClickedListener) getTargetFragment();
-				} else if (getActivity() instanceof OnDialogBtnClickedListener) {
-					listener = (OnDialogBtnClickedListener) getActivity();
+				OnDatePickerDialogBtnClickedListener listener = null;
+				if (getTargetFragment() instanceof  OnDatePickerDialogBtnClickedListener) {
+					listener = (OnDatePickerDialogBtnClickedListener) getTargetFragment();
+				} else if (getActivity() instanceof OnDatePickerDialogBtnClickedListener) {
+					listener = (OnDatePickerDialogBtnClickedListener) getActivity();
 				}
 
 				if (listener != null) {
-					listener.onDialogBtnClicked(i,
-							OnDialogBtnClickedListener.BUTTON_POSITIVE, Activity.RESULT_OK,
-							getArguments().getInt(Constants.KEY_REQUEST_CODE));
+					listener.onDialogBtnClicked(
+							i,
+							OnDatePickerDialogBtnClickedListener.BUTTON_POSITIVE,
+							Activity.RESULT_OK,
+							getArguments().getInt(Constants.KEY_REQUEST_CODE)
+					);
 				}
 
               }

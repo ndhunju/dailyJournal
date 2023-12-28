@@ -12,9 +12,9 @@ import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.LinearLayout;
 
+import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.Constants;
-import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +25,7 @@ public class DatePickerFragment extends DialogFragment {
 	public static final String EXTRA_CAL = "com.ndhunju.dailyJournal.datePickerFragment.extraCal";
 	
 	private static Calendar mCal;
-	private OnDialogBtnClickedListener listener;
+	private OnDatePickerDialogBtnClickedListener listener;
 	
 	public static DatePickerFragment newInstance(Date d, int requestCode){
 
@@ -88,9 +88,13 @@ public class DatePickerFragment extends DialogFragment {
 					Intent i = new Intent();
 					i.putExtra(EXTRA_CAL, mCal);
 					//So far, DatePickerFragment is called from JournalFragment only
-					if(listener != null) {
-						listener.onDialogBtnClicked(i, OnDialogBtnClickedListener.BUTTON_POSITIVE,
-								Activity.RESULT_OK, getArguments().getInt(Constants.KEY_REQUEST_CODE));
+					if (listener != null) {
+						listener.onDialogBtnClicked(
+								i,
+								OnDatePickerDialogBtnClickedListener.BUTTON_POSITIVE,
+								Activity.RESULT_OK,
+								getArguments().getInt(Constants.KEY_REQUEST_CODE)
+						);
 					}
 				}
 			})
@@ -101,13 +105,15 @@ public class DatePickerFragment extends DialogFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		if(getTargetFragment() instanceof OnDialogBtnClickedListener){
-			listener = (OnDialogBtnClickedListener)getTargetFragment();
-		}else if(activity instanceof OnDialogBtnClickedListener){
-			listener = (OnDialogBtnClickedListener)activity;
+		if(getTargetFragment() instanceof OnDatePickerDialogBtnClickedListener){
+			listener = (OnDatePickerDialogBtnClickedListener)getTargetFragment();
+		}else if(activity instanceof OnDatePickerDialogBtnClickedListener){
+			listener = (OnDatePickerDialogBtnClickedListener)activity;
 		}else{
-			throw new RuntimeException("The calling activity, " + activity.getComponentName() + " or Target fragment must implement the " +
-					"interface " + OnDialogBtnClickedListener.class.getSimpleName());
+			throw new RuntimeException("The calling activity, "
+					+ activity.getComponentName()
+					+ " or Target fragment must implement the interface "
+					+ OnDatePickerDialogBtnClickedListener.class.getSimpleName());
 		}
 	}
 }

@@ -23,9 +23,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
-import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
@@ -38,7 +38,7 @@ import com.ndhunju.dailyjournal.viewPager.AttachmentViewPagerActivity;
 import java.util.Calendar;
 import java.util.Date;
 
-public class JournalFragment extends Fragment implements OnDialogBtnClickedListener {
+public class JournalFragment extends Fragment implements OnDatePickerDialogBtnClickedListener {
 
     //Constants
 	private static final String TAG = JournalFragment.class.getSimpleName();

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
@@ -20,7 +21,6 @@ import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
-import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +29,10 @@ import java.util.List;
 /**
  * Created by Dhunju on 8/14/2016.
  */
-public class SpannedLedgerListActivity extends BaseActivity implements OnDialogBtnClickedListener, LedgerAdapter.OnItemClickListener {
+public class SpannedLedgerListActivity
+        extends BaseActivity
+        implements OnDatePickerDialogBtnClickedListener,
+        LedgerAdapter.OnItemClickListener {
 
     private static final int REQUEST_START_DATE = 6656;
     private static final int REQUEST_END_DATE = 5000;
@@ -76,20 +79,17 @@ public class SpannedLedgerListActivity extends BaseActivity implements OnDialogB
         });
 
         endDateBtn.setText(UtilsFormat.formatDate(endDate.getTime(), getApplicationContext()));
-        endDateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerFragment dpf = DatePickerFragment.newInstance(endDate.getTime(), REQUEST_END_DATE);
-                dpf.show(getSupportFragmentManager(), DatePickerFragment.TAG);
-            }
+        endDateBtn.setOnClickListener(v -> {
+            DatePickerFragment dpf = DatePickerFragment.newInstance(
+                    endDate.getTime(),
+                    REQUEST_END_DATE
+            );
+            dpf.show(getSupportFragmentManager(), DatePickerFragment.TAG);
         });
 
-        findJournalBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ledgerAdapter.setJournals(Services.getInstance(getApplicationContext()).findByDate(startDate.getTimeInMillis(), endDate.getTimeInMillis()));
-            }
-        });
+        findJournalBtn.setOnClickListener(v -> ledgerAdapter
+                .setJournals(Services.getInstance(getApplicationContext())
+                        .findByDate(startDate.getTimeInMillis(), endDate.getTimeInMillis())));
 
         ledgerAdapter = new LedgerCardAdapter(this, new ArrayList<Journal>());
         ledgerAdapter.setLayoutId(R.layout.spanned_ledger_card);

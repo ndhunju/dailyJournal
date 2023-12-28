@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -12,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
@@ -24,7 +24,6 @@ import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
-import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,7 +34,9 @@ import java.util.List;
  * This activity is responsible for showing list of journals for a selected day for a selected party.
  */
 
-public class DailyReportActivity extends BaseActivity implements LedgerAdapter.OnItemClickListener, OnDialogBtnClickedListener{
+public class DailyReportActivity
+        extends BaseActivity
+        implements LedgerAdapter.OnItemClickListener, OnDatePickerDialogBtnClickedListener {
 
     private static final int REQUEST_DATE = 6656;
     private static final int REQUEST_CHGD_PARTY = 456;
@@ -113,7 +114,13 @@ public class DailyReportActivity extends BaseActivity implements LedgerAdapter.O
     }
 
     @Override
-    public void onDialogBtnClicked(Intent data, @OnDialogBtnClickedListener.ButtonType int whichBtn, int result, int requestCode) {
+    public void onDialogBtnClicked(
+            Intent data,
+            @OnDatePickerDialogBtnClickedListener.ButtonType int whichBtn,
+            int result,
+            int requestCode
+    ) {
+
         if (result != Activity.RESULT_OK) return;
 
         switch (requestCode) {

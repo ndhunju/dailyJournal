@@ -4,25 +4,27 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class CompanySettingsActivity extends BaseActivity implements OnDialogBtnClickedListener {
+public class CompanySettingsActivity
+        extends BaseActivity
+        implements OnDatePickerDialogBtnClickedListener {
 
     private static final int REQUEST_CHGED_DATE = 656;
 
@@ -46,43 +48,37 @@ public class CompanySettingsActivity extends BaseActivity implements OnDialogBtn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_settings);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
 
         services = Services.getInstance(getContext());
 
-        companyNameEt = (EditText) findViewById(R.id.activity_company_settings_company_name_et);
+        companyNameEt = findViewById(R.id.activity_company_settings_company_name_et);
 
-        dateBtn = (Button) findViewById(R.id.activity_company_settings_date_btn);
-        dateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerFragment dpf = DatePickerFragment.newInstance(new Date(), REQUEST_CHGED_DATE);
-                dpf.show(getSupportFragmentManager(), DatePickerFragment.TAG);
-            }
+        dateBtn = findViewById(R.id.activity_company_settings_date_btn);
+        dateBtn.setOnClickListener(v -> {
+            DatePickerFragment dpf = DatePickerFragment.newInstance(new Date(), REQUEST_CHGED_DATE);
+            dpf.show(getSupportFragmentManager(), DatePickerFragment.TAG);
         });
 
-        doneBtn = (Button) findViewById(R.id.activity_company_settings_done_btn);
-        doneBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(companyNameEt.getText())) {
-                    companyNameEt.setError("");
-                    return;
-                }
-
-                services.setCompanyName(companyNameEt.getText().toString());
-                try {
-                    services.setFinancialYear(financialYear);
-                } catch (IllegalStateException ex) {
-                    UtilsView.alert(getContext(), getString(R.string.msg_financial_year_set, services.getFinancialYear()));
-                    return;
-                } catch (Exception ex) {
-                    UtilsView.alert(getContext(), getString(R.string.msg_is_not_valid, getString(R.string.str_date)));
-                    return;
-                }
-
-                finish();
+        doneBtn = findViewById(R.id.activity_company_settings_done_btn);
+        doneBtn.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(companyNameEt.getText())) {
+                companyNameEt.setError("");
+                return;
             }
+
+            services.setCompanyName(companyNameEt.getText().toString());
+            try {
+                services.setFinancialYear(financialYear);
+            } catch (IllegalStateException ex) {
+                UtilsView.alert(getContext(), getString(R.string.msg_financial_year_set, services.getFinancialYear()));
+                return;
+            } catch (Exception ex) {
+                UtilsView.alert(getContext(), getString(R.string.msg_is_not_valid, getString(R.string.str_date)));
+                return;
+            }
+
+            finish();
         });
 
         companyNameEt.setText(services.getCompanyName());
