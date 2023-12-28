@@ -210,6 +210,8 @@
     <!-- ImportContactsListDialog -->
     <!-- Text in a button. Selects all contacts upon clicking the button -->
     <string name="select_all">Select All</string>
+    <!-- Error message shown in a dialog when user selects 0 or multiple backup files-->
+    <string name="error_msg_invalid_backup_file_count_selected">Please select one backup file to restore.</string>
 
 </resources>
 
