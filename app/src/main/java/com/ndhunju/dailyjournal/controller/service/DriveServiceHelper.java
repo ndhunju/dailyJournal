@@ -35,6 +35,7 @@ import static com.ndhunju.dailyjournal.util.ProgressListener.publishProgress;
  */
 public class DriveServiceHelper {
 
+    public static final float CODE_AUTO_UPLOAD_TO_G_DRIVE_FAILED = -1f;
     private static final String APP_ROOT_FOLDER = "Daily Journal Plus";
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
     private final Drive mDriveService;
@@ -131,6 +132,12 @@ public class DriveServiceHelper {
                     UtilsFile.BACK_FILE_TYPE
             );
 
+        }).addOnFailureListener(e -> {
+
+            if (progressListener != null) {
+                progressListener.onProgress(CODE_AUTO_UPLOAD_TO_G_DRIVE_FAILED, e.getMessage());
+            }
+
         }).continueWithTask(createFileTask -> {
             // Create a new file in Google Drive to store backup
             File file = createFileTask.getResult();
@@ -193,7 +200,9 @@ public class DriveServiceHelper {
                 );
             } catch (IOException e1) {
                 Log.i("createBackup", "Unable to write file appFolder.");
-                throw e1;
+                throw new RuntimeException(
+                        "Failed to create backup in Google Drive: " + e1.getMessage()
+                );
             }
         });
     }
@@ -264,7 +273,11 @@ public class DriveServiceHelper {
                 File googleFile = mDriveService.files().create(metadata).execute();
                 taskCompletionSource.setResult(googleFile);
             } catch (IOException e) {
-                taskCompletionSource.trySetException(new IOException("File creation failed."));
+                taskCompletionSource.setException(
+                        new IOException(
+                                "Failed to create backup file in Google Drive: " + e.getMessage()
+                        )
+                );
             }
 
         });
@@ -287,7 +300,12 @@ public class DriveServiceHelper {
                 File file = mDriveService.files().update(fileId, updatedMetadata, content).execute();
                 taskCompletionSource.setResult(file);
             } catch (Exception e) {
-                taskCompletionSource.trySetException(e);
+                taskCompletionSource.setException(
+                        new RuntimeException(
+                                "Failed to update created back up file in Google Drive: "
+                                        + e.getMessage()
+                        )
+                );
             }
 
         });

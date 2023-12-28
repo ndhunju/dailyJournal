@@ -10,13 +10,16 @@ import android.util.Log;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.api.services.drive.Drive;
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.MyNotificationManager;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.util.concurrent.Executors;
 
+import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.CODE_AUTO_UPLOAD_TO_G_DRIVE_FAILED;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_SUCCESS;
 
@@ -64,13 +67,33 @@ public class AutoBackupWithRestApiHelper {
         Executors.newCachedThreadPool().execute(() -> {
             try {
                 // Make it unstoppable until the task is completed
-                startForeground(1, notifMgr.createBackingUpNotif());
+                startForeground(NOTIFICATION_ID_AUTO_BACK_UP, notifMgr.createBackingUpNotif());
                 backUpFileDir = Services.getInstance(getContext())
                         .createBackUp(UtilsFile.getAutoBackupDir(getContext()));
 
                 if (ps.getVal(R.string.key_pref_auto_upload_backup_to_gdrive_cb, false)) {
+                    // Show unstoppable notification for uploading to Google Drive also
+                    startForeground(
+                            NOTIFICATION_ID_GOOGLE_DRIVE_UPLOAD,
+                            notifMgr.createBackingUpToGDriveNotif(null)
+                    );
+
                     // Auto Upload backup to Google Drive as well
-                    signInToGoogleDrive();
+                    signInToGoogleDrive((percentage, message) -> {
+                        if (percentage == CODE_AUTO_UPLOAD_TO_G_DRIVE_FAILED) {
+                            AnalyticsService.INSTANCE.logEvent(
+                                    "didFailAutoUploadToGDrive",
+                                    message
+                            );
+                            notifyGDriveErrorToUser(message);
+                        } else {
+                            // Update the notification with new message about the progress
+                            startForeground(
+                                    NOTIFICATION_ID_GOOGLE_DRIVE_UPLOAD,
+                                    notifMgr.createBackingUpToGDriveNotif(message)
+                            );
+                        }
+                    });
                 }
 
                 // Notify that the backup has been created
@@ -83,6 +106,7 @@ public class AutoBackupWithRestApiHelper {
                 eventListener.onFinishBackUp();
             } catch (Exception e) {
                 Log.i(TAG, "backup failed" + e.getLocalizedMessage());
+                AnalyticsService.INSTANCE.logEvent("didFailAutoBackup", e.getMessage());
                 // Notify that auto backup creation failed
                 notifMgr.notify(notifMgr.createBackupCreationErrorNotif(
                         selectedEntry,
@@ -90,25 +114,29 @@ public class AutoBackupWithRestApiHelper {
                 ), NOTIFICATION_ID_AUTO_BACK_UP);
 
                 e.printStackTrace();
+                eventListener.onFinishBackUp();
             }
         });
     }
 
     /** Starts the sign-in process and initializes the Drive client. */
-    protected void signInToGoogleDrive() {
+    protected void signInToGoogleDrive(ProgressListener progressListener) {
 
         Pair<GoogleSignInAccount, Integer> googleSignInAccountAndConnectionResult
                 = GoogleSignInHelper.get().getLastSignedInAccountAndConnectionResult(getContext());
 
         if (googleSignInAccountAndConnectionResult.first != null) {
-            onSignedInToGoogleAccount(googleSignInAccountAndConnectionResult.first);
+            onSignedInToGoogleAccount(
+                    googleSignInAccountAndConnectionResult.first,
+                    progressListener
+            );
         } else {
             GoogleSignInHelper.get()
                     .getGoogleSigInClient(getContext())
                     .silentSignIn()
                     .addOnSuccessListener(
                             // Attempt Sign In again
-                            googleSignInAccount -> signInToGoogleDrive()
+                            googleSignInAccount -> signInToGoogleDrive(progressListener)
                     )
                     .addOnFailureListener(e -> {
                         Log.i(TAG, "User not signed into google drive.");
@@ -120,10 +148,14 @@ public class AutoBackupWithRestApiHelper {
         }
     }
 
-    private void onSignedInToGoogleAccount(GoogleSignInAccount googleAccount) {
+    private void onSignedInToGoogleAccount(
+            GoogleSignInAccount googleAccount,
+            ProgressListener progressListener
+    ) {
         Log.d(TAG, "Sign in successful");
         onSignedInToGoogleDrive(
-                googleSignInHelper.signInToGoogleDrive(googleAccount, getContext())
+                googleSignInHelper.signInToGoogleDrive(googleAccount, getContext()),
+                progressListener
         );
     }
 
@@ -131,10 +163,13 @@ public class AutoBackupWithRestApiHelper {
      * Continues the sign-in process, initializing the Drive clients with the current
      * user's account.
      */
-    protected void onSignedInToGoogleDrive(Drive googleDriveService) {
+    protected void onSignedInToGoogleDrive(
+            Drive googleDriveService,
+            ProgressListener progressListener
+    ) {
         driveServiceHelper = new DriveServiceHelper(googleDriveService);
         driveServiceHelper
-                .createBackup(getContext(), null)
+                .createBackup(getContext(), progressListener)
                 .addOnSuccessListener(aVoid -> {
                     // Notify user about success
                     notifMgr.notify(

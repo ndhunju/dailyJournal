@@ -204,6 +204,8 @@
     <string name="symbol_nepali_rupee">Rs.</string>
 
     <string name="notification_channel_name">Notification</string>
+    <!--text shown in a push notification in device's notification center. limited area-->
+    <string name="notification_title_auto_upload_backup_to_g_drive">Uploading backup to Google Drive</string>
 
     <!-- ImportContactsListDialog -->
     <!-- Text in a button. Selects all contacts upon clicking the button -->

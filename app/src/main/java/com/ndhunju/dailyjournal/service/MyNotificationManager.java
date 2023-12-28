@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -123,7 +125,7 @@ public class MyNotificationManager {
     }
 
     public Notification createBackupUploadedToGDriveSuccessNotif() {
-        Intent intent = new Intent(mContext, HomeActivity.class);
+        Intent intent = new Intent(mContext, BackupActivity.class);
         PendingIntent notifPI = PendingIntent.getActivity(mContext, 0, intent, getFlags(0));
         return create(mContext.getString(R.string.app_name) + " - " + mContext.getString(R.string.msg_auto_upload_to_g_drive_success),
                 mContext.getString(R.string.msg_auto_upload_to_g_drive_success),
@@ -158,7 +160,7 @@ public class MyNotificationManager {
      * @return
      */
     public Notification createBackingUpNotif(){
-        Intent intent = new Intent(mContext, HomeActivity.class);
+        Intent intent = new Intent(mContext, BackupActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pendingIntent = PendingIntent
@@ -168,6 +170,38 @@ public class MyNotificationManager {
                 .getBuilder(mContext.getString(R.string.str_auto_backup),
                         mContext.getString(R.string.msg_creating,
                         mContext.getString(R.string.str_backup)))
+                .setProgress(100, 20, true)
+                .setOngoing(true)
+                .setContentIntent(pendingIntent);
+        return builder.build();
+    }
+
+    /**
+     * Helper method that returns a {@link Notification} to display in notification
+     * bar while the backup is being created and uploaded to Google Drive
+     */
+    public Notification createBackingUpToGDriveNotif(@Nullable String message) {
+        Intent intent = new Intent(mContext, BackupActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent
+                .getActivity(
+                        mContext,
+                        0,
+                        intent,
+                        getFlags(PendingIntent.FLAG_UPDATE_CURRENT)
+                );
+
+        NotificationCompat.Builder builder = MyNotificationManager.from(mContext)
+                .getBuilder(
+                        mContext.getString(R.string.notification_title_auto_upload_backup_to_g_drive),
+                        message != null
+                                ? message
+                                : mContext.getString(
+                                        R.string.msg_uploading,
+                                        mContext.getString(R.string.str_backup)
+                                )
+                )
                 .setProgress(100, 20, true)
                 .setOngoing(true)
                 .setContentIntent(pendingIntent);

@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
 
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -60,6 +61,8 @@ public class AutoBackupJobService
             stopForeground(true);
             // schedule another job
             PreferenceService.from(this).updateAutoBackup();
+            // Log this failure
+            AnalyticsService.INSTANCE.logEvent("didStopAutoBackupServiceAfterMaxRetry");
         }
         return doRetry;
     }

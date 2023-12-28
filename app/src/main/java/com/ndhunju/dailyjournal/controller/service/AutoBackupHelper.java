@@ -68,7 +68,7 @@ public class AutoBackupHelper {
         Executors.newCachedThreadPool().execute(() -> {
             try {
                 //make it unstoppable until the task is completed
-                startForeground(1, notifMgr.createBackingUpNotif());
+                startForeground(NOTIFICATION_ID_AUTO_BACK_UP, notifMgr.createBackingUpNotif());
                 backUpFileDir = Services.getInstance(getContext())
                         .createBackUp(UtilsFile.getAutoBackupDir(getContext()));
 
