@@ -89,7 +89,10 @@ public class DriveServiceHelper {
                         // Request to return createdTime, modifiedTime, id and name
                         .setFields("files(createdTime,modifiedTime,id,name,size)")
                         // Return only backup files, filtering out folders
-                        .setQ("mimeType='" + UtilsFile.BACK_FILE_TYPE +"'")
+                        .setQ(
+                                "mimeType = '" + UtilsFile.BACK_FILE_TYPE +"' " +
+                                "and trashed = false"
+                        )
                         .setSpaces("drive")
                         .execute();
                 taskCompletionSource.setResult(fileList);
