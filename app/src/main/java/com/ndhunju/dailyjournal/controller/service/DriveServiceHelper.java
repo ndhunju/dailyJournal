@@ -249,6 +249,12 @@ public class DriveServiceHelper {
                         .setFields("id")
                         .execute();
 
+                /**
+                 * During testing, following exception wasn't caught and the backup created
+                 * message was shown to the user. Looks like, it's better to pass error via
+                 * {@link ProgressListener#publishProgressWithFailedResult(ProgressListener, String, int)}
+                 */
+                 // taskCompletionSource.setException(new Exception("test first"));
                 taskCompletionSource.setResult(file);
             } catch (Exception e) {
                 String errorMessage = "Failed to get App Folder: " + e.getMessage();
@@ -290,6 +296,12 @@ public class DriveServiceHelper {
 
             try {
                 File googleFile = mDriveService.files().create(metadata).execute();
+                /**
+                 * During testing, following exception wasn't caught and the backup created
+                 * message was shown to the user. Looks like, it's better to pass error via
+                 * {@link ProgressListener#publishProgressWithFailedResult(ProgressListener, String, int)}
+                 */
+                //taskCompletionSource.setException(new Exception("test first"));
                 taskCompletionSource.setResult(googleFile);
             } catch (IOException e) {
                 String message =  "Failed to create backup file in Google Drive: " + e.getMessage();
@@ -324,6 +336,12 @@ public class DriveServiceHelper {
             // Update the metadata and contents.
             try {
                 File file = mDriveService.files().update(fileId, updatedMetadata, content).execute();
+                /**
+                 * During testing, following exception wasn't caught and the backup created
+                 * message was shown to the user. Looks like, it's better to pass error via
+                 * {@link ProgressListener#publishProgressWithFailedResult(ProgressListener, String, int)}
+                 */
+                //taskCompletionSource.setException(new Exception("test first"));
                 taskCompletionSource.setResult(file);
             } catch (Exception e) {
                 String message = "Failed to update created back up file in Google Drive: "

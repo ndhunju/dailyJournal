@@ -19,10 +19,13 @@ import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.ndhunju.dailyjournal.util.ProgressListener.RESULT_AUTO_UPLOAD_TO_G_DRIVE_FAILED;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_SUCCESS;
+import static com.ndhunju.dailyjournal.util.ProgressListener.RESULT_OK;
+import static com.ndhunju.dailyjournal.util.ProgressListener.publishProgress;
 
 public class AutoBackupWithRestApiHelper {
 
@@ -167,10 +170,21 @@ public class AutoBackupWithRestApiHelper {
             Drive googleDriveService,
             ProgressListener progressListener
     ) {
+        AtomicInteger createBackupResultCode = new AtomicInteger(RESULT_OK);
         driveServiceHelper = new DriveServiceHelper(googleDriveService);
         driveServiceHelper
-                .createBackup(getContext(), progressListener)
+                .createBackup(getContext(), (progressType, percentage, message, resultCode) -> {
+                    // Propagate the progress
+                    publishProgress(progressListener, progressType, percentage, message, resultCode);
+                    // Store resultCode
+                    createBackupResultCode.set(resultCode);
+                })
                 .addOnSuccessListener(aVoid -> {
+                    // Check if error result was sent via progressListener
+                    if (createBackupResultCode.get() != RESULT_OK) {
+                        return;
+                    }
+
                     // Notify user about success
                     notifMgr.notify(
                             notifMgr.createBackupUploadedToGDriveSuccessNotif(),
@@ -181,10 +195,10 @@ public class AutoBackupWithRestApiHelper {
                             OPERATION_STATUS_SUCCESS
                     );
                 })
-                .addOnFailureListener(exception -> {
-                    Log.e(TAG, "Unable to create file in google drive - ", exception);
+                .addOnFailureListener(e -> {
+                    String message = "Unable to create file in google drive: " + e.getMessage();
                     // Notify user about failure
-                    notifyGDriveErrorToUser(exception.getMessage());
+                    notifyGDriveErrorToUser(message);
                     // Force user to grant access again
                     GoogleSignInHelper.get().getGoogleSigInClient(getContext()).revokeAccess();
                     DriveServiceHelper.setLastOperationStatus(getContext(), OPERATION_STATUS_FAIL);
