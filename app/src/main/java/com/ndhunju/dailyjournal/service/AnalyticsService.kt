@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.Event
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 object AnalyticsService {
 
@@ -13,7 +12,6 @@ object AnalyticsService {
     private const val TAG = "AnalyticsService"
     // Member Variables
     private var firebase: FirebaseAnalytics? = null
-    private var firebaseCrashlytics: FirebaseCrashlytics? = null
 
     // Sets up this class for usage
     fun setup(context: Context) {
@@ -22,20 +20,16 @@ object AnalyticsService {
             firebase?.setUserProperty("appInstanceId", appInstanceId)
             Log.d(TAG, "appInstanceId=$appInstanceId")
         }
-
-        firebaseCrashlytics = FirebaseCrashlytics.getInstance()
     }
 
     fun logEvent(name: String) {
         firebase?.logEvent(name, null)
-        firebaseCrashlytics?.log("Event=$name")
     }
 
     fun logEvent(name: String, info: String) {
         val bundle = Bundle()
         bundle.putString("Info", info)
         firebase?.logEvent(name, bundle)
-        firebaseCrashlytics?.log("Event=$name;info=$info")
     }
 
     fun logAppOpenEvent() {
@@ -50,6 +44,5 @@ object AnalyticsService {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
         firebase?.logEvent(Event.SCREEN_VIEW, bundle)
-        firebaseCrashlytics?.log("ViewedScreen:$screenName")
     }
 }
