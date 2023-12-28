@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.android.gms.tasks.Tasks;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
@@ -49,20 +48,24 @@ public class DriveServiceHelper {
      * and meta data.
      */
     public Task<Pair<InputStream, File>> readFileAsync(String fileId) {
-        return Tasks.call(mExecutor, () -> {
-            // Retrieve the metaData as a File object.
-            File metaData = mDriveService.files().get(fileId).execute();
 
+        TaskCompletionSource<Pair<InputStream, File>> taskCompletionSource
+                = new TaskCompletionSource<>();
+
+        mExecutor.execute(() -> {
             try {
+                // Retrieve the metaData as a File object.
+                File metaData = mDriveService.files().get(fileId).execute();
                 // Get and return input stream
                 InputStream is = mDriveService.files().get(fileId).executeMediaAsInputStream();
-                return Pair.create(is, metaData);
+                taskCompletionSource.setResult(Pair.create(is, metaData));
             } catch (Exception ex) {
+                taskCompletionSource.trySetException(ex);
                 ex.printStackTrace();
             }
-
-            return null;
         });
+
+        return taskCompletionSource.getTask();
     }
 
     /**
@@ -74,8 +77,13 @@ public class DriveServiceHelper {
      * Developer's Console</a> and be submitted to Google for verification.</p>
      */
     public Task<FileList> queryFiles() {
-        return Tasks.call(mExecutor, () ->
-                mDriveService
+
+        TaskCompletionSource<FileList> taskCompletionSource = new TaskCompletionSource<>();
+
+        mExecutor.execute(() -> {
+
+            try {
+                FileList fileList = mDriveService
                         .files()
                         .list()
                         // Request to return createdTime, modifiedTime, id and name
@@ -83,10 +91,19 @@ public class DriveServiceHelper {
                         // Return only backup files, filtering out folders
                         .setQ("mimeType='" + UtilsFile.BACK_FILE_TYPE +"'")
                         .setSpaces("drive")
-                        .execute());
+                        .execute();
+                taskCompletionSource.setResult(fileList);
+            } catch (IOException e) {
+                taskCompletionSource.trySetException(e);
+                e.printStackTrace();
+            }
+
+        });
+
+        return taskCompletionSource.getTask();
     }
 
-    public Task<Void> createBackup(Context context, @Nullable ProgressListener progressListener) {
+    public Task<File> createBackup(Context context, @Nullable ProgressListener progressListener) {
         return getAppFolder().continueWithTask(getAppFolderTask -> {
 
             // Get app folder first to store the backup file
@@ -183,33 +200,46 @@ public class DriveServiceHelper {
      * to store backup files or any other files.
      */
     public Task<File> getAppFolder() {
-        return Tasks.call(mExecutor, () -> {
-            // First, check if app folder was already created
-            List<File> fileList = mDriveService
-                    .files()
-                    .list()
-                    .setFields("files(id,name)")
-                    .setSpaces("drive")
-                    .execute()
-                    .getFiles();
 
-            for (File file: fileList) {
-                if (Objects.equals(file.getName(), APP_ROOT_FOLDER)) {
-                    return file;
+        TaskCompletionSource<File> taskCompletionSource = new TaskCompletionSource<>();
+
+        mExecutor.execute(() -> {
+            try {
+                // First, check if app folder was already created
+                List<File> fileList = mDriveService
+                        .files()
+                        .list()
+                        .setFields("files(id,name)")
+                        .setSpaces("drive")
+                        .execute()
+                        .getFiles();
+
+                for (File file : fileList) {
+                    if (Objects.equals(file.getName(), APP_ROOT_FOLDER)) {
+                        taskCompletionSource.setResult(file);
+                        return;
+                    }
                 }
+
+                // Second, create the app folder since it is not found
+                File folderMetaData = new File()
+                        .setName(APP_ROOT_FOLDER)
+                        .setMimeType("application/vnd.google-apps.folder");
+
+                File file =  mDriveService
+                        .files()
+                        .create(folderMetaData)
+                        .setFields("id")
+                        .execute();
+
+                taskCompletionSource.setResult(file);
+            } catch (Exception e) {
+                taskCompletionSource.trySetException(e);
             }
 
-            // Second, create the app folder since it is not found
-            File folderMetaData = new File()
-                    .setName(APP_ROOT_FOLDER)
-                    .setMimeType("application/vnd.google-apps.folder");
-
-            return mDriveService
-                    .files()
-                    .create(folderMetaData)
-                    .setFields("id")
-                    .execute();
         });
+
+        return taskCompletionSource.getTask();
     }
 
     /**
@@ -217,32 +247,49 @@ public class DriveServiceHelper {
      * of type, {@code mimeType}
      */
     public Task<File> createFile(File insideFolder, String fileName, String mimeType) {
-        return Tasks.call(mExecutor, () -> {
+
+        TaskCompletionSource<File> taskCompletionSource = new TaskCompletionSource<>();
+
+        mExecutor.execute(() -> {
 
             File metadata = new File()
                     .setParents(Collections.singletonList(insideFolder.getId()))
                     .setMimeType(mimeType)
                     .setName(fileName);
 
-            File googleFile = mDriveService.files().create(metadata).execute();
-            if (googleFile == null) {
-                throw new IOException("File creation failed.");
+            try {
+                File googleFile = mDriveService.files().create(metadata).execute();
+                taskCompletionSource.setResult(googleFile);
+            } catch (IOException e) {
+                taskCompletionSource.trySetException(new IOException("File creation failed."));
             }
 
-            return googleFile;
         });
+
+        return taskCompletionSource.getTask();
     }
 
     /**
      * Updates the file identified by {@code fileId} with the given {@code updatedMetadata}
      * and {@code content}.
      */
-    public Task<Void> saveFile(String fileId, File updatedMetadata, FileContent content) {
-        return Tasks.call(mExecutor, () -> {
+    public Task<File> saveFile(String fileId, File updatedMetadata, FileContent content) {
+
+        TaskCompletionSource<File> taskCompletionSource = new TaskCompletionSource<>();
+
+        mExecutor.execute(() -> {
+
             // Update the metadata and contents.
-            mDriveService.files().update(fileId, updatedMetadata, content).execute();
-            return null;
+            try {
+                File file = mDriveService.files().update(fileId, updatedMetadata, content).execute();
+                taskCompletionSource.setResult(file);
+            } catch (Exception e) {
+                taskCompletionSource.trySetException(e);
+            }
+
         });
+
+        return taskCompletionSource.getTask();
     }
 
     private static final String KEY_LAST_OPERATION = "KEY_GOOGLE_SERVICE_LAST_OPERATION";
