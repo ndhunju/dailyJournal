@@ -25,6 +25,7 @@ import com.ndhunju.dailyjournal.service.json.JsonConverter;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.Utils;
+import com.ndhunju.dailyjournal.util.UtilsDate;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsZip;
 
@@ -762,8 +763,12 @@ public class Services {
         return mCurrentFinancialYear;
     }
 
-    public void setFinancialYear(Date financialYear) throws Exception {
-        if (mCurrentFinancialYear != null) {
+    public void setFinancialYear(Date financialYear) throws RuntimeException {
+        if (financialYear == null) {
+            throw new NullPointerException("Financial year can not be empty");
+        }
+
+        if (!UtilsDate.isSameDay(financialYear, mCurrentFinancialYear)) {
             // don't allow to change mCurrentFinancialYear if already set because there could be
             // journal with date that might be outside the range of this new financial year
             throw new IllegalStateException("Current financial year is already set.");

@@ -1,6 +1,7 @@
 package com.ndhunju.dailyjournal.util;
 
 import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -39,4 +40,26 @@ public class UtilsDate {
         calendar.setTimeInMillis(System.currentTimeMillis() + timeInMilliSec);
         return calendar;
     }
+
+    /**
+     * Returns true if date1 and date2 is same day in point of time
+     */
+    public static boolean isSameDay(Date date1, Date date2) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(date1);
+        int dayOfYear1 = calendar.get(Calendar.DAY_OF_YEAR);
+        int monthOfYear1 = calendar.get(Calendar.MONTH);
+        int year1 = calendar.get(Calendar.YEAR);
+
+        calendar.setTime(date2);
+        int dayOfYear2 = calendar.get(Calendar.DAY_OF_YEAR);
+        int monthOfYear2 = calendar.get(Calendar.MONTH);
+        int year2 = calendar.get(Calendar.YEAR);
+
+        return dayOfYear1 == dayOfYear2          // Same day?
+                && monthOfYear1 == monthOfYear2  // Same month?
+                && year1 == year2;               // Same year?
+    }
+
 }

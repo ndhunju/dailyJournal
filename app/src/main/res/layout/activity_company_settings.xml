@@ -3,9 +3,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -23,6 +23,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/activity_company_settings_welcome_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textAppearance="@android:style/TextAppearance.DialogWindowTitle"
+                android:gravity="center"
+                tools:text="Welcome to Daily Journal+ App.
+                Please enter your Company or Business name."
+                />
 
             <EditText
                 android:id="@+id/activity_company_settings_company_name_et"

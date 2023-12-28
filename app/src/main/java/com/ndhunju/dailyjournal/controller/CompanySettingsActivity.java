@@ -5,11 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.R;
@@ -52,6 +51,12 @@ public class CompanySettingsActivity
 
         services = Services.getInstance(getContext());
 
+        TextView welcomeTextView = findViewById(R.id.activity_company_settings_welcome_msg);
+        welcomeTextView.setText(getString(
+                R.string.company_settings_welcome_msg,
+                getString(R.string.app_name)
+        ));
+
         companyNameEt = findViewById(R.id.activity_company_settings_company_name_et);
 
         dateBtn = findViewById(R.id.activity_company_settings_date_btn);
@@ -63,7 +68,7 @@ public class CompanySettingsActivity
         doneBtn = findViewById(R.id.activity_company_settings_done_btn);
         doneBtn.setOnClickListener(v -> {
             if (TextUtils.isEmpty(companyNameEt.getText())) {
-                companyNameEt.setError("");
+                companyNameEt.setError(getString(R.string.company_settings_company_name_empty_error));
                 return;
             }
 

@@ -51,6 +51,12 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         // wire up and set up
         mCompanyName = (TextView) findViewById(R.id.activity_home_company_name);
 
+        // Add the ability to edit the company name
+        View editCompanyView = findViewById(R.id.activity_home_edit_company);
+        editCompanyView.setOnClickListener(v -> startActivity(
+                new Intent(getContext(), CompanySettingsActivity.class))
+        );
+
         mRecyclerView = (RecyclerView) findViewById(R.id.activity_home_recycler_view);
         mRecyclerView.setItemAnimator(UtilsView.getDefaultItemAnimator());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(
