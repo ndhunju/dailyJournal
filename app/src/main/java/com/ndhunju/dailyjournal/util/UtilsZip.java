@@ -34,7 +34,7 @@ public class UtilsZip {
      * @param finalZipFile
      * @throws IOException
      */
-    public static void zip(
+    public static boolean zip(
             File directoryToZip,
             File finalZipFile,
             ProgressListener progressListener
@@ -73,6 +73,8 @@ public class UtilsZip {
                 }
             }
 
+            return true;
+
         } catch(Exception e){
             e.printStackTrace();
         }finally {
@@ -80,6 +82,8 @@ public class UtilsZip {
             out.close();
             zout.close();
         }
+
+        return false;
     }
 
     /**

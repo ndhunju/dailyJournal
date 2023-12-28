@@ -48,6 +48,7 @@ public class Services {
     private static final String KEY_FINANCIAL_YEAR = "KEY_FINANCIAL_YEAR";
     private static final String KEY_LAST_PASSED_DATE_ALERT_SHOWN = "KEY_LAST_PASSED_DATE_ALERT_SHOWN";
     private static final String FILE_COMPANY_INFO = "info.properties";
+    private static final String TAG = Services.class.getSimpleName();
 
     //Variables
     private Context mContext;
@@ -114,31 +115,43 @@ public class Services {
             ProgressListener progressListener
     ) throws IOException {
 
+        Log.d(TAG, "createBackUp() called with: " +
+                "dir = [" + dir + "], " +
+                "progressListener = [" + progressListener + "]" +
+                "mContext = " + mContext );
+
         //1.Create JSON with latest data
         JsonConverterString converter = JsonConverterString.getInstance(mContext);
-        converter.createJSONFile();
+        String jsonFilePath = converter.createJSONFile();
+        Log.d(TAG, "createBackUp: jsonFilePath=" + jsonFilePath);
 
-        //2. Zip app folder  as all the attachments and json file are here
+        //2. Zip app folder as all the attachments and json file are here
         //2.1 Get the app folder
         File directoryToZip = UtilsFile.getAppFolder(mContext);
 
         File infoFile = new File(directoryToZip.getPath(), FILE_COMPANY_INFO);
-        if (!infoFile.exists()) infoFile.createNewFile();
-        storeCompanyInfoInFile(infoFile);
+        if (!infoFile.exists()) {
+            boolean success = infoFile.createNewFile();
+            storeCompanyInfoInFile(infoFile);
+            Log.d(TAG, "createBackUp: createNewFile() success=" + success);
+        }
 
         //2.2 get backup Folder. Backup file will be created here
         File backupFolder = new File(dir);
         //if the file doesn't exit choose default folder
         if(!backupFolder.exists())  backupFolder = UtilsFile.getAppFolder(false);
+        Log.d(TAG, "createBackUp: backupFolder created=" + backupFolder.getPath());
 
 
         //2.3 create a zip file in not hidden app folder so that user can use it
         String fileName = UtilsFile.getZipFileName();
         File zipFile = new File(backupFolder.getAbsoluteFile(), fileName);
-        zipFile.createNewFile();
+        boolean zipFileCreationSuccess = zipFile.createNewFile();
+        Log.d(TAG, "createBackUp: zipFileCreationSuccess=" + zipFileCreationSuccess);
 
         //3 zip the directory file into zipFile
-        UtilsZip.zip(directoryToZip, zipFile, progressListener);
+        boolean zipFileCreated = UtilsZip.zip(directoryToZip, zipFile, progressListener);
+        Log.d(TAG, "createBackUp: zipFileCreated=" + zipFileCreated);
 
         // Let know that a new file has been created so that it appears in the computer
         // Note: Files created in Downloads folder is shown in Downloads type. But in other
@@ -150,7 +163,7 @@ public class Services {
                 null
         );
 
-        Log.i("BackUp", "Backup file created");
+        Log.i(TAG, "Backup file created");
 
         return zipFile.getAbsolutePath();
     }

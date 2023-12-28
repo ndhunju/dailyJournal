@@ -69,6 +69,7 @@ public class AutoBackupWithRestApiHelper {
                         .createBackUp(UtilsFile.getAutoBackupDir(getContext()));
 
                 if (ps.getVal(R.string.key_pref_auto_upload_backup_to_gdrive_cb, false)) {
+                    // Auto Upload backup to Google Drive as well
                     signInToGoogleDrive();
                 }
 

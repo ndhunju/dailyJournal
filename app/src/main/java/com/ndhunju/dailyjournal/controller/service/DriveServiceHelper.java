@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
@@ -132,14 +133,18 @@ public class DriveServiceHelper {
 
                 // Create a new full backup of data into local drive
                 Services services = Services.getInstance(context);
+                // Looks like the backup file uploaded to google drive
+                // is first created in Cache folder inside the app folder
                 String filePath = services.createBackUp(
                         UtilsFile.getCacheDir(context),
                         (percentage, message) -> {
-                            progressListener.onProgress(
-                                    // Cap lower limit to 30
-                                    30 + (percentage / 2),
-                                    context.getString(R.string.msg_copying, message)
-                            );
+                            if (progressListener != null) {
+                                progressListener.onProgress(
+                                        // Cap lower limit to 30
+                                        30 + (percentage / 2),
+                                        context.getString(R.string.msg_copying, message)
+                                );
+                            }
                         }
                 );
 
