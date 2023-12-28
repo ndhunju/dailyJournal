@@ -64,7 +64,25 @@ object EnglishToNepaliDateConverter {
     }
 
     @Throws(IndexOutOfBoundsException::class)
-    fun convertToNepali(englishYear: Int, englishMonth: Int, englishDay: Int): Triple<Int, Int, Int>
+    fun convertToNepali(
+        englishYear: Int,
+        englishMonth: Int,
+        englishDay: Int
+    ): Triple<Int, Int, Int>
+    {
+        return convertToNepaliUsingHumanReadableValues(
+            englishYear,
+            englishMonth + 1,
+            englishDay
+        )
+    }
+
+    @Throws(IndexOutOfBoundsException::class)
+    fun convertToNepaliUsingHumanReadableValues(
+        englishYear: Int,
+        englishMonth: Int,
+        englishDay: Int
+    ): Triple<Int, Int, Int>
     {
         // Why GreogorianCalendar instead of the usu Calendar.getInstance()?
         // Because if the locale is set to Japan then Calendar.getInstance()
@@ -147,20 +165,20 @@ object EnglishToNepaliDateConverter {
     }
 
     private fun debugPrintCalendar(prefix: String, calendar: Calendar) {
-        if (BuildConfig.DEBUG) {
-            Log.d(
-                "888", "logCalendar: $prefix " +
-                        "year=${calendar.get(Calendar.YEAR)} " +
-                        "month=${calendar.getHumanReadableValue(Calendar.MONTH)} " +
-                        "dayOfMonth=${calendar.getHumanReadableValue(Calendar.DAY_OF_MONTH)}"
-            )
-        }
+//        if (BuildConfig.DEBUG) {
+//            Log.d(
+//                "888", "logCalendar: $prefix " +
+//                        "year=${calendar.get(Calendar.YEAR)} " +
+//                        "month=${calendar.getHumanReadableValue(Calendar.MONTH)} " +
+//                        "dayOfMonth=${calendar.getHumanReadableValue(Calendar.DAY_OF_MONTH)}"
+//            )
+//        }
     }
 
     private fun debugPrint(log: String) {
-        if (BuildConfig.DEBUG) {
-            Log.d("888", log)
-        }
+//        if (BuildConfig.DEBUG) {
+//            Log.d("888", log)
+//        }
     }
 
 }

@@ -23,6 +23,7 @@ import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.json.JsonConverter;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
+import com.ndhunju.dailyjournal.util.EnglishToNepaliDateConverter;
 import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.Utils;
 import com.ndhunju.dailyjournal.util.UtilsDate;
@@ -40,6 +41,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+
+import kotlin.Triple;
 
 
 public class Services {
@@ -1060,6 +1063,60 @@ public class Services {
         }
 
         return success;
+    }
+
+    public void convertEnglishDateToNepaliAndPrefixToNotes(ProgressListener progressListener) {
+
+        ArrayList<Journal> journals = getJournals();
+        Calendar currentCalendar = Calendar.getInstance();
+        Triple<Integer, Integer, Integer> result;
+        Journal currentJournal;
+        String currentNote;
+        String nepaliDate;
+        long currentDate;
+
+        for (int i = 0; i < journals.size(); i++)
+        {
+            currentJournal = journals.get(i);
+            currentNote = currentJournal.getNote();
+            currentDate = currentJournal.getDate();
+            currentCalendar.setTimeInMillis(currentDate);
+
+            result = EnglishToNepaliDateConverter.INSTANCE
+                    .convertToNepali(
+                            currentCalendar.get(Calendar.YEAR),
+                            currentCalendar.get(Calendar.MONTH),
+                            currentCalendar.get(Calendar.DAY_OF_MONTH)
+            );
+
+            nepaliDate = result.getFirst() + "/" + result.getSecond() + "/" + result.getThird();
+
+            // Prefix note with Nepali date only if it's not already done so
+            if (!currentNote.startsWith(nepaliDate)) {
+                currentJournal.setNote(nepaliDate + " - " + currentNote);
+            }
+
+            updateJournal(currentJournal);
+
+            //float per = i / (float) journals.size();
+            //percentage = (int) (i / (float) journals.size() * 100);
+
+            //Log.d(TAG, "convertEnglishDateToNepaliAndPrefixToNotes: float=" + per + "percentage=" + percentage);
+
+            progressListener.onProgress(
+                    ProgressListener.PROGRESS_DETERMINATE,
+                    (int) (i / (float) journals.size() * 100),
+                    currentJournal.getDate() + "->" + nepaliDate,
+                    ProgressListener.RESULT_OK
+            );
+        }
+
+        progressListener.onProgress(
+                ProgressListener.PROGRESS_DETERMINATE,
+                100,
+                getContext().getString(R.string.str_finished),
+                ProgressListener.RESULT_OK
+        );
     }
 
     public void addListener(Listener listener) {

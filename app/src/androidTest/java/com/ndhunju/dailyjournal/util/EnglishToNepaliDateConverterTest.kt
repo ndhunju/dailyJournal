@@ -13,7 +13,7 @@ internal class EnglishToNepaliDateConverterTest {
     fun convertToNepali_lowerDateOutOfBound() {
 
         try {
-            val (_, _, _) = EnglishToNepaliDateConverter.convertToNepali(
+            val (_, _, _) = EnglishToNepaliDateConverter.convertToNepaliUsingHumanReadableValues(
                 englishYear = 2017,
                 englishMonth = 1,
                 englishDay = 1
@@ -35,7 +35,7 @@ internal class EnglishToNepaliDateConverterTest {
     fun convertToNepali_higherDateOutOfBound() {
 
         try {
-            val (_, _, _) = EnglishToNepaliDateConverter.convertToNepali(
+            val (_, _, _) = EnglishToNepaliDateConverter.convertToNepaliUsingHumanReadableValues(
                 englishYear = 2026,
                 englishMonth = 1,
                 englishDay = 1
@@ -135,6 +135,21 @@ internal class EnglishToNepaliDateConverterTest {
 
     }
 
+    @Test
+    fun convertToNepali6() {
+
+        assertEquals(
+            englishYear = 2022,
+            englishMonth = 11,
+            englishDay = 28,
+            expectedNepaliYear = 2079,
+            expectedNepaliMonth = 8,
+            expectedNepaliDay = 12
+        )
+
+
+    }
+
     private fun assertEquals(
         englishYear: Int,
         englishMonth: Int,
@@ -143,11 +158,12 @@ internal class EnglishToNepaliDateConverterTest {
         expectedNepaliMonth: Int,
         expectedNepaliDay: Int
     ) {
-        val (nepaliYear, nepaliMonth, nepaliDay) = EnglishToNepaliDateConverter.convertToNepali(
-            englishYear = englishYear,
-            englishMonth = englishMonth,
-            englishDay = englishDay
-        )
+        val (nepaliYear, nepaliMonth, nepaliDay) = EnglishToNepaliDateConverter
+            .convertToNepaliUsingHumanReadableValues(
+                englishYear = englishYear,
+                englishMonth = englishMonth,
+                englishDay = englishDay
+            )
 
         assertEquals("year doesn't match", expectedNepaliYear , nepaliYear)
         assertEquals("month doesn't match", expectedNepaliMonth , nepaliMonth)

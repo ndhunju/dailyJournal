@@ -160,6 +160,8 @@
         <activity android:name=".controller.export.ExportPrintableActivity"
             android:label="@string/str_export_printable"/>
 
+        <activity android:name=".controller.InternalToolsActivity"/>
+
     </application>
 
 </manifest>

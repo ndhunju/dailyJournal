@@ -11,6 +11,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -53,6 +55,26 @@ public class ToolsActivity extends NavDrawerActivity {
                 false);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(new ToolsAdapter());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(R.string.str_debug);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private int numOfTimesClicked = 0;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        numOfTimesClicked++;
+
+        if (numOfTimesClicked > 3) {
+            numOfTimesClicked = 0;
+            startActivity(new Intent(getContext(), InternalToolsActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

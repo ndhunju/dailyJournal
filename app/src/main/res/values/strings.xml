@@ -150,6 +150,9 @@
     <string name="str_exit">Exit</string>
     <string name="str_disclaimer">Disclaimer</string>
 
+    <!-- Verb. Menu item. When clicked shows debug menus -->
+    <string name="str_debug">Debug</string>
+
     <string name="trans_party_img">transPartyImg</string>
 
     <!-- noun. this is one the items shown in side navigation menu -->
