@@ -1,5 +1,7 @@
 package com.ndhunju.dailyjournal.util;
 
+import com.ndhunju.dailyjournal.service.AnalyticsService;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,6 +47,12 @@ public class UtilsDate {
      * Returns true if date1 and date2 is same day in point of time
      */
     public static boolean isSameDay(Date date1, Date date2) {
+
+        if (date1 == null || date2 == null) {
+            AnalyticsService.INSTANCE.logEvent("isSameDay() arg in null");
+            return false;
+        }
+
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(date1);
