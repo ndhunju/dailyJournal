@@ -46,6 +46,7 @@ public class Utils {
             File file = new File(path);
             InputStream inputStream = new FileInputStream(file);
             BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
 
             /** This method will cause OOM error for large images **/
             //scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
@@ -55,15 +56,22 @@ public class Utils {
             // config best quality option
             /** The sample size computed here does not compute the value correctly. Hence the changed is made in the scaleRatio which guarantees
              * a sample size of atleast 2, reducing the image size by half. */
-            options.inSampleSize = calculateSampleSize(options.outWidth, options.outHeight, newWidth, newHeight);
+            options.inSampleSize = calculateSampleSize(
+                    options.outWidth,
+                    options.outHeight,
+                    newWidth,
+                    newHeight
+            );
+
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             options.inJustDecodeBounds = false;
             options.inTargetDensity = 0;
             options.inScaled = false;
 
             // decode file to bitmap
-            scaledBitmap = BitmapFactory.decodeStream(new FileInputStream(file), null, options);
-
+            InputStream inputStream1 = new FileInputStream(file);
+            scaledBitmap = BitmapFactory.decodeStream(inputStream1, null, options);
+            inputStream1.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
