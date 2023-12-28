@@ -3,6 +3,9 @@
 // Android-specific build options.
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+// Add the Crashlytics Gradle plugin
+apply plugin: 'com.google.firebase.crashlytics'
+
 
 configurations {
     all {
@@ -19,7 +22,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.google.gms:google-services:4.3.14'
+        classpath 'com.google.gms:google-services:4.3.15'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 
@@ -94,13 +97,13 @@ android {
 dependencies {
     // Remote binary dependency
     implementation 'com.google.firebase:firebase-core:21.1.1'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'androidx.annotation:annotation:1.5.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.android.gms:play-services-auth:20.4.0'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
@@ -109,7 +112,8 @@ dependencies {
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     implementation 'com.google.apis:google-api-services-drive:v3-rev20201130-1.31.0'
 
-
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
 
     // local repo downloaded with SDK Manager
     // Import the BoM for the Firebase platform
@@ -118,9 +122,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
 
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
     // Fix "Duplicate class androidx.lifecycle.ViewModelLazy found in modules" error
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.8.0'
     // Local binary dependency
     //Even though android provides json library, it bring error while using it for JUnit testing
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -128,18 +137,18 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:2.23.4'
     androidTestImplementation 'androidx.annotation:annotation:1.5.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     // Set this dependency to use JUnit 4 rule
     androidTestImplementation 'androidx.test:rules:1.5.0'
     // Set this dependency to build and run Espresso tests
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     // Set this dependency to build and run UI Automator tests
     //androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     //In order for the Android Plug-in for Gradle to correctly build and run your instrumented
     // unit tests, you must specify the following libraries in the build.gradle file of your
     // Android app module:
     // Set this dependency if you want to use Hamcrest matching
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     'org.hamcrest:hamcrest-library:1.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
