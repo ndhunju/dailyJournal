@@ -64,7 +64,7 @@ public class UtilsZip {
                         zout.putNextEntry(new ZipEntry(name));
                         ProgressListener.publishProgress(
                                 progressListener,
-                                (float) fileIndex / files.length,
+                                fileIndex / files.length,
                                 name
                         );
                         copy(kid, zout);

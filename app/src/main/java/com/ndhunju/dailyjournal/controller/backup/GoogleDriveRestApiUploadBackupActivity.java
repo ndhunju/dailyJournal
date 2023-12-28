@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_SUCCESS;
-import static com.ndhunju.dailyjournal.util.ProgressListener.SHOW_INDETERMINATE_PROGRESS_PERCENTAGE;
+import static com.ndhunju.dailyjournal.util.ProgressListener.PROGRESS_INDETERMINATE;
 
 public class GoogleDriveRestApiUploadBackupActivity extends GoogleDriveRestApiActivity {
 
@@ -41,7 +41,7 @@ public class GoogleDriveRestApiUploadBackupActivity extends GoogleDriveRestApiAc
             ProgressDialog pd = showProgressDialog();
             getDriveServiceHelper().createBackup(
                     this,
-                    (percentage, message) -> {
+                    (progressType, percentage, message, resultCode) -> {
                         // Update UI only after 1 second has passed
                         long elapsedMillis = System.currentTimeMillis() - lastPostToUiThread.get();
                         if (elapsedMillis < 1000) {
@@ -52,7 +52,7 @@ public class GoogleDriveRestApiUploadBackupActivity extends GoogleDriveRestApiAc
 
                         runOnUiThread(() -> {
                             // For some reason, the progress dialog is not being updated
-                            if (percentage == SHOW_INDETERMINATE_PROGRESS_PERCENTAGE) {
+                            if (progressType == PROGRESS_INDETERMINATE) {
                                 pd.setIndeterminate(true);
                             } else {
                                 pd.setIndeterminate(false);

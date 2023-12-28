@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.api.services.drive.Drive;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.MyNotificationManager;
@@ -19,7 +20,7 @@ import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.util.concurrent.Executors;
 
-import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.CODE_AUTO_UPLOAD_TO_G_DRIVE_FAILED;
+import static com.ndhunju.dailyjournal.util.ProgressListener.RESULT_AUTO_UPLOAD_TO_G_DRIVE_FAILED;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_SUCCESS;
 
@@ -79,12 +80,8 @@ public class AutoBackupWithRestApiHelper {
                     );
 
                     // Auto Upload backup to Google Drive as well
-                    signInToGoogleDrive((percentage, message) -> {
-                        if (percentage == CODE_AUTO_UPLOAD_TO_G_DRIVE_FAILED) {
-                            AnalyticsService.INSTANCE.logEvent(
-                                    "didFailAutoUploadToGDrive",
-                                    message
-                            );
+                    signInToGoogleDrive((progressType, percentage, message, resultCode) -> {
+                        if (resultCode == RESULT_AUTO_UPLOAD_TO_G_DRIVE_FAILED) {
                             notifyGDriveErrorToUser(message);
                         } else {
                             // Update the notification with new message about the progress
@@ -144,6 +141,9 @@ public class AutoBackupWithRestApiHelper {
                                 getString(R.string.msg_error_g_drive_user_not_signed_in)
                                 + "(" + e.getLocalizedMessage() + ")"
                         );
+                        // Force user to grant access again
+                        GoogleSignInHelper.get().getGoogleSigInClient(getContext()).revokeAccess();
+                        DriveServiceHelper.setLastOperationStatus(getContext(), OPERATION_STATUS_FAIL);
                     });
         }
     }
@@ -184,15 +184,27 @@ public class AutoBackupWithRestApiHelper {
                 .addOnFailureListener(exception -> {
                     Log.e(TAG, "Unable to create file in google drive - ", exception);
                     // Notify user about failure
-                    notifyGDriveErrorToUser(exception.getLocalizedMessage());
+                    notifyGDriveErrorToUser(exception.getMessage());
                     // Force user to grant access again
                     GoogleSignInHelper.get().getGoogleSigInClient(getContext()).revokeAccess();
                     DriveServiceHelper.setLastOperationStatus(getContext(), OPERATION_STATUS_FAIL);
                 });
     }
 
+    String lastErrorMsg = null;
+
     private void notifyGDriveErrorToUser(String errorMsg) {
-        // disable auto upload to google drive option
+
+        // We have added error logs in multiple places which might be triggered
+        // for same error. To avoid multiple logging of the same error,
+        // check if the error is different than the last one
+        if (errorMsg.equals(lastErrorMsg)) {
+            return;
+        }
+
+        lastErrorMsg = errorMsg;
+
+        // Disable auto upload to google drive option
         PreferenceService ps = PreferenceService.from(getContext());
         ps.putVal(getString(R.string.key_pref_auto_upload_backup_to_gdrive_cb), false);
 
@@ -201,6 +213,10 @@ public class AutoBackupWithRestApiHelper {
                 notifMgr.createBackupUploadedToGDriveErrorNotif(errorMsg),
                 NOTIFICATION_ID_GOOGLE_DRIVE_UPLOAD
         );
+
+        // Send logs so that we can better resolve this issue
+        AnalyticsService.INSTANCE.logEvent("didFailAutoUploadToGDrive", errorMsg);
+        FirebaseCrashlytics.getInstance().recordException(new GDriveException(errorMsg));
     }
 
     /** @see android.app.Service#startForeground(int, Notification)*/

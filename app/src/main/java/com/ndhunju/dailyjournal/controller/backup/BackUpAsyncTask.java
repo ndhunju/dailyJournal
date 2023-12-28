@@ -53,12 +53,14 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
         String filePath = "";
         Services mServices = Services.getInstance(mActivity);
         try {
-            filePath = mServices.createBackUp(String[0], (percentage, message) -> {
-                mActivity.runOnUiThread(() -> {
-                    pd.setProgress((int) percentage);
-                    pd.setMessage(message);
-                });
-            });
+            filePath = mServices.createBackUp(
+                    String[0],
+                    (progressType, percentage, message, resultCode) -> {
+                        mActivity.runOnUiThread(() -> {
+                            pd.setProgress((int) percentage);
+                            pd.setMessage(message);
+                        });
+                    });
 
             // Notify user that we created a file
             File file = new File(filePath);

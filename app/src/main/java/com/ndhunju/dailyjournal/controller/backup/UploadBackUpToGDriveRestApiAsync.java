@@ -81,7 +81,7 @@ public class UploadBackUpToGDriveRestApiAsync extends AsyncTask<Void, Integer, S
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        driveServiceHelper.getAppFolder().continueWithTask(getAppFolderTask -> {
+        driveServiceHelper.getAppFolder(null).continueWithTask(getAppFolderTask -> {
 
             // Get app folder first to store the backup file
             File appFolder = getAppFolderTask.getResult();
@@ -94,6 +94,7 @@ public class UploadBackUpToGDriveRestApiAsync extends AsyncTask<Void, Integer, S
             publishProgress(20);
 
             return driveServiceHelper.createFile(
+                    null,
                     appFolder,
                     UtilsFile.getZipFileName(),
                     UtilsFile.BACK_FILE_TYPE
@@ -115,7 +116,7 @@ public class UploadBackUpToGDriveRestApiAsync extends AsyncTask<Void, Integer, S
                 Services s = Services.getInstance(activity);
                 String filePath = s.createBackUp(
                         UtilsFile.getCacheDir(activity),
-                        (percentage, message) -> {
+                        (progressType, percentage, message, resultCode) -> {
                             publishProgress(
                                     percentage,
                                     activity.getString(R.string.msg_copying, message)
@@ -139,6 +140,7 @@ public class UploadBackUpToGDriveRestApiAsync extends AsyncTask<Void, Integer, S
 
                 // Save the local backupFile in Google Drive
                 return driveServiceHelper.saveFile(
+                        null,
                         file.getId(),
                         metaData,
                         new FileContent(UtilsFile.BACK_FILE_TYPE, localBackUpFile)

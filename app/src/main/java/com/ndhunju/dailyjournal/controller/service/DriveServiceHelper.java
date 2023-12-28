@@ -1,7 +1,6 @@
 package com.ndhunju.dailyjournal.controller.service;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -27,15 +26,16 @@ import androidx.annotation.LongDef;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 
-import static com.ndhunju.dailyjournal.util.ProgressListener.SHOW_INDETERMINATE_PROGRESS_PERCENTAGE;
+import static com.ndhunju.dailyjournal.util.ProgressListener.RESULT_AUTO_UPLOAD_TO_G_DRIVE_FAILED;
+import static com.ndhunju.dailyjournal.util.ProgressListener.PROGRESS_INDETERMINATE;
 import static com.ndhunju.dailyjournal.util.ProgressListener.publishProgress;
+import static com.ndhunju.dailyjournal.util.ProgressListener.publishProgressWithFailedResult;
 
 /**
  * A utility for performing read/write operations on Drive files via the REST API
  */
 public class DriveServiceHelper {
 
-    public static final float CODE_AUTO_UPLOAD_TO_G_DRIVE_FAILED = -1f;
     private static final String APP_ROOT_FOLDER = "Daily Journal Plus";
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
     private final Drive mDriveService;
@@ -108,16 +108,18 @@ public class DriveServiceHelper {
     }
 
     public Task<File> createBackup(Context context, @Nullable ProgressListener progressListener) {
-        return getAppFolder().continueWithTask(getAppFolderTask -> {
+        return getAppFolder(progressListener).continueWithTask(getAppFolderTask -> {
 
             // Get app folder first to store the backup file
             File appFolder = getAppFolderTask.getResult();
 
             if (appFolder == null) {
-                throw new RuntimeException(context.getString(
+                String message = context.getString(
                         R.string.msg_fail,
                         context.getString(R.string.msg_error_google_drive_app_folder)
-                ));
+                );
+
+                throw new RuntimeException(message);
             }
 
             publishProgress(
@@ -127,26 +129,23 @@ public class DriveServiceHelper {
             );
 
             return createFile(
+                    progressListener,
                     appFolder,
                     UtilsFile.getZipFileName(),
                     UtilsFile.BACK_FILE_TYPE
             );
-
-        }).addOnFailureListener(e -> {
-
-            if (progressListener != null) {
-                progressListener.onProgress(CODE_AUTO_UPLOAD_TO_G_DRIVE_FAILED, e.getMessage());
-            }
 
         }).continueWithTask(createFileTask -> {
             // Create a new file in Google Drive to store backup
             File file = createFileTask.getResult();
 
             if (file == null) {
-                throw new RuntimeException(context.getString(
+                String message = context.getString(
                         R.string.msg_fail,
                         context.getString(R.string.msg_error_google_drive_backup_file)
-                ));
+                );
+
+                throw new RuntimeException(message);
             }
 
             java.io.File localBackUpFile;
@@ -164,14 +163,15 @@ public class DriveServiceHelper {
                 // is first created in Cache folder inside the app folder
                 String filePath = services.createBackUp(
                         UtilsFile.getCacheDir(context),
-                        (percentage, message) -> {
-                            if (progressListener != null) {
-                                progressListener.onProgress(
-                                        // Cap lower limit to 30
-                                        30 + (percentage / 2),
-                                        context.getString(R.string.msg_copying, message)
-                                );
-                            }
+                        (progressType, percentage, message, resultCode) -> {
+                            publishProgress(
+                                    progressListener,
+                                    progressType,
+                                    // Cap lower limit to 30
+                                    30 + (percentage / 2),
+                                    context.getString(R.string.msg_copying, message),
+                                    resultCode
+                            );
                         }
                 );
 
@@ -180,7 +180,7 @@ public class DriveServiceHelper {
                 publishProgress(progressListener, 90, null);
                 publishProgress(
                         progressListener,
-                        SHOW_INDETERMINATE_PROGRESS_PERCENTAGE,
+                        PROGRESS_INDETERMINATE,
                         context.getString(
                                 R.string.msg_uploading,
                                 context.getString(R.string.str_backup)
@@ -194,16 +194,21 @@ public class DriveServiceHelper {
 
                 // Save the local backupFile in Google Drive
                 return saveFile(
+                        progressListener,
                         file.getId(),
                         metaData,
                         new FileContent(UtilsFile.BACK_FILE_TYPE, localBackUpFile)
                 );
-            } catch (IOException e1) {
-                Log.i("createBackup", "Unable to write file appFolder.");
-                throw new RuntimeException(
-                        "Failed to create backup in Google Drive: " + e1.getMessage()
-                );
+            } catch (Exception e1) {
+                String message = "Failed to create backup in Google Drive: " + e1.getMessage();
+                throw new RuntimeException(message);
             }
+        }).addOnFailureListener(e -> {
+            publishProgressWithFailedResult(
+                    progressListener,
+                    e.getMessage(),
+                    RESULT_AUTO_UPLOAD_TO_G_DRIVE_FAILED
+            );
         });
     }
 
@@ -211,7 +216,7 @@ public class DriveServiceHelper {
      * Returns a pre-defined folder, {@link this#APP_ROOT_FOLDER}, that this app can use
      * to store backup files or any other files.
      */
-    public Task<File> getAppFolder() {
+    public Task<File> getAppFolder(ProgressListener progressListener) {
 
         TaskCompletionSource<File> taskCompletionSource = new TaskCompletionSource<>();
 
@@ -246,7 +251,16 @@ public class DriveServiceHelper {
 
                 taskCompletionSource.setResult(file);
             } catch (Exception e) {
-                taskCompletionSource.trySetException(e);
+                String errorMessage = "Failed to get App Folder: " + e.getMessage();
+                taskCompletionSource.setException(new Exception(
+                        "Failed to get App Folder: " + e.getMessage()
+                ));
+
+                publishProgressWithFailedResult(
+                        progressListener,
+                        errorMessage,
+                        RESULT_AUTO_UPLOAD_TO_G_DRIVE_FAILED
+                );
             }
 
         });
@@ -258,7 +272,12 @@ public class DriveServiceHelper {
      * Creates a File in google drive inside {@code insideFolder} folder with name {@code fileName}
      * of type, {@code mimeType}
      */
-    public Task<File> createFile(File insideFolder, String fileName, String mimeType) {
+    public Task<File> createFile(
+            ProgressListener progressListener,
+            File insideFolder,
+            String fileName,
+            String mimeType
+    ) {
 
         TaskCompletionSource<File> taskCompletionSource = new TaskCompletionSource<>();
 
@@ -273,10 +292,12 @@ public class DriveServiceHelper {
                 File googleFile = mDriveService.files().create(metadata).execute();
                 taskCompletionSource.setResult(googleFile);
             } catch (IOException e) {
-                taskCompletionSource.setException(
-                        new IOException(
-                                "Failed to create backup file in Google Drive: " + e.getMessage()
-                        )
+                String message =  "Failed to create backup file in Google Drive: " + e.getMessage();
+                taskCompletionSource.setException(new IOException(message));
+                publishProgressWithFailedResult(
+                        progressListener,
+                        message,
+                        RESULT_AUTO_UPLOAD_TO_G_DRIVE_FAILED
                 );
             }
 
@@ -289,7 +310,12 @@ public class DriveServiceHelper {
      * Updates the file identified by {@code fileId} with the given {@code updatedMetadata}
      * and {@code content}.
      */
-    public Task<File> saveFile(String fileId, File updatedMetadata, FileContent content) {
+    public Task<File> saveFile(
+            ProgressListener progressListener,
+            String fileId,
+            File updatedMetadata,
+            FileContent content
+    ) {
 
         TaskCompletionSource<File> taskCompletionSource = new TaskCompletionSource<>();
 
@@ -300,11 +326,13 @@ public class DriveServiceHelper {
                 File file = mDriveService.files().update(fileId, updatedMetadata, content).execute();
                 taskCompletionSource.setResult(file);
             } catch (Exception e) {
-                taskCompletionSource.setException(
-                        new RuntimeException(
-                                "Failed to update created back up file in Google Drive: "
-                                        + e.getMessage()
-                        )
+                String message = "Failed to update created back up file in Google Drive: "
+                        + e.getMessage();
+                taskCompletionSource.setException(new RuntimeException(message));
+                publishProgressWithFailedResult(
+                        progressListener,
+                        message,
+                        RESULT_AUTO_UPLOAD_TO_G_DRIVE_FAILED
                 );
             }
 
