@@ -104,7 +104,7 @@ public class ExportPartiesReportAsync extends AsyncTask<List<Party>, Integer, Bo
     protected void onPostExecute(Boolean success) {
         pd.cancel();
         String resultMsg =  success ?
-                String.format(mContext.getString(R.string.msg_finished), mContext.getString(R.string.str_export_printable))
+                String.format(mContext.getString(R.string.msg_export_printable), mPath)
                 : String.format(mContext.getString(R.string.msg_failed), mContext.getString(R.string.str_export_printable));
 
         UtilsView.alert(mContext, resultMsg);

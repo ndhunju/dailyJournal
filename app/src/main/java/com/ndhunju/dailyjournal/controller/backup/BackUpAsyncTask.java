@@ -1,7 +1,9 @@
 package com.ndhunju.dailyjournal.controller.backup;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -9,7 +11,9 @@ import android.util.Log;
 import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.UtilsFile;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -38,7 +42,7 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
     protected void onPreExecute() {
         String msg = String.format(mActivity.getString(R.string.msg_creating), mActivity.getString(R.string.str_backup));
         pd= new ProgressDialog(mActivity);
-        pd.setIndeterminate(true);
+        pd.setIndeterminate(false);
         pd.setMessage(msg);
         pd.setCancelable(false);
         pd.setCanceledOnTouchOutside(false);
@@ -50,7 +54,33 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
         String filePath = "";
         Services mServices = Services.getInstance(mActivity);
         try {
-            filePath = mServices.createBackUp(String[0]);
+            filePath = mServices.createBackUp(String[0], (percentage, message) -> {
+                mActivity.runOnUiThread(() -> {
+                    pd.setProgress((int) percentage);
+                    pd.setMessage(message);
+                });
+            });
+
+            // Notify user that we created a file
+            DownloadManager downloadManager = (DownloadManager) mActivity.getSystemService(
+                    Context.DOWNLOAD_SERVICE
+            );
+            File file = new File(filePath);
+            downloadManager.addCompletedDownload(
+                    // Set title to same as file name as on OS 33,
+                    // title name is used for file name
+                    file.getName(),
+                    mActivity.getString(
+                            R.string.msg_backup_created_title,
+                            mActivity.getString(R.string.app_name)
+                    ),
+                    true,
+                    UtilsFile.BACK_FILE_TYPE,
+                    file.getAbsolutePath(),
+                    file.length(),
+                    true
+            );
+
         } catch (IOException e) {
             Log.w(TAG, "Error creating backup file: " + e.getMessage());
         }

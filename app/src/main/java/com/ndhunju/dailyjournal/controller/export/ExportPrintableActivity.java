@@ -2,10 +2,12 @@ package com.ndhunju.dailyjournal.controller.export;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ListView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
@@ -15,23 +17,15 @@ import com.ndhunju.dailyjournal.controller.party.PartyListFragment;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
-import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.folderpicker.library.FolderPickerDialogFragment;
-import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-public class ExportPrintableActivity extends BaseActivity implements OnDialogBtnClickedListener {
+public class ExportPrintableActivity extends BaseActivity {
 
     // Constants
-    private static final int REQUEST_CODE_BACKUP_DIR_PRINTABLE = 1264;
-    private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
 
     // View member variables
     ListView listView;
@@ -71,10 +65,9 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
 
             switch (which) {
                 case 0: // Local Storage
-                    FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(null, REQUEST_CODE_BACKUP_DIR_PRINTABLE);
-                    dpdf.show(
-                            getSupportFragmentManager(),
-                            FolderPickerDialogFragment.class.getName()
+                    onBackUpDirForPrintableSelected(
+                            getActivity(),
+                            UtilsFile.getPublicDownloadDir()
                     );
                     break;
 
@@ -103,41 +96,20 @@ public class ExportPrintableActivity extends BaseActivity implements OnDialogBtn
         return this;
     }
 
-    @Override
-    public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode) {
+    public static void onBackUpDirForPrintableSelected(final Activity activity, String dir) {
+        // let the user choose the type of printable she wants to export
+        ItemDescriptionAdapter.Item[] options = ExportPartiesReportAsync.getStrTypes(activity);
 
-        switch (requestCode) {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                .setAdapter(
+                        new ItemDescriptionAdapter(activity, options),
+                        (dialogInterface, optionIndex) -> createAllOrSelectPartyDialog(
+                                activity,
+                                dir,
+                                optionIndex)
+                ).create();
 
-            case REQUEST_CODE_BACKUP_DIR_PRINTABLE:
-                onBackUpDirForPrintableSelected(getActivity(), data, whichBtn, result);
-                break;
-
-        }
-
-    }
-
-    public static void onBackUpDirForPrintableSelected(final Activity activity, Intent data, int whichBtn, int result) {
-        if (result != Activity.RESULT_OK)
-            UtilsView.toast(activity, activity.getString(R.string.str_failed));
-        if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
-            data.getData();
-            final String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-
-            // let the user choose the type of printable she wants to export
-            ItemDescriptionAdapter.Item[] options = ExportPartiesReportAsync.getStrTypes(activity);
-
-            AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                    .setAdapter(
-                            new ItemDescriptionAdapter(activity, options),
-                            (dialogInterface, optionIndex) -> createAllOrSelectPartyDialog(
-                                    activity,
-                                    dir,
-                                    optionIndex)
-                    ).create();
-
-            alertDialog.show();
-        }
-
+        alertDialog.show();
     }
 
     public static void createAllOrSelectPartyDialog(final Activity activity, final String dir, final int optionIndex) {

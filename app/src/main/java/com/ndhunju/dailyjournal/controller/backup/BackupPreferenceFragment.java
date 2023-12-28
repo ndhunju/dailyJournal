@@ -14,8 +14,6 @@ import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
-import com.ndhunju.folderpicker.library.FolderPickerDialogFragment;
-import com.ndhunju.folderpicker.library.OnDialogBtnClickedListener;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.CheckBoxPreference;
@@ -29,7 +27,7 @@ import androidx.preference.PreferenceFragmentCompat;
  */
 public class BackupPreferenceFragment
         extends PreferenceFragmentCompat
-        implements OnDialogBtnClickedListener, OnSharedPreferenceChangeListener {
+        implements OnSharedPreferenceChangeListener {
 
     public static final String TAG = BackupPreferenceFragment.class.getSimpleName();
     public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
@@ -115,13 +113,36 @@ public class BackupPreferenceFragment
 
         findPreference(getString(R.string.key_pref_backup_local_storage))
                 .setOnPreferenceClickListener(preference -> {
-
-                    FolderPickerDialogFragment dpdf = FolderPickerDialogFragment.newInstance(
-                            null,
-                            REQUEST_CODE_BACKUP_DIR
-                    );
-                    dpdf.setTargetFragment(BackupPreferenceFragment.this, 0);
-                    dpdf.show(getParentFragmentManager(), TAG);
+                    // Create backup in Downloads folder
+                    String dir = UtilsFile.getPublicDownloadDir();
+                    new BackUpAsyncTask(getActivity(), filePath -> {
+                        boolean success1 = !TextUtils.isEmpty(filePath);
+                        String resultMsg;
+                        if (success1) {
+                            setBackupSuccessResult();
+                            resultMsg = String.format(
+                                    getString(R.string.msg_finished),
+                                    getString(R.string.str_backup)
+                            );
+                            resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
+                            // Display the result
+                            UtilsView.alert(getActivity(), resultMsg, (dialog, which) -> {
+                                if (finishOnBackUpSuccess) {
+                                    getActivity().finish();
+                                }
+                            });
+                        } else {
+                            if (getActivity() != null) {
+                                getActivity().setResult(Activity.RESULT_CANCELED);
+                                resultMsg = String.format(
+                                        getString(R.string.msg_failed),
+                                        getString(R.string.str_backup)
+                                );
+                                // Display the result
+                                UtilsView.alert(getActivity(), resultMsg);
+                            }
+                        }
+                    }).execute(dir);
                     return true;
                 });
 
@@ -326,51 +347,6 @@ public class BackupPreferenceFragment
         }
     }
 
-    @Override
-    public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode) {
-
-        switch (requestCode) {
-            case REQUEST_CODE_BACKUP_DIR:
-                if (result != Activity.RESULT_OK)
-                    UtilsView.toast(getActivity(), getString(R.string.str_failed));
-                if (whichBtn == OnDialogBtnClickedListener.BUTTON_POSITIVE) {
-                    data.getData();
-                    String dir = data.getStringExtra(FolderPickerDialogFragment.KEY_CURRENT_DIR);
-                    new BackUpAsyncTask(getActivity(), filePath -> {
-                        boolean success = !TextUtils.isEmpty(filePath);
-                        String resultMsg;
-                        if (success) {
-                            setBackupSuccessResult();
-                            resultMsg = String.format(
-                                    getString(R.string.msg_finished),
-                                    getString(R.string.str_backup)
-                            );
-                            resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
-                            //Display the result
-                            UtilsView.alert(getActivity(), resultMsg, (dialog, which) -> {
-                                if (finishOnBackUpSuccess) {
-                                    getActivity().finish();
-                                }
-                            });
-                        } else {
-                            if (getActivity() != null) {
-                                getActivity().setResult(Activity.RESULT_CANCELED);
-                                resultMsg = String.format(
-                                        getString(R.string.msg_failed),
-                                        getString(R.string.str_backup)
-                                );
-                                // Display the result
-                                UtilsView.alert(getActivity(), resultMsg);
-                            }
-                        }
-
-                    }).execute(dir);
-                }
-                break;
-
-        }
-
-    }
 
     private void setBackupSuccessResult() {
         if (getActivity() != null) {
