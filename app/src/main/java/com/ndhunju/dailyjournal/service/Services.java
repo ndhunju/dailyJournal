@@ -144,7 +144,7 @@ public class Services {
 
 
         //2.3 create a zip file in not hidden app folder so that user can use it
-        String fileName = UtilsFile.getZipFileName();
+        String fileName = getCompanyName() + "-" + UtilsFile.getZipFileName();
         File zipFile = new File(backupFolder.getAbsoluteFile(), fileName);
         boolean zipFileCreationSuccess = zipFile.createNewFile();
         Log.d(TAG, "createBackUp: zipFileCreationSuccess=" + zipFileCreationSuccess);
