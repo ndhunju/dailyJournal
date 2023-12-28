@@ -108,7 +108,10 @@ public class ImportContacts {
                         null, null);
 
 
-                if(!c.moveToFirst()) return;
+                if(!c.moveToFirst()) {
+                    c.close();
+                    return;
+                }
 
                 String number = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 newParty.setPhone(number);

@@ -47,7 +47,10 @@ public class DBTransferService {
         Cursor c = mDb.query(prefix + PartyColumnsOld.TABLE_NAME_MERCHANT,
                 projectionOld, null, null, null, null, null);
 
-        if(!c.moveToFirst()) return;
+        if(!c.moveToFirst()) {
+            c.close();
+            return;
+        }
 
         do{
             String name = c.getString(c.getColumnIndexOrThrow(PartyColumnsOld.COL_MERCHANT_NAME));
@@ -82,7 +85,10 @@ public class DBTransferService {
         Cursor c = db.query( prefix + JournalColumnsOld.TABLE_NAME_JOURNAL,projection,selection,
                             null, null, null,null);
 
-        if(!c.moveToFirst()) return;
+        if(!c.moveToFirst()) {
+            c.close();
+            return;
+        }
 
         Journal journal = new Journal(partyId);
 
@@ -136,7 +142,10 @@ public class DBTransferService {
         Cursor c = db.query(prefix + AttachmentColumnsOld.TABLE_NAME_ATTACHMENTS,
                             projection,  selection, null,null,null, null);
 
-        if(!c.moveToFirst()) return;
+        if(!c.moveToFirst()) {
+            c.close();
+            return;
+        }
 
         Attachment attachment = new Attachment(journalId);
 

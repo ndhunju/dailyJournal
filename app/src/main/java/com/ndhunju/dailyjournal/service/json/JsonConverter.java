@@ -59,8 +59,8 @@ public abstract class JsonConverter implements JsonKeys{
             //Store old json files in an array so that it can be deleted once
             //new json file is created successfully
             ArrayList<File> filesToDelete = new ArrayList<>();
-            for(File f : appFolder.listFiles()){
-                if(f.getName().endsWith(".json"))
+            for (File f : appFolder.listFiles()) {
+                if (f.getName().endsWith(".json"))
                     filesToDelete.add(f);
             }
 
@@ -68,13 +68,14 @@ public abstract class JsonConverter implements JsonKeys{
             String fileName = UtilsFile.getJSONFileName();
             File jsonFile = new File(appFolder.getAbsolutePath(),fileName );
 
-            if(!jsonFile.createNewFile())
+            if (!jsonFile.createNewFile()) {
                 Log.d(TAG, "Fail to create file " + jsonFile.getAbsolutePath());
+            }
 
             writeToJSON(jsonFile.getAbsolutePath());
 
-            //Delete Old files so that there is always one latest copy
-            for(File f : filesToDelete){
+            // Delete Old files so that there is always one latest copy
+            for (File f : filesToDelete){
                 f.delete();
             }
 

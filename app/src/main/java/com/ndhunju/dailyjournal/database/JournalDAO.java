@@ -68,7 +68,10 @@ public class JournalDAO implements IJournalDAO {
         Cursor c = db.query(true, JournalColumns.TABLE_JOURNAL, null,
                 JournalColumns.JOURNAL_ID + "=" + aLong, null, null, null, null, null);
 
-        if(c == null || !c.moveToFirst()) return null;
+        if(c == null || !c.moveToFirst()) {
+            if (c != null) c.close();
+            return null;
+        }
         Journal journal = fromCursor(c);
         c.close();
         return journal;
@@ -79,7 +82,10 @@ public class JournalDAO implements IJournalDAO {
         SQLiteDatabase db = mSqLiteOpenHelper.getReadableDatabase();
         Cursor c = db.query(JournalColumns.TABLE_JOURNAL, null, null, null, null, null, null, null);
         List<Journal> temp = new ArrayList<>();
-        if(!c.moveToFirst()) return temp;
+        if (!c.moveToFirst()){
+            c.close();
+            return temp;
+        }
         do{temp.add(fromCursor(c));
         }while(c.moveToNext());
         c.close();
@@ -96,7 +102,10 @@ public class JournalDAO implements IJournalDAO {
                             JournalColumns.COL_JOURNAL_DATE, null);
 
         List<Journal> temp = new ArrayList<>();
-        if(!c.moveToFirst()) return temp;
+        if (!c.moveToFirst()){
+            c.close();
+            return temp;
+        }
 
         do{temp.add(fromCursor(c));
         }while(c.moveToNext());
@@ -127,7 +136,10 @@ public class JournalDAO implements IJournalDAO {
                 JournalColumns.COL_JOURNAL_DATE, null);
 
         List<Journal> temp = new ArrayList<>();
-        if(!c.moveToFirst()) return temp;
+        if (!c.moveToFirst()){
+            c.close();
+            return temp;
+        }
 
         Journal journal;
         do{
@@ -148,7 +160,10 @@ public class JournalDAO implements IJournalDAO {
                 JournalColumns.COL_JOURNAL_DATE, null);
 
         List<Journal> temp = new ArrayList<>();
-        if(!c.moveToFirst()) return temp;
+        if (!c.moveToFirst()){
+            c.close();
+            return temp;
+        }
 
         Journal journal;
         do{
@@ -174,7 +189,11 @@ public class JournalDAO implements IJournalDAO {
                 JournalColumns.COL_JOURNAL_DATE, null);
 
         List<Journal> temp = new ArrayList<>();
-        if(!c.moveToFirst()) return temp;
+
+        if (!c.moveToFirst()) {
+            c.close();
+            return temp;
+        }
 
         Journal journal;
         do{

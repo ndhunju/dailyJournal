@@ -59,7 +59,11 @@ public class AttachmentDAO implements IAttachmentDAO {
         Cursor c = db.query(true, AttachmentColumns.TABLE_NAME_ATTACHMENTS, null,
                             selection, null, null, null, null, null);
 
-        if(!c.moveToFirst()) return null;
+        if(!c.moveToFirst()) {
+            c.close();
+            return null;
+        }
+
         Attachment attachment = fromCursor(c);
         c.close();
         return attachment ;
@@ -72,7 +76,10 @@ public class AttachmentDAO implements IAttachmentDAO {
                             null, null, null, null, null, null);
 
         List<Attachment> temp = new ArrayList<>();
-        if(!c.moveToFirst())  return temp;
+        if(!c.moveToFirst()) {
+            c.close();
+            return temp;
+        }
 
         do{
             temp.add(fromCursor(c));
@@ -89,12 +96,17 @@ public class AttachmentDAO implements IAttachmentDAO {
                             null, null, null, null);
         List<Attachment> attchs = new ArrayList<>();
 
-        if(!c.moveToFirst()) return attchs;
+        if (!c.moveToFirst()) {
+            c.close();
+            return attchs;
+        }
 
-        do{ attchs.add(fromCursor(c));}
-        while(c.moveToNext());
+        do {
+            attchs.add(fromCursor(c));
+        } while(c.moveToNext());
 
         c.close();
+
         return attchs;
     }
 

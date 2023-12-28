@@ -3,7 +3,9 @@ package com.ndhunju.dailyjournal.controller;
 import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
 
+import com.ndhunju.dailyjournal.BuildConfig;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Setup;
 
@@ -39,6 +41,14 @@ public class DailyJournalApplication extends MultiDexApplication {
         // Initialize AnalyticsService
         AnalyticsService.INSTANCE.setup(this);
         AnalyticsService.INSTANCE.logAppOpenEvent();
+
+        if (BuildConfig.DEBUG) {
+            // Following helps to pinpoint which resource failed to close
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .build());
+        }
     }
 
     /**

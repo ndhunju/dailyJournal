@@ -66,7 +66,7 @@ public final class JsonConverterString extends JsonConverter{
     @Override
     public boolean writeToJSON(String jsonFilePath) {
         try {
-            //Write data to JSON file in json format
+            // Write data to JSON file in json format
             FileOutputStream fileOutputStream = new FileOutputStream(jsonFilePath);
             fileOutputStream.write(getAllDataInJson().toString().getBytes());
             fileOutputStream.close();

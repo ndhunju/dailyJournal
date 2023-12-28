@@ -58,7 +58,10 @@ public class PartyDAO implements IPartyDAO {
         Cursor c = db.query(PartyColumns.TABLE_PARTY, null,
                 PartyColumns.PARTY_ID + "=" + id, null, null, null, null, null);
 
-        if(!c.moveToFirst()) return null;
+        if(!c.moveToFirst()) {
+            c.close();
+            return null;
+        }
         Party party = fromCursor(c);
         c.close();
         return party;
@@ -159,7 +162,10 @@ public class PartyDAO implements IPartyDAO {
                 PartyColumns.COL_PARTY_NAME, null);
 
         List<Party> temp = new ArrayList<>();
-        if(!c.moveToFirst()) return temp;
+        if(!c.moveToFirst()) {
+            c.close();
+            return temp;
+        }
         Party current;
         do{
             current = fromCursor(c);
@@ -187,7 +193,10 @@ public class PartyDAO implements IPartyDAO {
                 + " DESC", String.valueOf(limit));
 
         Party[] temp = new Party[limit];
-        if(!c.moveToFirst()) return temp;
+        if (!c.moveToFirst()){
+            c.close();
+            return temp;
+        }
 
         int index = 0;
         do{
@@ -230,7 +239,10 @@ public class PartyDAO implements IPartyDAO {
                             null, null, null, null, PartyColumns.COL_PARTY_NAME);
 
         String[] names = new String[c.getCount()];
-        if(!c.moveToFirst())return names;
+        if (!c.moveToFirst()) {
+            c.close();
+            return names;
+        }
         int i = 0;
         do{
             names[i++]= (c.getString(c.getColumnIndex(PartyColumns.COL_PARTY_NAME)));
@@ -253,7 +265,10 @@ public class PartyDAO implements IPartyDAO {
                 null,
                 PartyColumns.COL_PARTY_DR_AMT);
 
-        if(!c.moveToFirst())return 0.0;
+        if(!c.moveToFirst()) {
+            c.close();
+            return 0.0;
+        }
         double amount = 0.0;
         do{
             amount += (c.getLong(c.getColumnIndex(PartyColumns.COL_PARTY_DR_AMT)));
@@ -276,7 +291,10 @@ public class PartyDAO implements IPartyDAO {
                 null,
                 PartyColumns.COL_PARTY_CR_AMT);
 
-        if(!c.moveToFirst())return 0.0;
+        if(!c.moveToFirst()) {
+            c.close();
+            return 0.0;
+        }
 
         double amount = 0.0;
         do{
