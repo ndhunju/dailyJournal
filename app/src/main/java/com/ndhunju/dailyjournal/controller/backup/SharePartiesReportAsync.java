@@ -19,6 +19,7 @@ import com.ndhunju.dailyjournal.service.report.CsvReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
 import com.ndhunju.dailyjournal.service.report.ReportGenerator;
 import com.ndhunju.dailyjournal.service.report.TextFileReportGenerator;
+import com.ndhunju.dailyjournal.util.UtilDownloadManager;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -175,23 +176,16 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
             mContext.startActivity(intent);
 
             // Notify user that we created a file
-            DownloadManager downloadManager = (DownloadManager) mContext.getSystemService(
-                    Context.DOWNLOAD_SERVICE
-            );
-            downloadManager.addCompletedDownload(
-                    // Set title to same as file name as on OS 33,
-                    // title name is used for file name
-                    zipFile.getName(),
+            UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
+                    mContext,
+                    zipFile,
                     mContext.getString(
                             R.string.msg_reports_created_title,
                             mContext.getString(R.string.app_name)
                     ),
-                    true,
-                    END_FILE_TYPE,
-                    zipFile.getAbsolutePath(),
-                    zipFile.length(),
-                    true
+                    END_FILE_TYPE
             );
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -19,6 +19,7 @@ import com.ndhunju.dailyjournal.service.report.PdfReportGenerator;
 import com.ndhunju.dailyjournal.service.report.PlainTextReportGenerator;
 import com.ndhunju.dailyjournal.service.report.ReportGenerator;
 import com.ndhunju.dailyjournal.service.report.TextFileReportGenerator;
+import com.ndhunju.dailyjournal.util.UtilDownloadManager;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsView;
 
@@ -152,21 +153,14 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         }
 
         if (mType != Type.TEXT) {
-            // notify user that we created a file
-            DownloadManager downloadManager = (DownloadManager) mActivity.getSystemService(
-                    Context.DOWNLOAD_SERVICE
-            );
-            downloadManager.addCompletedDownload(
-                    // Set title to same as file name as on OS 33,
-                    // title name is used for file name
-                    report.getName(),
+            // Notify user that we created a file
+            UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
+                    mActivity,
+                    report,
                     mActivity.getString(R.string.msg_report_created_desc, rg.getParty().getName()),
-                    true,
-                    rg.getReportType(),
-                    report.getAbsolutePath(),
-                    report.length(),
-                    true
+                    rg.getReportType()
             );
+
 
             // let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(

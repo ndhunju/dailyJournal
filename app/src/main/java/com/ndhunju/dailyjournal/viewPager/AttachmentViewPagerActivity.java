@@ -3,13 +3,10 @@ package com.ndhunju.dailyjournal.viewPager;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +26,7 @@ import com.ndhunju.dailyjournal.controller.journal.StoreImageAsync;
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.UtilDownloadManager;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -186,27 +184,12 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 			toExportImageOS.close();
 
 			// show it in Downloads app and in notification bar
-			DownloadManager downloadManager = (DownloadManager) getSystemService(
-					Context.DOWNLOAD_SERVICE
-			);
-			downloadManager.addCompletedDownload(
-					// OS is using this title to name the downloaded image file
-					internalImage.getName(),
+			UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
+					getActivity(),
+					toExportImage,
 					getString(R.string.msg_saved, getString(R.string.str_image)),
-					true,
-					"image/jpeg",
-					toExportImage.getAbsolutePath(),
-					toExportImage.length(),
-					true
-			);
-
-			// Let know that a new file has been created so that it appears in the computer
-			MediaScannerConnection.scanFile(
-					this,
-					new String[]{toExportImage.getAbsolutePath()},
-					null,
-					null
-			);
+					"image/jpeg"
+					);
 
 			UtilsView.toast(this, getString(R.string.str_finished));
 
