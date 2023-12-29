@@ -1,7 +1,10 @@
 package com.ndhunju.dailyjournal.controller.journal
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -44,6 +47,27 @@ abstract class JournalFragmentBase: Fragment()
         } else {
             _attachBtn?.text = getString(R.string.str_attachment)
         }
+    }
+
+    protected fun showAlertIfNoteHasComma(noteEt: EditText): Boolean {
+
+        if (noteEt.text.toString().contains(",")) {
+            AlertDialog.Builder(context)
+                .setTitle(getString(R.string.str_alert))
+                .setMessage(getString(R.string.msg_journal_note_replace_comma))
+                .setPositiveButton(getString(R.string.str_yes)) { _: DialogInterface?, _: Int ->
+                    noteEt.setText(
+                        noteEt.text.toString().replace(",", ";")
+                    )
+                }
+                .setNegativeButton(getString(R.string.str_no), null)
+                .create()
+                .show()
+
+            return true
+        }
+
+        return false
     }
 
     /**

@@ -42,6 +42,8 @@
     <string name="str_id">ID :</string>
     <string name="str_id_only">ID</string>
     <string name="str_new">New</string>
+    <string name="str_yes">Yes</string>
+    <string name="str_no">No</string>
     <string name="str_lock">Lock</string>
     <string name="str_note">Note</string>
     <string name="str_notes">Notes</string>
@@ -152,7 +154,6 @@
     <string name="str_account">Account</string>
     <string name="chart_dscrptn_owe_you">that owe you</string>
     <string name="chart_dscrptn_you_owe">that you owe</string>
-    <string name="str_no">No</string>
     <string name="str_search">Search</string>
     <string name="str_search_or_add">Search or Add new Party</string>
     <string name="str_exit">Exit</string>
@@ -232,6 +233,9 @@
 
     <!-- JournalFragmentNew Screen -->
     <string name="btn_attachment_with_count">Attachment (%d)</string>
+    <string name="msg_journal_note_replace_comma">You have used comma in your note.
+        This causes issue when exporting as Comma Separated Values (CSV) file. \n\n
+        Would you like to replace all commas with semi colon?</string>
 
     <!-- TutorialActivity -->
     <!-- Name of Tutorial Videos -->

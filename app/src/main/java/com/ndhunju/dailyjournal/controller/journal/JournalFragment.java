@@ -214,7 +214,13 @@ public class JournalFragment extends JournalFragmentBase implements OnDatePicker
 				return;
 			}
 
-			try{
+			// Check if user has used comma in notes
+			if (showAlertIfNoteHasComma(noteEt)) {
+				// User has used comma in notes
+				return;
+			}
+
+			try {
 				UtilsFormat.parseCurrency(amountEt.getText().toString(), getActivity());
 				if (journalChanged) {
 					mServices.updateJournal(mJournal);
@@ -240,9 +246,7 @@ public class JournalFragment extends JournalFragmentBase implements OnDatePicker
 
 		});
 
-		((FloatingActionButton) v.findViewById(
-				R.id.fragment_home_mic_btn
-		)).setVisibility(View.INVISIBLE);
+		v.findViewById(R.id.fragment_home_mic_btn).setVisibility(View.INVISIBLE);
 
         // Refresh values in UI
 		setValues(mJournal, mParty);

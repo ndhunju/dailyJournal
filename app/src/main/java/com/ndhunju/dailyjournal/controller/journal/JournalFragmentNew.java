@@ -272,6 +272,12 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
                 return;
             }
 
+            // Check if user has used comma in notes
+            if (showAlertIfNoteHasComma(noteEt)) {
+                // User has used comma in notes return
+                return;
+            }
+
             mServices.updateNewJournal(tempJournal);
 
             // Create and add another journal for Party 2
