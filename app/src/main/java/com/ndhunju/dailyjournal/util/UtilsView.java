@@ -1,6 +1,5 @@
 package com.ndhunju.dailyjournal.util;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -8,36 +7,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.RecyclerView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
+import androidx.annotation.ColorInt;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.StartNextYearActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
-import com.ndhunju.dailyjournal.service.AnalyticsService;
-import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.service.Services;
 
 import java.util.Date;
@@ -199,93 +186,6 @@ public class UtilsView {
         itemAnimator.setAddDuration(500);
         itemAnimator.setChangeDuration(100);
         return itemAnimator;
-    }
-
-    @SuppressLint("MissingPermission") // It is already added
-    public static void addAdView(
-            @Nullable FrameLayout adViewContainer,
-            @NonNull String adUnitId,
-            @NonNull String screenName
-    ) {
-        if (adViewContainer == null) {
-            return;
-        }
-
-        PreferenceService ps  = PreferenceService.from(adViewContainer.getContext());
-        boolean showAd = ps.getVal(R.string.key_pref_item_ad, 0) == 0;
-
-        if (!showAd) {
-            adViewContainer.setVisibility(View.GONE);
-            return;
-        }
-
-        AdView adView = new AdView(adViewContainer.getContext());
-        adView.setAdSize(AdSize.BANNER);
-        adView.setAdUnitId(adUnitId);
-        adViewContainer.addView(adView);
-        adView.setAdListener(new AdListener() {
-
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                FrameLayout.LayoutParams adViewLayoutParams = (FrameLayout.LayoutParams) adView.getLayoutParams();
-                adViewLayoutParams.gravity = Gravity.START;
-
-                // Ad an icon so that user can enable/disable the ads
-                ImageView adSettingsView = new ImageView(adViewContainer.getContext());
-                adSettingsView.setImageResource(R.drawable.ic_baseline_ad_setting_48);
-                int fiveDp = UtilsView.dpToPx(adSettingsView.getContext(), 5);
-                adSettingsView.setPaddingRelative(fiveDp, 0, 0, 0);
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                layoutParams.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
-                adViewContainer.addView(adSettingsView, layoutParams);
-                adSettingsView.setOnClickListener(v -> v.getContext().startActivity(new Intent(
-                        v.getContext(),
-                        MyPreferenceActivity.class
-                ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)));
-
-                ((ViewGroup.MarginLayoutParams) adViewContainer.getLayoutParams()).setMargins(
-                        fiveDp,
-                        fiveDp/2,
-                        fiveDp,
-                        fiveDp/2
-                );
-
-                // Improve the UI of Ads a bit
-                adViewContainer.setBackgroundResource(R.drawable.border);
-                ((ViewGroup.MarginLayoutParams) adViewContainer.getLayoutParams()).setMargins(
-                        fiveDp,
-                        fiveDp/2,
-                        fiveDp,
-                        fiveDp/2
-                );
-            }
-
-            @Override
-            public void onAdClicked() {
-                super.onAdClicked();
-                AnalyticsService.INSTANCE.logEvent("didClickOnAdIn" + screenName);
-            }
-
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                super.onAdFailedToLoad(loadAdError);
-                AnalyticsService.INSTANCE.logEvent(
-                        "didFailToLoadAdIn" + screenName,
-                        String.format(
-                                "domain: %s, code: %d, message: %s",
-                                loadAdError.getDomain(),
-                                loadAdError.getCode(),
-                                loadAdError.getMessage()
-                        ));
-            }
-        });
-
-        adView.loadAd(new AdRequest.Builder().build());
     }
 
 }

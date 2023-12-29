@@ -39,6 +39,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
 import com.ndhunju.dailyjournal.controller.backup.SharePartiesReportAsync;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AdManager;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.ImportContacts;
@@ -207,7 +208,7 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
     }
 
     public void addAdView(FrameLayout adViewContainer) {
-        UtilsView.addAdView(
+        AdManager.INSTANCE.addAdView(
                 adViewContainer,
                 getString(R.string.admob_party_list_ad_unit_id),
                 "PartyListScreen"

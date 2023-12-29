@@ -8,17 +8,16 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NavUtils;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
+import com.ndhunju.dailyjournal.service.AdManager;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
-import com.ndhunju.dailyjournal.util.UtilsView;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -120,7 +119,7 @@ public class PartyDetailActivity extends BaseActivity {
 
         // Load the Ad
         FrameLayout adViewContainer = findViewById(R.id.activity_party_detail_ad_view);
-        UtilsView.addAdView(
+        AdManager.INSTANCE.addAdView(
                 adViewContainer,
                 getString(R.string.admob_party_detail_ad_unit_id),
                 "PartyDetailScreen"
