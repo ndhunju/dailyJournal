@@ -313,6 +313,8 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
             tempJournal.setDate(selectedDate);
             tempJournal.setPartyId(selectedPartyId);
             tempJournal.setType(selectedType);
+            // Reset mParty2 as usually its not the same
+            mParty2 = null;
             setValues(tempJournal, mParty);
 
             UtilsView.toast(getActivity(), String.format(
