@@ -19,6 +19,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.CompanySettingsActivity;
 import com.ndhunju.dailyjournal.controller.NavDrawerActivity;
 import com.ndhunju.dailyjournal.controller.fragment.AppRater;
+import com.ndhunju.dailyjournal.service.AdManager;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -81,7 +82,8 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
 
         setupSizeForSummaryPager();
 
-	}
+        AdManager.INSTANCE.initConsent(this);
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
