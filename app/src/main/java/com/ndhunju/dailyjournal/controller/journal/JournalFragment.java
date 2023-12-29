@@ -152,6 +152,9 @@ public class JournalFragment extends JournalFragmentBase implements OnDatePicker
 				getString(R.string.warning_cant_change_party)
 		));
 
+		Button party2Btn = v.findViewById(R.id.fragment_home_party_2_btn);
+		party2Btn.setVisibility(View.GONE);
+
 		drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
 		drBtn.setOnClickListener(v15 -> {
 			journalChanged = true;

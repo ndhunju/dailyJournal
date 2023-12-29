@@ -27,6 +27,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
+import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.AdManager;
@@ -44,6 +45,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.ndhunju.dailyjournal.model.Journal.Type.Credit;
+import static com.ndhunju.dailyjournal.model.Journal.Type.Debit;
+
 public class JournalFragmentNew extends JournalFragmentBase implements OnDatePickerDialogBtnClickedListener {
 
     //Constants
@@ -53,6 +57,7 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
     private static final int REQUEST_CODE_GENERAL = 564;
     private static final int REQUEST_CHGED_DATE = 656;
     private static final int REQUEST_CHGD_PARTY = 456;
+    private static final int REQUEST_PARTY_2 = 457;
     private static final int REQUEST_CODE_SPEECH = 898;
 
 
@@ -62,6 +67,7 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
     private TextView crTv;
     private EditText noteEt;
     private Button partyBtn;
+    private Button party2Btn;
     private Button dateBtn;
     private TextView idTV;
     Button drBtn, crBtn;
@@ -70,6 +76,7 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
     private Journal tempJournal;
     private Services mServices;
     private Party mParty;
+    private Party mParty2;
 
     /**
      * Returns new instance of a JournalFragment Class based on passed arguments. Implements
@@ -174,6 +181,19 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
             //the result is delivered to onDialogBtnClicked()
         });
 
+        party2Btn = v.findViewById(R.id.fragment_home_party_2_btn);
+        party2Btn.setOnClickListener(v1 -> {
+
+            if (getActivity() == null) {
+                return;
+            }
+
+            PartyListDialog partylistdialog = PartyListDialog.newInstance(REQUEST_PARTY_2);
+            partylistdialog.setTargetFragment(JournalFragmentNew.this, REQUEST_PARTY_2);
+            partylistdialog.show(getActivity().getSupportFragmentManager(), PartyListDialog.TAG);
+            //the result is delivered to onDialogBtnClicked()
+        });
+
         if (mParty != null) {
             partyBtn.setText(mParty.getName());
             tempJournal.setPartyId(mParty.getId());
@@ -181,14 +201,14 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
 
         drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
         drBtn.setOnClickListener(v12 -> {
-            tempJournal.setType(Journal.Type.Debit);
+            tempJournal.setType(Debit);
             UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
             setTextDrCr(tempJournal.getType());
         });
 
         crBtn = (Button) v.findViewById(R.id.fragment_home_credit_btn);
         crBtn.setOnClickListener(v13 -> {
-            tempJournal.setType(Journal.Type.Credit);
+            tempJournal.setType(Credit);
             UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
             setTextDrCr(tempJournal.getType());
         });
@@ -250,7 +270,34 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
             }
 
             mServices.updateNewJournal(tempJournal);
-            // Save selected values so that user doesn't have to selected them again
+
+            // Create and add another journal for Party 2
+            if (mParty2 != null) {
+                Journal journal2 = mServices.getNewJournal();
+                journal2.setPartyId(mParty2.getId());
+                journal2.setType(tempJournal.getType() == Credit ? Debit : Credit);
+
+                // Copy shared data from tempJournal
+                journal2.setDate(tempJournal.getDate());
+                journal2.setCreatedDate(tempJournal.getCreatedDate());
+                journal2.setAmount(tempJournal.getAmount());
+                journal2.setNote(tempJournal.getNote());
+
+                // Update the database
+                mServices.updateNewJournal(journal2);
+
+                // Copy attachments too
+                List<Attachment> attachments = mServices.getAttachments(tempJournal.getId());
+                Attachment copy;
+                for (Attachment attachment: attachments) {
+                    copy = new Attachment(journal2.getId());
+                    copy.setPath(attachment.getPath());
+                    //copy.setId(); // Id is basically row number
+                    mServices.addAttachment(copy);
+                }
+            }
+
+            // Save selected values so that user doesn't have to select them again
             long selectedDate = tempJournal.getDate();
             long selectedPartyId = tempJournal.getPartyId();
             Journal.Type selectedType = tempJournal.getType();
@@ -262,8 +309,10 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
             tempJournal.setType(selectedType);
             setValues(tempJournal, mParty);
 
-            UtilsView.toast(getActivity(), String.format(getString(R.string.msg_saved),
-                    getString(R.string.str_journal)));
+            UtilsView.toast(getActivity(), String.format(
+                    getString(R.string.msg_saved),
+                    getString(R.string.str_journal))
+            );
         });
 
         /*ImageView settingImageView = (ImageView) v.findViewById(R.id.fragment_home_settings_btn);
@@ -397,7 +446,7 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
         int green = getResources().getColor(R.color.green);
 
 
-        if (journalType.equals(Journal.Type.Debit)) {
+        if (journalType.equals(Debit)) {
             amountEt.setTextColor(green);
             //drTv.setTextColor(green);
             //drTv.setText(getString(R.string.str_dr));
@@ -410,11 +459,59 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
             drTv.setVisibility(View.INVISIBLE);
             crTv.setVisibility(View.VISIBLE);
         }
+
+        // When journalType changes, text in Party2Btn also changes
+        setTextForParty2Btn();
+    }
+
+    /**
+     * Sets text and background of {@link this#party2Btn} based on various factors
+     */
+    private void setTextForParty2Btn() {
+
+        if (getContext() == null) {
+            return;
+        }
+
+        // Set the text following below logic
+        // If party 2 is selected, show party 2's name
+        if (mParty2 != null) {
+            party2Btn.setText(mParty2.getName());
+        } else if (tempJournal.getType() == Credit) {
+            // If tempJournal is Credit, show "Select Debit Party"
+            party2Btn.setText(getString(R.string.str_select)
+                    + " "
+                    + UtilsFormat.getDrFromPref(getActivity())
+                    + " "
+                    + UtilsFormat.getPartyFromPref(getActivity()));
+        } else {
+            // If tempJournal is Debit, show "Select Credit Party"
+            party2Btn.setText(getString(R.string.str_select)
+                    + " "
+                    + UtilsFormat.getCrFromPref(getActivity())
+                    + " "
+                    + UtilsFormat.getPartyFromPref(getActivity()));
+        }
+
+        // If the main party is a Debtor, the second will be Creditor
+        if (tempJournal.getType() == Debit) {
+            party2Btn.setBackground(ContextCompat.getDrawable(
+                    getContext(),
+                    R.drawable.button_negative
+                    ));
+        } else {
+            party2Btn.setBackground(ContextCompat.getDrawable(
+                    getContext(),
+                    R.drawable.button_positive
+                    ));
+        }
     }
 
 
     @Override
     public void onDialogBtnClicked(Intent data, int whichBtn, int result, int requestCode) {
+
+        PartyListDialog partylistdialog;
 
         switch (requestCode) {
 
@@ -424,7 +521,19 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
                 mParty = mServices.getParty(partyId);
                 partyBtn.setText(mParty.getName());
                 tempJournal.setPartyId(partyId);
-                PartyListDialog partylistdialog = (PartyListDialog) getParentFragmentManager()
+                partylistdialog = (PartyListDialog) getParentFragmentManager()
+                        .findFragmentByTag(PartyListDialog.TAG);
+                if (partylistdialog != null) {
+                    partylistdialog.dismiss();
+                }
+                break;
+
+            case REQUEST_PARTY_2: // A second party is selected
+                if (data == null) return;
+                long drPartyId = data.getLongExtra(Constants.KEY_PARTY_ID, 0);
+                mParty2 = mServices.getParty(drPartyId);
+                setTextForParty2Btn();
+                partylistdialog = (PartyListDialog) getParentFragmentManager()
                         .findFragmentByTag(PartyListDialog.TAG);
                 if (partylistdialog != null) {
                     partylistdialog.dismiss();

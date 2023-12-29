@@ -109,6 +109,15 @@
                     android:text="@string/str_select" />
 
                 <Button
+                    android:id="@+id/fragment_home_party_2_btn"
+                    style="@style/Widget.Button_Normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:drawableLeft="@drawable/ic_party"
+                    android:gravity="center"
+                    android:text="@string/str_select" />
+
+                <Button
                     android:id="@+id/fragment_home_attach_btn"
                     style="@style/Widget.Button_Normal"
                     android:layout_width="match_parent"
