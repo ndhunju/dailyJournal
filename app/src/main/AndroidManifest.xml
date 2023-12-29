@@ -168,6 +168,8 @@
 
         <activity android:name=".controller.tools.InternalToolsActivity"/>
 
+        <activity android:name=".controller.tutorial.TutorialActivity"/>
+
     </application>
 
 </manifest>

@@ -23,6 +23,7 @@ import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.controller.tools.ToolsActivity;
+import com.ndhunju.dailyjournal.controller.tutorial.TutorialActivity;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
@@ -76,6 +77,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
                 .add(UtilsFormat.getPartyFromPref(getContext()).contains(getString(R.string.str_party)) ? R.string.nav_item_party : R.string.nav_item_account, R.drawable.ic_nav_parties)
                 .add(R.string.nav_item_preference, R.drawable.ic_settings_black_48dp)
                 .add(R.string.nav_item_tools,    R.drawable.ic_tools)
+                .add(R.string.nav_item_tutorials, R.drawable.ic_menu_tutorial)
                 .add(R.string.nav_item_share,    R.drawable.ic_share)
                 .setIconTint(ContextCompat.getColor(getContext(), R.color.blue_medium));
         // Set the adapter for the list view
@@ -129,6 +131,11 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
             case R.drawable.ic_tools:
                 if (this instanceof ToolsActivity) return;
                 startActivity(new Intent(getContext(), ToolsActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                break;
+            case R.drawable.ic_menu_tutorial:
+                if (this instanceof TutorialActivity) return;
+                startActivity(new Intent(getContext(), TutorialActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.drawable.ic_share:

@@ -2,6 +2,8 @@ package com.ndhunju.dailyjournal.controller;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+
+import androidx.annotation.ArrayRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
@@ -39,7 +41,7 @@ public class IconTextAdapter extends ArrayAdapter<String> {
     TextView textView;
     ImageView imageView;
     Drawable drawable;
-    int tint;
+    int tint = -1;
 
     public IconTextAdapter(Context context) {
         super(context, R.layout.item_nav_icon_text);
@@ -49,6 +51,17 @@ public class IconTextAdapter extends ArrayAdapter<String> {
     public IconTextAdapter add(@StringRes int itemResId, @DrawableRes int itemIconId) {
         add(getContext().getString(itemResId));
         iconIds.add(itemIconId);
+        return this;
+    }
+
+    public IconTextAdapter addStringArray(@ArrayRes int arrayResId, @DrawableRes int itemIconId) {
+        String[] items = getContext().getResources().getStringArray(arrayResId);
+
+        for (String item : items) {
+            add(item);
+            iconIds.add(itemIconId);
+        }
+
         return this;
     }
 
