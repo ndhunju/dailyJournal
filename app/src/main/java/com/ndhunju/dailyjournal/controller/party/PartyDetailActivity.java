@@ -8,10 +8,10 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NavUtils;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
+import com.ndhunju.dailyjournal.controller.ads.AdsLayout;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.service.AdManager;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
@@ -118,9 +118,9 @@ public class PartyDetailActivity extends BaseActivity {
         super.onPostCreate(savedInstanceState);
 
         // Load the Ad
-        FrameLayout adViewContainer = findViewById(R.id.activity_party_detail_ad_view);
-        AdManager.INSTANCE.addAdView(
-                adViewContainer,
+        AdsLayout adsLayout = findViewById(R.id.activity_party_detail_ads_layout);
+        AdManager.INSTANCE.loadAdIfAllowed(
+                adsLayout,
                 getString(R.string.admob_party_detail_ad_unit_id),
                 "PartyDetailScreen"
         );

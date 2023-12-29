@@ -1,7 +1,6 @@
 package com.ndhunju.dailyjournal.controller.party;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,11 +10,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -37,6 +31,7 @@ import android.widget.FrameLayout;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.ItemDescriptionAdapter;
+import com.ndhunju.dailyjournal.controller.ads.AdsLayout;
 import com.ndhunju.dailyjournal.controller.backup.SharePartiesReportAsync;
 import com.ndhunju.dailyjournal.model.Party;
 import com.ndhunju.dailyjournal.service.AdManager;
@@ -199,20 +194,16 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         });
 
         // Load the Ad
-        FrameLayout adViewContainer = rootView.findViewById(R.id.fragment_party_list_ad_view);
-        addAdView(adViewContainer);
+        AdsLayout adsLayout = rootView.findViewById(R.id.fragment_party_list_ads_layout);
+        AdManager.INSTANCE.loadAdIfAllowed(
+                adsLayout,
+                getString(R.string.admob_party_list_ad_unit_id),
+                "PartyListScreen"
+        );
 
         mServices.registerPartyObserver(mPartyAdapter);
 
         return rootView;
-    }
-
-    public void addAdView(FrameLayout adViewContainer) {
-        AdManager.INSTANCE.addAdView(
-                adViewContainer,
-                getString(R.string.admob_party_list_ad_unit_id),
-                "PartyListScreen"
-        );
     }
 
     private RecyclerView getListView(){
