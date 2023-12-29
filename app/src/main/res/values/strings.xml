@@ -122,6 +122,7 @@
     <!-- %s is Journal/Transaction based on user's preference -->
     <string name="str_no_of_journal">%s Count</string>
 
+    <!-- Preference Screen -->
     <!-- %s is Journal/Transaction based on user's preference
     Eg. Allow out of range Journal Entry -->
     <string name="pref_allow_out_of_range_journal_entry">Allow out of range %s Entry</string>
@@ -129,6 +130,12 @@
     <string name="pref_summary_allow_out_of_range_journal_entry">If your financial year is April of 2008 to 2009,
         then you are allowed to add %1$s with date inside this range only. You can not add a %1$s with date May, 2009.
         However, you can enter Journal with any date by enabling this preference.</string>
+
+    <!-- Name of a preference. Displayed in a label of one line height -->
+    <string name="pref_ad">Advertisement</string>
+    <!-- Description of a preference. Displayed in a label of multiple lines -->
+    <string name="pref_ad_summary">Advertisement allows us to keep this app running free of cost to you.
+        Please enable and click on ads to support us.</string>
 
     <string name="action_settings">Settings</string>
     <string name="str_creditor">Creditor</string>

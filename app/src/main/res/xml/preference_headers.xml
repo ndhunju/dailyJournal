@@ -18,6 +18,17 @@
         <!-- key/value pairs can be included as arguments for the fragment. -->
         <extra android:name="someKey" android:value="someHeaderValue" />
     </Preference>
+
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/advertisement_options"
+        android:entryValues="@array/advertisement_options_values"
+        android:title="@string/pref_ad"
+        android:key="@string/key_pref_item_ad"
+        android:icon="@drawable/ic_baseline_ad_units_48"
+        android:summary="@string/pref_ad_summary"
+        />
+
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="@string/key_pref_allow_out_of_range_entry"

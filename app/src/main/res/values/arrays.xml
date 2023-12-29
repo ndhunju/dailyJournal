@@ -649,4 +649,14 @@
         <item>@string/str_account</item>
     </string-array>
 
+    <string-array name="advertisement_options">
+        <item>Show the Advertisements</item>
+        <item>Do not support the App</item>
+    </string-array>
+
+    <string-array name="advertisement_options_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
 </resources>
