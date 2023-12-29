@@ -1,6 +1,5 @@
 package com.ndhunju.dailyjournal.viewPager;
 
-import android.os.Build;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.core.view.ViewCompat;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.ViewTreeObserver;
 
 import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.util.Utils;
+import com.ndhunju.dailyjournal.util.UtilsFile;
 
 import java.util.List;
 
@@ -37,7 +37,12 @@ class AttachmentPagerAdapter extends PagerAdapter {
                 @Override public void onGlobalLayout() {
                     // make sure PhotoView is laid out so that its dimensions are measured
                     if (ViewCompat.isLaidOut(photoView)) {
-                        photoView.setImageBitmap(Utils.scaleBitmap(mAttachments.get(position).getPath(), photoView.getWidth(), photoView.getHeight()));
+                        String guid = mAttachments.get(position).getAttachmentGuid();
+                        photoView.setImageBitmap(Utils.scaleBitmap(
+                                UtilsFile.getAbsolutePathForAttachmentFolder(container.getContext()) + guid,
+                                photoView.getWidth(),
+                                photoView.getHeight()
+                        ));
                         photoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 }

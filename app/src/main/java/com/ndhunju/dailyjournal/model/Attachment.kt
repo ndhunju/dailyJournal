@@ -21,6 +21,7 @@ class Attachment(var journalId: Long) : Serializable {
             val path = path ?: return null
             // path -> /data/user/0/com.ndhunju.dailyjournalplus/
             // app_DailyJournal/.attachments/b9f89c9c-91eb-49e0-b27d-d08ef0d314ac.png
+            // This path becoms inaccessible if we change our app ID
             return path.substring(path.indexOf(".attachments/") + 13)
         }
 

@@ -192,6 +192,20 @@ public class UtilsFile {
 
 		return attchFolder;
 	}
+
+	public static String absolutePathForAttachmentFolder = null;
+
+	public static String getAbsolutePathForAttachmentFolder(Context context) {
+		if (absolutePathForAttachmentFolder == null) {
+			File attachmentFolder = UtilsFile.getAttachmentFolder(
+					UtilsFile.getAppFolder(context),
+					true
+			);
+			absolutePathForAttachmentFolder = attachmentFolder.getAbsolutePath() + "/";
+		}
+
+		return absolutePathForAttachmentFolder;
+	}
 	
 	private static File getPartyFolder(File attchFolder, String partyName, boolean hide) {
 		// Create a party folder
