@@ -180,7 +180,7 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
     @Override
     public void onJournalChanged(Journal journal) {
         // check if it is for current party
-        if (journal.getPartyId() != mParty.getId()) {
+        if (mParty != null && journal.getPartyId() != mParty.getId()) {
             return;
         }
 
