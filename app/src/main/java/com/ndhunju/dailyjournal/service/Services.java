@@ -749,7 +749,7 @@ public class Services {
 
         long now = System.currentTimeMillis();
         long financialYear = preferenceService.getVal(KEY_FINANCIAL_YEAR, now /* default value */);
-        if (now != financialYear) {
+        if (mCurrentFinancialYear == null || financialYear != now) {
             // set mCurrentFinancialYear only if not same as default value
             mCurrentFinancialYear = new Date(financialYear);
         }
@@ -765,6 +765,9 @@ public class Services {
     }
 
     public Date getFinancialYear() {
+        if (mCurrentFinancialYear == null) {
+            loadCompanyInfoFromPreferences();
+        }
         return mCurrentFinancialYear;
     }
 
