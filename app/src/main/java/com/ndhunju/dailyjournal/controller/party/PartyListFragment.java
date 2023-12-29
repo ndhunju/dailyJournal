@@ -66,7 +66,7 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
     //List view
     private RecyclerView mPartyLV;
     private Services mServices;
-    private EditText srchPartyET;
+    private EditText srchOrAddPartyET;
     private PartyCardAdapter mPartyAdapter;
 
     // The current activated item position. Only used on tablets
@@ -152,8 +152,8 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         View rootView = inflater.inflate(R.layout.fragment_party_list, container, false);
 
         //Wire up widgets
-        srchPartyET = (EditText)rootView.findViewById(R.id.fragment_party_list_search_et);
-        srchPartyET.addTextChangedListener(new TextWatcher() {
+        srchOrAddPartyET = (EditText)rootView.findViewById(R.id.fragment_party_list_search_et);
+        srchOrAddPartyET.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -182,16 +182,21 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         mPartyAdapter.setActivatedItemPos(0);
 
         //When user clicks on Add Party button, create a Party and pass the ID to previous activity
-        ((Button)rootView.findViewById(R.id.fragment_party_list_add_party_btn)).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String name = srchPartyET.getText().toString();
-                Party newParty = mServices.addParty(name);
-                UtilsView.toast(getActivity(), name + " saved.");
-                mPartyAdapter.dataSetChanged();
-            }
-        });
+        ((Button)rootView.findViewById(R.id.fragment_party_list_add_party_btn))
+                .setOnClickListener(v -> {
+                    Editable editable = srchOrAddPartyET.getText();
+                    if (editable == null || editable.toString().isEmpty()) {
+                        srchOrAddPartyET.setError(getString(
+                                R.string.party_name_empty_error
+                        ));
+                        return;
+                    }
+                    String name = srchOrAddPartyET.getText().toString();
+                    Party newParty = mServices.addParty(name);
+                    UtilsView.toast(getActivity(), name + " saved.");
+                    mPartyAdapter.dataSetChanged();
+                    mPartyAdapter.filter(name);
+                });
 
         FloatingActionButton newPartyFAB = (FloatingActionButton)rootView.findViewById(R.id.fragment_party_list_fab);
         newPartyFAB.setOnClickListener(new View.OnClickListener() {

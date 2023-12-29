@@ -71,7 +71,7 @@ public class LedgerCardAdapter extends LedgerAdapter {
         public void bind(Journal journal) {
             super.bind(journal);
             if (number != null) {
-                number.setText(String.valueOf(getAdapterPosition() + 1));
+                number.setText(String.valueOf(getAbsoluteAdapterPosition() + 1));
             }
 
             if (partyTV != null) {

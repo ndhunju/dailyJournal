@@ -147,6 +147,7 @@
     <string name="chart_dscrptn_you_owe">that you owe</string>
     <string name="str_no">No</string>
     <string name="str_search">Search</string>
+    <string name="str_search_or_add">Search or Add new Party</string>
     <string name="str_exit">Exit</string>
     <string name="str_disclaimer">Disclaimer</string>
 
@@ -215,6 +216,10 @@
     <string name="select_all">Select All</string>
     <!-- Error message shown in a dialog when user selects 0 or multiple backup files-->
     <string name="error_msg_invalid_backup_file_count_selected">Please select one backup file to restore.</string>
+
+    <!-- PartyListFragment -->
+    <!-- Text shown is a popup in Edit Text Field  -->
+    <string name="party_name_empty_error">Please enter the name here.</string>
 
 </resources>
 

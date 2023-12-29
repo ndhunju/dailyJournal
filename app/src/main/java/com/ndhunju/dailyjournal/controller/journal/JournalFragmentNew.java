@@ -164,15 +164,11 @@ public class JournalFragmentNew extends Fragment implements OnDatePickerDialogBt
         });
 
         partyBtn = (Button) v.findViewById(R.id.fragment_home_party_btn);
-        partyBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                PartyListDialog partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
-                partylistdialog.setTargetFragment(JournalFragmentNew.this, REQUEST_CHGD_PARTY);
-                partylistdialog.show(getActivity().getSupportFragmentManager(), PartyListDialog.TAG);
-                //the result is delivered to onDialogBtnClicked()
-            }
+        partyBtn.setOnClickListener(v1 -> {
+            PartyListDialog partylistdialog = PartyListDialog.newInstance(REQUEST_CHGD_PARTY);
+            partylistdialog.setTargetFragment(JournalFragmentNew.this, REQUEST_CHGD_PARTY);
+            partylistdialog.show(getActivity().getSupportFragmentManager(), PartyListDialog.TAG);
+            //the result is delivered to onDialogBtnClicked()
         });
 
         if (mParty != null) {
@@ -429,7 +425,8 @@ public class JournalFragmentNew extends Fragment implements OnDatePickerDialogBt
                 mParty = mServices.getParty(partyId);
                 partyBtn.setText(mParty.getName());
                 tempJournal.setPartyId(partyId);
-                PartyListDialog partylistdialog = (PartyListDialog) getFragmentManager().findFragmentByTag(PartyListDialog.TAG);
+                PartyListDialog partylistdialog = (PartyListDialog) getParentFragmentManager()
+                        .findFragmentByTag(PartyListDialog.TAG);
                 if (partylistdialog != null) {
                     partylistdialog.dismiss();
                 }

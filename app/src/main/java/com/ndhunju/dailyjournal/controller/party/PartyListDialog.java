@@ -29,7 +29,7 @@ public class PartyListDialog extends DialogFragment {
 	//Variables
 	public final static String TAG = PartyListDialog.class.getSimpleName();
 	private RecyclerView partyLV;
-	private EditText srchPartyET;
+	private EditText srchOrAddPartyET;
 	private PartyCardAdapter partyAdapter;
 
 	private Services mServices;
@@ -49,8 +49,8 @@ public class PartyListDialog extends DialogFragment {
 		mServices = Services.getInstance(getActivity());
 
 		//Wire up widgets
-		srchPartyET = (EditText)view.findViewById(R.id.fragment_party_list_search_et);
-		srchPartyET.addTextChangedListener(new TextWatcher() {
+		srchOrAddPartyET = (EditText)view.findViewById(R.id.fragment_party_list_search_et);
+		srchOrAddPartyET.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				partyAdapter.filter(s); //filter the list below
@@ -103,7 +103,14 @@ public class PartyListDialog extends DialogFragment {
 
 			@Override
 			public void onClick(View v) {
-				String name = srchPartyET.getText().toString();
+				Editable editable = srchOrAddPartyET.getText();
+				if (editable == null || editable.toString().isEmpty()) {
+					srchOrAddPartyET.setError(getString(
+							R.string.party_name_empty_error
+					));
+					return;
+				}
+				String name = srchOrAddPartyET.getText().toString();
 				Party addedParty = mServices.addParty(name);
 				UtilsView.toast(getActivity(), name + " saved. ");
 
@@ -134,7 +141,7 @@ public class PartyListDialog extends DialogFragment {
         mServices.registerPartyObserver(partyAdapter);
 
         // show keyboard
-		srchPartyET.requestFocus();
+		srchOrAddPartyET.requestFocus();
 		if (getDialog().getWindow() != null) {
 			getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		}
