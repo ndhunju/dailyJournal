@@ -7,6 +7,7 @@ import android.speech.RecognizerIntent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
@@ -346,17 +347,21 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
                     AnalyticsService.INSTANCE.logEvent("didClickOnMicInNewJournal");
                 });
 
-        AdManager.INSTANCE.loadAdIfAllowed(
-                v.findViewById(R.id.fragment_journal_ads_layout),
-                getString(R.string.admob_new_journal_ad_unit_id),
-                "NewJournalScreen"
-        );
-
-
         // Refresh values in UI
         setValues(tempJournal, mParty);
 
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Show ads only after the view has fully loaded to prevent slowing down of views
+        AdManager.INSTANCE.loadAdIfAllowed(
+                view.findViewById(R.id.fragment_journal_ads_layout),
+                getString(R.string.admob_new_journal_ad_unit_id),
+                "NewJournalScreen"
+        );
     }
 
     @NonNull

@@ -193,14 +193,6 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
             startActivityForResult(newPartyIntent, REQUEST_PARTY_INFO_CHGD);
         });
 
-        // Load the Ad
-        AdsLayout adsLayout = rootView.findViewById(R.id.fragment_party_list_ads_layout);
-        AdManager.INSTANCE.loadAdIfAllowed(
-                adsLayout,
-                getString(R.string.admob_party_list_ad_unit_id),
-                "PartyListScreen"
-        );
-
         mServices.registerPartyObserver(mPartyAdapter);
 
         return rootView;
@@ -211,13 +203,20 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // Restore the previously serialized activated item position.
         if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
         }
+
+        AdsLayout adsLayout = view.findViewById(R.id.fragment_party_list_ads_layout);
+        AdManager.INSTANCE.loadAdIfAllowed(
+                adsLayout,
+                getString(R.string.admob_party_list_ad_unit_id),
+                "PartyListScreen"
+        );
     }
 
 

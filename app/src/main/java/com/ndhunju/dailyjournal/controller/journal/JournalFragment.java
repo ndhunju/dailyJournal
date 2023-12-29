@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -243,16 +244,21 @@ public class JournalFragment extends JournalFragmentBase implements OnDatePicker
 				R.id.fragment_home_mic_btn
 		)).setVisibility(View.INVISIBLE);
 
-		AdManager.INSTANCE.loadAdIfAllowed(
-				v.findViewById(R.id.fragment_journal_ads_layout),
-				getString(R.string.admob_journal_ad_unit_id),
-				"JournalScreen"
-		);
-
         // Refresh values in UI
 		setValues(mJournal, mParty);
 
 		return v;
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		// Show ads only after the view has fully loaded to prevent slowing down of views
+		AdManager.INSTANCE.loadAdIfAllowed(
+				view.findViewById(R.id.fragment_journal_ads_layout),
+				getString(R.string.admob_journal_ad_unit_id),
+				"JournalScreen"
+		);
 	}
 
 	@NonNull
