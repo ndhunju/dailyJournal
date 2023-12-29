@@ -1,13 +1,7 @@
 package com.ndhunju.dailyjournal.controller.journal;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,19 +10,25 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener;
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
@@ -130,45 +130,42 @@ public class JournalFragment extends Fragment implements OnDatePickerDialogBtnCl
         });
 
 		dateBtn = (Button) v.findViewById(R.id.activity_home_date_btn);
-		dateBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				DatePickerFragment dpf = DatePickerFragment.newInstance(new Date(mJournal.getDate()), REQUEST_CHGED_DATE);
-				dpf.setTargetFragment(JournalFragment.this, REQUEST_CHGED_DATE);
-				dpf.show(getActivity().getSupportFragmentManager(), DatePickerFragment.TAG);
-				//the result is delivered to OnDialoguePressedOk()
+		dateBtn.setOnClickListener(v13 -> {
+			if (getActivity() == null) {
+				return;
 			}
+
+			DatePickerFragment dpf = DatePickerFragment.newInstance(
+					new Date(mJournal.getDate()),
+					REQUEST_CHGED_DATE
+			);
+
+			dpf.setTargetFragment(JournalFragment.this, REQUEST_CHGED_DATE);
+			dpf.show(getActivity().getSupportFragmentManager(), DatePickerFragment.TAG);
+			//the result is delivered to OnDialoguePressedOk()
 		});
 
 		partyBtn = (Button) v.findViewById(R.id.fragment_home_party_btn);
-		partyBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-                UtilsView.alert(getActivity(), getString(R.string.warning_cant_change_party));
-			}
-		});
+		partyBtn.setOnClickListener(v14 -> UtilsView.alert(
+				getActivity(),
+				getString(R.string.warning_cant_change_party)
+		));
 
 		drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
-		drBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				journalChanged = true;
-				mJournal.setType(Journal.Type.Debit);
-                UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
-                setTextDrCr(mJournal.getType());
-			}
+		drBtn.setOnClickListener(v15 -> {
+			journalChanged = true;
+			mJournal.setType(Journal.Type.Debit);
+			UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
+			setTextDrCr(mJournal.getType());
 		});
 
 		crBtn = (Button) v.findViewById(R.id.fragment_home_credit_btn);
-		crBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                journalChanged = true;
-                mJournal.setType(Journal.Type.Credit);
-                UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
-                setTextDrCr(mJournal.getType());
-            }
-        });
+		crBtn.setOnClickListener(v16 -> {
+			journalChanged = true;
+			mJournal.setType(Journal.Type.Credit);
+			UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
+			setTextDrCr(mJournal.getType());
+		});
 
 		noteEt = (EditText) v.findViewById(R.id.fragment_home_note_et);
 		noteEt.addTextChangedListener(new TextWatcher() {
@@ -179,74 +176,75 @@ public class JournalFragment extends Fragment implements OnDatePickerDialogBtnCl
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
 		Button attachBtn = (Button) v.findViewById(R.id.fragment_home_attach_btn);
-		attachBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //open AttachmentViewPagerActivity to view attachments
-                Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
-                i.putExtra(Constants.KEY_JOURNAL_ID, mJournal.getId());
-                startActivity(i);
-            }
-        });
+		attachBtn.setOnClickListener(v12 -> {
+			// Open AttachmentViewPagerActivity to view attachments
+			Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
+			i.putExtra(Constants.KEY_JOURNAL_ID, mJournal.getId());
+			startActivity(i);
+		});
 
 		Button saveJournalBtn = (Button) v.findViewById(R.id.fragment_home_save_btn);
-		saveJournalBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+		saveJournalBtn.setOnClickListener(v1 -> {
 
-				// Check if the selected date is allowed
-				if (!mServices.isAllowedDateForJournal(mJournal.getDate())) {
-					UtilsView.showAlertDialogForInvalidJournalDate(getContext(), mJournal.getDate());
-                    return;
-				} else if (mServices.shouldShowAlertForPassingFinancialYearDate(
+			// Check if the selected date is allowed
+			if (!mServices.isAllowedDateForJournal(mJournal.getDate())) {
+				UtilsView.showAlertDialogForInvalidJournalDate(getContext(), mJournal.getDate());
+				return;
+			} else if (mServices.shouldShowAlertForPassingFinancialYearDate(
+					mJournal.getDate()
+			)) {
+				UtilsView.showAlertDialogForFutureJournalDate(
+						getContext(),
 						mJournal.getDate()
-				)) {
-					UtilsView.showAlertDialogForFutureJournalDate(
-							getContext(),
-							mJournal.getDate()
-					);
-					return;
+				);
+				return;
+			}
+
+			try{
+				UtilsFormat.parseCurrency(amountEt.getText().toString(), getActivity());
+				if (journalChanged) {
+					mServices.updateJournal(mJournal);
+					mJournal = null;
 				}
 
-                try{
-					UtilsFormat.parseCurrency(amountEt.getText().toString(), getActivity());
-					if (journalChanged) {
-						mServices.updateJournal(mJournal);
-						mJournal = null;
-					}
-					getActivity().finish(); //Finish the Activity once user is done changing
-
-					UtilsView.toast(getActivity(), String.format(getString(R.string.msg_saved),
-							getString(R.string.str_journal)));
-				}catch (NumberFormatException nfe){
-					UtilsView.alert(getActivity(), getString(R.string.msg_is_not_valid
-					,getString(R.string.str_amount)));
+				// Finish the Activity once user is done changing
+				if (getActivity() != null) {
+					getActivity().finish();
 				}
 
-            }
-        });
+				UtilsView.toast(
+						getActivity(),
+						String.format(getString(R.string.msg_saved),
+						getString(R.string.str_journal))
+				);
+			} catch (NumberFormatException nfe) {
+				UtilsView.alert(
+						getActivity(),
+						getString(R.string.msg_is_not_valid, getString(R.string.str_amount))
+				);
+			}
 
-		((FloatingActionButton)v.findViewById(R.id.fragment_home_mic_btn))
-				.setVisibility(View.INVISIBLE);
+		});
 
-        //Refresh values in UI
+		((FloatingActionButton) v.findViewById(
+				R.id.fragment_home_mic_btn
+		)).setVisibility(View.INVISIBLE);
+
+        // Refresh values in UI
 		setValues(mJournal, mParty);
 
 		return v;
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_fragment_journal, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -258,19 +256,20 @@ public class JournalFragment extends Fragment implements OnDatePickerDialogBtnCl
 				//Prepare warning msg
 				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_journal));
 				//Alert user before deleting the Journal
-				UtilsView.alert(getActivity(), msg, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						journalChanged = true;
-						mServices.deleteJournal(mJournal);
-						String msg = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
-						UtilsView.toast(getActivity(), msg);
+				UtilsView.alert(getActivity(), msg, (dialogInterface, i) -> {
+					journalChanged = true;
+					mServices.deleteJournal(mJournal);
+					String msg1 = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
+					UtilsView.toast(getActivity(), msg1);
+					if (getActivity() != null) {
 						getActivity().finish();
 					}
 				}, null);
 				break;
 			case android.R.id.home:
-				getActivity().onBackPressed();
+				if (getActivity() != null) {
+					getActivity().onBackPressed();
+				}
 				return true;
 		}
 
@@ -302,9 +301,13 @@ public class JournalFragment extends Fragment implements OnDatePickerDialogBtnCl
     /**
      * Sets the value and color of {@link #drTv} and {@link #amountEt} based on passed
      * Journal Type
-     * @param journalType
      */
 	private void setTextDrCr(Journal.Type journalType){
+
+		if (getActivity() == null) {
+			return;
+		}
+
 		int red   = ContextCompat.getColor(getActivity(), R.color.red_light_pressed);
 		int green = ContextCompat.getColor(getActivity(), R.color.green);
 
@@ -328,14 +331,21 @@ public class JournalFragment extends Fragment implements OnDatePickerDialogBtnCl
 
 		switch (requestCode) {
 
-			case REQUEST_CHGED_DATE: //A Date is selected
-				long newDate = ((Calendar) data.getSerializableExtra(DatePickerFragment.EXTRA_CAL)).getTimeInMillis();
+			case REQUEST_CHGED_DATE:
+				// A Date is selected
+				long newDate = ((Calendar) data.getSerializableExtra(
+						DatePickerFragment.EXTRA_CAL
+				)).getTimeInMillis();
 				if(newDate != mJournal.getDate()){
-					//Set journalChanged to true is the date is changed. Journal needs to be reordered
+					// Set journalChanged to true is the date is changed.
+					// Journal needs to be reordered
 					journalChanged = true;
 					mJournal.setDate(newDate);
 				}
-				dateBtn.setText(UtilsFormat.formatDate(new Date(mJournal.getDate()), getActivity()));
+				dateBtn.setText(UtilsFormat.formatDate(
+						new Date(mJournal.getDate()),
+						getActivity()
+				));
 				Log.d("Selected Date", String.valueOf(mJournal.getDate()));
 				break;
 
