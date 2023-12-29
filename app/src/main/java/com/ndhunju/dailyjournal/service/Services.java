@@ -54,7 +54,7 @@ public class Services {
     private static final String FILE_COMPANY_INFO = "info.properties";
     private static final String TAG = Services.class.getSimpleName();
 
-    //Variables
+    // Variables
     private Context mContext;
 
     private String mCompanyName;
@@ -67,16 +67,18 @@ public class Services {
     private SQLiteOpenHelper mSqLiteOpenHelper;
     private List<Listener> mListeners;
 
-    //DAOs
+    // DAOs
     private IPartyDAO partyDAO;
     private IJournalDAO journalDAO;
     private IAttachmentDAO attachmentDAO;
 
-    //Static variable
+    // Static variable
     private static Services mServices;
 
     public static Services getInstance(Context con) {
-        if (mServices == null)	mServices = new Services(con);
+        if (mServices == null || mServices.mCurrentFinancialYear == null) {
+            mServices = new Services(con);
+        }
         return mServices;
     }
 

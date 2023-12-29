@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.PagerAdapter;
+
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -20,22 +19,17 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.AppRater;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
-import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class HomeActivity extends NavDrawerActivity implements Services.Listener {
 
 	private static final int REQUEST_CODE_COMPANY_SETTING = 34534;
 
-    // member variables
+    // Member variables
 	Services mServices;
     boolean mRefreshNeeded;
 
-    // view variables
+    // View variables
     View mRefreshHomeBtn;
     TextView mCompanyName;
     ViewPager mSummaryPager;
@@ -45,6 +39,12 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
 	@Override
 	public void onCreate(android.os.Bundle arg0) {
 		super.onCreate(arg0);
+
+        // Initialize Services at the beginning
+        // since other view relies on this object
+        mServices = Services.getInstance(getContext());
+        mServices.addListener(this);
+        mRefreshNeeded = true;
 
         addContentFrame(R.layout.activity_home);
 
@@ -69,24 +69,15 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         mRecyclerView.setAdapter(new ShortCutAdapter(this));
 
         mSummaryPager = (ViewPager) findViewById(R.id.activity_home_summary_pager);
-        mSummaryPager.setAdapter(new SummaryPagerAdapter());
+        mSummaryPager.setAdapter(new SummaryPagerAdapter(mServices));
 
         TabLayout dotTabLayout = (TabLayout) findViewById(R.id.activity_home_tab_dots);
         dotTabLayout.setupWithViewPager(mSummaryPager);
 
         mRefreshHomeBtn = findViewById(R.id.activity_home_refresh_home);
-        mRefreshHomeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshHomeView();
-            }
-        });
+        mRefreshHomeBtn.setOnClickListener(v -> refreshHomeView());
 
         setupSizeForSummaryPager();
-
-		mServices = Services.getInstance(getContext());
-        mServices.addListener(this);
-        mRefreshNeeded = true;
 
 	}
 
@@ -94,13 +85,17 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (DisclaimerFragmentDialog.shouldShow(getContext())) {
-            getSupportFragmentManager().beginTransaction().add(new DisclaimerFragmentDialog(), null).commit();
+            getSupportFragmentManager().beginTransaction().add(
+                    new DisclaimerFragmentDialog(),
+                    null
+            ).commit();
         }
     }
 
     private void setupSizeForSummaryPager() {
 
-        mSummaryPager.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mSummaryPager.getViewTreeObserver()
+                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
 
@@ -116,7 +111,8 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
                     summaryPagerChildHeight += summaryRootView.getChildAt(i).getHeight();
                 }
                 // add top and bottom padding as well
-                summaryPagerChildHeight += summaryRootView.getPaddingBottom() + summaryRootView.getPaddingTop();
+                summaryPagerChildHeight += summaryRootView.getPaddingBottom()
+                        + summaryRootView.getPaddingTop();
                 // set the height because by default view pager covers the entire screen
                 ViewGroup.LayoutParams params = mSummaryPager.getLayoutParams();
                 params.height = summaryPagerChildHeight;
@@ -145,7 +141,7 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         // save the index of the summary page that user was viewing before refresh
         currentSummaryIndex = mSummaryPager.getCurrentItem();
         mRecyclerView.getAdapter().notifyDataSetChanged();
-        mSummaryPager.setAdapter(new SummaryPagerAdapter());
+        mSummaryPager.setAdapter(new SummaryPagerAdapter(mServices));
         mSummaryPager.setCurrentItem(currentSummaryIndex);
         setCompanySettings();
         mRefreshNeeded = false;
@@ -189,92 +185,6 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
                 R.string.str_no_thanks
         );
         rater.show();
-    }
-
-    private class SummaryPagerAdapter extends PagerAdapter {
-
-        private class Summary {
-
-            ViewGroup rootView;
-
-            void bind(ViewGroup layout) {
-                rootView = layout;
-
-                // format the label based on user's preferences
-                ((TextView) rootView.findViewById(R.id.item_summary_journal_count_label)).setText(getString(R.string.str_no_of_journal, UtilsFormat.getJournalFromPref(getContext())));
-                ((TextView) rootView.findViewById(R.id.item_summary_cr_text)).setText(UtilsFormat.getUserDrFromPref(getContext()));
-                ((TextView) rootView.findViewById(R.id.item_summary_dr_text)).setText(UtilsFormat.getUserCrFromPref(getContext()));
-
-            }
-
-        }
-
-        private class YearlySummary extends Summary{
-
-            @Override
-            void bind(ViewGroup layout) {
-                super.bind(layout);
-                double drBalance = mServices.getDebitTotal();
-                double crBalance = mServices.getCreditTotal();
-                double balance = drBalance - crBalance;
-
-                ((TextView) rootView.findViewById(R.id.item_summary_title)).setText(getString(R.string.msg_financial_year, UtilsFormat.formatDate(mServices.getFinancialYear(), getContext())));
-                ((TextView) rootView.findViewById(R.id.item_summary_journal_count)).setText(String.valueOf(mServices.getTotalJournalCount()));
-                ((TextView) rootView.findViewById(R.id.item_summary_dr_balance)).setText(UtilsFormat.formatCurrency(drBalance, getContext()));
-                ((TextView) rootView.findViewById(R.id.item_summary_cr_balance)).setText(UtilsFormat.formatCurrency(crBalance, getContext()));
-                ((TextView) rootView.findViewById(R.id.item_summary_total_balance)).setText(UtilsFormat.formatCurrency(balance, getContext()));
-            }
-        }
-
-        private class TodaysSummary extends Summary {
-
-            @Override
-            void bind(ViewGroup layout) {
-                super.bind(layout);
-                mServices.calculateTodaysDrCrTotal();
-                double drBalance = mServices.getTodaysDebit();
-                double crBalance = mServices.getTodaysCredit();
-                double balance = drBalance - crBalance;
-
-                ((TextView) rootView.findViewById(R.id.item_summary_title)).setText(getString(R.string.msg_todays_date, UtilsFormat.formatDate(new Date(), getContext())));
-                ((TextView) rootView.findViewById(R.id.item_summary_journal_count)).setText(String.valueOf(mServices.getTodaysJournalCount()));
-                ((TextView) rootView.findViewById(R.id.item_summary_dr_balance)).setText(UtilsFormat.formatCurrency(drBalance, getContext()));
-                ((TextView) rootView.findViewById(R.id.item_summary_cr_balance)).setText(UtilsFormat.formatCurrency(crBalance, getContext()));
-                ((TextView) rootView.findViewById(R.id.item_summary_total_balance)).setText(UtilsFormat.formatCurrency(balance, getContext()));
-            }
-        }
-
-        private List<Summary> summaries;
-
-        public SummaryPagerAdapter() {
-            summaries = new ArrayList<>();
-            summaries.add(new TodaysSummary());
-            summaries.add(new YearlySummary());
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup collection, int position) {
-            ViewGroup root = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.item_summary, collection, false);
-            summaries.get(position).bind(root);
-            collection.addView(root);
-            return root;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup collection, int position, Object view) {
-            collection.removeView((View) view);
-        }
-
-        @Override
-        public int getCount() {
-            return summaries.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
     }
 
 }
