@@ -295,15 +295,15 @@ public class Services {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         boolean success = false;
         db.beginTransaction();
-        try{
+        try {
             deleteAllJournals(party.getId());
             UtilsFile.deleteFile(party.getPicturePath());
             partyDAO.delete(party);
             db.setTransactionSuccessful();
             success = true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             db.endTransaction();
         }
         return success;
@@ -528,20 +528,26 @@ public class Services {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         db.beginTransaction();
         boolean success =false;
-        try{
-            //delete the relevant attachments
-            for(Attachment attch : attachmentDAO.findAll(journal.getId()))
+        try {
+            // Delete the relevant attachments
+            for (Attachment attch : attachmentDAO.findAll(journal.getId())) {
                 deleteAttachment(attch);
-            //delete the journal
+            }
+
+            // Delete the journal
             journalDAO.delete(journal);
-            //subtract from the Dr/Cr column in party table
-            if(!(updatePartyAmount(journal, "-") > 0))
+
+            // Subtract from the Dr/Cr column in party table
+            if(!(updatePartyAmount(journal, "-") > 0)) {
                 throw new Exception("No rows updated");
+            }
+
             db.setTransactionSuccessful();
             success = true;
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
-        }finally {
+            AnalyticsService.INSTANCE.logEvent("didFailDeleteJournal", e.getMessage());
+        } finally {
             db.endTransaction();
         }
 
@@ -569,12 +575,23 @@ public class Services {
      * @return
      */
     private boolean deleteAllJournals(long partyId){
-        for(Journal j : journalDAO.findAll(partyId))
-            for(Attachment attch : attachmentDAO.findAll(j.getId()))
-                if(!deleteAttachment(attch))
-                    return false;
+        List<Journal> journals = journalDAO.findAll(partyId);
+        int deletedJournalCount = 0;
+        for (Journal journal : journals) {
+            boolean isSuccess = deleteJournal(journal);
+            if (isSuccess) {
+                deletedJournalCount++;
+            }
+        }
 
-        return true;
+        if (deletedJournalCount != journals.size()) {
+            AnalyticsService.INSTANCE.logEvent(
+                    "didFailDeleteAllJournal",
+                    "Deleted only " + deletedJournalCount + "/" + journals.size()
+            );
+        }
+
+        return deletedJournalCount == journals.size();
     }
 
     /**
@@ -849,8 +866,13 @@ public class Services {
         // 2. Delete the physical file from storage only,
         // if the file is not shared between 2 attachments
         if (linkedAttachment == null) {
-            if (!UtilsFile.deleteFile(attch.getPath()))
+            if (!UtilsFile.deleteFile(attch.getPath())) {
+                AnalyticsService.INSTANCE.logEvent(
+                        "didFailDeleteFile",
+                        "Path=" + attch.getPath()
+                );
                 return false;
+            }
         }
 
         // 3. Delete from the database

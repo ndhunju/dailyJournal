@@ -8,7 +8,7 @@ public interface IJournalDAO extends IGenericDAO<Journal, Long> {
 
     List<Journal> findAll(long partyId);
 
-    void deleteAll(long partyId);
+    int deleteAll(long partyId);
 
     int truncateTable();
 

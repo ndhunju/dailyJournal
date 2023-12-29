@@ -26,7 +26,13 @@ object AnalyticsService {
         firebase?.logEvent(name, null)
     }
 
-    fun logEvent(name: String, info: String) {
+    fun logEvent(name: String, info: String?) {
+
+        if (info == null) {
+            logEvent(name)
+            return
+        }
+
         val bundle = Bundle()
         bundle.putString("Info", info)
         firebase?.logEvent(name, bundle)

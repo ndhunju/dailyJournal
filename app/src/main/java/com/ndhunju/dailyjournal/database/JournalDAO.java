@@ -285,10 +285,16 @@ public class JournalDAO implements IJournalDAO {
 //    }
 
     @Override
-    public void deleteAll(long partyId){
+    public int deleteAll(long partyId){
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
-        db.delete(JournalColumns.TABLE_JOURNAL,
-                DailyJournalContract.PartyColumns.PARTY_ID + "=" + partyId, null);
+        // Only 1 is being returned for some reason. Needs further investigation
+        int affectedRowCount = db.delete(
+                JournalColumns.TABLE_JOURNAL,
+                DailyJournalContract.PartyColumns.PARTY_ID + "=" + partyId,
+                null
+        );
+
+        return affectedRowCount;
     }
 
     @Override
