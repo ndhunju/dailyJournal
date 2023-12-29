@@ -27,6 +27,7 @@ import com.ndhunju.dailyjournal.controller.party.PartyListDialog;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AdManager;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
@@ -177,25 +178,17 @@ public class JournalFragmentNew extends Fragment implements OnDatePickerDialogBt
         }
 
         drBtn = (Button) v.findViewById(R.id.fragment_home_debit_btn);
-        drBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                tempJournal.setType(Journal.Type.Debit);
-                UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
-                setTextDrCr(tempJournal.getType());
-            }
+        drBtn.setOnClickListener(v12 -> {
+            tempJournal.setType(Journal.Type.Debit);
+            UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
+            setTextDrCr(tempJournal.getType());
         });
 
         crBtn = (Button) v.findViewById(R.id.fragment_home_credit_btn);
-        crBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                tempJournal.setType(Journal.Type.Credit);
-                UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
-                setTextDrCr(tempJournal.getType());
-            }
+        crBtn.setOnClickListener(v13 -> {
+            tempJournal.setType(Journal.Type.Credit);
+            UtilsView.performTransition(R.id.fragment_home_dr_cr_ll, getActivity());
+            setTextDrCr(tempJournal.getType());
         });
 
         noteEt = (EditText) v.findViewById(R.id.fragment_home_note_et);
@@ -206,77 +199,67 @@ public class JournalFragmentNew extends Fragment implements OnDatePickerDialogBt
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         Button attachBtn = (Button) v.findViewById(R.id.fragment_home_attach_btn);
-        attachBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                //open AttachmentViewPagerActivity to view attachments
-                Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
-                i.putExtra(Constants.KEY_JOURNAL_ID, tempJournal.getId());
-                startActivity(i);
-            }
+        attachBtn.setOnClickListener(v14 -> {
+            // Open AttachmentViewPagerActivity to view attachments
+            Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
+            i.putExtra(Constants.KEY_JOURNAL_ID, tempJournal.getId());
+            startActivity(i);
         });
 
         Button saveJournalBtn = (Button) v.findViewById(R.id.fragment_home_save_btn);
-        saveJournalBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        saveJournalBtn.setOnClickListener(v15 -> {
 
-                // if mParty is not selected warn user
-                if (mParty == null) {
-                    UtilsView.alert(getActivity(), getString(R.string.warning_select_party));
-                    return;
-                }
-
-                // Party might have been deleted. one way is from Party dialog -> context menu -> delete
-                if (mServices.getParty(mParty.getId()) == null) {
-                    UtilsView.alert(getActivity(), getString(R.string.warning_party_not_found));
-                    return;
-                }
-
-                // Check if the selected date is allowed
-                if (!mServices.isAllowedDateForJournal(tempJournal.getDate())) {
-                    UtilsView.showAlertDialogForInvalidJournalDate(
-                            getContext(),
-                            tempJournal.getDate()
-                    );
-                    return;
-                } else if (mServices.shouldShowAlertForPassingFinancialYearDate(
-                        tempJournal.getDate()
-                )) {
-                    UtilsView.showAlertDialogForFutureJournalDate(
-                            getContext(),
-                            tempJournal.getDate()
-                    );
-                    return;
-                }
-
-                mServices.updateNewJournal(tempJournal);
-                //Save selected values so that user doesn't have to selected them again
-                long selectedDate = tempJournal.getDate();
-                long selectedPartyId = tempJournal.getPartyId();
-                Journal.Type selectedType = tempJournal.getType();
-
-                //Create new instance of Journal
-                tempJournal = mServices.getNewJournal();
-                tempJournal.setDate(selectedDate);
-                tempJournal.setPartyId(selectedPartyId);
-                tempJournal.setType(selectedType);
-                setValues(tempJournal, mParty);
-
-                UtilsView.toast(getActivity(), String.format(getString(R.string.msg_saved),
-                        getString(R.string.str_journal)));
+            // If mParty is not selected warn user
+            if (mParty == null) {
+                UtilsView.alert(getActivity(), getString(R.string.warning_select_party));
+                return;
             }
+
+            // Party might have been deleted. one way is from Party dialog -> context menu -> delete
+            if (mServices.getParty(mParty.getId()) == null) {
+                UtilsView.alert(getActivity(), getString(R.string.warning_party_not_found));
+                return;
+            }
+
+            // Check if the selected date is allowed
+            if (!mServices.isAllowedDateForJournal(tempJournal.getDate())) {
+                UtilsView.showAlertDialogForInvalidJournalDate(
+                        getContext(),
+                        tempJournal.getDate()
+                );
+                return;
+            } else if (mServices.shouldShowAlertForPassingFinancialYearDate(
+                    tempJournal.getDate()
+            )) {
+                UtilsView.showAlertDialogForFutureJournalDate(
+                        getContext(),
+                        tempJournal.getDate()
+                );
+                return;
+            }
+
+            mServices.updateNewJournal(tempJournal);
+            // Save selected values so that user doesn't have to selected them again
+            long selectedDate = tempJournal.getDate();
+            long selectedPartyId = tempJournal.getPartyId();
+            Journal.Type selectedType = tempJournal.getType();
+
+            // Create new instance of Journal
+            tempJournal = mServices.getNewJournal();
+            tempJournal.setDate(selectedDate);
+            tempJournal.setPartyId(selectedPartyId);
+            tempJournal.setType(selectedType);
+            setValues(tempJournal, mParty);
+
+            UtilsView.toast(getActivity(), String.format(getString(R.string.msg_saved),
+                    getString(R.string.str_journal)));
         });
 
         /*ImageView settingImageView = (ImageView) v.findViewById(R.id.fragment_home_settings_btn);
@@ -293,20 +276,26 @@ public class JournalFragmentNew extends Fragment implements OnDatePickerDialogBt
         });*/
 
         ((FloatingActionButton)v.findViewById(R.id.fragment_home_mic_btn))
-                .setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Create an intent that can start the Speech Recognizer activity
-                        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                        // Start the activity, the intent will be populated with the speech text
-                        startActivityForResult(intent, REQUEST_CODE_SPEECH);
-                        AnalyticsService.INSTANCE.logEvent("didClickOnMicInNewJournal");
-                    }
+                .setOnClickListener(v16 -> {
+                    // Create an intent that can start the Speech Recognizer activity
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(
+                            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                    );
+                    // Start the activity, the intent will be populated with the speech text
+                    startActivityForResult(intent, REQUEST_CODE_SPEECH);
+                    AnalyticsService.INSTANCE.logEvent("didClickOnMicInNewJournal");
                 });
 
+        AdManager.INSTANCE.loadAdIfAllowed(
+                v.findViewById(R.id.fragment_journal_ads_layout),
+                getString(R.string.admob_new_journal_ad_unit_id),
+                "NewJournalScreen"
+        );
 
-        //Refresh values in UI
+
+        // Refresh values in UI
         setValues(tempJournal, mParty);
 
         return v;
