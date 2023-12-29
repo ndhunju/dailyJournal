@@ -217,7 +217,9 @@ public class Services {
             properties.load(inputStream);
             inputStream.close();
             setCompanyName(properties.getProperty(KEY_COMPANY_NAME));
-            setFinancialYear(new Date(Long.parseLong(properties.getProperty(KEY_FINANCIAL_YEAR))));
+            // When loading company info from file, mCurrentFinancialYear is already set. So the one
+            // from the file is not set unless forced.
+            forceSetFinancialYear(new Date(Long.parseLong(properties.getProperty(KEY_FINANCIAL_YEAR))));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
