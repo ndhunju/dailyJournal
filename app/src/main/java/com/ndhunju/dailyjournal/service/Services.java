@@ -781,7 +781,9 @@ public class Services {
                && !UtilsDate.isSameDay(financialYear, mCurrentFinancialYear)) {
             // don't allow to change mCurrentFinancialYear if already set because there could be
             // journal with date that might be outside the range of this new financial year
-            throw new IllegalStateException("Current financial year is already set.");
+            if (getJournals().size() > 0) {
+                throw new IllegalStateException("Current financial year is already set.");
+            }
         }
 
         mCurrentFinancialYear = financialYear;
