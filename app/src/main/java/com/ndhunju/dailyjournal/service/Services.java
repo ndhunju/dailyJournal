@@ -59,6 +59,11 @@ public class Services {
 
     private String mCompanyName;
     private Date mCurrentFinancialYear;
+    /**
+     * Should {@link com.ndhunju.dailyjournal.controller.home.HomeActivity} refresh when
+     * user comes to that activity
+     */
+    public boolean shouldRefreshHomeScreen = true;
 
     private double mTodaysTotalDr;
     private double mTodaysTotalCr;
@@ -448,6 +453,7 @@ public class Services {
             journalDAO.update(newJournal);
             updatePartyAmount(newJournal, "+");
             db.setTransactionSuccessful();
+            shouldRefreshHomeScreen = true;
         }catch (Exception e){
             //can have custom exception such as negative balance
             e.printStackTrace();
@@ -509,6 +515,7 @@ public class Services {
             updatePartyAmount(journal, "+");
             id = journalDAO.create(journal);
             db.setTransactionSuccessful();
+            shouldRefreshHomeScreen = true;
         }catch (Exception e){
             //can have custom exception such as negative balance
             e.printStackTrace();
@@ -543,6 +550,7 @@ public class Services {
             }
 
             db.setTransactionSuccessful();
+            shouldRefreshHomeScreen = true;
             success = true;
         } catch (Exception e){
             e.printStackTrace();
@@ -627,6 +635,7 @@ public class Services {
             journalDAO.update(journal);
 
             db.setTransactionSuccessful();
+            shouldRefreshHomeScreen = true;
             success = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -781,6 +790,7 @@ public class Services {
     public void setCompanyName(String name) {
         mCompanyName = name;
         PreferenceService.from(mContext).putVal(KEY_COMPANY_NAME, name);
+        shouldRefreshHomeScreen = true;
     }
 
     public Date getFinancialYear() {
@@ -807,11 +817,13 @@ public class Services {
 
         mCurrentFinancialYear = financialYear;
         PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
+        shouldRefreshHomeScreen = true;
     }
 
     public void forceSetFinancialYear(Date financialYear) {
         mCurrentFinancialYear = financialYear;
         PreferenceService.from(mContext).putVal(KEY_FINANCIAL_YEAR, financialYear.getTime());
+        shouldRefreshHomeScreen = true;
     }
 
     public boolean hasValidCompanyInfo() {
@@ -821,6 +833,7 @@ public class Services {
     public void clearCompanyInfo() {
         mCompanyName = null;
         mCurrentFinancialYear = null;
+        shouldRefreshHomeScreen = true;
     }
 
     /********************ATTACHMENT SERVICES ************************/
@@ -984,6 +997,7 @@ public class Services {
     private boolean dropJournalTable() {
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         db.execSQL(DailyJournalContract.JournalColumns.SQL_DROP_ENTRIES_JOURNALS);
+        shouldRefreshHomeScreen = true;
         return true;
     }
 

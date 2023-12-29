@@ -30,7 +30,6 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
 
     // Member variables
 	Services mServices;
-    boolean mRefreshNeeded;
 
     // View variables
     View mRefreshHomeBtn;
@@ -47,7 +46,6 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         // since other view relies on this object
         mServices = Services.getInstance(getContext());
         mServices.addListener(this);
-        mRefreshNeeded = true;
 
         addContentFrame(R.layout.activity_home);
 
@@ -131,7 +129,7 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
     @Override
     protected void onResume() {
         super.onResume();
-        if (mRefreshNeeded) {
+        if (mServices.shouldRefreshHomeScreen) {
            refreshHomeView();
         }
 
@@ -148,7 +146,7 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         mSummaryPager.setAdapter(new SummaryPagerAdapter(mServices));
         mSummaryPager.setCurrentItem(currentSummaryIndex);
         setCompanySettings();
-        mRefreshNeeded = false;
+        mServices.shouldRefreshHomeScreen = false;
     }
 
 	private boolean setCompanySettings() {
@@ -172,7 +170,6 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
 
     @Override
     public void onEraseAll() {
-        mRefreshNeeded = true;
         ((ShortCutAdapter) mRecyclerView.getAdapter()).clearSelectedShortCuts();
     }
 
