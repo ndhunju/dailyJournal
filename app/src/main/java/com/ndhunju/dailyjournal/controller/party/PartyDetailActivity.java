@@ -3,10 +3,13 @@ package com.ndhunju.dailyjournal.controller.party;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.annotation.Nullable;
 import androidx.core.app.NavUtils;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
@@ -15,6 +18,7 @@ import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.PreferenceService;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
+import com.ndhunju.dailyjournal.util.UtilsView;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -76,17 +80,19 @@ public class PartyDetailActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
-        if(getSupportActionBar() != null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton newJournalFab = (FloatingActionButton) findViewById(R.id.activity_party_detail_fab);
-        newJournalFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newPartyIntent = new Intent(PartyDetailActivity.this, JournalNewActivity.class);
-                newPartyIntent.putExtra(Constants.KEY_PARTY_ID, getIntent().getStringExtra(Constants.KEY_PARTY_ID));
-                startActivity(newPartyIntent);
-            }
+        FloatingActionButton newJournalFab = (FloatingActionButton) findViewById(
+                R.id.activity_party_detail_fab
+        );
+        newJournalFab.setOnClickListener(v -> {
+            Intent newPartyIntent = new Intent(PartyDetailActivity.this, JournalNewActivity.class);
+            newPartyIntent.putExtra(
+                    Constants.KEY_PARTY_ID,
+                    getIntent().getStringExtra(Constants.KEY_PARTY_ID)
+            );
+            startActivity(newPartyIntent);
         });
 
     }
@@ -106,6 +112,19 @@ public class PartyDetailActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // Load the Ad
+        FrameLayout adViewContainer = findViewById(R.id.activity_party_detail_ad_view);
+        UtilsView.addAdView(
+                adViewContainer,
+                getString(R.string.admob_party_detail_ad_unit_id),
+                "PartyDetailScreen"
+        );
     }
 
     @Override

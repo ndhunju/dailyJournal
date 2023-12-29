@@ -1,6 +1,6 @@
 package com.ndhunju.dailyjournal.util;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -8,8 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,11 +22,18 @@ import android.view.Menu;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.StartNextYearActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;
 
 import java.util.Date;
@@ -187,6 +195,39 @@ public class UtilsView {
         itemAnimator.setAddDuration(500);
         itemAnimator.setChangeDuration(100);
         return itemAnimator;
+    }
+
+    @SuppressLint("MissingPermission") // It is already added
+    public static void addAdView(
+            @Nullable FrameLayout adViewContainer,
+            @NonNull String adUnitId,
+            @NonNull String screenName
+    ) {
+        if (adViewContainer == null) {
+            return;
+        }
+
+        AdView adView = new AdView(adViewContainer.getContext());
+        adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId(adUnitId);
+        adViewContainer.addView(adView);
+        adView.setAdListener(new AdListener() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                AnalyticsService.INSTANCE.logEvent(
+                        "didFailToLoadAdIn" + screenName,
+                        String.format(
+                                "domain: %s, code: %d, message: %s",
+                                loadAdError.getDomain(),
+                                loadAdError.getCode(),
+                                loadAdError.getMessage()
+                        ));
+            }
+        });
+
+        adView.loadAd(new AdRequest.Builder().build());
     }
 
 }

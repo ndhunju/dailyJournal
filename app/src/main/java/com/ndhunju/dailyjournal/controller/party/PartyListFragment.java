@@ -206,31 +206,13 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         return rootView;
     }
 
-    @SuppressLint("MissingPermission") // It is already added
-    private void addAdView(FrameLayout adViewContainer) {
-        AdView adView = new AdView(adViewContainer.getContext());
-        adView.setAdSize(AdSize.BANNER);
-        adView.setAdUnitId(getString(R.string.admob_party_list_ad_unit_id));
-        adViewContainer.addView(adView);
-        adView.setAdListener(new AdListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                super.onAdFailedToLoad(loadAdError);
-                AnalyticsService.INSTANCE.logEvent(
-                        "didFailToLoadAdInPartyListScreen",
-                        String.format(
-                                "domain: %s, code: %d, message: %s",
-                                loadAdError.getDomain(),
-                                loadAdError.getCode(),
-                                loadAdError.getMessage()
-                        ));
-            }
-        });
-
-        adView.loadAd(new AdRequest.Builder().build());
+    public void addAdView(FrameLayout adViewContainer) {
+        UtilsView.addAdView(
+                adViewContainer,
+                getString(R.string.admob_party_list_ad_unit_id),
+                "PartyListScreen"
+        );
     }
-
 
     private RecyclerView getListView(){
         return mPartyLV;
