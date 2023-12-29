@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.service
 import android.annotation.SuppressLint
 import android.view.View
 import com.google.android.gms.ads.*
+import com.ndhunju.dailyjournal.BuildConfig
 import com.ndhunju.dailyjournal.R
 import com.ndhunju.dailyjournal.controller.DailyJournalApplication
 import com.ndhunju.dailyjournal.controller.ads.AdsLayout
@@ -11,6 +12,12 @@ import com.ndhunju.dailyjournal.service.AnalyticsService.logEvent
 object AdManager {
 
     init {
+        if (BuildConfig.DEBUG) {
+            MobileAds.setRequestConfiguration(RequestConfiguration.Builder()
+                .setTestDeviceIds(listOf(AdRequest.DEVICE_ID_EMULATOR))
+                .build()
+            )
+        }
         MobileAds.initialize(DailyJournalApplication.getInstance()) {}
     }
 

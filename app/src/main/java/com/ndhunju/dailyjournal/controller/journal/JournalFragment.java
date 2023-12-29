@@ -28,6 +28,7 @@ import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AdManager;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
@@ -236,6 +237,12 @@ public class JournalFragment extends Fragment implements OnDatePickerDialogBtnCl
 		((FloatingActionButton) v.findViewById(
 				R.id.fragment_home_mic_btn
 		)).setVisibility(View.INVISIBLE);
+
+		AdManager.INSTANCE.loadAdIfAllowed(
+				v.findViewById(R.id.fragment_journal_ads_layout),
+				getString(R.string.admob_journal_ad_unit_id),
+				"JournalScreen"
+		);
 
         // Refresh values in UI
 		setValues(mJournal, mParty);
