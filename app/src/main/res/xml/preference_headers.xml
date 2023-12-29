@@ -29,9 +29,12 @@
         android:summary="@string/pref_ad_summary"
         />
 
+    <!-- The title and summary are changed at runtime based on user's preference for Journal word-->
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="@string/key_pref_allow_out_of_range_entry"
+        android:title="@string/pref_allow_out_of_range_journal_entry"
+        android:summary="@string/pref_summary_allow_out_of_range_journal_entry"
         />
 
 
