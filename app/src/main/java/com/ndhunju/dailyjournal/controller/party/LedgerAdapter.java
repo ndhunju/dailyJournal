@@ -18,6 +18,7 @@ import com.ndhunju.dailyjournal.controller.journal.JournalPagerActivity;
 import com.ndhunju.dailyjournal.database.JournalDAO;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsView;
@@ -158,6 +159,15 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
     }
     @Override
     public void onJournalAdded(Journal journal) {
+        // New journal added should be associated with a party
+        if (mParty == null) {
+            AnalyticsService.INSTANCE.logEvent(
+                    "onJournalAdded",
+                    "mParty is null: Stacktrace" + new Throwable()
+            );
+            return;
+        }
+
         // check if it is for current party
         if (journal.getPartyId() != mParty.getId()) {
             return;
@@ -179,9 +189,13 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
 
     @Override
     public void onJournalChanged(Journal journal) {
-        // check if it is for current party
-        if (mParty != null && journal.getPartyId() != mParty.getId()) {
-            return;
+        // Party can be null when this Adapter is used in SearchNotesActivity
+        // where journal from different parties are shown
+        if (mParty != null) {
+            // Check if it is for current party
+            if (journal.getPartyId() != mParty.getId()) {
+                return;
+            }
         }
 
         int pos;
@@ -227,9 +241,13 @@ public abstract class LedgerAdapter extends RecyclerView.Adapter implements Jour
 
     @Override
     public void onJournalDeleted(Journal journal) {
-        // check if it is for current party
-        if (journal.getPartyId() != mParty.getId()) {
-            return;
+        // Party can be null when this Adapter is used in SearchNotesActivity
+        // where journal from different parties are shown
+        if (mParty != null) {
+            // Check if it is for current party
+            if (journal.getPartyId() != mParty.getId()) {
+                return;
+            }
         }
 
         // check if Journal's position was set in the tag

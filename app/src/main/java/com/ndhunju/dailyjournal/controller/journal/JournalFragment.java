@@ -43,7 +43,7 @@ import java.util.Date;
 public class JournalFragment extends JournalFragmentBase implements OnDatePickerDialogBtnClickedListener {
 
     //Constants
-	private static final String TAG = JournalFragment.class.getSimpleName();
+	public static final String TAG = JournalFragment.class.getSimpleName();
     private static final int REQUEST_CHGED_DATE = 6656;
 
 	private EditText amountEt;

@@ -1,5 +1,6 @@
 package com.ndhunju.dailyjournal.controller.tools;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,10 +14,12 @@ import android.widget.EditText;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
+import com.ndhunju.dailyjournal.controller.journal.JournalActivity;
 import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
 import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
+import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 
@@ -43,7 +46,9 @@ public class SearchNotesActivity extends BaseActivity implements LedgerAdapter.O
         toolbar.setTitle(UtilsFormat.getJournalFromPref(this));
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         keywordEditText = (EditText) findViewById(R.id.activity_search_notes_keyword);
         searchJournalNotes = (Button) findViewById(R.id.activity_search_notes_search);
@@ -59,7 +64,7 @@ public class SearchNotesActivity extends BaseActivity implements LedgerAdapter.O
             }
         });
 
-        ledgerAdapter = new LedgerCardAdapter(this, new ArrayList<Journal>());
+        ledgerAdapter = new LedgerCardAdapter(this, new ArrayList<>());
         ledgerAdapter.setOnItemClickListener(SearchNotesActivity.this);
         Services.getInstance(this).registerJournalObserver(ledgerAdapter);
         recyclerView.setAdapter(ledgerAdapter);
@@ -88,6 +93,11 @@ public class SearchNotesActivity extends BaseActivity implements LedgerAdapter.O
         for (int i = 0; i < journalList.size(); i++)
             ids[i] = journalList.get(i).getId();
 
+        // Show only one journal without pager in favor of being able to delete it
+//        Intent intent = new Intent(this, JournalActivity.class);
+//        intent.putExtra(Constants.KEY_JOURNAL_POS, position);
+//        intent.putExtra(Constants.KEY_JOURNAL_ID, journalList.get(position).getId());
+//        startActivity(intent);
         LedgerAdapter.createJournalIntent(this, ids, position);
     }
 

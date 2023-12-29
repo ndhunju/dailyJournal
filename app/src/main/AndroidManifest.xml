@@ -170,6 +170,8 @@
 
         <activity android:name=".controller.tutorial.TutorialActivity"/>
 
+        <activity android:name=".controller.journal.JournalActivity"/>
+
     </application>
 
 </manifest>
