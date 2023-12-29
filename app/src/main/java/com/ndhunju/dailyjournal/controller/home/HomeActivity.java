@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.CompanySettingsActivity;
+import com.ndhunju.dailyjournal.controller.NavDrawerActivity;
 import com.ndhunju.dailyjournal.controller.fragment.AppRater;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Services;

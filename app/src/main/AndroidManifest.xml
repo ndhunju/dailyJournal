@@ -70,7 +70,7 @@
             android:label="@string/title_activity_company_settings"
             />
 
-        <activity android:name="com.ndhunju.dailyjournal.controller.HomeActivity"
+        <activity android:name="com.ndhunju.dailyjournal.controller.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -114,22 +114,22 @@
         </receiver>
 
         <activity
-            android:name="com.ndhunju.dailyjournal.controller.ChartsActivity"
+            android:name="com.ndhunju.dailyjournal.controller.tools.ChartsActivity"
             android:label="@string/title_activity_charts" >
         </activity>
 
-        <activity android:name="com.ndhunju.dailyjournal.controller.JournalPagerActivity"
+        <activity android:name="com.ndhunju.dailyjournal.controller.journal.JournalPagerActivity"
             android:label="@string/title_activity_journal"/>
 
         <activity android:name="com.ndhunju.dailyjournal.controller.backup.BackupActivity"
             android:label="@string/str_backup"/>
 
-        <activity android:name="com.ndhunju.dailyjournal.controller.SpannedLedgerListActivity"
+        <activity android:name="com.ndhunju.dailyjournal.controller.tools.SpannedLedgerListActivity"
             android:label="@string/str_journal"/>
 
-        <activity android:name="com.ndhunju.dailyjournal.controller.SearchNotesActivity"/>
+        <activity android:name="com.ndhunju.dailyjournal.controller.tools.SearchNotesActivity"/>
 
-        <activity android:name="com.ndhunju.dailyjournal.controller.ToolsActivity"
+        <activity android:name="com.ndhunju.dailyjournal.controller.tools.ToolsActivity"
             android:label="@string/str_tools"/>
 
         <activity android:name=".controller.backup.GoogleDriveRestApiActivity"
@@ -155,10 +155,10 @@
         <activity android:name=".controller.erase.EraseActivity"
             android:label="@string/title_activity_erase"/>
 
-        <activity android:name=".controller.StartNextYearActivity"
+        <activity android:name=".controller.tools.StartNextYearActivity"
             android:label="@string/title_activity_start_next_year"/>
 
-        <activity android:name=".controller.DailyReportActivity"
+        <activity android:name=".controller.tools.DailyReportActivity"
             android:label="@string/title_activity_daily_report"/>
 
         <activity android:name=".controller.backup.GoogleDriveSignInActivity" />
@@ -166,7 +166,7 @@
         <activity android:name=".controller.export.ExportPrintableActivity"
             android:label="@string/str_export_printable"/>
 
-        <activity android:name=".controller.InternalToolsActivity"/>
+        <activity android:name=".controller.tools.InternalToolsActivity"/>
 
     </application>
 

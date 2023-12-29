@@ -14,7 +14,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.ndhunju.dailyjournal.BuildConfig;
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.HomeActivity;
+import com.ndhunju.dailyjournal.controller.home.HomeActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment;
 

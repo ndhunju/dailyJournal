@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.tools;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.mpAndroidCharts.PieChartFrag;
 import com.ndhunju.dailyjournal.service.Analytics;
 import com.ndhunju.dailyjournal.service.AnalyticsService;

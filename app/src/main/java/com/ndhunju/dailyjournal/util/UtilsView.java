@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.StartNextYearActivity;
+import com.ndhunju.dailyjournal.controller.tools.StartNextYearActivity;
 import com.ndhunju.dailyjournal.controller.preference.MyPreferenceActivity;
 import com.ndhunju.dailyjournal.service.Services;
 

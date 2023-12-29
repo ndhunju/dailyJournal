@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.tools;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.NavDrawerActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
 import com.ndhunju.dailyjournal.controller.export.ExportPrintableActivity;

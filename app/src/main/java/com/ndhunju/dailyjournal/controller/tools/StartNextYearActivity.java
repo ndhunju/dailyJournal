@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.tools;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity;
 import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment;
 import com.ndhunju.dailyjournal.service.AnalyticsService;

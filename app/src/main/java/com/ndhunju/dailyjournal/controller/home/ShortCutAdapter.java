@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.home;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,6 +16,10 @@ import com.ndhunju.dailyjournal.controller.erase.EraseActivity;
 import com.ndhunju.dailyjournal.controller.export.ExportPrintableActivity;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyListActivity;
+import com.ndhunju.dailyjournal.controller.tools.ChartsActivity;
+import com.ndhunju.dailyjournal.controller.tools.DailyReportActivity;
+import com.ndhunju.dailyjournal.controller.tools.SearchNotesActivity;
+import com.ndhunju.dailyjournal.controller.tools.SpannedLedgerListActivity;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.KeyValPersistence;
 import com.ndhunju.dailyjournal.util.UtilsFormat;

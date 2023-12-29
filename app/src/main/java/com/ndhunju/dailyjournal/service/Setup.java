@@ -2,7 +2,7 @@ package com.ndhunju.dailyjournal.service;
 
 import android.content.Context;
 
-import com.ndhunju.dailyjournal.controller.ShortCutAdapter;
+import com.ndhunju.dailyjournal.controller.home.ShortCutAdapter;
 
 /**
  * Created by dhunju on 10/4/2015.

@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.ndhunju.dailyjournal.controller.JournalPagerActivity;
+import com.ndhunju.dailyjournal.controller.journal.JournalPagerActivity;
 import com.ndhunju.dailyjournal.controller.journal.JournalNewActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyActivity;
 import com.ndhunju.dailyjournal.controller.party.PartyDetailActivity;

@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.home;
 
 import android.content.Context;
 import android.view.LayoutInflater;

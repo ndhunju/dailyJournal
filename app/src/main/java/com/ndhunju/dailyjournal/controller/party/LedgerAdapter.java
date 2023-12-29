@@ -14,7 +14,7 @@ import android.view.View;
 import com.ndhunju.dailyjournal.ObservableField;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.IconTextAdapter;
-import com.ndhunju.dailyjournal.controller.JournalPagerActivity;
+import com.ndhunju.dailyjournal.controller.journal.JournalPagerActivity;
 import com.ndhunju.dailyjournal.database.JournalDAO;
 import com.ndhunju.dailyjournal.model.Journal;
 import com.ndhunju.dailyjournal.model.Party;

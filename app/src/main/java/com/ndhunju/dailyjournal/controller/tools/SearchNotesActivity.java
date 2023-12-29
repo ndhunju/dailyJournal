@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.tools;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.BaseActivity;
 import com.ndhunju.dailyjournal.controller.party.LedgerAdapter;
 import com.ndhunju.dailyjournal.controller.party.LedgerCardAdapter;
 import com.ndhunju.dailyjournal.model.Journal;

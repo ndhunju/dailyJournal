@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.journal;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.journal.JournalFragment;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 

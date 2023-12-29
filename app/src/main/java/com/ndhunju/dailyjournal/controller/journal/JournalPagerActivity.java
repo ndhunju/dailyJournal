@@ -1,9 +1,10 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.journal;
 
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ndhunju.dailyjournal.R;
+import com.ndhunju.dailyjournal.controller.BaseActivity;
 
 /**
  * Created by Dhunju on 8/7/2016.

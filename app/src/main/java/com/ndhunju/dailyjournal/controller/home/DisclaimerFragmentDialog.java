@@ -1,4 +1,4 @@
-package com.ndhunju.dailyjournal.controller;
+package com.ndhunju.dailyjournal.controller.home;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
