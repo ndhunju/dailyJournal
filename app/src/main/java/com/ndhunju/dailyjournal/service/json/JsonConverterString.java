@@ -322,6 +322,7 @@ public final class JsonConverterString extends JsonConverter{
 
     private Attachment insertAttchIntoDb(JSONObject jsonObject, long journalId) {
         Attachment newAttachment = getAttachment(jsonObject);
+        correctAttachmentPathIfInvalid(mServices, newAttachment);
         newAttachment.setJournalId(journalId);
         mServices.addAttachment(newAttachment);
         return newAttachment;

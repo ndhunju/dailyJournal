@@ -282,7 +282,10 @@ public class JsonConverterStream extends JsonConverter {
                 String key = jsonReader.nextName();
                 if (jsonReader.peek() == JsonToken.NULL) continue;
                 if (key.equals(KEY_ID)) attachment.setId(jsonReader.nextLong());
-                else if (key.equals(KEY_PATH)) attachment.setPath(jsonReader.nextString());
+                else if (key.equals(KEY_PATH)) {
+                    attachment.setPath(jsonReader.nextString());
+                    correctAttachmentPathIfInvalid(mServices, attachment);
+                }
                 else jsonReader.skipValue();
             }
             mServices.addAttachment(attachment);
@@ -291,7 +294,10 @@ public class JsonConverterStream extends JsonConverter {
             //for old json format
             while (jsonReader.hasNext()) {
                 if (jsonReader.peek() == JsonToken.NULL) continue;
-                else attachment.setPath(jsonReader.nextString());
+                else {
+                    attachment.setPath(jsonReader.nextString());
+                    correctAttachmentPathIfInvalid(mServices, attachment);
+                }
             }
             mServices.addAttachment(attachment);
         }

@@ -108,6 +108,7 @@ public class OldJsonConverter {
         //storage. If it is, then change it to the new one
         path = UtilsFile.replaceOldDir(path);
         attachment.setPath(path);
+        JsonConverter.correctAttachmentPathIfInvalid(mServices, attachment);
 
         mServices.addAttachment(attachment);
 

@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.service.json;
 import android.content.Context;
 import android.util.Log;
 
+import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  * This class entails methods for reading from JSON and inserting to
  * database and reading from database and writing to JSON
  */
-public abstract class JsonConverter implements JsonKeys{
+public abstract class JsonConverter implements JsonKeys {
 
     private static final String TAG = JsonConverter.class.getSimpleName();
 
@@ -84,6 +85,25 @@ public abstract class JsonConverter implements JsonKeys{
         } catch (IOException e) {
             Log.w(TAG, "Error creating json backup file: " + e.getMessage());
             throw e;
+        }
+    }
+
+    public static void correctAttachmentPathIfInvalid(Services services, Attachment attachment) {
+
+        if (attachment.getPath() == null) {
+            return;
+        }
+
+        String attachmentFolderPath = UtilsFile.getAbsolutePathForAttachmentFolder(
+                services.getContext()
+        );
+
+        // If the path doesn't start with attachmentFolderPath,
+        // change it to start with attachmentFolderPath.
+        // This happens when the app id has changed
+        if (!attachment.getPath().startsWith(attachmentFolderPath)) {
+            String guid = attachment.getAttachmentGuid();
+            attachment.setPath(attachmentFolderPath + guid);
         }
     }
 
