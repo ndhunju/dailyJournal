@@ -66,6 +66,7 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
     private EditText amountEt;
     private TextView drTv;
     private TextView crTv;
+    private Button attachBtn;
     private EditText noteEt;
     private Button partyBtn;
     private Button party2Btn;
@@ -228,7 +229,7 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
             public void afterTextChanged(Editable s) {}
         });
 
-        Button attachBtn = (Button) v.findViewById(R.id.fragment_home_attach_btn);
+        attachBtn = v.findViewById(R.id.fragment_home_attach_btn);
         attachBtn.setOnClickListener(v14 -> {
             // Open AttachmentViewPagerActivity to view attachments
             Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
@@ -424,6 +425,7 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
      */
     private void setValues(Journal tempJournal, Party party) {
         setTextDrCr(tempJournal.getType());
+        setTextForAttachmentButton(attachBtn);
         noteEt.setText(tempJournal.getNote());
         drBtn.setText(UtilsFormat.getDrFromPref(getActivity()));
         crBtn.setText(UtilsFormat.getCrFromPref(getActivity()));
