@@ -51,6 +51,27 @@ android {
         }
     }
 
+    // Disable all kinds of splitting of APK file since it is causing
+    // ResourceNotFound exception probably because of side loading the
+    // app i.e. one user downloaded the apk for one device and shared
+    // with another user with a different device. Also, our app isn't
+    // big to lose much for not splitting the apk to save space
+    // See https://stackoverflow.com/a/53082301
+    bundle {
+
+        language {
+            enableSplit = false
+        }
+
+        density {
+            enableSplit = false
+        }
+
+        abi {
+            enableSplit = false
+        }
+    }
+
 
     buildTypes {
         //By default, the build system defines two build types: debug and release
