@@ -84,6 +84,21 @@ android {
         debug {
             debuggable true
         }
+
+        // Specifies one flavor dimension.
+        flavorDimensions "version"
+        productFlavors {
+            local {
+                dimension "version"
+                applicationIdSuffix ".local"
+                versionNameSuffix "-local"
+            }
+
+            prod {
+                dimension "version"
+            }
+        }
+
     }
 
     testOptions {
