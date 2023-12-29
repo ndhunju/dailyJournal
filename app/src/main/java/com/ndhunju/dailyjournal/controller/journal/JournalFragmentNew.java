@@ -7,6 +7,7 @@ import android.speech.RecognizerIntent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
@@ -292,8 +293,11 @@ public class JournalFragmentNew extends JournalFragmentBase implements OnDatePic
                 for (Attachment attachment: attachments) {
                     copy = new Attachment(journal2.getId());
                     copy.setPath(attachment.getPath());
+                    copy.setLinkedAttachmentId(attachment.getId());
                     //copy.setId(); // Id is basically row number
-                    mServices.addAttachment(copy);
+                    long idFromDb = mServices.addAttachment(copy);
+                    attachment.setLinkedAttachmentId(idFromDb);
+                    mServices.updateAttachment(attachment);
                 }
             }
 

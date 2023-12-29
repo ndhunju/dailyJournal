@@ -824,8 +824,8 @@ public class Services {
     }
 
 
-    public void addAttachment(Attachment attachment){
-        attachmentDAO.create(attachment);
+    public long addAttachment(Attachment attachment){
+       return attachmentDAO.create(attachment);
     }
 
     public void addAttachments(List<Attachment> attachments){
@@ -838,13 +838,30 @@ public class Services {
      * if you have the attachment object.
      * @return
      */
-    public boolean deleteAttachment(Attachment attch){
-        //1. Delete the physical file from storage
-        if(!UtilsFile.deleteFile(attch.getPath()))
-            return false;
+    public boolean deleteAttachment(Attachment attch)
+    {
+        // 1. See if there is an attachment that shares file with attch
+        Attachment linkedAttachment = null;
+        if (attch.getLinkedAttachmentId() != null) {
+            linkedAttachment = attachmentDAO.find(attch.getLinkedAttachmentId());
+        }
 
-        //2. Delete from the database
+        // 2. Delete the physical file from storage only,
+        // if the file is not shared between 2 attachments
+        if (linkedAttachment == null) {
+            if (!UtilsFile.deleteFile(attch.getPath()))
+                return false;
+        }
+
+        // 3. Delete from the database
         attachmentDAO.delete(attch);
+
+        // 4. Update linkedAttachment's extra value
+        if (linkedAttachment != null) {
+            linkedAttachment.setLinkedAttachmentId(null);
+            attachmentDAO.update(linkedAttachment);
+        }
+
         return true;
     }
 

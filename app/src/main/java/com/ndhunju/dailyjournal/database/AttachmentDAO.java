@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class AttachmentDAO implements IAttachmentDAO {
 
-    private SQLiteOpenHelper mSqLiteOpenHelper;
+    private final SQLiteOpenHelper mSqLiteOpenHelper;
 
     //Constructor
     public AttachmentDAO(SQLiteOpenHelper sqLiteOpenHelper){
@@ -151,13 +151,15 @@ public class AttachmentDAO implements IAttachmentDAO {
      * @param c
      * @return
      */
-    private static Attachment fromCursor(Cursor c){
+    private static Attachment fromCursor(Cursor c) {
         long id = c.getLong((c.getColumnIndexOrThrow(AttachmentColumns.ATTACHMENT_ID)));
         String name = c.getString(c.getColumnIndexOrThrow(AttachmentColumns.COL_ATTACHMENT_NAME));
+        String extra = c.getString(c.getColumnIndexOrThrow(AttachmentColumns.COL_ATTACHMENT_EXTRA));
         long journalId = c.getLong(c.getColumnIndexOrThrow(AttachmentColumns.COL_FK_JOURNAL_ID));
         Attachment a = new Attachment(journalId);
         a.setId(id);
         a.setPath(name);
+        a.parseValueFromExtraColumn(extra);
         return a;
     }
 
@@ -167,11 +169,13 @@ public class AttachmentDAO implements IAttachmentDAO {
      * @param attch
      * @return
      */
-    private static ContentValues toContentValues(Attachment attch){
+    private static ContentValues toContentValues(Attachment attch) {
         ContentValues values = new ContentValues();
+        // Id is auto incremented in the table
         //values.put(AttachmentColumns.ATTACHMENT_ID, attch.getId());
         values.put(AttachmentColumns.COL_ATTACHMENT_NAME, attch.getPath());
         values.put(AttachmentColumns.COL_FK_JOURNAL_ID, attch.getJournalId());
+        values.put(AttachmentColumns.COL_ATTACHMENT_EXTRA, attch.makeValueForExtraColumn());
         return values;
     }
 
