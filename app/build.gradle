@@ -133,6 +133,7 @@ dependencies {
     // Local binary dependency
     //Even though android provides json library, it bring error while using it for JUnit testing
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.android.gms:play-services-ads-lite:22.0.0'
     //http://tools.android.com/tech-docs/unit-testing-support
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:2.23.4'

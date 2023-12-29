@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.controller;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.core.view.ViewCompat;
@@ -45,6 +46,8 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         mServices = Services.getInstance(getContext());
         mServices.addListener(this);
         mRefreshNeeded = true;
+
+        MobileAds.initialize(this, initializationStatus -> {});
 
         addContentFrame(R.layout.activity_home);
 
