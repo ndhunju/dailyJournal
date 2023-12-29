@@ -43,8 +43,8 @@ public class JsonConverterStream extends JsonConverter {
     @Override
     public boolean readFromJSON(String jsonFilePath) {
         File jsonFile = new File(jsonFilePath);
-        try {
-            parseJSONStream(new FileInputStream(jsonFile));
+        try(InputStream inputStream = new FileInputStream(jsonFile)) {
+            parseJSONStream(inputStream);
             Log.i(TAG, "Finished reading from stream : " + jsonFilePath);
             return true;
         } catch (IOException e) {
@@ -57,8 +57,8 @@ public class JsonConverterStream extends JsonConverter {
     @Override
     public boolean writeToJSON(String jsonFilePath) {
         File jsonFile = new File(jsonFilePath);
-        try {
-            writeJSONToStream(new FileOutputStream(jsonFile));
+        try(OutputStream outputStream = new FileOutputStream(jsonFile)) {
+            writeJSONToStream(outputStream);
             Log.i(TAG, "Finished writing to stream : " + jsonFilePath);
             return true;
         } catch (IOException e) {
@@ -170,6 +170,7 @@ public class JsonConverterStream extends JsonConverter {
         JsonReader jsonReader = new JsonReader(reader);
         insertPartiesIntoDb(jsonReader);
         reader.close();
+        jsonReader.close();
 
         return true;
     }
