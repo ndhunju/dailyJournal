@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
@@ -42,7 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class JournalFragmentNew extends Fragment implements OnDatePickerDialogBtnClickedListener {
+public class JournalFragmentNew extends JournalFragmentBase implements OnDatePickerDialogBtnClickedListener {
 
     //Constants
     public static final String TAG = JournalFragmentNew.class.getSimpleName();
@@ -210,8 +212,10 @@ public class JournalFragmentNew extends Fragment implements OnDatePickerDialogBt
             // Open AttachmentViewPagerActivity to view attachments
             Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
             i.putExtra(Constants.KEY_JOURNAL_ID, tempJournal.getId());
-            startActivity(i);
+            getAttachmentViewPagerActivityOnResult().launch(i);
         });
+
+        setTextForAttachmentButton(attachBtn);
 
         Button saveJournalBtn = (Button) v.findViewById(R.id.fragment_home_save_btn);
         saveJournalBtn.setOnClickListener(v15 -> {
@@ -299,6 +303,12 @@ public class JournalFragmentNew extends Fragment implements OnDatePickerDialogBt
         setValues(tempJournal, mParty);
 
         return v;
+    }
+
+    @NonNull
+    @Override
+    public Journal provideJournal() {
+        return tempJournal;
     }
 
     @Override

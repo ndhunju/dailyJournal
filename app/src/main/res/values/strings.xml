@@ -228,5 +228,8 @@
     <!-- Text shown is a popup in Edit Text Field  -->
     <string name="party_name_empty_error">Please enter the name here.</string>
 
+    <!-- JournalFragmentNew Screen -->
+    <string name="btn_attachment_with_count">Attachment (%d)</string>
+
 </resources>
 

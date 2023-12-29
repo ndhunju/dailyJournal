@@ -39,7 +39,7 @@ import com.ndhunju.dailyjournal.viewPager.AttachmentViewPagerActivity;
 import java.util.Calendar;
 import java.util.Date;
 
-public class JournalFragment extends Fragment implements OnDatePickerDialogBtnClickedListener {
+public class JournalFragment extends JournalFragmentBase implements OnDatePickerDialogBtnClickedListener {
 
     //Constants
 	private static final String TAG = JournalFragment.class.getSimpleName();
@@ -188,8 +188,10 @@ public class JournalFragment extends Fragment implements OnDatePickerDialogBtnCl
 			// Open AttachmentViewPagerActivity to view attachments
 			Intent i = new Intent(getActivity(), AttachmentViewPagerActivity.class);
 			i.putExtra(Constants.KEY_JOURNAL_ID, mJournal.getId());
-			startActivity(i);
+			getAttachmentViewPagerActivityOnResult().launch(i);
 		});
+
+		setTextForAttachmentButton(attachBtn);
 
 		Button saveJournalBtn = (Button) v.findViewById(R.id.fragment_home_save_btn);
 		saveJournalBtn.setOnClickListener(v1 -> {
@@ -248,6 +250,12 @@ public class JournalFragment extends Fragment implements OnDatePickerDialogBtnCl
 		setValues(mJournal, mParty);
 
 		return v;
+	}
+
+	@NonNull
+	@Override
+	public Journal provideJournal() {
+		return mJournal;
 	}
 
 	@Override
