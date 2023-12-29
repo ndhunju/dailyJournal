@@ -105,13 +105,10 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
                 // selected to delete the Party
                 String msg = String.format(activity.getString(R.string.msg_delete_confirm), activity.getString(R.string.str_party));
                 //Alert user before deleting the Journal
-                UtilsView.alert(activity, msg, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Services.getInstance(activity).deleteParty(partyAdapter.getItem(position));
-                        String msg = String.format(activity.getString(R.string.msg_deleted), partyAdapter.getItem(position).getName());
-                        UtilsView.toast(activity, msg);
-                    }
+                UtilsView.alert(activity, msg, (dialogInterface, i) -> {
+                    Services.getInstance(activity).deleteParty(partyAdapter.getItem(position));
+                    String msg1 = String.format(activity.getString(R.string.msg_deleted), partyAdapter.getItem(position).getName());
+                    UtilsView.toast(activity, msg1);
                 }, null);
 
                 break;
@@ -132,11 +129,7 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
      */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(String id, View view, int position) {
-        }
-    };
+    private static Callbacks sDummyCallbacks = (id, view, position) -> {};
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -149,10 +142,7 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mServices = Services.getInstance(getActivity());
-
         setHasOptionsMenu(true);
-
-
     }
 
     @Override
@@ -164,18 +154,15 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         srchOrAddPartyET.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 //filter the list below
                 mPartyAdapter.filter(s);
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         mPartyLV = (RecyclerView) rootView.findViewById(R.id.fragment_party_list_party_list);
@@ -205,12 +192,9 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
                 });
 
         FloatingActionButton newPartyFAB = (FloatingActionButton)rootView.findViewById(R.id.fragment_party_list_fab);
-        newPartyFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newPartyIntent = new Intent(getActivity(), PartyActivity.class);
-                startActivityForResult(newPartyIntent, REQUEST_PARTY_INFO_CHGD);
-            }
+        newPartyFAB.setOnClickListener(v -> {
+            Intent newPartyIntent = new Intent(getActivity(), PartyActivity.class);
+            startActivityForResult(newPartyIntent, REQUEST_PARTY_INFO_CHGD);
         });
 
         // Load the Ad
@@ -445,21 +429,13 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
         builder.setTitle(activity.getString(R.string.msg_choose, UtilsFormat.getPartyFromPref(activity)));
         builder.setNegativeButton(activity.getString(android.R.string.cancel), null);
         builder.setMultiChoiceItems(allParties, null,
-                new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        // Add checked contacts into selectedParties list
-                        if (b) selectedParties.add(parties.get(i));
-                        else selectedParties.remove(parties.get(i));
-                    }
+                (dialogInterface, i, b) -> {
+                    // Add checked contacts into selectedParties list
+                    if (b) selectedParties.add(parties.get(i));
+                    else selectedParties.remove(parties.get(i));
                 });
         builder.setPositiveButton(activity.getString(android.R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        new SharePartiesReportAsync(activity, SharePartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties);
-                    }
-                });
+                (dialogInterface, i) -> new SharePartiesReportAsync(activity, SharePartiesReportAsync.Type.values()[optionIndex]).execute(selectedParties));
 
         return builder.create();
     }
