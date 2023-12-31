@@ -81,9 +81,14 @@ public class Services {
     private static Services mServices;
 
     public static Services getInstance(Context con) {
-        if (mServices == null || mServices.mCurrentFinancialYear == null) {
+        if (mServices == null) {
             mServices = new Services(con);
         }
+
+        if (mServices.mCurrentFinancialYear == null) {
+            mServices.loadCompanyInfoFromPreferences();
+        }
+
         return mServices;
     }
 
