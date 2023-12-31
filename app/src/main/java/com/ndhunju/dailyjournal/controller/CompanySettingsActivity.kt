@@ -3,6 +3,7 @@ package com.ndhunju.dailyjournal.controller
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -27,26 +28,31 @@ class CompanySettingsActivity : BaseActivity(), OnDatePickerDialogBtnClickedList
     var doneBtn: Button? = null
     var services: Services? = null
     var financialYear: Date? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_company_settings)
         setSupportActionBar(findViewById(R.id.toolbar))
         services = Services.getInstance(context)
+
         val welcomeTextView = findViewById<TextView>(R.id.activity_company_settings_welcome_msg)
         welcomeTextView.text = getString(
             R.string.company_settings_welcome_msg,
             getString(R.string.app_name)
         )
+
         findViewById<View>(R.id.activity_company_settings_create_new)
-            .setOnClickListener { view: View? ->
+            .setOnClickListener {
                 // Hide screen 1
                 findViewById<View>(R.id.activity_company_settings_screen2).visibility = View.GONE
 
                 // Show screen 2
                 findViewById<View>(R.id.activity_company_settings_screen2).visibility = View.VISIBLE
             }
+
         findViewById<View>(R.id.activity_company_settings_restore_old)
-            .setOnClickListener { view: View? ->
+            .setOnClickListener {
                 startActivity(
                     Intent(this, BackupActivity::class.java)
                         .putExtra(
@@ -58,21 +64,26 @@ class CompanySettingsActivity : BaseActivity(), OnDatePickerDialogBtnClickedList
                         )
                 )
             }
+
         companyNameEt = findViewById(R.id.activity_company_settings_company_name_et)
+
         dateBtn = findViewById(R.id.activity_company_settings_date_btn)
-        dateBtn?.setOnClickListener(View.OnClickListener { v: View? ->
+        dateBtn?.setOnClickListener {
             val dpf = DatePickerFragment.newInstance(Date(), REQUEST_CHGED_DATE)
             dpf.show(supportFragmentManager, DatePickerFragment.TAG)
-        })
+        }
+
         doneBtn = findViewById(R.id.activity_company_settings_done_btn)
-        doneBtn?.setOnClickListener(View.OnClickListener { v: View? ->
+        doneBtn?.setOnClickListener {
+
             if (TextUtils.isEmpty(companyNameEt?.text)) {
                 companyNameEt?.error = getString(R.string.company_settings_company_name_empty_error)
                 //return@setOnClickListener
             }
-            services?.companyName = companyNameEt?.getText().toString()
+            services?.companyName = companyNameEt?.text.toString()
+
             try {
-                services?.setFinancialYear(financialYear)
+                services?.financialYear = financialYear
             } catch (ex: IllegalStateException) {
                 UtilsView.alert(
                     context,
@@ -87,14 +98,19 @@ class CompanySettingsActivity : BaseActivity(), OnDatePickerDialogBtnClickedList
                 //return@setOnClickListener
             }
             finish()
-        })
-        companyNameEt?.setText(services?.companyName)
-        financialYear = if (services?.financialYear != null) {
-            Date(services?.financialYear?.time)
-        } else {
-            Date()
         }
-        dateBtn?.setText(UtilsFormat.formatDate(financialYear, this))
+
+        companyNameEt?.setText(services?.companyName)
+
+        if (services?.financialYear != null) {
+            services?.financialYear?.time?.let { time ->
+                financialYear = Date(time)
+            }
+        } else {
+            financialYear = Date()
+        }
+
+        dateBtn?.text = UtilsFormat.formatDate(financialYear, this)
     }
 
     override fun onResume() {
@@ -105,24 +121,34 @@ class CompanySettingsActivity : BaseActivity(), OnDatePickerDialogBtnClickedList
     override fun onDialogBtnClicked(data: Intent, whichBtn: Int, result: Int, requestCode: Int) {
         when (requestCode) {
             REQUEST_CHGED_DATE -> {
-                if (data == null) return
-                financialYear!!.time =
-                    (data.getSerializableExtra(DatePickerFragment.EXTRA_CAL) as Calendar?)!!.timeInMillis
-                dateBtn!!.text = UtilsFormat.formatDate(financialYear, this)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    data.getSerializableExtra(DatePickerFragment.EXTRA_CAL, Calendar.getInstance().javaClass)?.timeInMillis?.let {
+                        financialYear?.time = it
+                    }
+                } else {
+                    @Suppress("DEPRECATION")
+                    (data.getSerializableExtra(DatePickerFragment.EXTRA_CAL) as Calendar?)?.timeInMillis?.let {
+                        financialYear?.time = it
+                    }
+                }
+                dateBtn?.text = UtilsFormat.formatDate(financialYear, this)
             }
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         // don't let user exit this screen until complete
         //super.onBackPressed();
     }
 
     private val context: Context
-        private get() = this
+        get() = this
 
     companion object {
+
         private const val REQUEST_CHGED_DATE = 656
+
         @JvmStatic
         fun startActivity(callingActivity: Activity, requestCode: Int) {
             val intent = Intent(
