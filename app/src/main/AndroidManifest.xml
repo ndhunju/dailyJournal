@@ -6,7 +6,22 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- if an application requests the CAMERA permission, Google Play assumes the application
+    requires a back (world-facing) camera even if the app doesn't declare a <uses-feature> element
+    for android.hardware.camera. As a result, Google Play filters devices that don't have a back
+    camera. If you don't want Google Play to filter based on a specific implied feature,
+    explicitly declare the feature in a <uses-feature> element and
+    include the android:required="false" attribute
+    -->
     <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <!-- Not supported by Windows Devices -->
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false"/>
     <!-- Without this entry storage-permission entry will not be visible under app-info permissions
      list Android-10 and below -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -27,8 +42,6 @@
     <!-- needed for using DownloadManager as well-->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
-
-    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name="com.ndhunju.dailyjournal.controller.DailyJournalApplication"

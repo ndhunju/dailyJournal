@@ -18,6 +18,7 @@ import androidx.core.content.FileProvider;
 import android.util.Log;
 
 import com.ndhunju.dailyjournal.model.Party;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -73,7 +74,10 @@ public class UtilsFile {
 			);
 			return Intent.createChooser(takePictureIntent, null);
 		} catch (Exception ex) {
-			Log.i("Picture from camera", "Error occurred while creating the File.");
+			AnalyticsService.INSTANCE.logEvent(
+					"didFailToTakeImage",
+					"Error occurred while creating the File."
+			);
 		}
 		return null;
 	}

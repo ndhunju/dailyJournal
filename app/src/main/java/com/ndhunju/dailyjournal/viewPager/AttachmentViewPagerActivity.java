@@ -24,6 +24,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.journal.StoreImageAsync;
 import com.ndhunju.dailyjournal.model.Attachment;
+import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.UtilDownloadManager;
@@ -37,6 +38,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static android.content.pm.PackageManager.FEATURE_CAMERA_ANY;
 
 /**
  * Lock/Unlock button is added to the ActionBar. Use it to temporarily disable
@@ -345,7 +348,16 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		}
 
 		Intent takePictureIntent = UtilsFile.getPictureFromCam(getActivity());
-		startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+		if (takePictureIntent != null) {
+			try {
+				startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+			} catch (Exception ex) {
+				AnalyticsService.INSTANCE.logEvent(
+						"didFailToTakeImage",
+						ex.getMessage()
+						);
+			}
+		}
 	}
 
 
