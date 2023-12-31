@@ -29,7 +29,7 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
     // each version of the Android Gradle Plugin now has a default version of the build tools.
     //buildToolsVersion '25.0.3'
 
@@ -85,20 +85,21 @@ android {
             debuggable true
         }
 
-        // Specifies one flavor dimension.
-        flavorDimensions "version"
-        productFlavors {
-            local {
-                dimension "version"
-                applicationIdSuffix ".local"
-                versionNameSuffix "-local"
-            }
+    }
 
-            prod {
-                dimension "version"
-            }
+    // Specifies one flavor dimension.
+    flavorDimensions ["version"]
+
+    productFlavors {
+        local {
+            dimension "version"
+            applicationIdSuffix ".local"
+            versionNameSuffix "-local"
         }
 
+        prod {
+            dimension "version"
+        }
     }
 
     testOptions {
