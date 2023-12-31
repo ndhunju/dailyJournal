@@ -88,17 +88,17 @@ android {
     }
 
     // Specifies one flavor dimension.
-    flavorDimensions ["version"]
+    flavorDimensions = ["version"]
 
     productFlavors {
         local {
-            dimension "version"
+            dimension = "version"
             applicationIdSuffix ".local"
             versionNameSuffix "-local"
         }
 
         prod {
-            dimension "version"
+            dimension = "version"
         }
     }
 
