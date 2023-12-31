@@ -44,6 +44,11 @@ public class GoogleDriveRestApiRestoreBackupActivity
     }
 
     @Override
+    protected boolean byPassCheckingCompanyInfo() {
+        return true;
+    }
+
+    @Override
     protected void onSignedInToGoogleDrive(Drive googleDriveService) {
         super.onSignedInToGoogleDrive(googleDriveService);
         queryForBackupFiles();

@@ -10,6 +10,10 @@ import android.view.MenuItem;
 
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.controller.BaseActivity;
+import com.ndhunju.dailyjournal.controller.CompanySettingsActivity;
+
+import static com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment.KEY_MODE;
+import static com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment.MODE_RESTORE;
 
 /** Created by Dhunju on 8/14/2016.
  * This activity groups together tools relevant to backing up. */
@@ -34,6 +38,18 @@ public class BackupActivity extends BaseActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    protected boolean byPassCheckingCompanyInfo() {
+        // Bypass checking company info if it is being called by CompanySettingsActivity to restore
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(CompanySettingsActivity.class.getName())
+                && MODE_RESTORE.equals(getIntent().getStringExtra(KEY_MODE))) {
+            return true;
+        }
+
+        return super.byPassCheckingCompanyInfo();
     }
 
     @Override

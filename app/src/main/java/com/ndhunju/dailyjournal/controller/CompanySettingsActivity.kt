@@ -10,11 +10,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener
 import com.ndhunju.dailyjournal.R
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity
 import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment
 import com.ndhunju.dailyjournal.controller.fragment.DatePickerFragment
+import com.ndhunju.dailyjournal.controller.home.HomeActivity
 import com.ndhunju.dailyjournal.service.AnalyticsService.logScreenViewEvent
 import com.ndhunju.dailyjournal.service.Services
 import com.ndhunju.dailyjournal.util.UtilsFormat
@@ -23,11 +25,23 @@ import java.util.Calendar
 import java.util.Date
 
 class CompanySettingsActivity : BaseActivity(), OnDatePickerDialogBtnClickedListener {
+
     var companyNameEt: EditText? = null
     var dateBtn: Button? = null
     var doneBtn: Button? = null
     var services: Services? = null
     var financialYear: Date? = null
+
+    private var backupActivityStartActivityForResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        // Start HomeActivity if restoration was successful
+        if (it?.resultCode == Activity.RESULT_OK) {
+            if (services?.hasValidCompanyInfo() == true) {
+                startActivity(Intent(context, HomeActivity::javaClass.javaClass))
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,16 +67,15 @@ class CompanySettingsActivity : BaseActivity(), OnDatePickerDialogBtnClickedList
 
         findViewById<View>(R.id.activity_company_settings_restore_old)
             .setOnClickListener {
-                startActivity(
-                    Intent(this, BackupActivity::class.java)
-                        .putExtra(
-                            BackupPreferenceFragment.KEY_MODE,
-                            BackupPreferenceFragment.MODE_RESTORE
-                        ).putExtra(
-                            BackupPreferenceFragment.KEY_FINISH_ON_RESTORE_SUCCESS,
-                            true
-                        )
-                )
+
+                backupActivityStartActivityForResult.launch(Intent(this, BackupActivity::class.java)
+                    .putExtra(
+                        BackupPreferenceFragment.KEY_MODE,
+                        BackupPreferenceFragment.MODE_RESTORE
+                    ).putExtra(
+                        BackupPreferenceFragment.KEY_FINISH_ON_RESTORE_SUCCESS,
+                        true
+                    ))
             }
 
         companyNameEt = findViewById(R.id.activity_company_settings_company_name_et)

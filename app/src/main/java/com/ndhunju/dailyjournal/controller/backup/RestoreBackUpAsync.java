@@ -6,6 +6,7 @@ import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.service.json.JsonConverterString;
@@ -43,6 +44,13 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
         return this;
     }
 
+    private FinishCallback<Boolean> onFinish;
+
+    public RestoreBackUpAsync setOnFinish(FinishCallback<Boolean> onFinish) {
+        this.onFinish = onFinish;
+        return this;
+    }
+
     @Override
     protected void onPreExecute() {
         String msg = String.format(mActivity.getString(R.string.msg_importing), mActivity.getString(R.string.str_backup));
@@ -68,6 +76,10 @@ public class RestoreBackUpAsync extends AsyncTask<String, Void, Boolean> {
         }
 
         UtilsView.alert(mActivity, msg);//Display msg
+
+        if (onFinish != null) {
+            onFinish.onFinish(result);
+        }
     }
 
     @Override

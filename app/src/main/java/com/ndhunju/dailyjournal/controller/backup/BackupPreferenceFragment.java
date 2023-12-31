@@ -31,9 +31,13 @@ public class BackupPreferenceFragment
 
     public static final String TAG = BackupPreferenceFragment.class.getSimpleName();
     public static final String KEY_BACKUP_RESULT = TAG + ".BACKUP_RESULT";
+    public static final String KEY_RESTORE_RESULT = TAG + ".RESTORE_RESULT";
     public static final String KEY_FINISH_ON_BACKUP_SUCCESS = TAG + ".KEY_FINISH_ON_BACKUP_SUCCESS";
+    public static final String KEY_FINISH_ON_RESTORE_SUCCESS = TAG + ".KEY_FINISH_ON_RESTORE_SUCCESS";
     public static final String KEY_MSG = ".KEY_MSG";
     public static final String MSG_AUTO_BACKUP_FAILED = ".MSG_AUTO_BACKUP_FAILED";
+    public static final String KEY_MODE = ".KEY_MODE";
+    public static final String MODE_RESTORE = ".MODE_RESTORE";
 
 
 
@@ -43,11 +47,18 @@ public class BackupPreferenceFragment
     private static final int REQUEST_CODE_BACKUP_DIR = 3561;
     private static final int REQUEST_CODE_BACKUP_COMPLETE = 5465;
     private static final int REQUEST_CODE_G_DRIVE_SIGN_IN_COMPLETE = 3943;
+    private static final int REQUEST_CODE_RESTORE_COMPLETE = 4908;
 
     private PreferenceService preferenceService;
     private CheckBoxPreference autoUploadBackupToGDriveCB;
     private Preference gDriveRestBackupPref;
+    private Preference gDriveBackupPref;
+    private Preference localBackupPref;
     private boolean finishOnBackUpSuccess;
+    /**
+     * Set true to finish() this activity after restoration operation is successful
+     */
+    private boolean finishOnRestoreSuccess;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -67,6 +78,11 @@ public class BackupPreferenceFragment
         preferenceService = PreferenceService.from(getActivity());
         finishOnBackUpSuccess = getActivity().getIntent().getBooleanExtra(
                 KEY_FINISH_ON_BACKUP_SUCCESS,
+                false
+        );
+
+        finishOnRestoreSuccess = getActivity().getIntent().getBooleanExtra(
+                KEY_FINISH_ON_RESTORE_SUCCESS,
                 false
         );
 
@@ -92,8 +108,8 @@ public class BackupPreferenceFragment
                     return true;
                 });
 
-        findPreference(getString(R.string.key_pref_backup_google_drive))
-                .setOnPreferenceClickListener(preference -> {
+        gDriveBackupPref = findPreference(getString(R.string.key_pref_backup_google_drive));
+        gDriveBackupPref.setOnPreferenceClickListener(preference -> {
                     startActivityForResult(
                             new Intent(getActivity(), GoogleDriveUploadBackupActivity.class),
                             REQUEST_CODE_BACKUP_COMPLETE
@@ -104,15 +120,15 @@ public class BackupPreferenceFragment
         findPreference(getString(R.string.key_pref_restore_google_drive))
                 .setOnPreferenceClickListener(preference -> {
                     UtilsView.alert(getActivity(), getString(R.string.warning_restore),
-                            (dialogInterface, i) -> startActivity(new Intent(
+                            (dialogInterface, i) -> startActivityForResult(new Intent(
                                     getContext(),
                                     GoogleDriveRestoreBackupActivity.class)
-                            ), null);
+                            , REQUEST_CODE_RESTORE_COMPLETE));
                     return true;
                 });
 
-        findPreference(getString(R.string.key_pref_backup_local_storage))
-                .setOnPreferenceClickListener(preference -> {
+        localBackupPref = findPreference(getString(R.string.key_pref_backup_local_storage));
+        localBackupPref.setOnPreferenceClickListener(preference -> {
                     // Create backup in Downloads folder
                     String dir = UtilsFile.getPublicDownloadDir();
                     new BackUpAsyncTask(getActivity(), filePath -> {
@@ -192,6 +208,17 @@ public class BackupPreferenceFragment
 
             // We just want to ask once. So clear the value for INTENT_MSG
             intent.putExtra(KEY_MSG, (String) null);
+        }
+
+        // Check if restore mode is requested
+        if (MODE_RESTORE.equals(intent.getStringExtra(KEY_MODE))) {
+            gDriveRestBackupPref.setVisible(false);
+            gDriveBackupPref.setVisible(false);
+            localBackupPref.setVisible(false);
+            Preference backupCategory = findPreference(getString(R.string.key_pref_auto_backup_category));
+            if (backupCategory != null) {
+                backupCategory.setVisible(false);
+            }
         }
 
     }
@@ -293,6 +320,14 @@ public class BackupPreferenceFragment
                         new RestoreBackUpAsync(getActivity())
                                 // ask to delete the internal cache file after restoring backup
                                 .setAction(RestoreBackUpAsync.Action.DELETE_SOURCE_FILE)
+                                .setOnFinish(isSuccess -> {
+                                    if (isSuccess) {
+                                        setRestoreSuccessResult();
+                                        if (finishOnRestoreSuccess) {
+                                            getActivity().finish();
+                                        }
+                                    }
+                                })
                                 .execute(internalCacheFile);
                     } else {
                         // show restore failed error message
@@ -344,7 +379,18 @@ public class BackupPreferenceFragment
                     );
                 }
                 break;
+            case REQUEST_CODE_RESTORE_COMPLETE:
+                if (resultCode == Activity.RESULT_OK) {
+                    setRestoreSuccessResult();
+                    if (finishOnRestoreSuccess) {
+                        getActivity().finish();
+                    }
+                } else {
+                    getActivity().setResult(Activity.RESULT_CANCELED);
+                }
+                break;
         }
+
     }
 
 
@@ -353,6 +399,15 @@ public class BackupPreferenceFragment
             getActivity().setResult(
                     Activity.RESULT_OK,
                     new Intent().putExtra(KEY_BACKUP_RESULT, true)
+            );
+        }
+    }
+
+    private void setRestoreSuccessResult() {
+        if (getActivity() != null) {
+            getActivity().setResult(
+                    Activity.RESULT_OK,
+                    new Intent().putExtra(KEY_RESTORE_RESULT, true)
             );
         }
     }

@@ -41,6 +41,7 @@
             android:title="@string/str_restore_backup_from_local_storage" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="@string/key_pref_auto_backup_category"
         android:title="@string/str_auto_backup"
         app:iconSpaceReserved="false"
         >

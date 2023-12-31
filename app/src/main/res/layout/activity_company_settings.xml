@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,54 +25,99 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/activity_company_settings_welcome_msg"
+            <LinearLayout
+                android:id="@+id/activity_company_settings_screen1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textAppearance="@android:style/TextAppearance.DialogWindowTitle"
-                android:gravity="center"
-                tools:text="Welcome to Daily Journal+ App.
-                Please enter your Company or Business name."
-                />
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/activity_company_settings_company_name_et"
+                <TextView
+                    android:id="@+id/activity_company_settings_welcome_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textAppearance="@android:style/TextAppearance.DialogWindowTitle"
+                    android:gravity="center"
+                    tools:text="Welcome to Daily Journal+ App."
+                    />
+
+                <Button
+                    android:id="@+id/activity_company_settings_create_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/button_neutral"
+                    android:text="Create new company"
+                    />
+
+                <Button
+                    android:id="@+id/activity_company_settings_restore_old"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/button_neutral"
+                    android:text="Restore Company from Backup File"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activity_company_settings_screen2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:hint="@string/hint_company_name"
-                android:ems="10"
-                android:autofillHints="" />
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/activity_company_settings_company_name_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textAppearance="@android:style/TextAppearance.DialogWindowTitle"
+                    android:gravity="center"
+                    tools:text="@string/company_settings_company_name"
+                    />
+
+                <EditText
+                    android:id="@+id/activity_company_settings_company_name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:hint="@string/hint_company_name"
+                    android:ems="10"
+                    android:autofillHints="" />
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/str_financial_year"
-                android:paddingRight="16dp"
-                android:paddingLeft="16dp"
-                android:paddingTop="16dp"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:labelFor="@+id/activity_company_settings_date_btn"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_financial_year"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:labelFor="@+id/activity_company_settings_date_btn"/>
 
-            <Button
-                android:id="@+id/activity_company_settings_date_btn"
-                style="@style/Widget.Button_Normal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
-                android:layout_margin="10dp"
-                android:drawableLeft="@drawable/ic_today_black_24dp"
-                android:ems="10" />
+                <Button
+                    android:id="@+id/activity_company_settings_date_btn"
+                    style="@style/Widget.Button_Normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_margin="10dp"
+                    android:drawableLeft="@drawable/ic_today_black_24dp"
+                    android:ems="10" />
 
-            <Button
-                android:id="@+id/activity_company_settings_done_btn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
-                android:background="@drawable/button_positive"
-                android:layout_margin="10dp"
-                style="@style/Widget.Button_Neutral"
-                android:text="@string/str_save"/>
+                <Button
+                    android:id="@+id/activity_company_settings_done_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:background="@drawable/button_positive"
+                    android:layout_margin="10dp"
+                    style="@style/Widget.Button_Neutral"
+                    android:text="@string/str_save"/>
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

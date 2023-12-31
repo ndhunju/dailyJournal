@@ -18,7 +18,8 @@
     <!-- CompanySettingsActivity -->
     <string name="title_activity_company_settings">Welcome</string>
     <!-- Text shown is a label. %s is the name of the app -->
-    <string name="company_settings_welcome_msg">Welcome to %s.\nPlease enter the Company or Business name.</string>
+    <string name="company_settings_welcome_msg">Welcome to %s.</string>
+    <string name="company_settings_company_name">Please enter the Company or Business name</string>
     <!-- Text shown is a label -->
     <string name="company_settings_company_name_empty_error">You must entire a company or business name. You could just enter you own name.</string>
 

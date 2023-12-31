@@ -3,7 +3,8 @@
     <string name="key_pref_pincode_cb">preferencesPincodeCB</string>
     <string name="key_pref_pincode_val_et">preferencesPincodeValET</string>
     <string name="key_pref_pincode_time_et">preferencePincodeTimeET</string>
-    <string name="key_pref_auto_backup_cb">keyPrefereceAutoBackup</string>
+    <string name="key_pref_auto_backup_category">keyPreferenceAutoBackupCategory</string>
+    <string name="key_pref_auto_backup_cb">keyPreferenceAutoBackup</string>
     <string name="key_pref_auto_upload_backup_to_gdrive_cb">keyPreferenceAutoUploadBackupToGDrive</string>
     <string name="key_pref_date_format">prefenceDateFormatLP</string>
     <string name="key_pref_currency">preferenceCurrencyLP</string>

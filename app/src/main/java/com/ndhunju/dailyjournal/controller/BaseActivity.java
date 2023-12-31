@@ -15,9 +15,20 @@ public class BaseActivity extends AppCompatActivity {
 
         // it is important to have a valid company info all the time
         // esp. a valid financial year as this is used to restrict the date of journal to correct range
-        if (!(this instanceof CompanySettingsActivity) && !Services.getInstance(this).hasValidCompanyInfo()) {
+        if (
+                !(this instanceof CompanySettingsActivity)
+                        && !Services.getInstance(this).hasValidCompanyInfo()
+                        && !byPassCheckingCompanyInfo()
+        ) {
             CompanySettingsActivity.startActivity(this, 0);
         }
+    }
+
+    /**
+     * Return true if you don't want to check if user has provided valid company info
+     */
+    protected boolean byPassCheckingCompanyInfo() {
+        return false;
     }
 
     protected void onResume() {
