@@ -1,5 +1,6 @@
 package com.ndhunju.dailyjournal.controller
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -59,7 +60,7 @@ class CompanySettingsActivity : BaseActivity(), OnDatePickerDialogBtnClickedList
         findViewById<View>(R.id.activity_company_settings_create_new)
             .setOnClickListener {
                 // Hide screen 1
-                findViewById<View>(R.id.activity_company_settings_screen2).visibility = View.GONE
+                findViewById<View>(R.id.activity_company_settings_screen1).visibility = View.GONE
 
                 // Show screen 2
                 findViewById<View>(R.id.activity_company_settings_screen2).visibility = View.VISIBLE
