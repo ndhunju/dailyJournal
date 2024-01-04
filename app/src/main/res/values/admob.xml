@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Define your admob ad IDs here -->
+<resources>
+    <string name="admob_app_id">ca-app-pub-ID</string>
+    <string name="admob_party_list_ad_unit_id">ca-app-pub-ID</string>
+    <string name="admob_party_detail_ad_unit_id">ca-app-pub-ID</string>
+    <string name="admob_journal_ad_unit_id">ca-app-pub-ID</string>
+    <string name="admob_new_journal_ad_unit_id">ca-app-pub-ID</string>
+</resources>
