@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener
+import com.ndhunju.dailyjournal.OnDatePickerDialogBtnClickedListener.ButtonType
 import com.ndhunju.dailyjournal.R
 import com.ndhunju.dailyjournal.controller.backup.BackupActivity
 import com.ndhunju.dailyjournal.controller.backup.BackupPreferenceFragment
@@ -132,7 +133,7 @@ class CompanySettingsActivity : BaseActivity(), OnDatePickerDialogBtnClickedList
         logScreenViewEvent("CompanySettings")
     }
 
-    override fun onDialogBtnClicked(data: Intent, whichBtn: Int, result: Int, requestCode: Int) {
+    override fun onDialogBtnClicked(data: Intent, @ButtonType whichBtn: Int, result: Int, requestCode: Int) {
         when (requestCode) {
             REQUEST_CHGED_DATE -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

@@ -27,12 +27,12 @@ import com.ndhunju.dailyjournal.model.Attachment;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 import com.ndhunju.dailyjournal.service.Constants;
 import com.ndhunju.dailyjournal.service.Services;
+import com.ndhunju.dailyjournal.util.PermissionManager;
 import com.ndhunju.dailyjournal.util.UtilDownloadManager;
 import com.ndhunju.dailyjournal.util.UtilsFile;
 import com.ndhunju.dailyjournal.util.UtilsFormat;
 import com.ndhunju.dailyjournal.util.UtilsView;
 import com.ndhunju.dailyjournal.util.UtilsZip;
-import com.ndhunju.folderpicker.library.PermissionManager;
 
 import java.io.File;
 import java.io.FileInputStream;
