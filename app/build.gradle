@@ -23,7 +23,7 @@ buildscript {
 
     dependencies {
         classpath 'com.google.gms:google-services:4.4.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
     }
 
 }
@@ -36,7 +36,8 @@ android {
     defaultConfig {
         // The values in defaultConfig override those in the manifest file.
         applicationId "com.ndhunju.dailyjournalplus"
-        minSdkVersion 19
+        minSdkVersion 21
+        targetSdk 34
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -108,6 +109,7 @@ android {
         // you can add the snippet below to your build.gradle to change this behavior:
         //unitTests.returnDefaultValues = true
     }
+
     sourceSets {
         main {
             assets.srcDirs += ['src/main/assets', 'src/main/assets/']
@@ -118,13 +120,28 @@ android {
 
 
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
     }
+
     namespace 'com.ndhunju.dailyjournal'
+
     lint {
         disable 'MissingTranslation'
     }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = '1.5.7'
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
 }
 
 //The dependencies element is outside and after the android element. This element declares the
