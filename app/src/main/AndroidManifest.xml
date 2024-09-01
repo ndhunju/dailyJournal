@@ -27,11 +27,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
-    <!-- Remove following permission that FolderPicker Library has declared.
-     App doesn't use the functionality of FolderPicker Library that require this permission -->
-    <uses-permission
-        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:node="remove" />
+    <!-- App needs this permission even to  create backup files in Downloads folder. Require this
+     until the we have proper fix -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 

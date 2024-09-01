@@ -1,6 +1,7 @@
 package com.ndhunju.dailyjournal.controller.home;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
@@ -9,6 +10,9 @@ import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Environment;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +85,16 @@ public class HomeActivity extends NavDrawerActivity implements Services.Listener
         setupSizeForSummaryPager();
 
         AdManager.INSTANCE.initConsent(this);
+
+        //  App needs this permission even to  create backup files in Downloads folder.
+        //  Require this until the we have proper fix for it -->
+        if (Build.VERSION.SDK_INT >= 30){
+            if (!Environment.isExternalStorageManager()){
+                Intent getPermission = new Intent();
+                getPermission.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(getPermission);
+            }
+        }
     }
 
     @Override
