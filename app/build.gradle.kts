@@ -33,9 +33,10 @@ android {
         //generatedDensities = emptyList<String>()
     }
 
-    fun Packaging.() {
+    packaging {
         resources {
             excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/INDEX.LIST"
         }
     }
 
