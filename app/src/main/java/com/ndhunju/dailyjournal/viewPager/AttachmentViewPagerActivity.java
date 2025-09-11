@@ -118,32 +118,27 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		switch (item.getItemId()){
-			case R.id.viewpager_delete_picture:
-				if (attachmentPagerAdapter.getCount() > 0) {
-					String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_attachment));
-					UtilsView.alert(AttachmentViewPagerActivity.this, msg, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialogInterface, int i) {
-							int currentItemPos = mViewPager.getCurrentItem();
-							UtilsView.toast(AttachmentViewPagerActivity.this, getString(R.string.str_attch_delete));
-							mServices.deleteAttachment(attachmentPagerAdapter.getItem(currentItemPos));
-							attachmentPagerAdapter.deleteItem(currentItemPos);
-							attachmentPagerAdapter.notifyDataSetChanged();
-						}
-					}, null);
-				} else {
-					UtilsView.alert(getActivity(), getString(R.string.msg_attachment_count_zero));
-				}
-				break;
-
-			case R.id.viewpager_new_picture:
-				addNewPicture();
-				break;
-
-			case R.id.viewpager_download_picture:
-				downloadPicture();
-				break;
+		int itemId = item.getItemId();
+		if (itemId == R.id.viewpager_delete_picture) {
+			if (attachmentPagerAdapter.getCount() > 0) {
+				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_attachment));
+				UtilsView.alert(AttachmentViewPagerActivity.this, msg, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						int currentItemPos = mViewPager.getCurrentItem();
+						UtilsView.toast(AttachmentViewPagerActivity.this, getString(R.string.str_attch_delete));
+						mServices.deleteAttachment(attachmentPagerAdapter.getItem(currentItemPos));
+						attachmentPagerAdapter.deleteItem(currentItemPos);
+						attachmentPagerAdapter.notifyDataSetChanged();
+					}
+				}, null);
+			} else {
+				UtilsView.alert(getActivity(), getString(R.string.msg_attachment_count_zero));
+			}
+		} else if (itemId == R.id.viewpager_new_picture) {
+			addNewPicture();
+		} else if (itemId == R.id.viewpager_download_picture) {
+			downloadPicture();
 		}
 
 		return super.onOptionsItemSelected(item);

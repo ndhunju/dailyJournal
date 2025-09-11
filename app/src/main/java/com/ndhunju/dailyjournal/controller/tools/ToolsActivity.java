@@ -154,41 +154,34 @@ public class ToolsActivity extends NavDrawerActivity {
 
             @Override
             public void onClick(View v) {
-                switch ((int) v.getTag()) {
-                    case R.string.activity_home_find_journal_by_date:
-                        startActivity(new Intent(getContext(), SpannedLedgerListActivity.class));
-                        break;
-                    case R.string.activity_home_backup:
-                        startActivity(new Intent(getContext(), BackupActivity.class));
-                        break;
-                    case R.string.activity_home_search_journal_notes:
-                        startActivity(new Intent(getContext(), SearchNotesActivity.class));
-                        break;
-                    case R.string.activity_home_charts:
-                        startActivity(new Intent(getContext(), ChartsActivity.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        break;
-                    case R.string.str_export_printable:
-                        showExportPrintableOptions();
-                        break;
-                    case R.string.title_activity_erase:
-                        startActivity(new Intent(getContext(), EraseActivity.class));
-                        break;
-                    case R.string.title_activity_start_next_year:
-                        startActivity(new Intent(getContext(), StartNextYearActivity.class));
-                        break;
-                    case R.string.title_activity_daily_report:
-                        startActivity(new Intent(getContext(), DailyReportActivity.class));
+                int tag = (int) v.getTag();
+                if (tag == R.string.activity_home_find_journal_by_date) {
+                    startActivity(new Intent(getContext(), SpannedLedgerListActivity.class));
+                } else if (tag == R.string.activity_home_backup) {
+                    startActivity(new Intent(getContext(), BackupActivity.class));
+                } else if (tag == R.string.activity_home_search_journal_notes) {
+                    startActivity(new Intent(getContext(), SearchNotesActivity.class));
+                } else if (tag == R.string.activity_home_charts) {
+                    startActivity(new Intent(getContext(), ChartsActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                } else if (tag == R.string.str_export_printable) {
+                    showExportPrintableOptions();
+                } else if (tag == R.string.title_activity_erase) {
+                    startActivity(new Intent(getContext(), EraseActivity.class));
+                } else if (tag == R.string.title_activity_start_next_year) {
+                    startActivity(new Intent(getContext(), StartNextYearActivity.class));
+                } else if (tag == R.string.title_activity_daily_report) {
+                    startActivity(new Intent(getContext(), DailyReportActivity.class));
                 }
             }
         }
     }
 
+
     private void showExportPrintableOptions() {
         Intent openExportActivity = new Intent(getContext(), ExportPrintableActivity.class);
         startActivity(openExportActivity);
     }
-
 
     private boolean checkWriteStoragePermission() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

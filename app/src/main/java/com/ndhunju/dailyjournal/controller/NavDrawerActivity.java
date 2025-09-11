@@ -104,50 +104,43 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
-        switch ((int) id) {
-            default:
-            case R.mipmap.ic_app:
-                // do nothing
-                break;
-            case R.drawable.ic_dashboard_black_48dp:
-                if (this instanceof HomeActivity) return;
-                startActivity(new Intent(getContext(), HomeActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                break;
-            case R.drawable.ic_journal:
-                if (this instanceof JournalNewActivity) return;
-                startActivity(new Intent(getContext(), JournalNewActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                break;
-            case R.drawable.ic_nav_parties:
-                if (this instanceof PartyListActivity) return;
-                startActivity(new Intent(getContext(), PartyListActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                break;
-            case R.drawable.ic_settings_black_48dp:
-                startActivity(new Intent(getContext(), MyPreferenceActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                break;
-            case R.drawable.ic_tools:
-                if (this instanceof ToolsActivity) return;
-                startActivity(new Intent(getContext(), ToolsActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                break;
-            case R.drawable.ic_menu_tutorial:
-                if (this instanceof TutorialActivity) return;
-                startActivity(new Intent(getContext(), TutorialActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                break;
-            case R.drawable.ic_share:
-                //user clicked on Share option
-                AnalyticsService.INSTANCE.logAppShareEvent();
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.msg_share_subject));
-                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.msg_share_body) + " "
-                        + getString(R.string.link_app));
-                shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent, getString(R.string.str_choose)));
-                break;
+        int itemId = (int) id;
+        if (itemId == R.mipmap.ic_app) {
+            // do nothing
+        } else if (itemId == R.drawable.ic_dashboard_black_48dp) {
+            if (this instanceof HomeActivity) return;
+            startActivity(new Intent(getContext(), HomeActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        } else if (itemId == R.drawable.ic_journal) {
+            if (this instanceof JournalNewActivity) return;
+            startActivity(new Intent(getContext(), JournalNewActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        } else if (itemId == R.drawable.ic_nav_parties) {
+            if (this instanceof PartyListActivity) return;
+            startActivity(new Intent(getContext(), PartyListActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        } else if (itemId == R.drawable.ic_settings_black_48dp) {
+            startActivity(new Intent(getContext(), MyPreferenceActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        } else if (itemId == R.drawable.ic_tools) {
+            if (this instanceof ToolsActivity) return;
+            startActivity(new Intent(getContext(), ToolsActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        } else if (itemId == R.drawable.ic_menu_tutorial) {
+            if (this instanceof TutorialActivity) return;
+            startActivity(new Intent(getContext(), TutorialActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        } else if (itemId == R.drawable.ic_share) {
+            //user clicked on Share option
+            AnalyticsService.INSTANCE.logAppShareEvent();
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.msg_share_subject));
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.msg_share_body) + " "
+                    + getString(R.string.link_app));
+            shareIntent.setType("text/plain");
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.str_choose)));
+        } else {
+            // default: do nothing
         }
 
 

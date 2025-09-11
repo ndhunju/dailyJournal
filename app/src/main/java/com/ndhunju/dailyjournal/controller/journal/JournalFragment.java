@@ -279,26 +279,25 @@ public class JournalFragment extends JournalFragmentBase implements OnDatePicker
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()){
-			case R.id.menu_fragment_journal_delete_picture:
-				//Prepare warning msg
-				String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_journal));
-				//Alert user before deleting the Journal
-				UtilsView.alert(getActivity(), msg, (dialogInterface, i) -> {
-					journalChanged = true;
-					mServices.deleteJournal(mJournal);
-					String msg1 = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
-					UtilsView.toast(getActivity(), msg1);
-					if (getActivity() != null) {
-						getActivity().finish();
-					}
-				}, null);
-				break;
-			case android.R.id.home:
+		int itemId = item.getItemId();
+		if (itemId == R.id.menu_fragment_journal_delete_picture) {
+			//Prepare warning msg
+			String msg = String.format(getString(R.string.msg_delete_confirm), getString(R.string.str_journal));
+			//Alert user before deleting the Journal
+			UtilsView.alert(getActivity(), msg, (dialogInterface, i) -> {
+				journalChanged = true;
+				mServices.deleteJournal(mJournal);
+				String msg1 = String.format(getString(R.string.msg_deleted), getString(R.string.str_journal));
+				UtilsView.toast(getActivity(), msg1);
 				if (getActivity() != null) {
-					getActivity().onBackPressed();
+					getActivity().finish();
 				}
-				return true;
+			}, null);
+		} else if (itemId == android.R.id.home) {
+			if (getActivity() != null) {
+				getActivity().onBackPressed();
+			}
+			return true;
 		}
 
 		return super.onOptionsItemSelected(item);

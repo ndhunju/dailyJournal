@@ -272,21 +272,17 @@ public class PartyListFragment extends Fragment implements PartyCardAdapter.OnIt
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-
-            case R.id.menu_party_list_activity_import:
-                AnalyticsService.INSTANCE.logEvent("didClickOnImportContacts");
-                startImportingContacts();
-                break;
-
-            case R.id.menu_party_list_activity_share:
-                AnalyticsService.INSTANCE.logEvent("didClickOnShareReportInPartyList");
-                // let the user choose the type of report she wants to share
-                createDialogForSharePartiesReport(getActivity()).show();
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_party_list_activity_import) {
+            AnalyticsService.INSTANCE.logEvent("didClickOnImportContacts");
+            startImportingContacts();
+            return true;
+        } else if (itemId == R.id.menu_party_list_activity_share) {
+            AnalyticsService.INSTANCE.logEvent("didClickOnShareReportInPartyList");
+            // let the user choose the type of report she wants to share
+            createDialogForSharePartiesReport(getActivity()).show();
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

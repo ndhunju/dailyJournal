@@ -106,7 +106,10 @@ public class GoogleDriveSignInActivity extends AppCompatActivity {
                     onSignedIn(getAccountTask.getResult());
                 } else {
                     Log.e(TAG, "Sign-in failed.");
-                    showEndResultToUser(getString(R.string.common_google_play_services_unknown_issue, getString(R.string.app_name)), false);
+                    showEndResultToUser(getString(
+                            R.string.warming_common_google_play_services_unknown_issue,
+                            getString(R.string.app_name)
+                    ), false);
                 }
                 break;
             default:

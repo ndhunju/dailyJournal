@@ -212,18 +212,15 @@ public abstract class PartyDetailFragment extends Fragment implements PartyDAO.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.menu_party_activity_info:
-                startPartyActivity();
-                break;
-            case R.id.menu_party_activity_share:
-                showOptionsForAction(Intent.ACTION_SEND);
-                break;
-            case R.id.menu_party_activity_view_report:
-                showOptionsForAction(Intent.ACTION_VIEW);
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_party_activity_info) {
+            startPartyActivity();
+        } else if (itemId == R.id.menu_party_activity_share) {
+            showOptionsForAction(Intent.ACTION_SEND);
+        } else if (itemId == R.id.menu_party_activity_view_report) {
+            showOptionsForAction(Intent.ACTION_VIEW);
         }
+
 
         return super.onOptionsItemSelected(item);
     }
