@@ -177,10 +177,13 @@ public class GoogleDriveRestApiActivity extends BaseActivity {
     }
 
     private void onSignedInToGoogleAccount(GoogleSignInAccount googleAccount) {
-        Log.d(TAG, "Sign in successful");
-        onSignedInToGoogleDrive(
-                googleSignInHelper.signInToGoogleDrive(googleAccount, getContext())
-        );
+        Drive googleDriveService = googleSignInHelper.signInToGoogleDrive(googleAccount, getContext());
+        if (googleDriveService != null) {
+            Log.d(TAG, "Sign in successful");
+            onSignedInToGoogleDrive(googleDriveService);
+        } else {
+            Log.d(TAG, "Sign in failed");
+        }
     }
 
     protected void onSignedInToGoogleDrive(Drive googleDriveService) {
@@ -199,10 +202,9 @@ public class GoogleDriveRestApiActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

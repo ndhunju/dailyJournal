@@ -155,11 +155,16 @@ public class AutoBackupWithRestApiHelper {
             GoogleSignInAccount googleAccount,
             ProgressListener progressListener
     ) {
-        Log.d(TAG, "Sign in successful");
-        onSignedInToGoogleDrive(
-                googleSignInHelper.signInToGoogleDrive(googleAccount, getContext()),
-                progressListener
-        );
+        Drive drive = googleSignInHelper.signInToGoogleDrive(googleAccount, getContext());
+        if (drive != null) {
+            Log.d(TAG, "Sign in successful");
+            onSignedInToGoogleDrive(
+                    drive,
+                    progressListener
+            );
+        } else {
+            Log.d(TAG, "Sign in failed");
+        }
     }
 
     /**

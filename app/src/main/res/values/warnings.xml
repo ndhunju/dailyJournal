@@ -11,4 +11,5 @@
     <string name="warning_cant_change_date">Changing date is not supported. Please delete this journal and add new journal with correct date.</string>
     <!-- text field inside a dialog. Shown when party user selected doesn't exist anymore-->
     <string name="warning_party_not_found">Selected Party not found. Please select a Party again.</string>
+    <string name="warning_common_google_play_services_unknown_issue">There is an issue with google play services - %s.</string>
 </resources>

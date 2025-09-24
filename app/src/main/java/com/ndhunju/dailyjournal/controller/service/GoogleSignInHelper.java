@@ -3,8 +3,10 @@ package com.ndhunju.dailyjournal.controller.service;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -14,14 +16,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Scope;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.common.collect.Sets;
 import com.ndhunju.dailyjournal.R;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +34,8 @@ import java.util.Set;
  * Helper class that groups relevant objects like {@link Scope} and provides helper methods
  */
 public class GoogleSignInHelper {
+
+    public static final String TAG = GoogleSignInHelper.class.getSimpleName();
 
     public static final GoogleSignInHelper INSTANCE = new GoogleSignInHelper();
 
@@ -66,7 +72,7 @@ public class GoogleSignInHelper {
         );
     }
 
-    @NonNull
+    @Nullable
     public Drive signInToGoogleDrive(GoogleSignInAccount googleSignInAccount, Context context) {
         // Use the authenticated account to sign in to the Drive service.
         GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
@@ -75,14 +81,20 @@ public class GoogleSignInHelper {
         );
 
         credential.setSelectedAccount(googleSignInAccount.getAccount());
-
-        return new Drive.Builder(
-                AndroidHttp.newCompatibleTransport(),
-                new AndroidJsonFactory(),
-                credential
-        ).setApplicationName(context.getString(R.string.app_name)).build();
+        try {
+            // TODO: Test this change
+            return new Drive.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    GsonFactory.getDefaultInstance(),
+                    credential
+            ).setApplicationName(context.getString(R.string.app_name)).build();
+        } catch (GeneralSecurityException | IOException e) {
+            Log.e(TAG, "signInToGoogleDrive: ", e);
+            return null;
+        }
     }
 
+    @NonNull
     public Pair<GoogleSignInAccount, Integer> getLastSignedInAccountAndConnectionResult(
             Context context
     ) {
