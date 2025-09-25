@@ -1,138 +1,100 @@
-package com.ndhunju.dailyjournal.controller.service;
+package com.ndhunju.dailyjournal.controller.service
 
-import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
-
-import android.content.Context;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.Scope;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
-import com.google.common.collect.Sets;
-import com.ndhunju.dailyjournal.R;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import android.content.Context
+import android.util.Log
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
+import androidx.core.util.Pair
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.api.Scope
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.common.collect.Sets
+import com.ndhunju.dailyjournal.R
 
 /**
- * Helper class that groups relevant objects like {@link Scope} and provides helper methods
+ * Helper class that groups relevant objects like [Scope] and provides helper methods
  */
-public class GoogleSignInHelper {
+object GoogleSignInHelper {
 
-    public static final String TAG = GoogleSignInHelper.class.getSimpleName();
+    const val TAG = "GoogleSignInHelper"
 
-    public static final GoogleSignInHelper INSTANCE = new GoogleSignInHelper();
+    private val requiredScopes = setOf(Scope(DriveScopes.DRIVE_FILE))
 
-    public static GoogleSignInHelper get() {
-        return INSTANCE;
+    fun buildGoogleSigInOptions(): GoogleSignInOptions {
+        return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestScopes(Scope(DriveScopes.DRIVE_FILE))
+            .build()
     }
 
-    Scope[] requiredScopes = {
-            // See https://github.com/vaquarkhan/Scoot-mobile-app/blob/master/ScootAppSource/com/google/android/gms/auth/api/signin/GoogleSignInOptions.java
-//            GoogleSignInOptions.zat, // openId
-//            GoogleSignInOptions.zar, // profile
-            // Without email, gives "IllegalArgumentException: the name must not be empty: null"
-            /** See {@link GoogleSignInOptions.Builder#requestEmail()} to know which var is for email */
-            GoogleSignInOptions.zab, // email
-            new Scope(DriveScopes.DRIVE_FILE)
-    };
-
-    private GoogleSignInHelper() {}
-
-    public GoogleSignInOptions buildGoogleSigInOptions() {
-        GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder();
-
-        for (Scope scope: requiredScopes) {
-            builder.requestScopes(scope);
-        }
-
-        return builder.build();
+    fun getGoogleSigInClient(context: Context): GoogleSignInClient {
+        return GoogleSignIn.getClient(context, buildGoogleSigInOptions())
     }
 
-    public GoogleSignInClient getGoogleSigInClient(Context context) {
-        return GoogleSignIn.getClient(
-                context,
-                GoogleSignInHelper.get().buildGoogleSigInOptions()
-        );
-    }
+    fun signInToGoogleDrive(
+        @Nullable googleSignInAccount: GoogleSignInAccount?,
+        context: Context
+    ): Drive? {
+        googleSignInAccount ?: return null
 
-    @Nullable
-    public Drive signInToGoogleDrive(GoogleSignInAccount googleSignInAccount, Context context) {
-        // Use the authenticated account to sign in to the Drive service.
-        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
-                context,
-                requiredScopesAsStringList()
-        );
+        val credential = GoogleAccountCredential.usingOAuth2(
+            context,
+            listOf(DriveScopes.DRIVE_FILE)
+        )
 
-        credential.setSelectedAccount(googleSignInAccount.getAccount());
-        try {
-            // TODO: Test this change
-            return new Drive.Builder(
-                    GoogleNetHttpTransport.newTrustedTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    credential
-            ).setApplicationName(context.getString(R.string.app_name)).build();
-        } catch (GeneralSecurityException | IOException e) {
-            Log.e(TAG, "signInToGoogleDrive: ", e);
-            return null;
+        credential.selectedAccount = googleSignInAccount.account
+        return try {
+            Drive.Builder(
+                GoogleNetHttpTransport.newTrustedTransport(),
+                GsonFactory.getDefaultInstance(),
+                credential
+            )
+                .setApplicationName(context.getString(R.string.app_name))
+                .build()
+        } catch (e: Exception) {
+            Log.e(TAG, "signInToGoogleDrive: ", e)
+            null
         }
     }
 
     @NonNull
-    public Pair<GoogleSignInAccount, Integer> getLastSignedInAccountAndConnectionResult(
-            Context context
-    ) {
+    fun getLastSignedInAccountAndConnectionResult(context: Context): Pair<GoogleSignInAccount?, Int> {
+        val googleServiceStatus = GoogleApiAvailability.getInstance()
+            .isGooglePlayServicesAvailable(context)
 
-        int googleServiceStatus = GoogleApiAvailability.getInstance()
-                .isGooglePlayServicesAvailable(context);
+        return when (googleServiceStatus) {
+            ConnectionResult.SERVICE_MISSING,
+            ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED,
+            ConnectionResult.API_UNAVAILABLE,
+            ConnectionResult.SERVICE_DISABLED -> Pair(null, googleServiceStatus)
 
-        switch (googleServiceStatus) {
-            case ConnectionResult.SERVICE_MISSING:
-            case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
-            case ConnectionResult.API_UNAVAILABLE:
-            case ConnectionResult.SERVICE_DISABLED:
-                return Pair.create(null, googleServiceStatus);
-            case ConnectionResult.SUCCESS:
-                GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(context);
+            ConnectionResult.SUCCESS -> {
+                val signInAccount = GoogleSignIn.getLastSignedInAccount(context)
                 if (signInAccount != null
-                        && !signInAccount.isExpired()
-                        && (signInAccount.getGrantedScopes()
-                        .containsAll(requiredScopesAsSet()))
-                        && (DriveServiceHelper.getLastOperationStatus(context)
-                        != OPERATION_STATUS_FAIL)) {
-                    return Pair.create(signInAccount, googleServiceStatus);
+                    && !signInAccount.isExpired
+                    && requiredScopes.all { signInAccount.grantedScopes.contains(it) }
+                    && DriveServiceHelper.getLastOperationStatus(context) != DriveServiceHelper.OPERATION_STATUS_FAIL
+                ) {
+                    Pair(signInAccount, googleServiceStatus)
+                } else {
+                    Pair(null, googleServiceStatus)
                 }
+            }
+
+            else -> Pair(null, googleServiceStatus)
         }
-
-        return Pair.create(null, googleServiceStatus);
     }
 
-    public Set<Scope> requiredScopesAsSet() {
-        return Sets.newHashSet(requiredScopes);
-    }
+    fun requiredScopesAsSet(): Set<Scope> = Sets.newHashSet(*requiredScopes.toTypedArray())
 
-    public List<String> requiredScopesAsStringList() {
-        List<String> scopes = new ArrayList<>();
-        for (Scope scope: requiredScopes) {
-            scopes.add(scope.toString());
-        }
-
-        return scopes;
-    }
+    fun requiredScopesAsStringList(): List<String> = requiredScopes.map { it.toString() }
 }
