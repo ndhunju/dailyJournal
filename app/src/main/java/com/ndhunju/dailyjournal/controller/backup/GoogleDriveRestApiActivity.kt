@@ -1,101 +1,140 @@
-package com.ndhunju.dailyjournal.controller.backup;
+package com.ndhunju.dailyjournal.controller.backup
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.MenuItem;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.api.services.drive.Drive;
-import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.BaseActivity;
-import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
-import com.ndhunju.dailyjournal.controller.service.GoogleSignInHelper;
-import com.ndhunju.dailyjournal.util.UtilsView;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.util.Pair;
-
-import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
-import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_SUCCESS;
+import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
+import android.view.MenuItem
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
+import androidx.core.util.Pair
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.api.services.drive.Drive
+import com.ndhunju.dailyjournal.R
+import com.ndhunju.dailyjournal.controller.BaseActivity
+import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper
+import com.ndhunju.dailyjournal.controller.service.GoogleSignInHelper
+import com.ndhunju.dailyjournal.util.UtilsView
 
 /**
  * The main {@link Activity} for the Drive REST API functionality.
  */
-public class GoogleDriveRestApiActivity extends BaseActivity {
+class GoogleDriveRestApiActivity : BaseActivity() {
 
     // Constants
-    private static final String TAG = GoogleDriveRestApiActivity.class.getSimpleName();
-    private static final int REQUEST_CODE_SIGN_IN = 1;
-    private static final int REQUEST_CODE_ERROR_RESOLUTION = 2;
-    /** Pass true for this key to finish this activity upon successful sign in to google drive **/
-    public static final String BUNDLE_SHOULD_FINISH_ON_SIGN_IN = "BUNDLE_SHOULD_FINISH_ON_SIGN_IN";
+    companion object {
+        private const val TAG = "GoogleDriveRestApiActivity"
+        private const val REQUEST_CODE_SIGN_IN = 1
+        private const val REQUEST_CODE_ERROR_RESOLUTION = 2
+        /** Pass true for this key to finish this activity upon successful sign in to google drive **/
+        const val BUNDLE_SHOULD_FINISH_ON_SIGN_IN = "BUNDLE_SHOULD_FINISH_ON_SIGN_IN"
+    }
 
     // Member Variables
-    private final GoogleSignInHelper googleSignInHelper = GoogleSignInHelper.get();
-    private DriveServiceHelper mDriveServiceHelper;
+    private val googleSignInHelper = GoogleSignInHelper
+    private lateinit var mDriveServiceHelper: DriveServiceHelper
 
     // View Variables
-    private ProgressDialog connectionPd;
+    private lateinit var connectionPd: ProgressDialog
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Setup Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        // Wire views
-        connectionPd = new ProgressDialog(getActivity());
-        connectionPd.setMessage(String.format(
-                getString(R.string.msg_connecting),
-                getString(R.string.str_google_drive)
-        ));
-        connectionPd.setCanceledOnTouchOutside(true);
-        connectionPd.setIndeterminate(true);
-        connectionPd.setCancelable(true);
-        connectionPd.show();
-
-        Pair<GoogleSignInAccount, Integer> googleAccountAndConnectionResult
-                = GoogleSignInHelper.get().getLastSignedInAccountAndConnectionResult(getContext());
-
-        if (googleAccountAndConnectionResult.second == ConnectionResult.SUCCESS) {
-            if (googleAccountAndConnectionResult.first != null) {
-                onSignedInToGoogleAccount(googleAccountAndConnectionResult.first);
-            } else {
-                requestSignIn();
-            }
+    private val signInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            handleSignInResult(result.data)
         } else {
-            GoogleApiAvailability.getInstance().getErrorDialog(
-                    this,
-                    googleAccountAndConnectionResult.second,
-                    REQUEST_CODE_ERROR_RESOLUTION
-            ).show();
+            DriveServiceHelper.setLastOperationStatus(this, DriveServiceHelper.OPERATION_STATUS_FAIL)
+            showEndResultToUser(
+                getString(R.string.msg_error_g_drive_user_not_signed_in),
+                false
+            )
         }
     }
 
-    protected void showProgress(boolean showProgress, String message) {
-        if (showProgress) {
-            connectionPd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            connectionPd.setMessage(message);
-            connectionPd.show();
-        } else if (!TextUtils.isEmpty(message)) {
-            connectionPd.setProgressDrawable(null);
-            connectionPd.setMessage(message);
+    private val resolutionLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val newStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+            if (newStatus == ConnectionResult.SUCCESS) {
+                val accountPair = googleSignInHelper.getLastSignedInAccountAndConnectionResult(this)
+                if (accountPair.first != null) {
+                    onSignedInToGoogleAccount(accountPair.first)
+                } else {
+                    requestSignIn()
+                }
+            } else {
+                DriveServiceHelper.setLastOperationStatus(this, DriveServiceHelper.OPERATION_STATUS_FAIL)
+                showEndResultToUser(
+                    getString(R.string.msg_error_g_drive_user_not_signed_in),
+                    false
+                )
+            }
         } else {
-            connectionPd.dismiss();
+            DriveServiceHelper.setLastOperationStatus(this, DriveServiceHelper.OPERATION_STATUS_FAIL)
+            showEndResultToUser(
+                getString(R.string.msg_error_g_drive_user_not_signed_in),
+                false
+            )
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Setup Toolbar
+        val toolbar: Toolbar? = findViewById(R.id.toolbar)
+        toolbar?.let {
+            setSupportActionBar(it)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+
+        // Wire views
+        connectionPd = ProgressDialog(this).apply {
+            setMessage(getString(R.string.msg_connecting, getString(R.string.str_google_drive)))
+            setCanceledOnTouchOutside(true)
+            isIndeterminate = true
+            setCancelable(true)
+            show()
+        }
+
+        val accountPair = googleSignInHelper.getLastSignedInAccountAndConnectionResult(this)
+
+        if (accountPair.second == ConnectionResult.SUCCESS) {
+            accountPair.first?.let { onSignedInToGoogleAccount(it) } ?: requestSignIn()
+        } else {
+            val apiAvailability = GoogleApiAvailability.getInstance()
+            if (apiAvailability.isUserResolvableError(accountPair.second)) {
+                val intent = apiAvailability.getErrorResolutionIntent(this, accountPair.second, REQUEST_CODE_ERROR_RESOLUTION)
+                intent?.let { resolutionLauncher.launch(it) }
+            } else {
+                DriveServiceHelper.setLastOperationStatus(this, DriveServiceHelper.OPERATION_STATUS_FAIL)
+                showEndResultToUser(
+                    getString(R.string.msg_error_g_drive_user_not_signed_in),
+                    false
+                )
+            }
+        }
+    }
+
+    protected fun showProgress(showProgress: Boolean, message: String?) {
+        if (showProgress) {
+            connectionPd.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+            connectionPd.setMessage(message)
+            connectionPd.show()
+        } else if (!TextUtils.isEmpty(message)) {
+            connectionPd.setProgressDrawable(null)
+            connectionPd.setMessage(message)
+        } else {
+            connectionPd.dismiss()
         }
     }
 
@@ -103,123 +142,93 @@ public class GoogleDriveRestApiActivity extends BaseActivity {
      * Shows {@code message} to the user in a dialog. When user acknowledges the message, finishes
      * current activity and passes {@code success} to previous activity.
      */
-    protected void showEndResultToUser(String message, boolean success) {
-        setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
-        if (getActivity() != null && !getActivity().isFinishing()) {
-            UtilsView.alert(getActivity(), message, (dialog, which) -> {
-                setResult(success ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
-                finish();
-            });
+    protected fun showEndResultToUser(message: String, success: Boolean) {
+        setResult(if (success) Activity.RESULT_OK else Activity.RESULT_CANCELED)
+        if (!isFinishing) {
+            UtilsView.alert(this, message) { _, _ ->
+                setResult(if (success) Activity.RESULT_OK else Activity.RESULT_CANCELED)
+                finish()
+            }
         }
     }
 
     /**
      * Starts a sign-in activity using {@link #REQUEST_CODE_SIGN_IN}.
      */
-    protected void requestSignIn() {
-        Log.d(TAG, "Requesting sign-in");
-        showProgress(true, getString(R.string.msg_requesting_sign_in));
+    protected fun requestSignIn() {
+        Log.d(TAG, "Requesting sign-in")
+        showProgress(true, getString(R.string.msg_requesting_sign_in))
 
-        GoogleSignInClient client = GoogleSignInHelper.get().getGoogleSigInClient(this);
+        val client: GoogleSignInClient = googleSignInHelper.getGoogleSigInClient(this)
 
-        // The result of the sign-in Intent is handled in onActivityResult.
-        startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        switch (requestCode) {
-            case REQUEST_CODE_SIGN_IN:
-                if (resultCode == Activity.RESULT_OK && resultData != null) {
-                    handleSignInResult(resultData);
-                } else {
-                    DriveServiceHelper.setLastOperationStatus(this, OPERATION_STATUS_FAIL);
-                    showEndResultToUser(
-                            getString(R.string.msg_error_g_drive_user_not_signed_in),
-                            false
-                    );
-                }
-                break;
-            case REQUEST_CODE_ERROR_RESOLUTION:
-                if (resultCode == Activity.RESULT_OK) {
-                    requestSignIn();
-                } else {
-                    DriveServiceHelper.setLastOperationStatus(this, OPERATION_STATUS_FAIL);
-                    showEndResultToUser(
-                            getString(R.string.msg_error_g_drive_user_not_signed_in),
-                            false
-                    );
-                }
-                break;
-        }
-
-        super.onActivityResult(requestCode, resultCode, resultData);
+        // The result of the sign-in Intent is handled in signInLauncher.
+        signInLauncher.launch(client.signInIntent)
     }
 
     /**
      * Handles the {@code result} of a completed sign-in activity initiated from {@link
      * #requestSignIn()}.
      */
-    private void handleSignInResult(Intent result) {
+    private fun handleSignInResult(result: Intent?) {
+        result ?: return
         GoogleSignIn.getSignedInAccountFromIntent(result)
-                .addOnSuccessListener(googleSignInAccount -> {
-                    DriveServiceHelper.setLastOperationStatus(getContext(), OPERATION_STATUS_SUCCESS);
-                    onSignedInToGoogleAccount(googleSignInAccount);
-                })
-                .addOnFailureListener(exception -> {
-                    Log.e(TAG, "Failed sign in.", exception);
-                    DriveServiceHelper.setLastOperationStatus(this, OPERATION_STATUS_FAIL);
-                    showEndResultToUser(
-                            getString(R.string.msg_error_g_drive_user_not_signed_in),
-                            false
-                    );
-                });
+            .addOnSuccessListener { googleSignInAccount ->
+                DriveServiceHelper.setLastOperationStatus(this@GoogleDriveRestApiActivity, DriveServiceHelper.OPERATION_STATUS_SUCCESS)
+                onSignedInToGoogleAccount(googleSignInAccount)
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Failed sign in.", exception)
+                DriveServiceHelper.setLastOperationStatus(this@GoogleDriveRestApiActivity, DriveServiceHelper.OPERATION_STATUS_FAIL)
+                showEndResultToUser(
+                    getString(R.string.msg_error_g_drive_user_not_signed_in),
+                    false
+                )
+            }
     }
 
-    private void onSignedInToGoogleAccount(GoogleSignInAccount googleAccount) {
-        Drive googleDriveService = googleSignInHelper.signInToGoogleDrive(googleAccount, getContext());
+    private fun onSignedInToGoogleAccount(googleAccount: GoogleSignInAccount) {
+        val googleDriveService = googleSignInHelper.signInToGoogleDrive(googleAccount, this)
         if (googleDriveService != null) {
-            Log.d(TAG, "Sign in successful");
-            onSignedInToGoogleDrive(googleDriveService);
+            Log.d(TAG, "Sign in successful")
+            onSignedInToGoogleDrive(googleDriveService)
         } else {
-            Log.d(TAG, "Sign in failed");
+            Log.d(TAG, "Sign in failed")
+            DriveServiceHelper.setLastOperationStatus(this, DriveServiceHelper.OPERATION_STATUS_FAIL)
+            showEndResultToUser(
+                getString(R.string.msg_error_g_drive_user_not_signed_in),
+                false
+            )
         }
     }
 
-    protected void onSignedInToGoogleDrive(Drive googleDriveService) {
-        showProgress(false, null);
+    protected fun onSignedInToGoogleDrive(googleDriveService: Drive) {
 
-        if (getIntent().getBooleanExtra(BUNDLE_SHOULD_FINISH_ON_SIGN_IN, false)) {
-            setResult(RESULT_OK);
-            finish();
-            return;
+        showProgress(false, null)
+
+        if (intent.getBooleanExtra(BUNDLE_SHOULD_FINISH_ON_SIGN_IN, false)) {
+            setResult(RESULT_OK)
+            finish()
+            return
         }
 
         // The DriveServiceHelper encapsulates all REST API and SAF functionality.
         // Its instantiation is required before handling any onClick actions.
-        mDriveServiceHelper = new DriveServiceHelper(googleDriveService);
+        mDriveServiceHelper = DriveServiceHelper(googleDriveService)
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
-    public DriveServiceHelper getDriveServiceHelper() {
-        return mDriveServiceHelper;
-    }
+    fun getDriveServiceHelper(): DriveServiceHelper = mDriveServiceHelper
 
-    public Context getContext() {
-        return this;
-    }
+    fun getContext(): Context = this
 
-    public Activity getActivity() {
-        return this;
-    }
-
+    fun getActivity(): Activity = this
 }
