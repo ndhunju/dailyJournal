@@ -11,8 +11,6 @@
     <string name="key_pref_auto_backup_interval_lp">preferencesAutoBackupIntervalLP</string>
     <string name="key_pref_share_ps">preferencesKeySharePS</string>
     <string name="key_pref_rate_ps">preferenceKeyRateAppPS</string>
-    <string name="key_pref_backup_google_drive">preferenceKeyBackupGoogleDrive</string>
-    <string name="key_pref_restore_google_drive">preferenceKeyRestoreGoogleDrive</string>
     <string name="key_pref_backup_google_drive_in_house">preferenceKeyBackupGoogleDriveInHouse</string>
     <string name="key_pref_restore_google_drive_in_house">preferenceKeyRestoreGoogleDriveInHouse</string>
     <string name="key_pref_backup_local_storage">preferenceKeyBackupLocalStorage</string>

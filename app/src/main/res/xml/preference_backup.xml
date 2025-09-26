@@ -15,19 +15,6 @@
             android:title="@string/str_restore_backup_from_google_drive" />
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/str_google_drive"
-        app:iconSpaceReserved="false"
-        >
-        <Preference
-            android:icon="@drawable/ic_cloud_upload_black_24dp"
-            android:key="@string/key_pref_backup_google_drive"
-            android:title="@string/str_create_backup_in_google_drive" />
-        <Preference
-            android:icon="@drawable/ic_cloud_download_black_24dp"
-            android:key="@string/key_pref_restore_google_drive"
-            android:title="@string/str_restore_backup_from_google_drive" />
-    </PreferenceCategory>
-    <PreferenceCategory
         android:title="@string/str_local_storage"
         app:iconSpaceReserved="false"
         >

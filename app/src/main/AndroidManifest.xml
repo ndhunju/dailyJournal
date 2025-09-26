@@ -172,8 +172,6 @@
         <activity android:name=".controller.tools.DailyReportActivity"
             android:label="@string/title_activity_daily_report"/>
 
-        <activity android:name=".controller.backup.GoogleDriveSignInActivity" />
-
         <activity android:name=".controller.export.ExportPrintableActivity"
             android:label="@string/str_export_printable"/>
 

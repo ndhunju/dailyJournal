@@ -49,7 +49,7 @@ public class GoogleDriveRestApiRestoreBackupActivity
     }
 
     @Override
-    protected void onSignedInToGoogleDrive(Drive googleDriveService) {
+    public void onSignedInToGoogleDrive(Drive googleDriveService) {
         super.onSignedInToGoogleDrive(googleDriveService);
         queryForBackupFiles();
     }

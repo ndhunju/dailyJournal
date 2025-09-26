@@ -30,7 +30,7 @@ public class GoogleDriveRestApiUploadBackupActivity extends GoogleDriveRestApiAc
     }
 
     @Override
-    protected void onSignedInToGoogleDrive(Drive googleDriveService) {
+    public void onSignedInToGoogleDrive(@NonNull Drive googleDriveService) {
         super.onSignedInToGoogleDrive(googleDriveService);
         uploadBackUpToGDrive();
     }

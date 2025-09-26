@@ -108,25 +108,6 @@ public class BackupPreferenceFragment
                     return true;
                 });
 
-        gDriveBackupPref = findPreference(getString(R.string.key_pref_backup_google_drive));
-        gDriveBackupPref.setOnPreferenceClickListener(preference -> {
-                    startActivityForResult(
-                            new Intent(getActivity(), GoogleDriveUploadBackupActivity.class),
-                            REQUEST_CODE_BACKUP_COMPLETE
-                    );
-                    return true;
-                });
-
-        findPreference(getString(R.string.key_pref_restore_google_drive))
-                .setOnPreferenceClickListener(preference -> {
-                    UtilsView.alert(getActivity(), getString(R.string.warning_restore),
-                            (dialogInterface, i) -> startActivityForResult(new Intent(
-                                    getContext(),
-                                    GoogleDriveRestoreBackupActivity.class)
-                            , REQUEST_CODE_RESTORE_COMPLETE));
-                    return true;
-                });
-
         localBackupPref = findPreference(getString(R.string.key_pref_backup_local_storage));
         localBackupPref.setOnPreferenceClickListener(preference -> {
                     // Create backup in Downloads folder

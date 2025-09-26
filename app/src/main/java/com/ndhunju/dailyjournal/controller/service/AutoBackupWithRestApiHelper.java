@@ -1,5 +1,6 @@
 package com.ndhunju.dailyjournal.controller.service;
 
+import android.accounts.Account;
 import android.app.Notification;
 import android.content.Context;
 import androidx.annotation.StringRes;
@@ -7,6 +8,8 @@ import androidx.core.util.Pair;
 
 import android.util.Log;
 
+import com.google.android.gms.auth.api.identity.AuthorizationRequest;
+import com.google.android.gms.auth.api.identity.RevokeAccessRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.api.services.drive.Drive;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -35,7 +38,7 @@ public class AutoBackupWithRestApiHelper {
     private static final int NOTIFICATION_ID_GOOGLE_DRIVE_UPLOAD = 2;
 
     // Member Variables
-    private final GoogleSignInHelper googleSignInHelper = GoogleSignInHelper.get();
+    private final GoogleSignInHelper googleSignInHelper = GoogleSignInHelper.INSTANCE;
     private DriveServiceHelper driveServiceHelper;
 
     private final Context context;
@@ -122,8 +125,8 @@ public class AutoBackupWithRestApiHelper {
     /** Starts the sign-in process and initializes the Drive client. */
     protected void signInToGoogleDrive(ProgressListener progressListener) {
 
-        Pair<GoogleSignInAccount, Integer> googleSignInAccountAndConnectionResult
-                = GoogleSignInHelper.get().getLastSignedInAccountAndConnectionResult(getContext());
+        Pair<Account, Integer> googleSignInAccountAndConnectionResult
+                = GoogleSignInHelper.INSTANCE.getLastSignedInAccountAndConnectionResult(getContext());
 
         if (googleSignInAccountAndConnectionResult.first != null) {
             onSignedInToGoogleAccount(
@@ -131,9 +134,13 @@ public class AutoBackupWithRestApiHelper {
                     progressListener
             );
         } else {
-            GoogleSignInHelper.get()
-                    .getGoogleSigInClient(getContext())
-                    .silentSignIn()
+            GoogleSignInHelper.INSTANCE
+                    .getAuthClient(getContext())
+                    .authorize(
+                            AuthorizationRequest.builder().setRequestedScopes(
+                                    GoogleSignInHelper.INSTANCE.getRequiredScopes()
+                            ).build()
+                    )
                     .addOnSuccessListener(
                             // Attempt Sign In again
                             googleSignInAccount -> signInToGoogleDrive(progressListener)
@@ -145,14 +152,14 @@ public class AutoBackupWithRestApiHelper {
                                 + "(" + e.getLocalizedMessage() + ")"
                         );
                         // Force user to grant access again
-                        GoogleSignInHelper.get().getGoogleSigInClient(getContext()).revokeAccess();
+                        GoogleSignInHelper.INSTANCE.getAuthClient(getContext()).revokeAccess(RevokeAccessRequest.builder().build());
                         DriveServiceHelper.setLastOperationStatus(getContext(), OPERATION_STATUS_FAIL);
                     });
         }
     }
 
     private void onSignedInToGoogleAccount(
-            GoogleSignInAccount googleAccount,
+            Account googleAccount,
             ProgressListener progressListener
     ) {
         Drive drive = googleSignInHelper.signInToGoogleDrive(googleAccount, getContext());
@@ -205,7 +212,7 @@ public class AutoBackupWithRestApiHelper {
                     // Notify user about failure
                     notifyGDriveErrorToUser(message);
                     // Force user to grant access again
-                    GoogleSignInHelper.get().getGoogleSigInClient(getContext()).revokeAccess();
+                    GoogleSignInHelper.INSTANCE.getAuthClient(getContext()).revokeAccess(RevokeAccessRequest.builder().build());
                     DriveServiceHelper.setLastOperationStatus(getContext(), OPERATION_STATUS_FAIL);
                 });
     }
