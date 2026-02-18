@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.api.services.drive.Drive;
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 import com.ndhunju.dailyjournal.service.AnalyticsService;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -14,6 +13,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_FAIL;
 import static com.ndhunju.dailyjournal.controller.service.DriveServiceHelper.OPERATION_STATUS_SUCCESS;
 import static com.ndhunju.dailyjournal.util.ProgressListener.PROGRESS_INDETERMINATE;
+import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
+
+import androidx.annotation.NonNull;
 
 public class GoogleDriveRestApiUploadBackupActivity extends GoogleDriveRestApiActivity {
 

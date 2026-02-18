@@ -1,5 +1,6 @@
 package com.ndhunju.dailyjournal.controller.backup
 
+import android.accounts.Account
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
@@ -11,63 +12,57 @@ import android.view.MenuItem
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
-import androidx.core.util.Pair
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.Scopes
 import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.firebase.auth.FirebaseAuth
 import com.ndhunju.dailyjournal.R
 import com.ndhunju.dailyjournal.controller.BaseActivity
 import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper
-import com.ndhunju.dailyjournal.controller.service.GoogleSignInHelper
+import com.ndhunju.dailyjournal.controller.service.GoogleAuthHelper
 import com.ndhunju.dailyjournal.util.UtilsView
+import kotlinx.coroutines.launch
 
 /**
  * The main {@link Activity} for the Drive REST API functionality.
  */
-class GoogleDriveRestApiActivity : BaseActivity() {
+open class GoogleDriveRestApiActivity : BaseActivity() {
 
     // Constants
     companion object {
         private const val TAG = "GoogleDriveRestApiActivity"
-        private const val REQUEST_CODE_SIGN_IN = 1
-        private const val REQUEST_CODE_ERROR_RESOLUTION = 2
+        private const val REQUEST_CODE_ERROR_RESOLUTION = "REQUEST_CODE_ERROR_RESOLUTION"
+
         /** Pass true for this key to finish this activity upon successful sign in to google drive **/
         const val BUNDLE_SHOULD_FINISH_ON_SIGN_IN = "BUNDLE_SHOULD_FINISH_ON_SIGN_IN"
     }
 
     // Member Variables
-    private val googleSignInHelper = GoogleSignInHelper
+    private val googleSignInHelper = GoogleAuthHelper(this)
     private lateinit var mDriveServiceHelper: DriveServiceHelper
 
     // View Variables
     private lateinit var connectionPd: ProgressDialog
 
     private val signInLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            handleSignInResult(result.data)
-        } else {
-            DriveServiceHelper.setLastOperationStatus(this, DriveServiceHelper.OPERATION_STATUS_FAIL)
-            showEndResultToUser(
-                getString(R.string.msg_error_g_drive_user_not_signed_in),
-                false
-            )
-        }
+        FirebaseAuthUIActivityResultContract()
+    ) { result ->
+        onSignInResult(result)
     }
 
     private val resolutionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             val newStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
             if (newStatus == ConnectionResult.SUCCESS) {
-                val accountPair = googleSignInHelper.getLastSignedInAccountAndConnectionResult(this)
-                if (accountPair.first != null) {
-                    onSignedInToGoogleAccount(accountPair.first)
+                if (googleSignInHelper.getCredential()?.selectedAccount != null) {
+                    onSignedInToGoogleAccount(googleSignInHelper.getCredential()?.selectedAccount)
                 } else {
                     requestSignIn()
                 }
@@ -98,6 +93,7 @@ class GoogleDriveRestApiActivity : BaseActivity() {
         }
 
         // Wire views
+        // TODO: Use AlertDialog to show progress
         connectionPd = ProgressDialog(this).apply {
             setMessage(getString(R.string.msg_connecting, getString(R.string.str_google_drive)))
             setCanceledOnTouchOutside(true)
@@ -106,26 +102,27 @@ class GoogleDriveRestApiActivity : BaseActivity() {
             show()
         }
 
-        val accountPair = googleSignInHelper.getLastSignedInAccountAndConnectionResult(this)
+        val account = googleSignInHelper.getCredential()?.selectedAccount
 
-        if (accountPair.second == ConnectionResult.SUCCESS) {
-            accountPair.first?.let { onSignedInToGoogleAccount(it) } ?: requestSignIn()
+        if (account != null) {
+            onSignedInToGoogleAccount(account)
         } else {
             val apiAvailability = GoogleApiAvailability.getInstance()
-            if (apiAvailability.isUserResolvableError(accountPair.second)) {
-                val intent = apiAvailability.getErrorResolutionIntent(this, accountPair.second, REQUEST_CODE_ERROR_RESOLUTION)
+            if (googleSignInHelper.errorCode != null && apiAvailability.isUserResolvableError(googleSignInHelper.errorCode)) {
+                val intent = apiAvailability.getErrorResolutionIntent(
+                    this,
+                    googleSignInHelper.errorCode,
+                    REQUEST_CODE_ERROR_RESOLUTION
+                )
                 intent?.let { resolutionLauncher.launch(it) }
             } else {
-                DriveServiceHelper.setLastOperationStatus(this, DriveServiceHelper.OPERATION_STATUS_FAIL)
-                showEndResultToUser(
-                    getString(R.string.msg_error_g_drive_user_not_signed_in),
-                    false
-                )
+                requestSignIn()
             }
         }
     }
 
-    protected fun showProgress(showProgress: Boolean, message: String?) {
+    // TODO: Use AlertDialog to show progress
+    fun showProgress(showProgress: Boolean, message: String?) {
         if (showProgress) {
             connectionPd.setProgressStyle(ProgressDialog.STYLE_SPINNER)
             connectionPd.setMessage(message)
@@ -142,11 +139,11 @@ class GoogleDriveRestApiActivity : BaseActivity() {
      * Shows {@code message} to the user in a dialog. When user acknowledges the message, finishes
      * current activity and passes {@code success} to previous activity.
      */
-    protected fun showEndResultToUser(message: String, success: Boolean) {
-        setResult(if (success) Activity.RESULT_OK else Activity.RESULT_CANCELED)
+    fun showEndResultToUser(message: String, success: Boolean) {
+        setResult(if (success) RESULT_OK else RESULT_CANCELED)
         if (!isFinishing) {
             UtilsView.alert(this, message) { _, _ ->
-                setResult(if (success) Activity.RESULT_OK else Activity.RESULT_CANCELED)
+                setResult(if (success) RESULT_OK else RESULT_CANCELED)
                 finish()
             }
         }
@@ -155,45 +152,71 @@ class GoogleDriveRestApiActivity : BaseActivity() {
     /**
      * Starts a sign-in activity using {@link #REQUEST_CODE_SIGN_IN}.
      */
-    protected fun requestSignIn() {
+    fun requestSignIn() {
         Log.d(TAG, "Requesting sign-in")
         showProgress(true, getString(R.string.msg_requesting_sign_in))
 
-        val client: GoogleSignInClient = googleSignInHelper.getGoogleSigInClient(this)
+        // Use FirebaseUI Auth to start the sign-in flow with Google provider
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder()
+                .setScopes(
+                    listOf(
+                        DriveScopes.DRIVE_FILE,
+                        Scopes.EMAIL,
+                        Scopes.PROFILE
+                    )
+                )
+                .build()
+        )
 
-        // The result of the sign-in Intent is handled in signInLauncher.
-        signInLauncher.launch(client.signInIntent)
+        val signInIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .setLogo(R.mipmap.ic_app)
+            .setTheme(R.style.AppTheme)
+            .build()
+        signInLauncher.launch(signInIntent)
     }
 
     /**
-     * Handles the {@code result} of a completed sign-in activity initiated from {@link
-     * #requestSignIn()}.
+     * Handles the result of the FirebaseUI Auth sign-in flow.
      */
-    private fun handleSignInResult(result: Intent?) {
-        result ?: return
-        GoogleSignIn.getSignedInAccountFromIntent(result)
-            .addOnSuccessListener { googleSignInAccount ->
-                DriveServiceHelper.setLastOperationStatus(this@GoogleDriveRestApiActivity, DriveServiceHelper.OPERATION_STATUS_SUCCESS)
-                onSignedInToGoogleAccount(googleSignInAccount)
-            }
-            .addOnFailureListener { exception ->
-                Log.e(TAG, "Failed sign in.", exception)
-                DriveServiceHelper.setLastOperationStatus(this@GoogleDriveRestApiActivity, DriveServiceHelper.OPERATION_STATUS_FAIL)
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        if (result.resultCode == RESULT_OK) {
+            // Successfully signed in
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user != null) {
+                Log.d(TAG, "Sign in successful: ${user.email}")
+                DriveServiceHelper.setLastOperationStatus(
+                    this@GoogleDriveRestApiActivity,
+                    DriveServiceHelper.OPERATION_STATUS_SUCCESS
+                )
+                val account = user.email?.let { Account(it, "com.google") }
+                onSignedInToGoogleAccount(account)
+            } else {
+                Log.e(TAG, "Sign in succeeded but user is null")
+                DriveServiceHelper.setLastOperationStatus(
+                    this@GoogleDriveRestApiActivity,
+                    DriveServiceHelper.OPERATION_STATUS_FAIL
+                )
                 showEndResultToUser(
                     getString(R.string.msg_error_g_drive_user_not_signed_in),
                     false
                 )
             }
-    }
-
-    private fun onSignedInToGoogleAccount(googleAccount: GoogleSignInAccount) {
-        val googleDriveService = googleSignInHelper.signInToGoogleDrive(googleAccount, this)
-        if (googleDriveService != null) {
-            Log.d(TAG, "Sign in successful")
-            onSignedInToGoogleDrive(googleDriveService)
         } else {
-            Log.d(TAG, "Sign in failed")
-            DriveServiceHelper.setLastOperationStatus(this, DriveServiceHelper.OPERATION_STATUS_FAIL)
+            // Sign in failed
+            val response = result.idpResponse
+            if (response == null) {
+                Log.d(TAG, "User cancelled sign-in")
+            } else {
+                Log.e(TAG, "Sign in error", response.error)
+            }
+            DriveServiceHelper.setLastOperationStatus(
+                this@GoogleDriveRestApiActivity,
+                DriveServiceHelper.OPERATION_STATUS_FAIL
+            )
             showEndResultToUser(
                 getString(R.string.msg_error_g_drive_user_not_signed_in),
                 false
@@ -201,7 +224,26 @@ class GoogleDriveRestApiActivity : BaseActivity() {
         }
     }
 
-    protected fun onSignedInToGoogleDrive(googleDriveService: Drive) {
+    private fun onSignedInToGoogleAccount(googleAccount: Account?) {
+        val googleDriveService = googleSignInHelper.getDriveService()
+        if (googleDriveService != null) {
+            Log.d(TAG, "Sign in successful")
+            onSignedInToGoogleDrive(googleDriveService)
+        } else {
+
+            Log.d(TAG, "Sign in failed")
+            DriveServiceHelper.setLastOperationStatus(
+                this,
+                DriveServiceHelper.OPERATION_STATUS_FAIL
+            )
+            showEndResultToUser(
+                getString(R.string.msg_error_g_drive_user_not_signed_in),
+                false
+            )
+        }
+    }
+
+    open fun onSignedInToGoogleDrive(googleDriveService: Drive) {
 
         showProgress(false, null)
 

@@ -9,10 +9,10 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.model.File;
 import com.ndhunju.dailyjournal.FinishCallback;
 import com.ndhunju.dailyjournal.R;
-import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 import com.ndhunju.dailyjournal.service.Services;
 import com.ndhunju.dailyjournal.util.ProgressListener;
 import com.ndhunju.dailyjournal.util.UtilsFile;
+import com.ndhunju.dailyjournal.controller.service.DriveServiceHelper;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
