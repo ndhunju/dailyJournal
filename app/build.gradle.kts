@@ -1,11 +1,12 @@
 import com.android.build.api.dsl.Packaging
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.firebase.crashlytics")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.ksp) // this version has to match with Kotlin version
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 configurations {
@@ -181,6 +182,3 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(project(":androidpdfwriter"))
 }
-
-// Apply this plugin at the bottom of the build.gradle file: https://developers.google.com/android/guides/google-services-plugin
-apply(plugin = "com.google.gms.google-services")
