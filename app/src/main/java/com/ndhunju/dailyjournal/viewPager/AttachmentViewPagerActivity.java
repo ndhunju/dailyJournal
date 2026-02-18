@@ -39,8 +39,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static android.content.pm.PackageManager.FEATURE_CAMERA_ANY;
-
 /**
  * Lock/Unlock button is added to the ActionBar. Use it to temporarily disable
  * ViewPager navigation in order to correctly interact with ImageView by
@@ -362,11 +360,6 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	 */
 	private void attachImage() {
 
-		if (!checkReadImagePermission()) {
-			runAfterPermissionGrant = this::attachImage;
-			return;
-		}
-
 		Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		startActivityForResult(i, REQUEST_IMAGE);
 	}
@@ -377,104 +370,20 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 
 	private boolean checkCameraPermission() {
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if (ActivityCompat.checkSelfPermission(
-					getActivity(),
-					Manifest.permission.CAMERA
-			) != PackageManager.PERMISSION_GRANTED) {
-				// Ask for permission
-				getActivity().requestPermissions(
-						new String[]{Manifest.permission.CAMERA},
-						REQUEST_PERMISSIONS_CAMERA
-				);
-				// Permission not granted yet
-				return false;
-			}
-		}
+        if (ActivityCompat.checkSelfPermission(
+                getActivity(),
+                Manifest.permission.CAMERA
+        ) != PackageManager.PERMISSION_GRANTED) {
+		// Ask for permission
+            getActivity().requestPermissions(
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_PERMISSIONS_CAMERA
+            );
+		// Permission not granted yet
+            return false;
+        }
 
-		return true;
-	}
-
-	private boolean checkReadImagePermission() {
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			if (ActivityCompat.checkSelfPermission(
-					getActivity(),
-					Manifest.permission.READ_MEDIA_IMAGES
-			) != PackageManager.PERMISSION_GRANTED) {
-				UtilsView.alert(
-						getActivity(),
-						getString(R.string.msg_permission_read_not_granted),
-						(dialog, which) -> {
-							// Ask for permission
-							getActivity().requestPermissions(
-									new String[] {Manifest.permission.READ_MEDIA_IMAGES},
-									REQUEST_PERMISSIONS_READ_MEDIA_IMAGES
-							);
-						},
-						(dialog, which) -> dialog.dismiss()
-				);
-
-				// Permission not granted yet
-				return false;
-			}
-		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if (ActivityCompat.checkSelfPermission(
-					getActivity(),
-					Manifest.permission.WRITE_EXTERNAL_STORAGE
-			) != PackageManager.PERMISSION_GRANTED) {
-				UtilsView.alert(
-						getActivity(),
-						getString(R.string.msg_permission_read_not_granted),
-						(dialog, which) -> {
-							// Ask for permission
-							getActivity().requestPermissions(
-									new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
-									REQUEST_PERMISSIONS_WRITE_STORAGE
-							);
-						},
-						(dialog, which) -> dialog.dismiss()
-				);
-
-				// Permission not granted yet
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	private boolean checkImageWritePermission() {
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			// Storing image to the "Downloads" folder worked without
-			// getting an image on Tiramisu (33)
-			return true;
-		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			// Keep the existing logic for Android M and above
-			if (ActivityCompat.checkSelfPermission(
-					getActivity(),
-					Manifest.permission.WRITE_EXTERNAL_STORAGE
-			) != PackageManager.PERMISSION_GRANTED) {
-				UtilsView.alert(
-						getActivity(),
-						getString(R.string.msg_permission_write_not_granted),
-						(dialog, which) -> {
-							// Ask for permission
-							getActivity().requestPermissions(
-									new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
-									REQUEST_PERMISSIONS_WRITE_STORAGE
-							);
-						},
-						(dialog, which) -> dialog.dismiss()
-				);
-
-				// Permission not granted yet
-				return false;
-			}
-		}
-
-		return true;
+        return true;
 	}
 
 	@Override
