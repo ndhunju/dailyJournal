@@ -4,7 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.firebase.crashlytics")
-    id("com.google.devtools.ksp") version "2.2.20-2.0.2" // this version has to match with Kotlin version
+    alias(libs.plugins.ksp) // this version has to match with Kotlin version
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -133,60 +133,52 @@ android {
 // compilation classpath and includes them in the final package.
 dependencies {
     // Remote binary dependency
-    implementation("com.google.firebase:firebase-core:21.1.1")
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.annotation:annotation:1.9.1")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("com.google.android.gms:play-services-drive:17.0.0")
-    implementation("androidx.legacy:legacy-support-v13:1.0.0")
-    implementation("com.google.android.gms:play-services-auth:21.4.0")
+    implementation(libs.firebase.core)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.play.services.drive)
+    implementation(libs.androidx.legacy.support.v13)
 
-    implementation("androidx.multidex:multidex:2.0.1")
+    implementation(libs.androidx.multidex)
 
-    implementation("com.google.api-client:google-api-client:2.8.1")
-    implementation("com.google.api-client:google-api-client-android:2.8.1")
-    implementation("com.google.oauth-client:google-oauth-client-jetty:1.39.0")
-    implementation("com.google.apis:google-api-services-drive:v3-rev20201130-1.31.0")
+    implementation(libs.google.api.client.android)
+    implementation(libs.google.api.services.drive)
+    implementation(libs.play.services.auth)
+    implementation(libs.firebase.auth)
 
-    // local repo downloaded with SDK Manager
     // Import the BoM for the Firebase platform
-    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
+    implementation(platform(libs.firebase.bom))
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-messaging")
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
 
     // Add the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-crashlytics")
-    implementation("com.google.firebase:firebase-analytics")
-    // Fix "Duplicate class androidx.lifecycle.ViewModelLazy found in modules" error
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.3")
-    implementation("com.google.android.material:material:1.13.0")
-    // Local binary dependency
-    //Even though android provides json library, it bring error while using it for JUnit testing
-    //implementation(fileTree(mapOf("include" to kotlin.collections.listOf("*.jar"), "dir" to "libs")))
-    implementation("com.google.android.gms:play-services-ads-lite:24.3.0")
-    implementation("androidx.compose.runtime:runtime:1.9.1") // Use the latest stable version
+    implementation(libs.firebase.crashlytics)
 
-    //http://tools.android.com/tech-docs/unit-testing-support
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:5.19.0")
-    androidTestImplementation("androidx.annotation:annotation:1.9.1")
-    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    // Fix "Duplicate class androidx.lifecycle.ViewModelLazy found in modules" error
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.google.material)
+    implementation(libs.firebase.ui.auth)
+
+    implementation(libs.play.services.ads.lite)
+    implementation(libs.androidx.compose.runtime)
+
+    // Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    androidTestImplementation(libs.androidx.annotation)
+    androidTestImplementation(libs.androidx.test.ext.junit)
     // Set this dependency to use JUnit 4 rule
-    androidTestImplementation("androidx.test:rules:1.7.0")
+    androidTestImplementation(libs.androidx.test.rules)
     // Set this dependency to build and run Espresso tests
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
-    // Set this dependency to build and run UI Automator tests
-    //androidTestImplementation("com.android.support.test.uiautomator:uiautomator-v18:2.1.2")
-    //In order for the Android Plug-in for Gradle to correctly build and run your instrumented
-    // unit tests, you must specify the following libraries in the build.gradle file of your
-    // Android app module:
+    androidTestImplementation(libs.androidx.test.espresso.core)
     // Set this dependency if you want to use Hamcrest matching
-    androidTestImplementation("org.hamcrest:hamcrest-library:3.0")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.recyclerview:recyclerview:1.4.0")
+    androidTestImplementation(libs.hamcrest.library)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.recyclerview)
     implementation(project(":androidpdfwriter"))
 }
 

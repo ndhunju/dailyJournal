@@ -1,0 +1,150 @@
+[versions]
+# Build Tools
+agp = "8.13.2"
+kotlin = "2.3.0"
+
+# Google
+googleServices = "4.4.4"
+googleApiClient = "2.8.1"
+googleApiServicesDrive = "v3-rev20220815-2.0.0"
+playServicesAuth = "21.5.0"
+playServicesCoroutines = "1.9.0"
+playServicesDrive = "17.0.0"
+playServicesAdsLite = "24.3.0"
+grpcAndroid = "1.78.0"
+
+# Firebase
+firebaseCore = "21.1.1"
+firebaseBom = "34.8.0"
+firebaseUiAuth = "9.0.0"
+
+# AndroidX
+coreKtx = "1.17.0"
+appcompat = "1.7.1"
+annotation = "1.9.1"
+legacySupportV4 = "1.0.0"
+legacySupportV13 = "1.0.0"
+preferenceKtx = "1.2.1"
+multidex = "2.0.1"
+lifecycleRuntimeKtx = "2.10.0"
+lifecycleViewmodelKtx = "2.9.3"
+activityCompose = "1.12.2"
+cardview = "1.0.0"
+recyclerview = "1.4.0"
+composeRuntime = "1.9.1"
+composeBom = "2026.01.00"
+navigationCompose = "2.9.6"
+materialIcons = "1.7.8"
+camerax = "1.5.2"
+workRuntime = "2.11.0"
+
+# Material
+material = "1.13.0"
+
+# Third Party
+koin = "4.1.1"
+coil = "2.6.0"
+
+# Testing
+junit = "4.13.2"
+junitVersion = "1.3.0"
+mockitoCore = "5.19.0"
+testExtJunit = "1.3.0"
+testRules = "1.7.0"
+espressoCore = "3.7.0"
+hamcrestLibrary = "3.0"
+
+# Plugins
+ksp = "2.2.20-2.0.2"
+
+[libraries]
+# AndroidX Core
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+androidx-legacy-support-v13 = { group = "androidx.legacy", name = "legacy-support-v13", version.ref = "legacySupportV13" }
+androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preferenceKtx" }
+androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+
+# AndroidX Lifecycle
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+
+# AndroidX Compose
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "composeRuntime" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIcons" }
+
+# AndroidX CameraX
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "camerax" }
+androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
+androidx-camera-video = { group = "androidx.camera", name = "camera-video", version.ref = "camerax" }
+
+# AndroidX WorkManager
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntime" }
+
+# Google Drive & Auth
+google-api-client-android = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "googleApiClient" }
+google-api-services-drive = { group = "com.google.apis", name = "google-api-services-drive", version.ref = "googleApiServicesDrive" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+play-services-drive = { group = "com.google.android.gms", name = "play-services-drive", version.ref = "playServicesDrive" }
+play-services-ads-lite = { group = "com.google.android.gms", name = "play-services-ads-lite", version.ref = "playServicesAdsLite" }
+
+# Google Material
+google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# gRPC
+grpc-android = { module = "io.grpc:grpc-android", version.ref = "grpcAndroid" }
+grpc-okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "grpcAndroid" }
+grpc-protobuf-lite = { module = "io.grpc:grpc-protobuf-lite", version.ref = "grpcAndroid" }
+grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpcAndroid" }
+
+# Firebase
+firebase-core = { group = "com.google.firebase", name = "firebase-core", version.ref = "firebaseCore" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
+firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUiAuth" }
+
+# Koin
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+
+# Coil
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "playServicesCoroutines" }
+
+# Testing
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "testExtJunit" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "testRules" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+hamcrest-library = { group = "org.hamcrest", name = "hamcrest-library", version.ref = "hamcrestLibrary" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.3" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
