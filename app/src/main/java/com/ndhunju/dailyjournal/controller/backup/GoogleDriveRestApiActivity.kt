@@ -2,15 +2,18 @@ package com.ndhunju.dailyjournal.controller.backup
 
 import android.accounts.Account
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -47,7 +50,9 @@ open class GoogleDriveRestApiActivity : BaseActivity() {
     private lateinit var mDriveServiceHelper: DriveServiceHelper
 
     // View Variables
-    private lateinit var connectionPd: ProgressDialog
+    private lateinit var progressDialog: AlertDialog
+    private lateinit var progressBar: ProgressBar
+    private lateinit var progressMessage: TextView
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -92,15 +97,18 @@ open class GoogleDriveRestApiActivity : BaseActivity() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        // Wire views
-        // TODO: Use AlertDialog to show progress
-        connectionPd = ProgressDialog(this).apply {
-            setMessage(getString(R.string.msg_connecting, getString(R.string.str_google_drive)))
-            setCanceledOnTouchOutside(true)
-            isIndeterminate = true
-            setCancelable(true)
-            show()
-        }
+        // Build a progress AlertDialog with a custom view containing a ProgressBar and message
+        val progressView = layoutInflater.inflate(R.layout.dialog_progress, null)
+        progressBar = progressView.findViewById(R.id.progress_bar)
+        progressMessage = progressView.findViewById(R.id.progress_message)
+        progressMessage.text = getString(R.string.msg_connecting, getString(R.string.str_google_drive))
+
+        progressDialog = AlertDialog.Builder(this)
+            .setView(progressView)
+            .setCancelable(true)
+            .create()
+        progressDialog.setCanceledOnTouchOutside(true)
+        progressDialog.show()
 
         val account = googleSignInHelper.getCredential()?.selectedAccount
 
@@ -121,17 +129,16 @@ open class GoogleDriveRestApiActivity : BaseActivity() {
         }
     }
 
-    // TODO: Use AlertDialog to show progress
     fun showProgress(showProgress: Boolean, message: String?) {
         if (showProgress) {
-            connectionPd.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-            connectionPd.setMessage(message)
-            connectionPd.show()
+            progressBar.visibility = View.VISIBLE
+            progressMessage.text = message
+            progressDialog.show()
         } else if (!TextUtils.isEmpty(message)) {
-            connectionPd.setProgressDrawable(null)
-            connectionPd.setMessage(message)
+            progressBar.visibility = View.GONE
+            progressMessage.text = message
         } else {
-            connectionPd.dismiss()
+            progressDialog.dismiss()
         }
     }
 
