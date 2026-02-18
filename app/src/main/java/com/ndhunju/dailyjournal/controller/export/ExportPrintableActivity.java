@@ -67,8 +67,7 @@ public class ExportPrintableActivity extends BaseActivity {
                 case 0: // Local Storage
                     onBackUpDirForPrintableSelected(
                             getActivity(),
-                            UtilsFile.getPublicDownloadDir()
-                    );
+                            UtilsFile.getInternalDownloadDir(getActivity()));
                     break;
 
                 case 1: // Other Apps
@@ -113,7 +112,7 @@ public class ExportPrintableActivity extends BaseActivity {
     }
 
     public static void createAllOrSelectPartyDialog(final Activity activity, final String dir, final int optionIndex) {
-        //Let the user choose the parties
+        // Let the user choose the parties
         final List<Party> parties = Services.getInstance(activity).getParties();
 
         CharSequence[] options = activity.getResources().getStringArray(R.array.options_export_print);
@@ -122,12 +121,11 @@ public class ExportPrintableActivity extends BaseActivity {
                 .setItems(options, (dialog, which) -> {
                     switch (which) {
                         case 0: // All parties
-                            //noinspection unchecked
+                            // noinspection unchecked
                             new ExportPartiesReportAsync(
                                     activity,
                                     dir,
-                                    ExportPartiesReportAsync.Type.values()[optionIndex]
-                            ).execute(parties);
+                                    ExportPartiesReportAsync.Type.values()[optionIndex]).execute(parties);
                             break;
 
                         case 1: // Select parties
@@ -135,8 +133,7 @@ public class ExportPrintableActivity extends BaseActivity {
                                     activity,
                                     parties,
                                     dir,
-                                    optionIndex
-                            ).show();
+                                    optionIndex).show();
                             break;
 
                     }
@@ -149,8 +146,7 @@ public class ExportPrintableActivity extends BaseActivity {
             final Activity activity,
             final List<Party> parties,
             final String dir,
-            final int optionIndex
-    ) {
+            final int optionIndex) {
         final ArrayList<Party> selectedParties = new ArrayList<>();
 
         // create array of Parties' name

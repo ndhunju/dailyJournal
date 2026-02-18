@@ -50,12 +50,11 @@ import java.io.IOException;
 public class AttachmentViewPagerActivity extends AppCompatActivity {
 
 	private static final String TAG = AttachmentViewPagerActivity.class.getSimpleName();
-	private static final int REQUEST_TAKE_PHOTO= 2646;
-	private static final int REQUEST_IMAGE  = 4646;
+	private static final int REQUEST_TAKE_PHOTO = 2646;
+	private static final int REQUEST_IMAGE = 4646;
 	private static final int REQUEST_PERMISSIONS_READ_MEDIA_IMAGES = 2322;
 	private static final int REQUEST_PERMISSIONS_WRITE_STORAGE = 2323;
 	private static final int REQUEST_PERMISSIONS_CAMERA = 2324;
-
 
 	private static final String ISLOCKED_ARG = "isLocked";
 	private AttachmentPagerAdapter attachmentPagerAdapter;
@@ -77,12 +76,12 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		mViewPager.setAdapter(attachmentPagerAdapter);
 
 		if (savedInstanceState != null) {
-			boolean isLocked = savedInstanceState.getBoolean(ISLOCKED_ARG,false);
+			boolean isLocked = savedInstanceState.getBoolean(ISLOCKED_ARG, false);
 			((HackyViewPager) mViewPager).setLocked(isLocked);
 		}
 
-		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-		if(toolbar != null) {
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		if (toolbar != null) {
 			toolbar.setTitle(UtilsFormat.getPartyFromPref(this));
 			setSupportActionBar(toolbar);
 		}
@@ -93,7 +92,6 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		getMenuInflater().inflate(R.menu.menu_viewpager, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -109,9 +107,6 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		});
 		return super.onPrepareOptionsMenu(menu);
 	}
-
-
-
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -164,30 +159,21 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		}
 
 		try {
-			// Copy internal image attachment to download folder
+			// Copy internal image attachment to cache folder
 			File internalImage = new File(
-					attachmentPagerAdapter.getItem(mViewPager.getCurrentItem()).getPath()
-			);
+					attachmentPagerAdapter.getItem(mViewPager.getCurrentItem()).getPath());
 			File toExportImage = new File(
-					UtilsFile.getPublicDownloadDir(),
-					internalImage.getName()
-			);
+					UtilsFile.getInternalDownloadDir(getActivity()),
+					internalImage.getName());
 			toExportImage.createNewFile();
-			FileInputStream picFileIS  = new FileInputStream(internalImage);
+			FileInputStream picFileIS = new FileInputStream(internalImage);
 			FileOutputStream toExportImageOS = new FileOutputStream(toExportImage);
 			UtilsZip.copy(picFileIS, toExportImageOS);
 			picFileIS.close();
 			toExportImageOS.close();
 
-			// show it in Downloads app and in notification bar
-			UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
-					getActivity(),
-					toExportImage,
-					getString(R.string.msg_saved, getString(R.string.str_image)),
-					"image/jpeg"
-					);
-
-			UtilsView.toast(this, getString(R.string.str_finished));
+			// Let user share/save via share sheet
+			UtilsFile.shareFile(getActivity(), toExportImage, "image/jpeg");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -197,17 +183,17 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-			case REQUEST_TAKE_PHOTO: //Picture was taken from the Camera App
+			case REQUEST_TAKE_PHOTO: // Picture was taken from the Camera App
 
 				if (!UtilsView.showResult(getActivity(), resultCode)) {
 					return;
 				}
 
-				//Since camera cannot save picture in file created inside app's folder
-				//1. Create a file in external mServices
-				//2. Provide that file's path to camera where it will stream picture data
-				//3. Copy the file into internal mServices
-				//4. Delete file in external mServices
+				// Since camera cannot save picture in file created inside app's folder
+				// 1. Create a file in external mServices
+				// 2. Provide that file's path to camera where it will stream picture data
+				// 3. Copy the file into internal mServices
+				// 4. Delete file in external mServices
 
 				File tempPicFile = UtilsFile.createExternalStoragePublicPicture();
 				File internalPicFile = UtilsFile.createImageFile(getActivity());
@@ -218,7 +204,7 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 					UtilsZip.copy(picFileIS, internalFileOS);
 					picFileIS.close();
 					internalFileOS.close();
-					//deleting this file works fine. May be files in public folder can be deleted
+					// deleting this file works fine. May be files in public folder can be deleted
 					String log = tempPicFile.delete() ? "Temp pic file deleted" : "Temp file NOT deleted";
 					Log.d(TAG, log);
 
@@ -234,13 +220,12 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 				attachmentPagerAdapter.notifyDataSetChanged();
 				break;
 
-			case REQUEST_IMAGE:  //Image was picked from the storage
+			case REQUEST_IMAGE: // Image was picked from the storage
 
-				//if not image is selected data is null even tho result code is OK
+				// if not image is selected data is null even tho result code is OK
 				if (!UtilsView.showResult(getActivity(), resultCode)) {
 					return;
 				}
-
 
 				Uri selectedImage = data.getData();
 				Bitmap bitmap;
@@ -282,10 +267,10 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		}
 		String title;
 		int drawableResId;
-		if(isLocked){
+		if (isLocked) {
 			title = getString(R.string.str_lock);
-			drawableResId =  R.drawable.ic_lock_black_vector;
-		}else{
+			drawableResId = R.drawable.ic_lock_black_vector;
+		} else {
 			title = getString(R.string.str_unlock);
 			drawableResId = R.drawable.ic_lock_open_black_vector;
 		}
@@ -320,7 +305,7 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 							takePicture();
 							break;
 
-						case 1: //Select image from the storage
+						case 1: // Select image from the storage
 							attachImage();
 							break;
 
@@ -347,12 +332,10 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 			} catch (Exception ex) {
 				AnalyticsService.INSTANCE.logEvent(
 						"didFailToTakeImage",
-						ex.getMessage()
-						);
+						ex.getMessage());
 			}
 		}
 	}
-
 
 	/**
 	 * Initiates the process for attaching an image from the device's storage
@@ -364,34 +347,31 @@ public class AttachmentViewPagerActivity extends AppCompatActivity {
 		startActivityForResult(i, REQUEST_IMAGE);
 	}
 
-	public Activity getActivity(){
+	public Activity getActivity() {
 		return AttachmentViewPagerActivity.this;
 	}
 
 	private boolean checkCameraPermission() {
 
-        if (ActivityCompat.checkSelfPermission(
-                getActivity(),
-                Manifest.permission.CAMERA
-        ) != PackageManager.PERMISSION_GRANTED) {
-		// Ask for permission
-            getActivity().requestPermissions(
-                    new String[]{Manifest.permission.CAMERA},
-                    REQUEST_PERMISSIONS_CAMERA
-            );
-		// Permission not granted yet
-            return false;
-        }
+		if (ActivityCompat.checkSelfPermission(
+				getActivity(),
+				Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+			// Ask for permission
+			getActivity().requestPermissions(
+					new String[] { Manifest.permission.CAMERA },
+					REQUEST_PERMISSIONS_CAMERA);
+			// Permission not granted yet
+			return false;
+		}
 
-        return true;
+		return true;
 	}
 
 	@Override
 	public void onRequestPermissionsResult(
 			int requestCode,
 			@NonNull String[] permissions,
-			@NonNull int[] grantResults
-	) {
+			@NonNull int[] grantResults) {
 		if (requestCode == REQUEST_PERMISSIONS_WRITE_STORAGE
 				|| requestCode == REQUEST_PERMISSIONS_READ_MEDIA_IMAGES
 				|| requestCode == REQUEST_PERMISSIONS_CAMERA) {

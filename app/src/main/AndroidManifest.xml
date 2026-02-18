@@ -22,16 +22,7 @@
     <uses-feature
         android:name="android.hardware.camera.autofocus"
         android:required="false"/>
-    <!-- Without this entry storage-permission entry will not be visible under app-info permissions
-     list Android-10 and below -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
 
-    <!-- App needs this permission even to  create backup files in Downloads folder. Require this
-     until the we have proper fix -->
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -46,7 +37,7 @@
         android:icon="@mipmap/ic_app"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage="true">
+        >
         <!-- Without this entry the folders will remain in-accessible in Android-10,
         even if WRITE_EXTERNAL_STORAGE as above is present. -->
 
@@ -152,14 +143,6 @@
         <activity android:name=".controller.backup.GoogleDriveRestApiUploadBackupActivity"
             android:screenOrientation="locked"
             android:label="@string/str_create_backup_in_google_drive"/>
-
-        <activity android:name=".controller.backup.GoogleDriveRestoreBackupActivity"
-            android:screenOrientation="locked"
-            android:label="@string/str_backup"/>
-
-        <activity android:name=".controller.backup.GoogleDriveUploadBackupActivity"
-            android:screenOrientation="locked"
-            android:label="@string/str_backup"/>
 
         <activity android:name=".controller.erase.EraseActivity"
             android:label="@string/title_activity_erase"/>

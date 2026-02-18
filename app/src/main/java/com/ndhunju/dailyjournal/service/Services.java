@@ -155,7 +155,7 @@ public class Services {
         //2.2 get backup Folder. Backup file will be created here
         File backupFolder = new File(dir);
         //if the file doesn't exit choose default folder
-        if(!backupFolder.exists())  backupFolder = UtilsFile.getAppFolder(false);
+        if(!backupFolder.exists())  backupFolder = UtilsFile.getAppFolder(getContext());
         Log.d(TAG, "createBackUp: backupFolder created=" + backupFolder.getPath());
 
 

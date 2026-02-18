@@ -44,15 +44,15 @@ public class AttachmentsReportGenerator extends ReportGenerator<File> {
             // Otherwise in public download folder
             String selectedFolderPath = (folder != null && folder.exists())
                     ? folder.getAbsolutePath()
-                    : UtilsFile.getPublicDownloadDir();
+                    : UtilsFile.getInternalDownloadDir(mContext);
 
             Services services = Services.getInstance(mContext);
             Party party = mParty;
 
-            for (Journal journal: services.getJournals(party.getId())) {
+            for (Journal journal : services.getJournals(party.getId())) {
                 List<Attachment> attachments = services.getAttachments(journal.getId());
 
-                if (attachments.size() < 1) {
+                if (attachments.isEmpty()) {
                     // No attachments.
                     // Skip this party or journal
                     continue;
@@ -65,7 +65,7 @@ public class AttachmentsReportGenerator extends ReportGenerator<File> {
                 }
 
                 int attachmentCount = 1;
-                for (Attachment attachment: attachments) {
+                for (Attachment attachment : attachments) {
                     // Copy attachments to respective party folder
                     String attachmentName = getString(R.string.str_journal)
                             + getString(R.string.str_id_only) + "-"

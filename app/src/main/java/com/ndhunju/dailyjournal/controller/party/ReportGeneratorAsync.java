@@ -152,7 +152,10 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
             return;
         }
 
-        if (mType != Type.TEXT) {
+        if (mType != Type.TEXT &&
+                // Don't notify for internal file
+                !report.getAbsolutePath().startsWith(UtilsFile.getInternalDownloadDir(mActivity))
+        ) {
             // Notify user that we created a file
             UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
                     mActivity,

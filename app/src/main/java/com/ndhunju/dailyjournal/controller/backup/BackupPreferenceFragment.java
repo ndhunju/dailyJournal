@@ -22,7 +22,8 @@ import androidx.preference.PreferenceFragmentCompat;
 
 /**
  * Created by dhunju on 10/8/2015.
- * This fragment allows users to create/restore backup from Google drive/Local Storage
+ * This fragment allows users to create/restore backup from Google drive/Local
+ * Storage
  * as well as set Automatic Backup and erase all data
  */
 public class BackupPreferenceFragment
@@ -39,9 +40,7 @@ public class BackupPreferenceFragment
     public static final String KEY_MODE = ".KEY_MODE";
     public static final String MODE_RESTORE = ".MODE_RESTORE";
 
-
-
-    //Request codes with random values
+    // Request codes with random values
     private static final int REQUEST_CODE_PICK_JSON = 1235;
     private static final int REQUEST_CODE_PICK_BACKUP = 8489;
     private static final int REQUEST_CODE_BACKUP_DIR = 3561;
@@ -89,12 +88,11 @@ public class BackupPreferenceFragment
         // Create Backup in Google Drive using REST API library
         gDriveRestBackupPref = findPreference(getString(R.string.key_pref_backup_google_drive_in_house));
         gDriveRestBackupPref.setOnPreferenceClickListener(preference -> {
-                    startActivityForResult(new Intent(
-                            getActivity(),
-                            GoogleDriveRestApiUploadBackupActivity.class
-                    ), REQUEST_CODE_BACKUP_COMPLETE);
-                    return true;
-                });
+            startActivityForResult(new Intent(
+                    getActivity(),
+                    GoogleDriveRestApiUploadBackupActivity.class), REQUEST_CODE_BACKUP_COMPLETE);
+            return true;
+        });
 
         // Restore Backup form Google Drive using REST API library
         findPreference(getString(R.string.key_pref_restore_google_drive_in_house))
@@ -103,45 +101,43 @@ public class BackupPreferenceFragment
                             (dialogInterface, i) -> startActivity(
                                     new Intent(
                                             getActivity(),
-                                            GoogleDriveRestApiRestoreBackupActivity.class)
-                            ), null);
+                                            GoogleDriveRestApiRestoreBackupActivity.class)),
+                            null);
                     return true;
                 });
 
         localBackupPref = findPreference(getString(R.string.key_pref_backup_local_storage));
         localBackupPref.setOnPreferenceClickListener(preference -> {
-                    // Create backup in Downloads folder
-                    String dir = UtilsFile.getPublicDownloadDir();
-                    new BackUpAsyncTask(getActivity(), filePath -> {
-                        boolean success1 = !TextUtils.isEmpty(filePath);
-                        String resultMsg;
-                        if (success1) {
-                            setBackupSuccessResult();
-                            resultMsg = String.format(
-                                    getString(R.string.msg_finished),
-                                    getString(R.string.str_backup)
-                            );
-                            resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
-                            // Display the result
-                            UtilsView.alert(getActivity(), resultMsg, (dialog, which) -> {
-                                if (finishOnBackUpSuccess) {
-                                    getActivity().finish();
-                                }
-                            });
-                        } else {
-                            if (getActivity() != null) {
-                                getActivity().setResult(Activity.RESULT_CANCELED);
-                                resultMsg = String.format(
-                                        getString(R.string.msg_failed),
-                                        getString(R.string.str_backup)
-                                );
-                                // Display the result
-                                UtilsView.alert(getActivity(), resultMsg);
-                            }
+            // Create backup in Downloads folder
+            String dir = UtilsFile.getInternalDownloadDir(getActivity());
+            new BackUpAsyncTask(getActivity(), filePath -> {
+                boolean success1 = !TextUtils.isEmpty(filePath);
+                String resultMsg;
+                if (success1) {
+                    setBackupSuccessResult();
+                    resultMsg = String.format(
+                            getString(R.string.msg_finished),
+                            getString(R.string.str_backup));
+                    resultMsg += String.format(getString(R.string.msg_saved_in), filePath);
+                    // Display the result
+                    UtilsView.alert(getActivity(), resultMsg, (dialog, which) -> {
+                        if (finishOnBackUpSuccess) {
+                            getActivity().finish();
                         }
-                    }).execute(dir);
-                    return true;
-                });
+                    });
+                } else {
+                    if (getActivity() != null) {
+                        getActivity().setResult(Activity.RESULT_CANCELED);
+                        resultMsg = String.format(
+                                getString(R.string.msg_failed),
+                                getString(R.string.str_backup));
+                        // Display the result
+                        UtilsView.alert(getActivity(), resultMsg);
+                    }
+                }
+            }).execute(dir);
+            return true;
+        });
 
         findPreference(getString(R.string.key_pref_restore_local_storage))
                 .setOnPreferenceClickListener((preference -> {
@@ -227,7 +223,7 @@ public class BackupPreferenceFragment
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        //get the key for Reminder Checkbox and Reminder Interval Preference List
+        // get the key for Reminder Checkbox and Reminder Interval Preference List
         String autoBackUpCB = getString(R.string.key_pref_auto_backup_cb);
         String autoBackUpIntervalPl = getString(R.string.key_pref_auto_backup_interval_lp);
         //Check if the changed preference is Reminder Checkbox or reminder interval preference
@@ -274,15 +270,15 @@ public class BackupPreferenceFragment
                 JsonConverterString converter = JsonConverterString.getInstance(getActivity());
                 boolean success = converter.readFromJSON((selectedJsonFile.getPath()));
 
-                //Prepare msg
-                msg = success ? String.format(getString(R.string.msg_finished), getString(R.string.str_backup)) :
-                        String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
+                // Prepare msg
+                msg = success ? String.format(getString(R.string.msg_finished), getString(R.string.str_backup))
+                        : String.format(getString(R.string.msg_failed), getString(R.string.str_backup));
 
                 UtilsView.alert(getActivity(), msg);
 
                 break;
 
-            case REQUEST_CODE_PICK_BACKUP://User picks a backup file from mServices(.dj/.zip) file
+            case REQUEST_CODE_PICK_BACKUP:// User picks a backup file from mServices(.dj/.zip) file
                 if (resultCode != Activity.RESULT_OK || data.getData() == null) {
                     msg = String.format(getString(R.string.msg_importing), getString(R.string.str_failed));
                     UtilsView.alert(getActivity(), msg);
@@ -295,8 +291,7 @@ public class BackupPreferenceFragment
                 } else {
                     String internalCacheFile = UtilsFile.copyDataToInternalCacheFile(
                             getActivity(),
-                            data.getData()
-                    );
+                            data.getData());
                     if (internalCacheFile != null) {
                         new RestoreBackUpAsync(getActivity())
                                 // ask to delete the internal cache file after restoring backup
@@ -347,8 +342,7 @@ public class BackupPreferenceFragment
                             getContext(),
                             getString(R.string.msg_backup_now),
                             (dialog, which) -> gDriveRestBackupPref.performClick(),
-                            (dialog, which) -> dialog.dismiss()
-                    );
+                            (dialog, which) -> dialog.dismiss());
                 } else {
                     // show connecting to msg "Connecting to Google Drive failed"
                     UtilsView.alert(
@@ -373,7 +367,6 @@ public class BackupPreferenceFragment
         }
 
     }
-
 
     private void setBackupSuccessResult() {
         if (getActivity() != null) {

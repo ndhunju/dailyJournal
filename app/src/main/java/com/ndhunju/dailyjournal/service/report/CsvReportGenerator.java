@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
  * Created by dhunju on 9/27/2015.
  * This class can be used to Generate CVS Report files
  */
-public class CsvReportGenerator extends ReportGenerator<File>{
+public class CsvReportGenerator extends ReportGenerator<File> {
 
     // variables
     protected static final String FILE_EXT = ".csv";
@@ -71,11 +71,13 @@ public class CsvReportGenerator extends ReportGenerator<File>{
         makeReport(builder);
 
         // write the report in a file
-        try{
-            // create a new unique file inside the folder if exists. otherwise in public download folder
+        try {
+            // create a new unique file inside the folder if exists. otherwise in public
+            // download folder
             File cvsFile = new File(folder != null && folder.exists()
-                    ? folder.getAbsolutePath() : UtilsFile.getPublicDownloadDir(),
-                    getSubject() + "-" + String.valueOf(System.currentTimeMillis()).substring(8,12) + FILE_EXT);
+                    ? folder.getAbsolutePath()
+                    : UtilsFile.getInternalDownloadDir(mContext),
+                    getSubject() + "-" + String.valueOf(System.currentTimeMillis()).substring(8, 12) + FILE_EXT);
             cvsFile.createNewFile();
 
             // write to file
@@ -84,7 +86,9 @@ public class CsvReportGenerator extends ReportGenerator<File>{
             os.close();
 
             //to let know that a new file has been created so that it appears in the computer
-            MediaScannerConnection.scanFile(mContext, new String[]{cvsFile.getAbsolutePath()}, null, null);
+            if (!cvsFile.getAbsolutePath().startsWith(UtilsFile.getInternalDownloadDir(mContext))) {
+                MediaScannerConnection.scanFile(mContext, new String[]{cvsFile.getAbsolutePath()}, null, null);
+            }
             return cvsFile;
 
         } catch (Exception e) {

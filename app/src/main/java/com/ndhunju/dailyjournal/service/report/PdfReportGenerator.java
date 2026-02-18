@@ -30,7 +30,7 @@ import crl.android.pdfwriter.StandardFonts;
  * Created by dhunju on 9/27/2015.
  * This class can be used to Generate PDF Report files.
  */
-public class PdfReportGenerator extends ReportGenerator<File>{
+public class PdfReportGenerator extends ReportGenerator<File> {
 
     private static final int PAGE_HEIGHT = PaperSize.A4_HEIGHT;
     private static final int PAGE_WIDTH = PaperSize.A4_WIDTH;
@@ -40,9 +40,8 @@ public class PdfReportGenerator extends ReportGenerator<File>{
     private static final int DEF_TEXT_SIZE = 12;
     private static final int MARGIN = 25;
     private static final int MARGIN_BETWEEN_IMGS = 15;
-    /* Total number of Characters that can fit in A4 Size paper.*/
+    /* Total number of Characters that can fit in A4 Size paper. */
     private static final int CHAR_COUNT_PER_LINE = 75;
-
 
     public PdfReportGenerator(Context context, long partyId) {
         super(context, partyId);
@@ -56,7 +55,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         super(context, party, journals);
     }
 
-    public static class Builder extends ReportGenerator.Builder{
+    public static class Builder extends ReportGenerator.Builder {
 
         // variables
         int textSize;
@@ -159,7 +158,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
                     add = maxWidth - sb.length() - posText.length();
                 }
 
-                for(int i = add; i > 0; i--) {
+                for (int i = add; i > 0; i--) {
                     sb.append(" ");
                 }
 
@@ -319,7 +318,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         builder.appendText(addGap(getString(R.string.str_id_only), idColWidth));
         builder.appendText("", getString(R.string.str_note), addGap("", 0), noteLineWidth);
 
-        for (Journal journal: mJournals) {
+        for (Journal journal : mJournals) {
             if (TextUtils.isEmpty(journal.getNote())) {
                 continue;
             }
@@ -333,21 +332,24 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         }
 
         // write the report in a file
-        try{
-            // create a new unique file inside the folder if exists. otherwise in public download folder
+        try {
+            // create a new unique file inside the folder if exists. otherwise in public
+            // download folder
             File pdfFile = new File(folder != null && folder.exists()
-                    ? folder.getAbsolutePath() : UtilsFile.getPublicDownloadDir(),
-                    getSubject() + "-" + String.valueOf(System.currentTimeMillis()).substring(8,12) + FILE_EXT);
+                    ? folder.getAbsolutePath()
+                    : UtilsFile.getInternalDownloadDir(mContext),
+                    getSubject() + "-" + String.valueOf(System.currentTimeMillis()).substring(8, 12) + FILE_EXT);
             pdfFile.createNewFile();
 
             // write to file
             FileOutputStream os = new FileOutputStream(pdfFile);
-            //os.write(builder.asString().getBytes("UTF-8"));
+            // os.write(builder.asString().getBytes("UTF-8"));
             builder.asString(os);
             os.close();
 
-            // To let know that a new file has been created so that it appears in the computer
-            MediaScannerConnection.scanFile(mContext, new String[]{pdfFile.getAbsolutePath()}, null, null);
+            // To let know that a new file has been created so that it appears in the
+            // computer
+            MediaScannerConnection.scanFile(mContext, new String[] { pdfFile.getAbsolutePath() }, null, null);
             return pdfFile;
 
         } catch (Exception e) {
@@ -358,7 +360,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
 
     @Override
     public void onAppendNote(ReportGenerator.Builder builder, Journal journal) {
-        //super.onAppendNote(builder, journal);
+        // super.onAppendNote(builder, journal);
         // Don't use super class implementation to add notes
     }
 
@@ -380,7 +382,7 @@ public class PdfReportGenerator extends ReportGenerator<File>{
         builder.writeTextLn();
 
         // Loop through all Journal for this party
-        for (Journal journal: mServices.getJournals(getParty().getId())) {
+        for (Journal journal : mServices.getJournals(getParty().getId())) {
 
             if (mServices.getAttachments(journal.getId()).size() <= 0) {
                 // There are no attachments for this journal

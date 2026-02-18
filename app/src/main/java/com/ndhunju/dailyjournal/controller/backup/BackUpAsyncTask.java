@@ -39,8 +39,9 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        String msg = String.format(mActivity.getString(R.string.msg_creating), mActivity.getString(R.string.str_backup));
-        pd= new ProgressDialog(mActivity);
+        String msg = String.format(mActivity.getString(R.string.msg_creating),
+                mActivity.getString(R.string.str_backup));
+        pd = new ProgressDialog(mActivity);
         pd.setIndeterminate(false);
         pd.setMessage(msg);
         pd.setCancelable(false);
@@ -62,17 +63,20 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
                         });
                     });
 
-            // Notify user that we created a file
+            // Let user share/save via share sheet
             File file = new File(filePath);
-            UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
-                    mActivity,
-                    file,
-                    mActivity.getString(
-                            R.string.msg_backup_created_title,
-                            mActivity.getString(R.string.app_name)
-                    ),
-                    UtilsFile.BACK_FILE_TYPE
-            );
+            UtilsFile.shareFile(mActivity, file, UtilsFile.BACK_FILE_TYPE);
+            if (!file.getAbsolutePath().startsWith(UtilsFile.getInternalDownloadDir(mActivity))) {
+                UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
+                        mActivity,
+                        file,
+                        mActivity.getString(
+                                R.string.msg_backup_created_title,
+                                mActivity.getString(R.string.app_name)
+                        ),
+                        UtilsFile.BACK_FILE_TYPE
+                );
+            }
 
         } catch (IOException e) {
             Log.w(TAG, "Error creating backup file: " + e.getMessage());
@@ -83,7 +87,7 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String filePath) {
-        //End progress bar
+        // End progress bar
         pd.cancel();
         mCallback.onFinish(filePath);
         mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);

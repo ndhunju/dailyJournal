@@ -24,7 +24,7 @@ android {
         // The values in defaultConfig override those in the manifest file.
         applicationId = "com.ndhunju.dailyjournalplus"
         compileSdk = 36
-        minSdk = 23
+        minSdk = 24
         targetSdk = 36
         multiDexEnabled = true
 

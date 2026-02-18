@@ -3,12 +3,8 @@ package com.ndhunju.dailyjournal.util
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
@@ -19,13 +15,17 @@ import androidx.fragment.app.Fragment
 object PermissionManager {
 
     /**
-     * Returns true if the app has permission to manage files in the device
+     * Returns true if the app has permission to manage files in the device.
+     * On API 29+, the app uses app-scoped external storage which doesn't require
+     * special permissions.
      */
     fun hasManageFilePermission(context: Context): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return Environment.isExternalStorageManager()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // On Android 10+, we use app-scoped external storage
+            // which doesn't require MANAGE_EXTERNAL_STORAGE
+            return true
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Check WRITE_EXTERNAL_STORAGE permission for Android OS older than R
+            // Check WRITE_EXTERNAL_STORAGE permission for Android OS older than Q
             return ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -37,7 +37,7 @@ object PermissionManager {
     }
 
     /**
-     * Returns true is permission is already granted.
+     * Returns true if permission is already granted.
      */
     fun askManageFilePermission(
         fragment: Fragment,
@@ -51,46 +51,34 @@ object PermissionManager {
             return true
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-
-            // Request manage all files permission at runtime
-            val uri = Uri.parse("package:" + context.packageName)
-            fragment.startActivityForResult(
-                Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri),
-                requestCodeForManageFilePermission
+        // Check WRITE_EXTERNAL_STORAGE permission for Android OS >= M and < Q
+        if (checkSelfPermission(
+                context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Request WRITE_EXTERNAL_STORAGE permission
+            fragment.requestPermissions(
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                requestCodeForWriteExternalStoragePermission
             )
-            return false
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Check WRITE_EXTERNAL_STORAGE permission for Android OS older than R
-            if (checkSelfPermission(
-                    context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // Request WRITE_EXTERNAL_STORAGE permission for Android OS >= M and <R
-                fragment.requestPermissions(
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    requestCodeForWriteExternalStoragePermission
-                )
-            }
-            return false
         }
+        return false
         return true
     }
 
     fun canSaveImageOnDownloadsFolder(context: Context): Boolean {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Storing image to the "Downloads" folder worked without
-            // getting an image write permission on Tiramisu (33)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // On Android 10+, we use app-scoped external storage
+            // which doesn't require special write permission
             return true
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        } else
             // Keep the existing logic for Android M and above
             return checkSelfPermission(
                 context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
-        }
 
         return true
     }
@@ -100,11 +88,11 @@ object PermissionManager {
         requestCode: Int
     ): Boolean {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Storing image to the "Downloads" folder worked without
-            // getting an image write permission on Tiramisu (33)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // On Android 10+, we use app-scoped external storage
+            // which doesn't require special write permission
             return true
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        } else
             // Keep the existing logic for Android M and above
             if (checkSelfPermission(
                     activity,
@@ -119,7 +107,6 @@ object PermissionManager {
                 // Permission not granted yet
                 return false
             }
-        }
 
         return true
     }
