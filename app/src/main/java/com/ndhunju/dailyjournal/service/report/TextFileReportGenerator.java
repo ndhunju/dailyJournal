@@ -54,8 +54,9 @@ public class TextFileReportGenerator extends ReportGenerator<File> {
         try {
             // create a new unique file inside the folder if exists. otherwise in public download folder
             File textFile = new File(folder != null && folder.exists()
-                    ? folder.getAbsolutePath() : UtilsFile.getPublicDownloadDir(),
-                    getSubject() + "-" + String.valueOf(System.currentTimeMillis()).substring(8,12) + FILE_EXT);
+                    ? folder.getAbsolutePath()
+                    : UtilsFile.getInternalDownloadDir(mContext),
+                    getSubject() + "-" + String.valueOf(System.currentTimeMillis()).substring(8, 12) + FILE_EXT);
             textFile.createNewFile();
 
             // write to file
@@ -80,7 +81,7 @@ public class TextFileReportGenerator extends ReportGenerator<File> {
 
     @Override
     public void onAppendNote(ReportGenerator.Builder builder, Journal journal) {
-        //super.onAppendNote(builder, journal);
+        // super.onAppendNote(builder, journal);
         // This file will make custom note section.
     }
 
@@ -96,10 +97,9 @@ public class TextFileReportGenerator extends ReportGenerator<File> {
                 "",
                 getString(R.string.str_note),
                 addGap("", 0),
-                noteLineWidth
-        );
+                noteLineWidth);
 
-        for (Journal journal: mJournals) {
+        for (Journal journal : mJournals) {
             if (TextUtils.isEmpty(journal.getNote())) {
                 continue;
             }
@@ -108,8 +108,7 @@ public class TextFileReportGenerator extends ReportGenerator<File> {
                     addGap("", mIdColumnSize),
                     journal.getNote(),
                     addGap("", 0),
-                    noteLineWidth
-            );
+                    noteLineWidth);
         }
     }
 
@@ -118,10 +117,12 @@ public class TextFileReportGenerator extends ReportGenerator<File> {
         StringBuilder localSb = new StringBuilder();
 
         /**
-         * This method adds passed {@code text} without exceeding the {@code maxWidth} value for
+         * This method adds passed {@code text} without exceeding the {@code maxWidth}
+         * value for
          * the line by breaking the overflow text to next line.
-         * @param preText: pretext to add from second line if overflows
-         * @param text: main text to add
+         * 
+         * @param preText:  pretext to add from second line if overflows
+         * @param text:     main text to add
          * @param postText: post text to append at the end
          * @param maxWidth: maximum width of the line
          */
@@ -160,7 +161,7 @@ public class TextFileReportGenerator extends ReportGenerator<File> {
                     add = maxWidth - localSb.length() - postText.length();
                 }
 
-                for(int i = add; i > 0; i--) {
+                for (int i = add; i > 0; i--) {
                     localSb.append(" ");
                 }
 

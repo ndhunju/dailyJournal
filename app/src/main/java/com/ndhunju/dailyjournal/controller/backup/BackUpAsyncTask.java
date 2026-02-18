@@ -72,10 +72,8 @@ public class BackUpAsyncTask extends AsyncTask<String, Void, String> {
                         file,
                         mActivity.getString(
                                 R.string.msg_backup_created_title,
-                                mActivity.getString(R.string.app_name)
-                        ),
-                        UtilsFile.BACK_FILE_TYPE
-                );
+                                mActivity.getString(R.string.app_name)),
+                        UtilsFile.BACK_FILE_TYPE);
             }
 
         } catch (IOException e) {

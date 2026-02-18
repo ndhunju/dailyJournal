@@ -38,26 +38,25 @@ import java.util.UUID;
 
 public class UtilsFile {
 
-	//Folder Names that the App uses
+	// Folder Names that the App uses
 	private static final String HIDE_FOLDER = ".";
-	private static final String APP_CACHE_FOLDER_NAME ="Cache";
+	private static final String APP_CACHE_FOLDER_NAME = "Cache";
 	public static final String APP_FOLDER_NAME = "DailyJournal";
 	private static final String ATTCH_FOLDER_NAME = "attachments";
 	private static final String AUTO_BACKUP_FOLDER_NAME = "backups";
 
-
-	//File Extension types
-    public static final String ZIP_EXT = ".zip";
+	// File Extension types
+	public static final String ZIP_EXT = ".zip";
 	public static final String IMG_EXT = ".png";
 	public static final String ZIP_EXT_OLD = ".dj";
 	public static final String BACK_FILE_TYPE = "application/zip";
-    private static final String TEMP_IMG_FILE_NAME = "temp" + IMG_EXT;
+	private static final String TEMP_IMG_FILE_NAME = "temp" + IMG_EXT;
 
-	//Variables
+	// Variables
 	private static String appDir;
 
 	@Nullable
-	public static Intent getPictureFromCam(Activity activity){
+	public static Intent getPictureFromCam(Activity activity) {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// Create the File where the photo should go
 		File photoFile = null;
@@ -69,19 +68,16 @@ public class UtilsFile {
 					FileProvider.getUriForFile(
 							activity,
 							UtilsFile.getFileSharingAuthority(activity),
-							photoFile
-					)
-			);
+							photoFile));
 			return Intent.createChooser(takePictureIntent, null);
 		} catch (Exception ex) {
 			AnalyticsService.INSTANCE.logEvent(
 					"didFailToTakeImage",
-					"Error occurred while creating the File."
-			);
+					"Error occurred while creating the File.");
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns a folder that will store app data.
 	 *  <b>NOTE:</b> <i>Since Android 4.4+, an app cannot delete files created in SD card
@@ -105,26 +101,30 @@ public class UtilsFile {
 		return appFolder;
 	}
 
-    /**
-     * Checks whether old app folder (v3.1) exists or not.
-     * @return
-     */
-	public static boolean oldAppFolderExist(){
+	/**
+	 * Checks whether old app folder (v3.1) exists or not.
+	 * 
+	 * @return
+	 */
+	public static boolean oldAppFolderExist() {
 		// Create an app folder
 		File oldAppFolder = new File(Environment.getExternalStorageDirectory(),
-				HIDE_FOLDER + UtilsFile.APP_FOLDER_NAME );
+				HIDE_FOLDER + UtilsFile.APP_FOLDER_NAME);
 		return oldAppFolder.exists();
 
 	}
 
 	/**
-	 * Returns app's folder in an internal storage if exists otherwise creates a new one
+	 * Returns app's folder in an internal storage if exists otherwise creates a new
+	 * one
+	 * 
 	 * @param context
 	 * @return
 	 */
-	public static File getAppFolder(Context context){
+	public static File getAppFolder(Context context) {
 		File appFolder = context.getDir(UtilsFile.APP_FOLDER_NAME, Context.MODE_PRIVATE);
-		if(!appFolder.exists()) appFolder.mkdir();
+		if (!appFolder.exists())
+			appFolder.mkdir();
 		appDir = appFolder.getAbsolutePath();
 		return appFolder;
 	}
@@ -132,65 +132,69 @@ public class UtilsFile {
 	/**
 	 * Unlike {@link Activity#getCacheDir()} this method doesn't limit storage size
 	 * to 1 MB.
+	 * 
 	 * @param con
 	 * @return
 	 */
-	public static String getCacheDir(Context con){
+	public static String getCacheDir(Context con) {
 		return con.getDir(UtilsFile.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE)
 				.getAbsolutePath();
 	}
 
-    /**
-     * Clears up all the content of the Cache Folder excluding the Folder.
-     * It is recursive.
-     * @param context
-     * @return
-     */
-	public static boolean cleanCacheDir(Context context){
+	/**
+	 * Clears up all the content of the Cache Folder excluding the Folder.
+	 * It is recursive.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static boolean cleanCacheDir(Context context) {
 		File file = context.getDir(UtilsFile.APP_CACHE_FOLDER_NAME, Context.MODE_PRIVATE);
 		boolean success = false;
-		try{
+		try {
 			success = UtilsFile.deleteDirectory(file);
 		} catch (IOException e) {
 			Log.d("Cache Dir", "Error deleting cache folder");
 			e.printStackTrace();
 		}
 
-		return  success;
+		return success;
 	}
 
-	public static String getAutoBackupDir(Context con){
+	public static String getAutoBackupDir(Context con) {
 		return con.getDir(AUTO_BACKUP_FOLDER_NAME, Context.MODE_PRIVATE)
 				.getAbsolutePath();
 	}
 
-	public static File[] getAutoBackUpFiles(Context con){
+	public static File[] getAutoBackUpFiles(Context con) {
 		File backupFolder = new File(getAutoBackupDir(con));
 		return backupFolder.listFiles();
 	}
 
-	private static String getAppDir(){
+	private static String getAppDir() {
 		return appDir;
 	}
 
 	/**
 	 * Since app's data such as attachments are now stored in internal storage
-	 * we need to check if the path for attachments are still referring to external(old)
+	 * we need to check if the path for attachments are still referring to
+	 * external(old)
 	 * storage. If it is, then change it to the new one
+	 * 
 	 * @param path
 	 * @return
 	 */
-	public static String replaceOldDir(String path){
+	public static String replaceOldDir(String path) {
 		String oldPath = getAppFolder(true).getAbsolutePath();
-		if(path.contains(oldPath)){
+		if (path.contains(oldPath)) {
 			path = path.replace(oldPath, UtilsFile.getAppDir());
 		}
 		return path;
 	}
 
-    public static File getAttachmentFolder(File appFolder, boolean hide) {
-		File attchFolder = new File(appFolder.getAbsolutePath(), hide ? HIDE_FOLDER + UtilsFile.ATTCH_FOLDER_NAME :
-			UtilsFile.ATTCH_FOLDER_NAME); //. makes it invisible
+	public static File getAttachmentFolder(File appFolder, boolean hide) {
+		File attchFolder = new File(appFolder.getAbsolutePath(),
+				hide ? HIDE_FOLDER + UtilsFile.ATTCH_FOLDER_NAME : UtilsFile.ATTCH_FOLDER_NAME); // . makes it invisible
 		if (!attchFolder.exists())
 			attchFolder.mkdir();
 
@@ -203,18 +207,19 @@ public class UtilsFile {
 		if (absolutePathForAttachmentFolder == null) {
 			File attachmentFolder = UtilsFile.getAttachmentFolder(
 					UtilsFile.getAppFolder(context),
-					true
-			);
+					true);
 			absolutePathForAttachmentFolder = attachmentFolder.getAbsolutePath() + "/";
 		}
 
 		return absolutePathForAttachmentFolder;
 	}
-	
+
 	private static File getPartyFolder(File attchFolder, String partyName, boolean hide) {
 		// Create a party folder
-		File partyFolder = new File(attchFolder.getAbsolutePath(), hide ? HIDE_FOLDER +  partyName :
-			partyName); //. makes it invisible
+		File partyFolder = new File(attchFolder.getAbsolutePath(), hide ? HIDE_FOLDER + partyName : partyName); // .
+																												// makes
+																												// it
+																												// invisible
 		if (!partyFolder.exists())
 			partyFolder.mkdir();
 
@@ -222,74 +227,80 @@ public class UtilsFile {
 	}
 
 	public static String getFileSharingAuthority(Context context) {
-	    return context.getPackageName() + ".fileProvider";
-    }
-
-    /**
-     * Create a temporary image file in public Picture directory. It can be used to save an
-     * image taken by camera app since camera app cannot access thus save image to app's
-     * private folder
-     * @return
-     */
-    public static File createExternalStoragePublicPicture() {
-        // Create a path where we will place our picture in the user's
-        // public pictures directory.  Note that you should be careful about
-        // what you place here, since the user often manages these files.  For
-        // pictures and other media owned by the application, consider
-        // Context.getExternalMediaDir().
-        File path = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File file = new File(path, TEMP_IMG_FILE_NAME);
-
-        // Make sure the Pictures directory exists.
-        path.mkdirs();
-        return file;
-    }
+		return context.getPackageName() + ".fileProvider";
+	}
 
 	/**
-	 * @deprecated Document directory is not guaranteed to be present in all device. Rather
-	 * use {@link UtilsFile#getPublicDownloadDir()}
-     *
-	 * Create a temporary image file in public Picture directory. It can be used to save an
-	 * image taken by camera app since camera app cannot access thus save image to app's
+	 * Create a temporary image file in public Picture directory. It can be used to
+	 * save an
+	 * image taken by camera app since camera app cannot access thus save image to
+	 * app's
 	 * private folder
+	 * 
 	 * @return
 	 */
-	public static File createFileInDocumentFolder(String fileName) {
+	public static File createExternalStoragePublicPicture() {
+		// Create a path where we will place our picture in the user's
+		// public pictures directory. Note that you should be careful about
+		// what you place here, since the user often manages these files. For
+		// pictures and other media owned by the application, consider
+		// Context.getExternalMediaDir().
 		File path = Environment.getExternalStoragePublicDirectory(
-				Environment.DIRECTORY_DOCUMENTS);
+				Environment.DIRECTORY_PICTURES);
+		File file = new File(path, TEMP_IMG_FILE_NAME);
+
 		// Make sure the Pictures directory exists.
 		path.mkdirs();
-		File file = new File(path, fileName);
 		return file;
 	}
 
-    public static String getPublicDownloadDir(){
-        File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        if (!downloadDir.exists()) {
-        	downloadDir.mkdirs();
+	/**
+	 * Returns an internal directory for temporarily storing downloaded/exported
+	 * files.
+	 * Files here should be shared with the user via {@link #shareFile} after
+	 * creation.
+	 */
+	public static String getInternalDownloadDir(Context context) {
+		File downloadDir = new File(context.getCacheDir(), "downloads");
+		if (!downloadDir.exists()) {
+			downloadDir.mkdirs();
 		}
-
 		return downloadDir.getAbsolutePath();
-    }
+	}
 
-    public static boolean deleteExternalStoragePublicPicture() {
-        // Create a path where we will place our picture in the user's
-        // public pictures directory and delete the file.  If external
-        // storage is not currently mounted this will fail.
-        File path = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File file = new File(path, TEMP_IMG_FILE_NAME);
-        return file.delete();
-    }
+	/**
+	 * Shares a file with the user via Android's share sheet.
+	 * This allows the user to save to Downloads, Google Drive, email, etc.
+	 */
+	public static void shareFile(Context context, File file, String mimeType) {
+		Uri fileUri = FileProvider.getUriForFile(
+				context,
+				getFileSharingAuthority(context),
+				file);
+		Intent shareIntent = new Intent(Intent.ACTION_SEND);
+		shareIntent.setType(mimeType);
+		shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+		shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+		context.startActivity(Intent.createChooser(shareIntent, null));
+	}
 
-    public static File createImageFile(Context context) {
+	public static boolean deleteExternalStoragePublicPicture() {
+		// Create a path where we will place our picture in the user's
+		// public pictures directory and delete the file. If external
+		// storage is not currently mounted this will fail.
+		File path = Environment.getExternalStoragePublicDirectory(
+				Environment.DIRECTORY_PICTURES);
+		File file = new File(path, TEMP_IMG_FILE_NAME);
+		return file.delete();
+	}
 
-		//the file returned is inside the app folder which can be accessed by
-		//the app only. So Camera app cannot stream photo to this file
+	public static File createImageFile(Context context) {
+
+		// the file returned is inside the app folder which can be accessed by
+		// the app only. So Camera app cannot stream photo to this file
 
 		File attachmentFolder = getAttachmentFolder(getAppFolder(context), true);
-		
+
 		String fileName = UUID.randomUUID().toString();
 
 		try {
@@ -297,63 +308,69 @@ public class UtilsFile {
 			pic = new File(attachmentFolder.getAbsolutePath(), fileName + IMG_EXT);
 			pic.createNewFile();
 			return pic;
-		} catch (Exception e) {	e.printStackTrace();}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return null;
 	}
 
 	/**
 	 * Attempts to delete the file with passed path. Since Android 4.4, files in
-	 * SD Card can't be deleted (using {@link #getAppFolder(boolean)} but there should
-     * be no problem deleting files created using {@link #getAppFolder(Context)}
+	 * SD Card can't be deleted (using {@link #getAppFolder(boolean)} but there
+	 * should
+	 * be no problem deleting files created using {@link #getAppFolder(Context)}
+	 * 
 	 * @param path
 	 * @return
 	 */
-	public static boolean deleteFile(String path){
+	public static boolean deleteFile(String path) {
 		File f = new File(path);
-		if(!f.exists())
+		if (!f.exists())
 			return true;
 		boolean t = f.isFile();
 		boolean u = f.isHidden();
 		return f.delete();
 	}
 
-    /**
-     * Deletes all the content inside the passed directory
-     * @param directory : directory to clean
-     * @return
-     * @throws IOException : if not directory is found
-     */
+	/**
+	 * Deletes all the content inside the passed directory
+	 * 
+	 * @param directory : directory to clean
+	 * @return
+	 * @throws IOException : if not directory is found
+	 */
 	public static boolean deleteDirectory(File directory) throws IOException {
 		if (!directory.exists()) {
 			final String message = directory + " does not exist";
 			throw new IllegalArgumentException(message);
-			}
+		}
 
 		if (!directory.isDirectory()) {
-		 final String message = directory + " is not a directory";
+			final String message = directory + " is not a directory";
 			throw new IllegalArgumentException(message);
-			}
+		}
 
 		final File[] files = directory.listFiles();
-		if (files == null) {  // null if security restricted
+		if (files == null) { // null if security restricted
 			throw new IOException("Failed to list contents of " + directory);
-			}
+		}
 
 		for (final File file : files) {
-			//if it is a directory, go inside it with recursive call
-			if(file.isDirectory())	deleteDirectory(file);
-			else if(!file.delete()) return false;
-			}
+			// if it is a directory, go inside it with recursive call
+			if (file.isDirectory())
+				deleteDirectory(file);
+			else if (!file.delete())
+				return false;
+		}
 
 		return directory.delete();
 	}
 
-	public static void copyInputStream( BufferedReader in, BufferedWriter out )throws IOException {
-		char[] buffer=new char[1024];
+	public static void copyInputStream(BufferedReader in, BufferedWriter out) throws IOException {
+		char[] buffer = new char[1024];
 		int len;
-		while ( ( len=in.read(buffer) ) >= 0 )
-		{
+		while ((len = in.read(buffer)) >= 0) {
 			out.write(buffer, 0, len);
 		}
 	}
@@ -387,12 +404,14 @@ public class UtilsFile {
 			ex.printStackTrace();
 		} finally {
 			try {
-				if (outputStream != null) outputStream.close();
+				if (outputStream != null)
+					outputStream.close();
 			} catch (IOException ignore) {
 			}
 
 			try {
-				if (ios != null) ios.close();
+				if (ios != null)
+					ios.close();
 			} catch (IOException ignore) {
 			}
 		}
@@ -407,20 +426,20 @@ public class UtilsFile {
 			ous = new ByteArrayOutputStream();
 			ios = new FileInputStream(file);
 			int read = 0;
-			while ( (read = ios.read(buffer)) != -1 ) {
+			while ((read = ios.read(buffer)) != -1) {
 				ous.write(buffer, 0, read);
 			}
 		} finally {
 			try {
-				if ( ous != null )
+				if (ous != null)
 					ous.close();
-			} catch ( IOException e) {
+			} catch (IOException e) {
 			}
 
 			try {
-				if ( ios != null )
+				if (ios != null)
 					ios.close();
-			} catch ( IOException e) {
+			} catch (IOException e) {
 			}
 		}
 		return ous.toByteArray();
@@ -433,20 +452,20 @@ public class UtilsFile {
 			byte[] buffer = new byte[4096];
 			ous = new ByteArrayOutputStream();
 			int read = 0;
-			while ( (read = in.read(buffer)) != -1 ) {
+			while ((read = in.read(buffer)) != -1) {
 				ous.write(buffer, 0, read);
 			}
 		} finally {
 			try {
-				if ( ous != null )
+				if (ous != null)
 					ous.close();
-			} catch ( IOException e) {
+			} catch (IOException e) {
 			}
 
 			try {
-				if ( in != null )
+				if (in != null)
 					in.close();
-			} catch ( IOException e) {
+			} catch (IOException e) {
 			}
 		}
 		return ous.toByteArray();
@@ -454,46 +473,53 @@ public class UtilsFile {
 
 	/**
 	 * Returns file name for JSON file that will store data
+	 * 
 	 * @return
 	 */
-	public static String getJSONFileName(){
+	public static String getJSONFileName() {
 		return "dailyJournal-" + UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT_FOR_FILE) + ".json";
 	}
 
-	public static String getZipFileName(){
-		return "dailyJournal-" + UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT_FOR_FILE) + UtilsFile.ZIP_EXT;
+	public static String getZipFileName() {
+		return "dailyJournal-" + UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT_FOR_FILE)
+				+ UtilsFile.ZIP_EXT;
 	}
 
-	public static File getPartyPicture(Party party, Context con){
-		File partyFolder = getPartyFolder(getAttachmentFolder(getAppFolder(con),false), party.getName(), false);
+	public static File getPartyPicture(Party party, Context con) {
+		File partyFolder = getPartyFolder(getAttachmentFolder(getAppFolder(con), false), party.getName(), false);
 		File partyPic = new File(partyFolder, party.getName() + IMG_EXT);
-		if(partyPic.exists()) return  partyPic;
-		else try {
-			partyPic.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		if (partyPic.exists())
+			return partyPic;
+		else
+			try {
+				partyPic.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		return partyPic;
 	}
 
-    /**
-     * Stores the bitmap image into passed file. The operation in done in background thread
-     * @param imageData
-     * @param pic
-     * @param c
-     */
+	/**
+	 * Stores the bitmap image into passed file. The operation in done in background
+	 * thread
+	 * 
+	 * @param imageData
+	 * @param pic
+	 * @param c
+	 */
 	public static void storeImage(final Bitmap imageData, final File pic, final Context c) {
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(pic);
-			//Log.i("path", c.getFilesDir().getAbsolutePath());
+			// Log.i("path", c.getFilesDir().getAbsolutePath());
 			BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
 
 			// choose another format if PNG doesn't suit you
 			imageData.compress(Bitmap.CompressFormat.PNG, 100, bos);
 			bos.flush();
 			bos.close();
-			//to let know that a new file has been created so that it appears in the computer
-			MediaScannerConnection.scanFile(c, new String[]{pic.getAbsolutePath()}, null, null);
+			// to let know that a new file has been created so that it appears in the
+			// computer
+			MediaScannerConnection.scanFile(c, new String[] { pic.getAbsolutePath() }, null, null);
 			Log.i("store image", pic.getName() + " was stored successfully.");
 
 		} catch (Exception e) {
@@ -502,27 +528,27 @@ public class UtilsFile {
 		}
 	}
 
-    /**Get a file path from a Uri. */
-    public static String getPath(final Context context, final Uri uri) {
+	/** Get a file path from a Uri. */
+	public static String getPath(final Context context, final Uri uri) {
 
-        // DocumentProvider
-        if (DocumentsContract.isDocumentUri(context, uri)) {
-            String contentId;
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                contentId = DocumentsContract.getDocumentId(uri);
-                final String[] split = contentId .split(":");
-                final String type = split[0];
+		// DocumentProvider
+		if (DocumentsContract.isDocumentUri(context, uri)) {
+			String contentId;
+			// ExternalStorageProvider
+			if (isExternalStorageDocument(uri)) {
+				contentId = DocumentsContract.getDocumentId(uri);
+				final String[] split = contentId.split(":");
+				final String type = split[0];
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
+				if ("primary".equalsIgnoreCase(type)) {
+					return Environment.getExternalStorageDirectory() + "/" + split[1];
+				}
 
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+			}
+			// DownloadsProvider
+			else if (isDownloadsDocument(uri)) {
 
-                contentId = DocumentsContract.getDocumentId(uri);
+				contentId = DocumentsContract.getDocumentId(uri);
 
 				String[] contentUriPrefixesToTry = new String[] {
 						"content://downloads/public_downloads",
@@ -536,56 +562,55 @@ public class UtilsFile {
 						// raw:/storage/emulated/0/Download/dailyJournal-1-2-2021-15-03-31.zip"
 						Uri contentUri = ContentUris.withAppendedId(
 								Uri.parse(contentUriPrefix),
-								Long.parseLong(contentId)
-						);
+								Long.parseLong(contentId));
 						String path = getDataColumn(context, contentUri, null, null);
 						if (path != null) {
 							return path;
 						}
-					} catch (Exception ignore) {}
+					} catch (Exception ignore) {
+					}
 				}
 
+				return null;
+			}
+			// MediaProvider
+			else if (isMediaDocument(uri)) {
+				contentId = DocumentsContract.getDocumentId(uri);
+				final String[] split = contentId.split(":");
+				final String type = split[0];
 
-                return null;
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                contentId = DocumentsContract.getDocumentId(uri);
-                final String[] split = contentId.split(":");
-                final String type = split[0];
+				Uri contentUri = null;
+				if ("image".equals(type)) {
+					contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+				} else if ("video".equals(type)) {
+					contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+				} else if ("audio".equals(type)) {
+					contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+				}
 
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
+				final String selection = "_id=?";
+				final String[] selectionArgs = new String[] { split[1] };
 
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {split[1]};
+				return getDataColumn(context, contentUri, selection, selectionArgs);
+			}
+		}
+		// MediaStore (and general)
+		else if ("content".equalsIgnoreCase(uri.getScheme())) {
+			return getDataColumn(context, uri, null, null);
+		}
+		// File
+		else if ("file".equalsIgnoreCase(uri.getScheme())) {
+			return uri.getPath();
+		}
 
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
+		return null;
+	}
 
-        return null;
-    }
-
-    /**
-     * Copies data referenced by {@code uri} into a internal cache file and returns
-     * internal cache file's absolute path.
-     */
-    public static String copyDataToInternalCacheFile(Context context, Uri uri) {
+	/**
+	 * Copies data referenced by {@code uri} into a internal cache file and returns
+	 * internal cache file's absolute path.
+	 */
+	public static String copyDataToInternalCacheFile(Context context, Uri uri) {
 		String fileName = "copyOfFileWithId-" + DocumentsContract.getDocumentId(uri);
 		File copyToThisFile = new File(getCacheDir(context), fileName);
 		try {
@@ -608,58 +633,57 @@ public class UtilsFile {
 		return null;
 	}
 
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+	/**
+	 * Get the value of the data column for this Uri. This is useful for
+	 * MediaStore Uris, and other file-based ContentProviders.
+	 *
+	 * @param context       The context.
+	 * @param uri           The Uri to query.
+	 * @param selection     (Optional) Filter used in the query.
+	 * @param selectionArgs (Optional) Selection arguments used in the query.
+	 * @return The value of the _data column, which is typically a file path.
+	 */
+	public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
 
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {column};
+		Cursor cursor = null;
+		final String column = "_data";
+		final String[] projection = { column };
 
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
+		try {
+			cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+			if (cursor != null && cursor.moveToFirst()) {
+				final int column_index = cursor.getColumnIndexOrThrow(column);
+				return cursor.getString(column_index);
+			}
+		} finally {
+			if (cursor != null)
+				cursor.close();
+		}
+		return null;
+	}
 
+	/**
+	 * @param uri The Uri to check.
+	 * @return Whether the Uri authority is ExternalStorageProvider.
+	 */
+	public static boolean isExternalStorageDocument(Uri uri) {
+		return "com.android.externalstorage.documents".equals(uri.getAuthority());
+	}
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
+	/**
+	 * @param uri The Uri to check.
+	 * @return Whether the Uri authority is DownloadsProvider.
+	 */
+	public static boolean isDownloadsDocument(Uri uri) {
+		return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+	}
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
+	/**
+	 * @param uri The Uri to check.
+	 * @return Whether the Uri authority is MediaProvider.
+	 */
+	public static boolean isMediaDocument(Uri uri) {
+		return "com.android.providers.media.documents".equals(uri.getAuthority());
+	}
 
 }

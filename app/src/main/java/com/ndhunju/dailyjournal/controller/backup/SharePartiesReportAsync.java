@@ -30,8 +30,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-/** Created by ndhunju on 2/4/18.*/
-public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Boolean> {
+/** Created by ndhunju on 2/4/18. */
+public class SharePartiesReportAsync extends AsyncTask<List<Party>, Integer, Boolean> {
 
     public static final String END_FILE_TYPE = "application/zip";
     private ProgressDialog pd;
@@ -46,15 +46,16 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
         ZIPPED_IMAGE_ATTACHMENTS
     }
 
-    public SharePartiesReportAsync(Context con, Type type){
+    public SharePartiesReportAsync(Context con, Type type) {
         mContext = con;
         mType = type;
     }
 
     @Override
     protected void onPreExecute() {
-        String msg = String.format(mContext.getString(R.string.msg_creating), mContext.getString(R.string.str_share_report));
-        pd= new ProgressDialog(mContext);
+        String msg = String.format(mContext.getString(R.string.msg_creating),
+                mContext.getString(R.string.str_share_report));
+        pd = new ProgressDialog(mContext);
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setMessage(msg);
         pd.setCancelable(false);
@@ -77,8 +78,7 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
                 UtilsFile.getAppFolder(mContext),
                 mContext.getString(R.string.str_share_report)
                         + "-"
-                        + UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT_FOR_FILE)
-        );
+                        + UtilsFormat.formatDate(new Date(), UtilsFormat.DATE_FORMAT_FOR_FILE));
 
         try {
             if (!toBeZippedFolder.exists()) {
@@ -92,11 +92,10 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
         }
 
         File zipFile = new File(
-                UtilsFile.getPublicDownloadDir(),
+                UtilsFile.getInternalDownloadDir(mContext),
                 mContext.getString(R.string.str_report)
                         + "-"
-                        + UtilsFile.getZipFileName()
-        );
+                        + UtilsFile.getZipFileName());
 
         try {
             zipFile.createNewFile();
@@ -104,7 +103,7 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
             e.printStackTrace();
         }
 
-        for(int i = 0; i < partyList.size() ; i++) {
+        for (int i = 0; i < partyList.size(); i++) {
             switch (mType) {
                 default:
                 case ZIPPED_TEXT_FILEs:
@@ -137,7 +136,7 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
                     break;
             }
 
-            int finishedPercentage = ((i+1) * 100) / partyList.size();
+            int finishedPercentage = ((i + 1) * 100) / partyList.size();
             publishProgress(finishedPercentage);
         }
 
@@ -159,10 +158,9 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
             // Let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(
                     mContext,
-                    new String[]{zipFile.getAbsolutePath()},
+                    new String[] { zipFile.getAbsolutePath() },
                     null,
-                    null
-            );
+                    null);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_SUBJECT, mContext.getString(R.string.str_share_report));
             intent.putExtra(
@@ -170,21 +168,21 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
                     FileProvider.getUriForFile(
                             mContext,
                             UtilsFile.getFileSharingAuthority(mContext),
-                            zipFile)
-            );
+                            zipFile));
             intent.setType(END_FILE_TYPE);
-            mContext.startActivity(intent);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            mContext.startActivity(Intent.createChooser(intent, null));
 
             // Notify user that we created a file
-            UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
-                    mContext,
-                    zipFile,
-                    mContext.getString(
-                            R.string.msg_reports_created_title,
-                            mContext.getString(R.string.app_name)
-                    ),
-                    END_FILE_TYPE
-            );
+            if (!zipFile.getAbsolutePath().startsWith(UtilsFile.getInternalDownloadDir(mContext))) {
+                UtilDownloadManager.INSTANCE.notifyUserAboutFileCreation(
+                        mContext,
+                        zipFile,
+                        mContext.getString(
+                                R.string.msg_reports_created_title,
+                                mContext.getString(R.string.app_name)),
+                        END_FILE_TYPE);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -192,8 +190,6 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
 
         return success;
     }
-
-
 
     @Override
     protected void onProgressUpdate(final Integer... values) {
@@ -203,14 +199,16 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
     @Override
     protected void onPostExecute(Boolean success) {
         pd.cancel();
-        String resultMsg =  success ?
-                String.format(mContext.getString(R.string.msg_finished), mContext.getString(R.string.str_export_printable))
-                : String.format(mContext.getString(R.string.msg_failed), mContext.getString(R.string.str_export_printable));
+        String resultMsg = success
+                ? String.format(mContext.getString(R.string.msg_finished),
+                        mContext.getString(R.string.str_export_printable))
+                : String.format(mContext.getString(R.string.msg_failed),
+                        mContext.getString(R.string.str_export_printable));
 
         UtilsView.alert(mContext, resultMsg);
     }
 
-    //helper
+    // helper
     public static ItemDescriptionAdapter.Item[] getStrTypes(Context context) {
         SharePartiesReportAsync.Type types[] = SharePartiesReportAsync.Type.values();
 
@@ -222,17 +220,15 @@ public class SharePartiesReportAsync  extends AsyncTask<List<Party>, Integer, Bo
         if (types.length != strTypes.length) {
             Log.e(
                     SharePartiesReportAsync.class.getSimpleName(),
-                    "The length of share parties options does not match with string resource."
-            );
+                    "The length of share parties options does not match with string resource.");
         }
 
         ItemDescriptionAdapter.Item[] items = new ItemDescriptionAdapter.Item[types.length];
 
-        for(int index=0; index < types.length; index++) {
+        for (int index = 0; index < types.length; index++) {
             items[index] = new ItemDescriptionAdapter.Item(
                     strTypes[index],
-                    strTypesDescriptions[index]
-            );
+                    strTypesDescriptions[index]);
         }
 
         return items;

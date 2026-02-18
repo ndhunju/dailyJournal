@@ -43,10 +43,11 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
     private ReportGenerator rg;
     private File report;
 
-    enum Type{FILE, PDF, PDF_WITH_ATTACHMENTS, CSV, TEXT}
+    enum Type {
+        FILE, PDF, PDF_WITH_ATTACHMENTS, CSV, TEXT
+    }
 
-
-    public ReportGeneratorAsync(Activity activity, Type type, String action){
+    public ReportGeneratorAsync(Activity activity, Type type, String action) {
         mActivity = activity;
         mAction = action;
         mType = type;
@@ -54,8 +55,9 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
 
     @Override
     protected void onPreExecute() {
-        String msg = String.format(mActivity.getString(R.string.msg_creating), mActivity.getString(R.string.str_report));
-        pd= new ProgressDialog(mActivity);
+        String msg = String.format(mActivity.getString(R.string.msg_creating),
+                mActivity.getString(R.string.str_report));
+        pd = new ProgressDialog(mActivity);
         pd.setIndeterminate(true);
         pd.setMessage(msg);
         pd.setCancelable(false);
@@ -69,6 +71,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         StringBuilder sb;
 
         intent = new Intent(mAction);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         boolean shouldAddAttachments = false;
 
         switch (mType) {
@@ -76,7 +79,8 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 rg = new TextFileReportGenerator(mActivity, partyId);
                 report = (File) rg.getReport(null);
                 // check if report was successfully generated
-                if (report == null) return false;
+                if (report == null)
+                    return false;
                 sb = new StringBuilder();
                 rg.fillAppBanner(sb);
                 rg.fillPartyInfo(sb);
@@ -87,8 +91,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                         FileProvider.getUriForFile(
                                 mActivity,
                                 UtilsFile.getFileSharingAuthority(mActivity),
-                                report)
-                );
+                                report));
                 break;
             case PDF_WITH_ATTACHMENTS:
                 shouldAddAttachments = true;
@@ -97,7 +100,8 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                 rg.setShouldAppendAttachments(shouldAddAttachments);
                 report = (File) rg.getReport(null);
                 // check if report was successfully generated
-                if (report == null) return false;
+                if (report == null)
+                    return false;
 
                 sb = new StringBuilder();
                 rg.fillAppBanner(sb);
@@ -109,15 +113,14 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                         FileProvider.getUriForFile(
                                 mActivity,
                                 UtilsFile.getFileSharingAuthority(mActivity),
-                                report
-                        )
-                );
+                                report));
                 break;
             case CSV:
                 rg = new CsvReportGenerator(mActivity, partyId);
                 report = (File) rg.getReport(null);
                 // check if report was successfully generated
-                if (report == null) return false;
+                if (report == null)
+                    return false;
 
                 sb = new StringBuilder();
                 rg.fillAppBanner(sb);
@@ -129,9 +132,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                         FileProvider.getUriForFile(
                                 mActivity,
                                 UtilsFile.getFileSharingAuthority(mActivity),
-                                report
-                        )
-                );
+                                report));
                 break;
             case TEXT:
                 rg = new PlainTextReportGenerator(mActivity, partyId);
@@ -147,8 +148,9 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         pd.cancel();
-        if(!success){
-            UtilsView.alert(mActivity, String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_report)));
+        if (!success) {
+            UtilsView.alert(mActivity,
+                    String.format(mActivity.getString(R.string.msg_failed), mActivity.getString(R.string.str_report)));
             return;
         }
 
@@ -161,14 +163,12 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
                     mActivity,
                     report,
                     mActivity.getString(R.string.msg_report_created_desc, rg.getParty().getName()),
-                    rg.getReportType()
-            );
-
+                    rg.getReportType());
 
             // let know that a new file has been created so that it appears in the computer
             MediaScannerConnection.scanFile(
                     mActivity,
-                    new String[]{report.getAbsolutePath()},
+                    new String[] { report.getAbsolutePath() },
                     null,
                     (s, uri) -> {
                         if (Intent.ACTION_VIEW.equalsIgnoreCase(mAction)) {
@@ -179,8 +179,7 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
 
                         mActivity.startActivity(Intent.createChooser(
                                 intent,
-                                mActivity.getString(R.string.str_choose))
-                        );
+                                mActivity.getString(R.string.str_choose)));
                     });
         } else {
             intent.setType(rg.getReportType());
@@ -200,17 +199,15 @@ public class ReportGeneratorAsync extends AsyncTask<Long, Integer, Boolean> {
         if (types.length != strTypes.length) {
             Log.e(
                     ReportGeneratorAsync.class.getSimpleName(),
-                    "The length of share parties options does not match with string resource."
-            );
+                    "The length of share parties options does not match with string resource.");
         }
 
         ItemDescriptionAdapter.Item[] items = new ItemDescriptionAdapter.Item[types.length];
 
-        for(int index=0; index < types.length; index++) {
+        for (int index = 0; index < types.length; index++) {
             items[index] = new ItemDescriptionAdapter.Item(
                     strTypes[index],
-                    strTypesDescriptions[index]
-            );
+                    strTypesDescriptions[index]);
         }
 
         return items;
